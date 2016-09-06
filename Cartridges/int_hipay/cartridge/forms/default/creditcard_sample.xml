@@ -11,7 +11,8 @@
     <field formid="number" label="creditcard.number" type="string" mandatory="true" masked="4" max-length="17"
 	    description="creditcard.numberexample" binding="creditCardNumber"
 	    missing-error="creditcard.numbermissingerror" value-error="creditcard.numbervalueerror"/>
-
+		
+	<group formid="expiration">
 		<!-- field for credit card expiration month -->
 	    <field formid="month" label="resource.month" type="integer" mandatory="true" binding="creditCardExpirationMonth"
 	      	missing-error="creditcard.monthmissingerror" value-error="creditcard.yearvalueerror">
@@ -47,7 +48,7 @@
 	            <option optionid="2022" label="year.2022" value="2022"/>            
 	        </options>
 	    </field>
-
+	</group>
 	<!-- field for credit card owner -->
     <field formid="owner" label="creditcard.ownerlabel" type="string" mandatory="false" max-length="40" binding="creditCardHolder"
      	missing-error="creditcard.ownermissingerror"/>

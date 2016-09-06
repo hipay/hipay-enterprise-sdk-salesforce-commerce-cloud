@@ -15,22 +15,29 @@
 	<iselse/>
 		<ischeckoutprogressindicator step="4" multishipping="true" rendershipping="${pdict.Basket.productLineItems.size() == 0 ? 'false' : 'true'}"/>
 	</isif>
-
-	<isscript>
-		var paymentStatus = null;
-		if ( pdict.CurrentHttpParameterMap.status != null ) {
-		paymentStatus = pdict.CurrentHttpParameterMap.status.stringValue;
-		}
-	</isscript>
-	<isif condition="${pdict.PlaceOrderError != null || paymentStatus != null}">
-		<isif condition="${paymentStatus === 'cancel'}">
-			<div class="error-form">${Resource.msg('hipay.paymant.cancel','hipay',null)}</div>
-			<iselseif condition="${paymentStatus === 'decline'}">
-				<div class="error-form">${Resource.msg('hipay.payment.decline','hipay',null)}</div>
-				<iselseif condition="${paymentStatus === 'error'}">
-					<div class="error-form">${Resource.msg('hipay.payment.error','hipay',null)}</div>
-					<iselse>
-						<div class="error-form">${Resource.msg(pdict.PlaceOrderError.code,'checkout',null)}</div>
+	
+	<isset name="hipayEnabled" value="${dw.system.Site.getCurrent().getCustomPreferenceValue('hipayEnabled')}" scope="page"/>
+	<isif condition="${hipayEnabled}" >
+		<isscript>
+			var paymentStatus = null;
+			if ( pdict.CurrentHttpParameterMap.status != null ) {
+			paymentStatus = pdict.CurrentHttpParameterMap.status.stringValue;
+			}
+		</isscript>
+		<isif condition="${pdict.PlaceOrderError != null || paymentStatus != null}">
+			<isif condition="${paymentStatus === 'cancel'}">
+				<div class="error-form">${Resource.msg('hipay.paymant.cancel','hipay',null)}</div>
+				<iselseif condition="${paymentStatus === 'decline'}">
+					<div class="error-form">${Resource.msg('hipay.payment.decline','hipay',null)}</div>
+					<iselseif condition="${paymentStatus === 'error'}">
+						<div class="error-form">${Resource.msg('hipay.payment.error','hipay',null)}</div>
+						<iselse>
+							<div class="error-form">${Resource.msg(pdict.PlaceOrderError.code,'checkout',null)}</div>
+			</isif>
+		</isif>
+	<iselse/>
+		<isif condition="${pdict.PlaceOrderError != null}">
+			<div class="error-form">${Resource.msg(pdict.PlaceOrderError.code,'checkout',null)}</div>
 		</isif>
 	</isif>
 
