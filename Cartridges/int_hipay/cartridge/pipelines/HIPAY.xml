@@ -418,8 +418,8 @@
           <config-property key="VerifySecurityCode" value="true"/>
           <key-binding alias="dw.order.PaymentMgr.getPaymentCard(CurrentForms.billing.paymentMethods.creditCard.type.value)" key="PaymentCard"/>
           <key-binding alias="CurrentForms.billing.paymentMethods.creditCard.number.value" key="CardNumber"/>
-          <key-binding alias="CurrentForms.billing.paymentMethods.creditCard.month.value" key="ExpirationMonth"/>
-          <key-binding alias="CurrentForms.billing.paymentMethods.creditCard.year.value" key="ExpirationYear"/>
+          <key-binding alias="CurrentForms.billing.paymentMethods.creditCard.expiration.month.value" key="ExpirationMonth"/>
+          <key-binding alias="CurrentForms.billing.paymentMethods.creditCard.expiration.year.value" key="ExpirationYear"/>
           <key-binding alias="CreditCardStatus" key="Status"/>
           <key-binding alias="CurrentForms.billing.paymentMethods.creditCard.cvn.value" key="CardSecurityCode"/>
         </pipelet-node>
@@ -554,8 +554,8 @@
           <key-binding alias="null" key="ScriptLog"/>
           <key-binding alias="PaymentInstrument.custom.hipayProductName" key="HiPayCardBrand"/>
           <key-binding alias="CurrentForms.billing.paymentMethods.creditCard.number.value" key="HiPayCardNumber"/>
-          <key-binding alias="CurrentForms.billing.paymentMethods.creditCard.month.value" key="HiPayCardExpiryMonth"/>
-          <key-binding alias="CurrentForms.billing.paymentMethods.creditCard.year.value" key="HiPayCardExpiryYear"/>
+          <key-binding alias="CurrentForms.billing.paymentMethods.creditCard.expiration.month.value" key="HiPayCardExpiryMonth"/>
+          <key-binding alias="CurrentForms.billing.paymentMethods.creditCard.expiration.year.value" key="HiPayCardExpiryYear"/>
           <key-binding alias="CreditCardHolder" key="HiPayCardHolder"/>
           <key-binding alias="CurrentForms.billing.paymentMethods.creditCard.cvn.value" key="HiPayCardCVC"/>
           <key-binding alias="false" key="HiPayMultiUseToken"/>
@@ -602,9 +602,9 @@
           <key-binding alias="PaymentInstrument.creditCardNumber" key="To_1"/>
           <key-binding alias="CurrentForms.billing.paymentMethods.creditCard.type.selectedOptionObject.custom.hipayProductName" key="From_2"/>
           <key-binding alias="PaymentInstrument.creditCardType" key="To_2"/>
-          <key-binding alias="CurrentForms.billing.paymentMethods.creditCard.month.value" key="From_3"/>
+          <key-binding alias="CurrentForms.billing.paymentMethods.creditCard.expiration.month.value" key="From_3"/>
           <key-binding alias="PaymentInstrument.creditCardExpirationMonth" key="To_3"/>
-          <key-binding alias="CurrentForms.billing.paymentMethods.creditCard.year.value" key="From_4"/>
+          <key-binding alias="CurrentForms.billing.paymentMethods.creditCard.expiration.year.value" key="From_4"/>
           <key-binding alias="PaymentInstrument.creditCardExpirationYear" key="To_4"/>
           <key-binding alias="null" key="From_7"/>
           <key-binding alias="null" key="To_7"/>
