@@ -16,7 +16,7 @@
   <branch basename="Start">
     <segment>
       <node>
-        <start-node name="Start" secure="false"/>
+        <start-node name="Start" secure="true"/>
         <node-display x="1" y="1"/>
       </node>
       <simple-transition/>
