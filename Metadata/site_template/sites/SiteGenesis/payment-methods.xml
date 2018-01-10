@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <payment-settings xmlns="http://www.demandware.com/xml/impex/paymentsettings/2009-09-15">
-
     <payment-method method-id="HIPAY_HOSTED_CREDIT_CARD">
         <name xml:lang="x-default">Hosted Credit Cards</name>
         <description xml:lang="x-default">HiPay Hosted Cards Payment Method</description>
         <enabled-flag>true</enabled-flag>
         <processor-id>HIPAY_HOSTED</processor-id>
         <custom-attributes>
-            <custom-attribute attribute-id="hipayProductName">hosted</custom-attribute>
-            <custom-attribute attribute-id="hipayPaymentProductList">bcmc,cb,maestro,mastercard,visa,american-express</custom-attribute>
             <custom-attribute attribute-id="hipayPaymentCategoryList">credit-card,debit-card</custom-attribute>
+            <custom-attribute attribute-id="hipayPaymentProductList">bcmc,cb,maestro,mastercard,visa,american-express</custom-attribute>
+            <custom-attribute attribute-id="hipayProductName">hosted</custom-attribute>
         </custom-attributes>
     </payment-method>
 
@@ -19,9 +18,9 @@
         <enabled-flag>true</enabled-flag>
         <processor-id>HIPAY_HOSTED</processor-id>
         <custom-attributes>
-            <custom-attribute attribute-id="hipayProductName">dexia-directnet</custom-attribute>
-            <custom-attribute attribute-id="hipayPaymentProductList">dexia-directnet</custom-attribute>
             <custom-attribute attribute-id="hipayPaymentCategoryList">realtime-banking</custom-attribute>
+            <custom-attribute attribute-id="hipayPaymentProductList">dexia-directnet</custom-attribute>
+            <custom-attribute attribute-id="hipayProductName">dexia-directnet</custom-attribute>
         </custom-attributes>
     </payment-method>
 
@@ -31,9 +30,9 @@
         <enabled-flag>true</enabled-flag>
         <processor-id>HIPAY_HOSTED</processor-id>
         <custom-attributes>
-            <custom-attribute attribute-id="hipayProductName">giropay</custom-attribute>
-            <custom-attribute attribute-id="hipayPaymentProductList">giropay</custom-attribute>
             <custom-attribute attribute-id="hipayPaymentCategoryList">realtime-banking</custom-attribute>
+            <custom-attribute attribute-id="hipayPaymentProductList">giropay</custom-attribute>
+            <custom-attribute attribute-id="hipayProductName">giropay</custom-attribute>
         </custom-attributes>
     </payment-method>
 
@@ -43,9 +42,9 @@
         <enabled-flag>true</enabled-flag>
         <processor-id>HIPAY_HOSTED</processor-id>
         <custom-attributes>
-            <custom-attribute attribute-id="hipayProductName">ideal</custom-attribute>
-            <custom-attribute attribute-id="hipayPaymentProductList">ideal</custom-attribute>
             <custom-attribute attribute-id="hipayPaymentCategoryList">realtime-banking</custom-attribute>
+            <custom-attribute attribute-id="hipayPaymentProductList">ideal</custom-attribute>
+            <custom-attribute attribute-id="hipayProductName">ideal</custom-attribute>
         </custom-attributes>
     </payment-method>
 
@@ -55,9 +54,9 @@
         <enabled-flag>true</enabled-flag>
         <processor-id>HIPAY_HOSTED</processor-id>
         <custom-attributes>
-            <custom-attribute attribute-id="hipayProductName">ing-homepay</custom-attribute>
-            <custom-attribute attribute-id="hipayPaymentProductList">ing-homepay</custom-attribute>
             <custom-attribute attribute-id="hipayPaymentCategoryList">realtime-banking</custom-attribute>
+            <custom-attribute attribute-id="hipayPaymentProductList">ing-homepay</custom-attribute>
+            <custom-attribute attribute-id="hipayProductName">ing-homepay</custom-attribute>
         </custom-attributes>
     </payment-method>
 
@@ -67,9 +66,9 @@
         <enabled-flag>false</enabled-flag>
         <processor-id>HIPAY_HOSTED</processor-id>
         <custom-attributes>
-            <custom-attribute attribute-id="hipayProductName">klarna</custom-attribute>
-            <custom-attribute attribute-id="hipayPaymentProductList">klarna</custom-attribute>
             <custom-attribute attribute-id="hipayPaymentCategoryList">realtime-banking</custom-attribute>
+            <custom-attribute attribute-id="hipayPaymentProductList">klarna</custom-attribute>
+            <custom-attribute attribute-id="hipayProductName">klarna</custom-attribute>
         </custom-attributes>
     </payment-method>
 
@@ -79,9 +78,9 @@
         <enabled-flag>true</enabled-flag>
         <processor-id>HIPAY_HOSTED</processor-id>
         <custom-attributes>
-            <custom-attribute attribute-id="hipayProductName">przelewy24</custom-attribute>
-            <custom-attribute attribute-id="hipayPaymentProductList">przelewy24</custom-attribute>
             <custom-attribute attribute-id="hipayPaymentCategoryList">realtime-banking</custom-attribute>
+            <custom-attribute attribute-id="hipayPaymentProductList">przelewy24</custom-attribute>
+            <custom-attribute attribute-id="hipayProductName">przelewy24</custom-attribute>
         </custom-attributes>
     </payment-method>
 
@@ -91,9 +90,9 @@
         <enabled-flag>true</enabled-flag>
         <processor-id>HIPAY_HOSTED</processor-id>
         <custom-attributes>
-            <custom-attribute attribute-id="hipayProductName">sisal</custom-attribute>
-            <custom-attribute attribute-id="hipayPaymentProductList">sisal</custom-attribute>
             <custom-attribute attribute-id="hipayPaymentCategoryList">realtime-banking</custom-attribute>
+            <custom-attribute attribute-id="hipayPaymentProductList">sisal</custom-attribute>
+            <custom-attribute attribute-id="hipayProductName">sisal</custom-attribute>
         </custom-attributes>
     </payment-method>
 
@@ -103,9 +102,9 @@
         <enabled-flag>true</enabled-flag>
         <processor-id>HIPAY_HOSTED</processor-id>
         <custom-attributes>
-            <custom-attribute attribute-id="hipayProductName">sofort-uberweisung</custom-attribute>
-            <custom-attribute attribute-id="hipayPaymentProductList">sofort-uberweisung</custom-attribute>
             <custom-attribute attribute-id="hipayPaymentCategoryList">realtime-banking</custom-attribute>
+            <custom-attribute attribute-id="hipayPaymentProductList">sofort-uberweisung</custom-attribute>
+            <custom-attribute attribute-id="hipayProductName">sofort-uberweisung</custom-attribute>
         </custom-attributes>
     </payment-method>
 
@@ -115,9 +114,9 @@
         <enabled-flag>true</enabled-flag>
         <processor-id>HIPAY_HOSTED</processor-id>
         <custom-attributes>
-            <custom-attribute attribute-id="hipayProductName">qiwi-wallet</custom-attribute>
-            <custom-attribute attribute-id="hipayPaymentProductList">qiwi-wallet</custom-attribute>
             <custom-attribute attribute-id="hipayPaymentCategoryList">ewallet</custom-attribute>
+            <custom-attribute attribute-id="hipayPaymentProductList">qiwi-wallet</custom-attribute>
+            <custom-attribute attribute-id="hipayProductName">qiwi-wallet</custom-attribute>
         </custom-attributes>
     </payment-method>
 
@@ -127,9 +126,9 @@
         <enabled-flag>true</enabled-flag>
         <processor-id>HIPAY_HOSTED</processor-id>
         <custom-attributes>
-            <custom-attribute attribute-id="hipayProductName">webmoney-transfer</custom-attribute>
-            <custom-attribute attribute-id="hipayPaymentProductList">webmoney-transfer</custom-attribute>
             <custom-attribute attribute-id="hipayPaymentCategoryList">ewallet</custom-attribute>
+            <custom-attribute attribute-id="hipayPaymentProductList">webmoney-transfer</custom-attribute>
+            <custom-attribute attribute-id="hipayProductName">webmoney-transfer</custom-attribute>
         </custom-attributes>
     </payment-method>
 
@@ -139,9 +138,9 @@
         <enabled-flag>true</enabled-flag>
         <processor-id>HIPAY_HOSTED</processor-id>
         <custom-attributes>
-            <custom-attribute attribute-id="hipayProductName">yandex</custom-attribute>
-            <custom-attribute attribute-id="hipayPaymentProductList">yandex</custom-attribute>
             <custom-attribute attribute-id="hipayPaymentCategoryList">ewallet</custom-attribute>
+            <custom-attribute attribute-id="hipayPaymentProductList">yandex</custom-attribute>
+            <custom-attribute attribute-id="hipayProductName">yandex</custom-attribute>
         </custom-attributes>
     </payment-method>
 
@@ -279,7 +278,7 @@
     </payment-method>
 
     <payment-method method-id="HIPAY_HOSTED_PAYPAL">
-            <name xml:lang="x-default">PayPal</name>
+        <name xml:lang="x-default">PayPal</name>
         <description xml:lang="x-default">HiPay PayPal</description>
         <enabled-flag>true</enabled-flag>
         <processor-id>HIPAY</processor-id>
@@ -295,10 +294,10 @@
         <card-number-settings>
             <enable-checksum-verification>true</enable-checksum-verification>
             <number-length>
-                <length>16</length>
+                <length>9-16</length>
             </number-length>
             <number-prefix>
-                <prefix>51-55</prefix>
+                <prefix>62-67</prefix>
             </number-prefix>
         </card-number-settings>
         <security-code-length>3</security-code-length>
