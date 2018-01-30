@@ -5,10 +5,12 @@
         <parameters/>
         <flow>
             <context site-id="SiteGenesis"/>
-            <step step-id="ClearHungOrders" type="ExecutePipeline" enforce-restart="false">
+            <step step-id="ClearHungOrders" type="ExecuteScriptModule" enforce-restart="false">
                 <description/>
                 <parameters>
-                    <parameter name="ExecutePipeline.Pipeline">HiPayProcess-ClearHungOrders</parameter>
+                    <parameter name="ExecuteScriptModule.Module">int_hipay_controllers/cartridge/controllers/HiPayProcess.js</parameter>
+                    <parameter name="ExecuteScriptModule.FunctionName">ClearHungOrders</parameter>
+                    <parameter name="ExecuteScriptModule.Transactional">false</parameter>
                 </parameters>
             </step>
         </flow>
@@ -20,17 +22,17 @@
         <triggers>
             <run-recurring enabled="true">
                 <recurrence>
-                    <date-from>2017-09-14Z</date-from>
-                    <start-time>05:00:00.000Z</start-time>
+                    <date-from>2018-01-29Z</date-from>
+                    <start-time>22:36:18.000Z</start-time>
                     <interval>30m</interval>
                     <day-of-week>
                         <weekday>Thursday</weekday>
-                        <weekday>Saturday</weekday>
-                        <weekday>Monday</weekday>
                         <weekday>Wednesday</weekday>
                         <weekday>Friday</weekday>
                         <weekday>Sunday</weekday>
                         <weekday>Tuesday</weekday>
+                        <weekday>Monday</weekday>
+                        <weekday>Saturday</weekday>
                     </day-of-week>
                 </recurrence>
             </run-recurring>

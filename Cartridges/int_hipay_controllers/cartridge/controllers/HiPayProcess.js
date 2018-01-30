@@ -70,11 +70,21 @@ function ClearHungOrders() {
     startDate.add(Calendar.MINUTE, -minutesBack);
 
     try {
-        OrderMgr.processOrders(OrderMgr.failOrder, "status = {0} AND creationDate < {1}", "creationDate", Order.ORDER_STATUS_CREATED, startDate.getTime());
+        OrderMgr.processOrders(failHungOrder, "status = {0} AND creationDate < {1}", Order.ORDER_STATUS_CREATED, startDate.getTime());
     } catch (e) {
         var error = "Error while fetching hung orders ::: " + e.message;
         log.error(error);
-        throw new Error(error);
+    }
+}
+
+function failHungOrder(order) {
+    try {
+        require('dw/system/Transaction').wrap(function () {
+            require('dw/order/OrderMgr').failOrder(order);
+        });
+    } catch (e) {
+        var error = "Error while fail hung order ::: " + e.message;
+        log.error(error);
     }
 }
 

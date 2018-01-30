@@ -3,5 +3,5 @@
 var hipayCSSContent = dw.system.Site.getCurrent().getCustomPreferenceValue('hipayCSSContent');
 </isscript>
 <isif condition="${!empty(hipayCSSContent)}">
-    <isprint value="${hipayCSSContent}" encoding="off" />
+    <isprint value="${hipayCSSContent}" />
 </isif>
