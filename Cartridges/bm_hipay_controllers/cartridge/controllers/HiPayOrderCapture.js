@@ -9,8 +9,9 @@
 */
 
 /* API includes */
-var ISML  = require('dw/template/ISML'),
-    guard = require('~/cartridge/scripts/guard');
+var ISML       = require('dw/template/ISML'),
+    PaymentMgr = require('dw/order/PaymentMgr'),
+    guard      = require('~/cartridge/scripts/guard');
 
 function start() {
     var operationStatus = {};
@@ -60,9 +61,27 @@ function handleForm() {
     } else if (!empty(triggeredAction) && triggeredAction.formId === 'capture') {
         var captureAmount = session.forms.searchorder.captureAmount.value,
             orderNo       = session.forms.searchorder.captureOrderID.value,
-            order         = dw.order.OrderMgr.getOrder(orderNo);
+            order         = dw.order.OrderMgr.getOrder(orderNo),
+            response      = null;
 
-        var response = require('int_hipay_controllers/cartridge/scripts/lib/hipay/HiPayMaintenanceModule').hiPayMaintenanceRequest(order, captureAmount);
+        var hipayPaymentMethod = order.paymentInstrument.paymentMethod,
+            paymentMethod = PaymentMgr.getPaymentMethod(hipayPaymentMethod);
+
+        if (paymentMethod.custom.hipayOnlyCompleteCapture && captureAmount < order.totalGrossPrice) {
+            operationStatus.valid = false;
+            operationStatus.msg   = dw.web.Resource.msg('hipay_bm.capture.partialerror', 'hipay_bm', null);
+
+            return cont({
+                OperationStatus : operationStatus,
+                Order           : order
+            });
+        }
+
+        try {
+            response = require('int_hipay_controllers/cartridge/scripts/lib/hipay/HiPayMaintenanceModule').hiPayMaintenanceRequest(order, captureAmount);
+        } catch (e) {
+            response = require('int_hipay_sfra/cartridge/scripts/lib/hipay/modules/HiPayMaintenanceModule').hiPayMaintenanceRequest(order, captureAmount);
+        }
 
         if (response.error) {
             operationStatus.valid = false;

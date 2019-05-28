@@ -10,6 +10,7 @@
 i.payment-product-sprite-hosted {
     background-image: url("../images/payment-products/payment_product_hosted.png");
     background-size: cover;
+    width: 78px;
 }
 
 i.payment-product-sprite-mastercard {
@@ -172,10 +173,6 @@ i.payment-product-sprite-klarnainvoice {
     background-position: -75px -135px;
 }
 
-i.payment-product-sprite-3xcb {
-    background-position: -75px -225px;
-}
-
 i.payment-product-sprite-bank-transfer {
     background-position: -150px -225px;
 }
@@ -192,23 +189,33 @@ i.payment-product-sprite-cofinoga {
     background-position: -375px -90px;
 }
 
+i.payment-product-sprite-3xcb {
+    background-position: -75px -270px;
+}
+
 i.payment-product-sprite-4xcb {
-    background-position: -450px -225px;
+    background-position: -75px -270px;
 }
 
 i.payment-product-sprite-3xcb-no-fees {
-    background-position: -525px -225px;
+    background-position: -75px -270px;
 }
 
 i.payment-product-sprite-4xcb-no-fees {
-    background-position: -600px -225px;
+    background-position: -75px -270px;
 }
 
 i.payment-product-sprite-carte-accord {
     background-position: -0px -270px;
 }
 
+.payment-method-options {
+    display: flex;
+    flex-wrap: wrap;
+}
+
 .payment-method-options .form-row {
-    clear: none;
-    float: left;
-    width: 33%; }
+    clear: both;
+    float: none;
+    width: 33%; 
+}

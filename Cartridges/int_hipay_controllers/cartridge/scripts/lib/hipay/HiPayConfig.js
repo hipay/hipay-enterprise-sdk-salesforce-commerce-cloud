@@ -32,6 +32,7 @@ function HiPayConfig() {
     this.declineURL = URLUtils.https("HiPayOrder-Decline").toString();
     this.cancelURL  = URLUtils.https("HiPayOrder-Cancel").toString();
     this.errorURL   = URLUtils.https("HiPayOrder-Error").toString();
+    this.notifyURL  = URLUtils.https("HiPayNotification-Notify").toString();
 
     this.hipayOperationMode               = this.getSitePeference("hipayOperationMode").value;
     this.hipayEnableTestMode              = this.getSitePeference("hipayEnableTestMode");
