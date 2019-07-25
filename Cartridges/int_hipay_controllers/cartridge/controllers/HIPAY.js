@@ -69,7 +69,6 @@ function CreditCardHandle(paymentInstrument) {
         expirationMonth,
         expirationYear,
         paymentCard,
-        hiPayCardBrand,
         hiPayCardNumber,
         hiPayCardExpiryMonth,
         hiPayCardExpiryYear,
@@ -128,7 +127,6 @@ function CreditCardHandle(paymentInstrument) {
         hiPayToken           = selectedCreditCard.creditCardToken;
         hiPayCardType        = selectedCreditCard.creditCardType;
     } else {
-        hiPayCardBrand       = paymentInstrument.custom.hipayProductName;
         hiPayCardNumber      = creditCard.number.value;
         hiPayCardExpiryMonth = creditCard.expiration.month.value;
         hiPayCardExpiryYear  = creditCard.expiration.year.value;
@@ -136,7 +134,7 @@ function CreditCardHandle(paymentInstrument) {
         hiPayCardCVC         = creditCard.cvn.value;
         hiPayMultiUseToken   = hipayEnableOneClick && session.forms.billing.paymentMethods.creditCard.saveCard.value,
         hiPayCardType        = creditCard.type.value;
-        hiPayTokenResult     = hiPayModule.hiPayGenerateToken(hiPayCardBrand, hiPayCardNumber, hiPayCardExpiryMonth,
+        hiPayTokenResult     = hiPayModule.hiPayGenerateToken(hiPayCardNumber, hiPayCardExpiryMonth,
             hiPayCardExpiryYear, hiPayCardHolder, hiPayCardCVC, hiPayMultiUseToken);
 
         if (!empty(hiPayTokenResult) && hiPayTokenResult.error == false) {

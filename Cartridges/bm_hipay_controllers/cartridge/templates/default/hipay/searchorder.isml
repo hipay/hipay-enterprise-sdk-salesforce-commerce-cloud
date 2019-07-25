@@ -39,7 +39,14 @@
             orderTotal = pdict.Order.getAdjustedMerchandizeTotalPrice(true).add(LineItemCtnr.giftCertificateTotalPrice).decimalValue;
         }
 
-        var HiPayHelper                          = require("int_hipay_controllers/cartridge/scripts/lib/hipay/HiPayHelper");
+        var HiPayHelper;
+
+        try {
+            HiPayHelper = require("int_hipay_controllers/cartridge/scripts/lib/hipay/HiPayHelper");
+        } catch(e) {
+            HiPayHelper = require("int_hipay_sfra/cartridge/scripts/lib/hipay/HiPayHelper");
+        }
+
         var helper                               = new HiPayHelper();
         var paymentInstr: OrderPaymentInstrument = helper.getOrderPaymentInstrument(pdict.Order);
 
