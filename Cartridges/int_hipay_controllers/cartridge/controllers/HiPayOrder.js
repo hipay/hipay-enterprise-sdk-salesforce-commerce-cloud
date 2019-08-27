@@ -1,6 +1,7 @@
 'use strict';
 
 var guard            = require('~/cartridge/scripts/guard'),
+    ISML             = require('dw/template/ISML'),
     HiPayOrderModule = require('~/cartridge/scripts/lib/hipay/HiPayOrderModule'),
     HiPayProcess     = require('~/cartridge/controllers/HiPayProcess');
 
@@ -41,16 +42,12 @@ function Pending() {
 }
 
 /** Handles HiPay declined payment */
-function Decline(args) {
+function Decline() {
     var isHashValid = HiPayProcess.VerifyHash(),
-        order       = args.order,
-        hiPayState  = args.hiPayState,
+        hiPayState  = 'decline',
+        order,
         hiPayRedirectURL,
         result;
-
-    if (hiPayState !== "cancel") {
-        hiPayState = "decline";
-    }
 
     if (!isHashValid) {
         hiPayRedirectURL = dw.web.URLUtils.https('Home-Show');
@@ -77,9 +74,35 @@ function Decline(args) {
 }
 
 /** Handles HiPay cancelled payment */
-function Cancel(args) {
-    args.hiPayState = "cancel";
-    HiPayProcess.Decline(args);
+function Cancel() {
+    var isHashValid = HiPayProcess.VerifyHash(),
+        hiPayState  = 'cancel',
+        order,
+        hiPayRedirectURL,
+        result;
+
+    if (!isHashValid) {
+        hiPayRedirectURL = dw.web.URLUtils.https('Home-Show');
+        ISML.renderTemplate('hipay/hosted/hipayredirect', {
+            HiPayRedirectURL : hiPayRedirectURL
+        });
+    } else {
+        var processOrder = HiPayOrderModule.hiPayProcessOrderCall();
+
+        if (processOrder.error) {
+            hiPayRedirectURL = dw.web.URLUtils.https('Home-Show');
+            ISML.renderTemplate('hipay/hosted/hipayredirect', {
+                HiPayRedirectURL : hiPayRedirectURL
+            });
+        } else {
+            order  = processOrder.order;
+            result = {
+                order      : order,
+                hiPayState : hiPayState
+            };
+            HiPayProcess.FailOrder(result);
+        }
+    }
 }
 
 /** Handles HiPay error payment response */

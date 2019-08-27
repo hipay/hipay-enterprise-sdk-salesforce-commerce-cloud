@@ -202,4 +202,95 @@ ServiceRegistry.configure("hipay.rest.maintenance.SiteGenesis", {
     mockCall: function(svc, client) {}
 });
 
+/////////////////////////////
+//HiPay REST Hosted Payment SiteGenesisGlobal Service Registry
+ServiceRegistry.configure("hipay.rest.hpayment.SiteGenesisGlobal", {
+    createRequest: function(svc, args) {
+        svc.addHeader("Content-Type", "application/x-www-form-urlencoded");
+        svc.addHeader("Cache-Control", "no-cache");
+        svc.addHeader("Accept", "application/json");
 
+        var serviceConfig     = svc.getConfiguration(),
+            credentials       = serviceConfig.getCredential(),
+            credString        = credentials.getUser() + ":" + credentials.getPassword(),
+            base64Credentials = Encoding.toBase64(new Bytes(credString));
+
+        svc.addHeader("Authentication", "Basic " + base64Credentials);
+        svc.setRequestMethod("POST");
+
+        return args;
+    },
+    parseResponse: function(svc, client) {
+        return client;
+    },
+    mockCall: function(svc, client) {}
+});
+
+// HiPay Generate Token SiteGenesisGlobal Service Registry
+ServiceRegistry.configure("hipay.rest.createtoken.SiteGenesisGlobal", {
+    createRequest: function(svc, args) {
+        svc.addHeader("Content-Type", "application/x-www-form-urlencoded");
+        svc.addHeader("Cache-Control", "no-cache");
+        svc.addHeader("Accept", "application/json");
+
+        var serviceConfig     = svc.getConfiguration(),
+            credentials       = serviceConfig.getCredential(),
+            credString        = credentials.getUser() + ":" + credentials.getPassword(),
+            base64Credentials = Encoding.toBase64(new Bytes(credString));
+
+        svc.addHeader("Authentication", "Basic " + base64Credentials);
+        svc.setRequestMethod("POST");
+
+        return args;
+    },
+    parseResponse: function(svc, client) {
+        return client;
+    },
+    mockCall: function(svc, client) {}
+});
+
+// HiPay Order SiteGenesisGlobal Service Registry
+ServiceRegistry.configure("hipay.rest.order.SiteGenesisGlobal", {
+    createRequest: function(svc, args) {
+        svc.addHeader("Content-Type", "application/x-www-form-urlencoded");
+        svc.addHeader("Cache-Control", "no-cache");
+        svc.addHeader("Accept", "application/json");
+
+        var serviceConfig     = svc.getConfiguration(),
+            credentials       = serviceConfig.getCredential(),
+            credString        = credentials.getUser() + ":" + credentials.getPassword(),
+            base64Credentials = Encoding.toBase64(new Bytes(credString));
+
+        svc.addHeader("Authentication", "Basic " + base64Credentials);
+        svc.setRequestMethod("POST");
+
+        return args;
+    },
+    parseResponse: function(svc, client) {
+        return client;
+    },
+    mockCall: function(svc, client) {}
+});
+
+// HiPay REST Maintenance SiteGenesisGlobal Service Registry
+ServiceRegistry.configure("hipay.rest.maintenance.SiteGenesisGlobal", {
+    createRequest: function(svc, args) {
+        svc.addHeader("Content-Type", "application/x-www-form-urlencoded");
+        svc.addHeader("Cache-Control", "no-cache");
+        svc.addHeader("Accept", "application/json");
+
+        var serviceConfig     = svc.getConfiguration(),
+            credentials       = serviceConfig.getCredential(),
+            credString        = credentials.getUser() + ":" + credentials.getPassword(),
+            base64Credentials = Encoding.toBase64(new Bytes(credString));
+
+        svc.addHeader("Authentication", "Basic " + base64Credentials);
+        svc.setRequestMethod("POST");
+
+        return args;
+    },
+    parseResponse: function(svc, client) {
+        return client;
+    },
+    mockCall: function(svc, client) {}
+});
