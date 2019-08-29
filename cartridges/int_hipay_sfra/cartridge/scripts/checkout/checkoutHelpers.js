@@ -386,7 +386,7 @@ function calculatePaymentTransaction(currentBasket) {
     try {
         Transaction.wrap(function () {
             var orderTotal = currentBasket.totalGrossPrice;
-            var paymentInstrument = currentBasket.paymentInstrument;
+            var paymentInstrument = currentBasket.getPaymentInstruments()[0];
             paymentInstrument.paymentTransaction.setAmount(orderTotal);
         });
     } catch (e) {
@@ -604,7 +604,7 @@ function placeOrder(order, fraudDetectionStatus) {
         order.setExportStatus(Order.EXPORT_STATUS_READY);
         Transaction.commit();
     } catch (e) {
-        Transaction.wrap(function () { OrderMgr.failOrder(order); });
+        Transaction.wrap(function () { OrderMgr.failOrder(order, true); });
         Logger.error("[checkoutHelpets.js] crashed on line: " + e.lineNumber + " with error: " + e);
         result.error = true;
     }
