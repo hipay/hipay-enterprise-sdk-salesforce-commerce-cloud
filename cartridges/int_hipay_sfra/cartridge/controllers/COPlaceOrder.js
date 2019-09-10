@@ -30,7 +30,7 @@ function submitOrder(order_id, req, res, next) {
     var Resource = require('dw/web/Resource');
 
     if (fraudDetectionStatus.status === 'fail') {
-        Transaction.wrap(function () { OrderMgr.failOrder(order); });
+        Transaction.wrap(function () { OrderMgr.failOrder(order, true); });
         // fraud detection failed
         req.session.privacyCache.set('fraudDetectionStatus', true);
         res.json({

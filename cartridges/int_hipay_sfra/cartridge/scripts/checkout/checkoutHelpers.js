@@ -105,7 +105,7 @@ function copyCustomerAddressToShipment(address, shipmentOrNull) {
         shippingAddress.setCity(address.city);
         shippingAddress.setPostalCode(address.postalCode);
 
-        if (!empty(address.stateCode)) {
+        if (address.stateCode) {
             shippingAddress.setStateCode(address.stateCode);
         }
 
@@ -171,7 +171,7 @@ function copyShippingAddressToShipment(shippingData, shipmentOrNull) {
         shippingAddress.setCity(shippingData.address.city);
         shippingAddress.setPostalCode(shippingData.address.postalCode);
 
-        if (!empty(shippingData.address.stateCode)) {
+        if (shippingData.address.stateCode) {
             shippingAddress.setStateCode(shippingData.address.stateCode);
         }
 
@@ -386,7 +386,7 @@ function calculatePaymentTransaction(currentBasket) {
     try {
         Transaction.wrap(function () {
             var orderTotal = currentBasket.totalGrossPrice;
-            var paymentInstrument = currentBasket.getPaymentInstruments()[0];
+            var paymentInstrument = currentBasket.paymentInstruments[0];
             paymentInstrument.paymentTransaction.setAmount(orderTotal);
         });
     } catch (e) {
@@ -491,7 +491,7 @@ function handlePayments(order, orderNumber, storedPaymentUUID) {
         var paymentInstruments = order.paymentInstruments;
 
         if (paymentInstruments.length === 0) {
-            Transaction.wrap(function () { OrderMgr.failOrder(order); });
+            Transaction.wrap(function () { OrderMgr.failOrder(order, true); });
             result.error = true;
         }
 
@@ -526,7 +526,7 @@ function handlePayments(order, orderNumber, storedPaymentUUID) {
                     }
 
                     if (authorizationResult.error) {
-                        Transaction.wrap(function () { OrderMgr.failOrder(order); });
+                        Transaction.wrap(function () { OrderMgr.failOrder(order, true); });
                         result.error = true;
 
                         if (!empty(authorizationResult.PlaceOrderError)) {
@@ -585,7 +585,7 @@ function sendConfirmationEmail(order, locale) {
  */
 function placeOrder(order, fraudDetectionStatus) {
     var result = { error: false };
-    var Logger                 = require('dw/system/Logger');
+    var Logger = require('dw/system/Logger');
 
     try {
         Transaction.begin();
