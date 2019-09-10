@@ -36,7 +36,7 @@ function FailOrder(args) {
 
     if (order != null) {
         Transaction.wrap(function() {
-            status = OrderMgr.failOrder(order);
+            status = OrderMgr.failOrder(order, true);
         });
         if (status.status === Status.OK) {
             hiPayRedirectURL = dw.web.URLUtils.https('COPlaceOrder-Submit', 'order_token', order.orderToken, 'order_id', order.orderNo, 'paymentStatus', hiPayState, dw.web.CSRFProtection.getTokenName(), dw.web.CSRFProtection.generateToken());
