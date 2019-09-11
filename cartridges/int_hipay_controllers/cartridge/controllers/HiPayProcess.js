@@ -38,7 +38,7 @@ function FailOrder(args) {
 
     if (order != null) {
         Transaction.wrap(function() {
-            status = dw.order.OrderMgr.failOrder(order);
+            status = dw.order.OrderMgr.failOrder(order, true);
         });
         if (status.status === Status.OK) {
             hiPayRedirectURL = dw.web.URLUtils.https('COSummary-Start', 'status', hiPayState);
@@ -80,7 +80,7 @@ function ClearHungOrders() {
 function failHungOrder(order) {
     try {
         require('dw/system/Transaction').wrap(function () {
-            require('dw/order/OrderMgr').failOrder(order);
+            require('dw/order/OrderMgr').failOrder(order, true);
         });
     } catch (e) {
         var error = "Error while fail hung order ::: " + e.message;
