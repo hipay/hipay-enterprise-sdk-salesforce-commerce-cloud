@@ -74,7 +74,7 @@ function ClearHungOrders() {
 function failHungOrder(order) {
     try {
         Transaction.wrap(function () {
-            OrderMgr.failOrder(order);
+            OrderMgr.failOrder(order, true);
         });
     } catch (e) {
         var error = "Error while fail hung order ::: " + e.message;
