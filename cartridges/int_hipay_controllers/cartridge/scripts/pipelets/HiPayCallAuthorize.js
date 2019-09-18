@@ -7,11 +7,11 @@
 */
 
 function execute(args) {
-    var order             = args.Order,
+    var order = args.Order,
         paymentInstrument = args.PaymentInstrument,
-        ProcessorID       = args.ProcessorID,
-        PaymentMethod     = args.PaymentMethodID,
-        extensionPoint    = 'app.payment.processor.' + args.ProcessorID;
+        ProcessorID = args.ProcessorID,
+        PaymentMethod = args.PaymentMethodID,
+        extensionPoint = 'app.payment.processor.' + args.ProcessorID;
 
     if (dw.system.HookMgr.hasHook(extensionPoint)) {
         var response = dw.system.HookMgr.callHook(extensionPoint, 'Authorize', {

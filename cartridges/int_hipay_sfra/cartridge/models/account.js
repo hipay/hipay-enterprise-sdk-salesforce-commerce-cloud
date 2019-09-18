@@ -10,16 +10,16 @@ var URLUtils = require('dw/web/URLUtils');
  * @returns {Object} object that contains info about the current customer's payment instruments
  */
 function getCustomerPaymentInstruments(userPaymentInstruments) {
-    var paymentInstruments,
-        sitePrefs   = dw.system.Site.getCurrent().getPreferences();
+    var paymentInstruments;
+    var sitePrefs = require('dw/system/Site').getCurrent().getPreferences().getCustom();
 
-    userPaymentInstruments = userPaymentInstruments.filter(function(paymentInstrument) {
-        if (sitePrefs.custom["hipayEnabled"] && sitePrefs.custom["hipayEnableOneClick"]) {
+    userPaymentInstruments = userPaymentInstruments.filter(function (paymentInstrument) { // eslint-disable-line no-param-reassign
+        if (sitePrefs.hipayEnabled && sitePrefs.hipayEnableOneClick) {
             return paymentInstrument.raw.paymentMethod.indexOf('HIPAY') > -1;
-        } else {
+        } else { // eslint-disable-line
             return paymentInstrument.raw.paymentMethod.indexOf('HIPAY') < 0;
         }
-   });
+    });
 
     paymentInstruments = userPaymentInstruments.map(function (paymentInstrument) {
         var result = {

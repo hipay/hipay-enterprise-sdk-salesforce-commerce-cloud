@@ -8,7 +8,7 @@
  * Recovers the last url from the click stream
  * @return {dw.web.URL} the last called URL
  */
-exports.lastUrl  = function lastUrl() {
+exports.lastUrl = function lastUrl() {
     var location = dw.web.URLUtils.url('Home-Show');
     var click = session.clickStream.last;
     if (click) {

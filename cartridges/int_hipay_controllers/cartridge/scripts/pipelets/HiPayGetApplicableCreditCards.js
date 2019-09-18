@@ -5,7 +5,7 @@
 */
 
 function execute(args) {
-    var countryCode   = args.CountryCode,
+    var countryCode = args.CountryCode,
         paymentAmount = args.PaymentAmount;
 
     args.ValidPaymentInstruments = require('*/cartridge/scripts/lib/hipay/HiPayCheckoutModule').getApplicableCreditCards(countryCode, paymentAmount).ValidPaymentInstruments;

@@ -19,34 +19,35 @@ var HiPayMaintenanceModule = function () {};
  *          {String}  response.hiPayMaintenanceResponse
  */
 
-HiPayMaintenanceModule.hiPayMaintenanceRequest = function(order, amount) {
-    return dw.system.Transaction.wrap(function() {
-        var dwOrder                 = require('dw/order'),
-            HiPayMaintenanceService = require('~/cartridge/scripts/lib/hipay/services/hipayMaintenanceService'),
-            HiPayLogger             = require('~/cartridge/scripts/lib/hipay/hipayLogger'),
-            HiPayHelper             = require('~/cartridge/scripts/lib/hipay/hipayHelper'),
-            log                     = new HiPayLogger("HiPayMaintenanceRequest"),
-            helper                  = new HiPayHelper(),
-            hiPayMaintenanceService = new HiPayMaintenanceService(),
-            amountToCapture         = amount,
-            regEx                   = /^[+]?([.]\d+|\d+[.]?\d*)$/, /* Validate for positive number */
-            response                = {
-                hiPayMaintenanceResponse : null,
-                error                    : true
-            };
+HiPayMaintenanceModule.hiPayMaintenanceRequest = function (order, amount) {
+    var Transaction = require('dw/system/Transaction');
+    var Decimal = require('dw/util/Decimal');
+    return Transaction.wrap(function () {
+        var HiPayMaintenanceService = require('~/cartridge/scripts/lib/hipay/services/hipayMaintenanceService');
+        var HiPayLogger = require('~/cartridge/scripts/lib/hipay/hipayLogger');
+        var HiPayHelper = require('~/cartridge/scripts/lib/hipay/hipayHelper');
+        var log = new HiPayLogger('HiPayMaintenanceRequest');
+        var helper = new HiPayHelper();
+        var hiPayMaintenanceService = new HiPayMaintenanceService();
+        var amountToCapture = amount;
+        var regEx = /^[+]?([.]\d+|\d+[.]?\d*)$/; // Validate for positive number
+        var response = {
+            hiPayMaintenanceResponse: null,
+            error: true
+        };
 
         if (!amountToCapture.match(regEx)) {
-            log.error("Calling HiPayMaintenance Capture ::: \n Wrong Capture amount value!");
+            log.error('Calling HiPayMaintenance Capture ::: Wrong Capture amount value!');
             response.error = true;
 
             return response;
         }
 
-        var paymentInstr         = helper.getOrderPaymentInstrument(order),
-            transactionReference = paymentInstr.getPaymentTransaction().getTransactionID(),
-            captureRequestAmount = 0;
+        var paymentInstr = helper.getOrderPaymentInstrument(order);
+        var transactionReference = paymentInstr.getPaymentTransaction().getTransactionID();
+        var captureRequestAmount = 0;
 
-        if ("hipayTransactionCaptureRequestAmount" in paymentInstr.custom) {
+        if ('hipayTransactionCaptureRequestAmount' in paymentInstr.custom) {
             captureRequestAmount = paymentInstr.custom.hipayTransactionCaptureRequestAmount;
         }
 
@@ -55,24 +56,24 @@ HiPayMaintenanceModule.hiPayMaintenanceRequest = function(order, amount) {
         if (order.totalGrossPrice.available) {
             orderTotal = order.totalGrossPrice.decimalValue;
         } else {
-            orderTotal = order.getAdjustedMerchandizeTotalPrice(true).add(LineItemCtnr.giftCertificateTotalPrice).decimalValue;
+            orderTotal = order.getAdjustedMerchandizeTotalPrice(true).add(order.giftCertificateTotalPrice).decimalValue;
         }
 
-        var captureDiff = orderTotal - captureRequestAmount,
-            roundedDiff = new dw.util.Decimal(captureDiff).round(2);
+        var captureDiff = orderTotal - captureRequestAmount;
+        var roundedDiff = new Decimal(captureDiff).round(2);
 
         if (roundedDiff < amountToCapture) {
-            log.error("Calling HiPayMaintenance Capture ::: \n The Capture amount is higher than the avilable total amount!");
+            log.error('Calling HiPayMaintenance Capture ::: The Capture amount is higher than the avilable total amount!');
             response.error = true;
 
             return response;
         }
 
         try {
-            log.debug("Calling HiPayMaintenance Capture ::: \n" + transactionReference);
+            log.debug('Calling HiPayMaintenance Capture ::: ' + transactionReference);
 
             if (empty(transactionReference)) {
-                log.error("HiPay maintenance service ::: Missing transaction Reference");
+                log.error('HiPay maintenance service ::: Missing transaction Reference');
                 response.error = true;
 
                 return response;
@@ -80,19 +81,19 @@ HiPayMaintenanceModule.hiPayMaintenanceRequest = function(order, amount) {
 
             var serviceAmount = amountToCapture;
 
-            if (amountToCapture == orderTotal) {
+            if (amountToCapture === orderTotal) {
                 serviceAmount = '';
             }
 
-            var hipayResponse = hiPayMaintenanceService.initiateCapture(transactionReference, HiPayMaintenanceService.OPERATION_CAPTURE, serviceAmount),
-                msg           = null;
+            var hipayResponse = hiPayMaintenanceService.initiateCapture(transactionReference, HiPayMaintenanceService.OPERATION_CAPTURE, serviceAmount);
+            var msg = null;
 
             if (hipayResponse.ok === true) {
                 msg = JSON.parse(hipayResponse.object.text);
 
-                paymentInstr.custom.hipayTransactionCaptureRequestAmount = +captureRequestAmount + +amountToCapture; /* update capture amount */
+                paymentInstr.custom.hipayTransactionCaptureRequestAmount = +captureRequestAmount + +amountToCapture; // update capture amount
 
-                log.debug("HiPay Hosted Page Response ::: \n" + JSON.stringify(msg, undefined, 2));
+                log.debug('HiPay Hosted Page Response ::: ' + JSON.stringify(msg, undefined, 2));
             } else {
                 log.error(hipayResponse.msg);
                 response.error = true;
@@ -112,6 +113,6 @@ HiPayMaintenanceModule.hiPayMaintenanceRequest = function(order, amount) {
 
         return response;
     });
-}
+};
 
 module.exports = HiPayMaintenanceModule;

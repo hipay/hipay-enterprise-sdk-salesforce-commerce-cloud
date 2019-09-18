@@ -48,7 +48,7 @@
                 HiPayHelper = require("int_hipay_sfra/cartridge/scripts/lib/hipay/hipayHelper");
             }
 
-            var helper                               = new HiPayHelper();
+            var helper = new HiPayHelper();
             var paymentInstr: OrderPaymentInstrument = helper.getOrderPaymentInstrument(pdict.Order);
 
             var capturedAmount = 0;
@@ -64,7 +64,7 @@
             }
 
             var maxCaptureRequest = Number(orderTotal - captureRequestAmount).toFixed(2);
-            pdict.CurrentForms.searchorder.captureAmount.value  = maxCaptureRequest;
+            pdict.CurrentForms.searchorder.captureAmount.value = maxCaptureRequest;
             pdict.CurrentForms.searchorder.captureOrderID.value = pdict.Order.orderNo;
 
             var hipayTransactionState = "";

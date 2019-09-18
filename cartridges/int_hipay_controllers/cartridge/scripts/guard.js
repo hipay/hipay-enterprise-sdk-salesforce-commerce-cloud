@@ -19,7 +19,7 @@ var CSRFProtection = require('dw/web/CSRFProtection');
 
 var app = require('~/cartridge/scripts/app');
 var browsing = require('~/cartridge/scripts/util/Browsing');
-var LOGGER   = dw.system.Logger.getLogger('guard');
+var LOGGER = dw.system.Logger.getLogger('guard');
 
 /**
  * This method contains the login to handle a not logged in customer

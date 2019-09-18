@@ -2,7 +2,7 @@
 <form xmlns="http://www.demandware.com/xml/form/2008-04-19">
 
     <field formid="addressId" label="label.input.addressid" type="string" mandatory="true"
-           max-length="20" missing-error="error.message.required" range-error="error.message.lessthan20"/>
+    	   max-length="20" missing-error="error.message.required" range-error="error.message.lessthan20"/>
     <field formid="firstName" label="label.input.firstname.profile" type="string" mandatory="true" binding="firstName"
            max-length="50" missing-error="error.message.required" range-error="error.message.lessthan50"/>
     <field formid="lastName" label="label.input.lastname.profile" type="string" mandatory="true" binding="lastName" max-length="50"

@@ -7,8 +7,8 @@
 */
 
 /* API includes */
-var ISML  = require('dw/template/ISML'),
-    guard = require('~/cartridge/scripts/guard');
+var ISML = require('dw/template/ISML');
+var guard = require('~/cartridge/scripts/guard');
 
 /* Handles HiPay server notifications */
 function notify() {

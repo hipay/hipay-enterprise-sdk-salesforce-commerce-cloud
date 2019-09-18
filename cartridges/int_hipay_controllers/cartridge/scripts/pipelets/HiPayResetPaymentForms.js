@@ -5,7 +5,7 @@
 
 function execute(args) {
     var HiPayLogger = require("*/cartridge/scripts/lib/hipay/HiPayLogger"),
-        log         = new HiPayLogger("HiPayResetPaymentForms");
+        log = new HiPayLogger("HiPayResetPaymentForms");
 
     try {
         if (require('*/cartridge/scripts/lib/hipay/HiPayCheckoutModule').resetPaymentForms()) {

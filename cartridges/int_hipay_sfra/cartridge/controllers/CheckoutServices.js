@@ -4,9 +4,6 @@ var page = module.superModule;
 var server = require('server');
 
 var COHelpers = require('*/cartridge/scripts/checkout/checkoutHelpers');
-var csrfProtection = require('*/cartridge/scripts/middleware/csrf');
-var userLoggedIn = require('*/cartridge/scripts/middleware/userLoggedIn');
-var consentTracking = require('*/cartridge/scripts/middleware/consentTracking');
 
 server.extend(page);
 
@@ -17,6 +14,7 @@ server.replace(
     'SubmitPayment',
     server.middleware.https,
     function (req, res, next) {
+        var PaymentMgr = require('dw/order/PaymentMgr');
         var paymentForm = server.forms.getForm('billing');
         var paymentMethodID = paymentForm.paymentMethod.value;
         var billingFormErrors = {};
@@ -28,12 +26,11 @@ server.replace(
         billingFormErrors = COHelpers.validateBillingForm(paymentForm.addressFields);
 
         if (!req.form.storedPaymentUUID) {
-            if (paymentMethodID == "CREDIT_CARD" || paymentMethodID == "HIPAY_CREDIT_CARD") {
+            if (paymentMethodID === 'CREDIT_CARD' || paymentMethodID === 'HIPAY_CREDIT_CARD') {
                 // verify credit card form data
                 delete paymentForm.hipayMethodsFields;
 
                 if (!empty(paymentForm.creditCardFields.cardType.value)) {
-                    var PaymentMgr = require('dw/order/PaymentMgr');
                     var paymentCard = PaymentMgr.getPaymentCard(paymentForm.creditCardFields.cardType.value);
 
                     if (!empty(paymentCard) && paymentCard.custom.hipayCVVIgnored) {
@@ -42,13 +39,13 @@ server.replace(
                 }
 
                 creditCardErrors = COHelpers.validateCreditCard(paymentForm);
-            } else if (paymentMethodID == 'HIPAY_KLARNA') {
+            } else if (paymentMethodID === 'HIPAY_KLARNA') {
                 hiPayErrors = COHelpers.validateFields(paymentForm.hipayMethodsFields.klarna);
                 paymentForm.hipayMethodsFields = paymentForm.hipayMethodsFields.klarna;
-            } else if (paymentMethodID == 'HIPAY_IDEAL') {
+            } else if (paymentMethodID === 'HIPAY_IDEAL') {
                 hiPayErrors = COHelpers.validateFields(paymentForm.hipayMethodsFields.ideal);
                 paymentForm.hipayMethodsFields = paymentForm.hipayMethodsFields.ideal;
-            } else if (paymentMethodID == 'HIPAY_GIROPAY') {
+            } else if (paymentMethodID === 'HIPAY_GIROPAY') {
                 hiPayErrors = COHelpers.validateFields(paymentForm.hipayMethodsFields.giropay);
                 paymentForm.hipayMethodsFields = paymentForm.hipayMethodsFields.giropay;
             }
@@ -115,7 +112,7 @@ server.replace(
                 viewData.paymentInformation.securityCode = {
                     value: paymentForm.creditCardFields.securityCode.value,
                     htmlName: paymentForm.creditCardFields.securityCode.htmlName
-                }
+                };
             }
 
             if (req.form.storedPaymentUUID) {
@@ -137,7 +134,6 @@ server.replace(
                 var CustomerMgr = require('dw/customer/CustomerMgr');
                 var HookMgr = require('dw/system/HookMgr');
                 var Resource = require('dw/web/Resource');
-                var PaymentMgr = require('dw/order/PaymentMgr');
                 var Transaction = require('dw/system/Transaction');
                 var AccountModel = require('*/cartridge/models/account');
                 var OrderModel = require('*/cartridge/models/order');
@@ -164,7 +160,7 @@ server.replace(
 
                 var billingAddress = currentBasket.billingAddress;
                 var billingForm = server.forms.getForm('billing');
-                var paymentMethodID = billingData.paymentMethod.value;
+                var paymentMethodID = billingData.paymentMethod.value; // eslint-disable-line no-shadow
                 var result;
 
                 billingForm.creditCardFields.cardNumber.htmlValue = '';
@@ -501,13 +497,13 @@ server.replace('PlaceOrder', server.middleware.https, function (req, res, next) 
     if (handlePaymentResult.HiPay) {
         if ((handlePaymentResult.Hosted || handlePaymentResult.API) && !empty(handlePaymentResult.HiPayRedirectURL)) {
             res.json({
-                error : false,
-                continueUrl : handlePaymentResult.HiPayRedirectURL
+                error: false,
+                continueUrl: handlePaymentResult.HiPayRedirectURL
             });
-        } else if (handlePaymentResult.Iframe){
+        } else if (handlePaymentResult.Iframe) {
             res.json({
-                error : false,
-                continueUrl : URLUtils.url('CheckoutServices-RenderIFrame', 'iframeurl', handlePaymentResult.HiPayRedirectURL, 'templatename', handlePaymentResult.Template).toString()
+                error: false,
+                continueUrl: URLUtils.url('CheckoutServices-RenderIFrame', 'iframeurl', handlePaymentResult.HiPayRedirectURL, 'templatename', handlePaymentResult.Template).toString()
             });
         }
         return next();
@@ -561,7 +557,7 @@ server.get('RenderIFrame',
     server.middleware.https,
     function (req, res, next) {
         res.render(req.querystring.templatename, {
-            HiPayRedirectURL : req.querystring.iframeurl
+            HiPayRedirectURL: req.querystring.iframeurl
         });
 
         next();

@@ -113,7 +113,7 @@ base.cancelNewPayment = function () {
     });
 };
 
-base.methods.updatePaymentInformation = function(order) {
+base.methods.updatePaymentInformation = function (order) {
     // update payment details
     var $paymentSummary = $('.payment-details');
     var htmlToAppend = '';
