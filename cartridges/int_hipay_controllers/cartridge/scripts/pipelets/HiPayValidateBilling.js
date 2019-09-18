@@ -3,8 +3,8 @@
  */
 
 function execute(args) {
-    var HiPayLogger = require("*/cartridge/scripts/lib/hipay/HiPayLogger"),
-        log         = new HiPayLogger("HiPayValidateBilling");
+    var HiPayLogger = require('*/cartridge/scripts/lib/hipay/HiPayLogger');
+    var log = new HiPayLogger('HiPayValidateBilling');
 
     try {
         if (require('*/cartridge/scripts/lib/hipay/HiPayCheckoutModule').validateBilling()) {

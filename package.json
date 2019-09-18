@@ -4,7 +4,7 @@
   "description": "New overlay cartridge",
   "main": "index.js",
   "scripts": {
-    "lint": "sgmf-scripts --lint js && sgmf-scripts --lint css",
+    "lint": "sgmf-scripts --lint js",
     "upload": "sgmf-scripts --upload -- ",
     "uploadCartridge": "sgmf-scripts --uploadCartridge int_hipay_sfra",
     "compile:js": "sgmf-scripts --compile js",

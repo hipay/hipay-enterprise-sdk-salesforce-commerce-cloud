@@ -1,50 +1,15 @@
 'use strict';
 
-var OrderMgr           = require('dw/order/OrderMgr'),
-    Resource           = require('dw/web/Resource'),
-    PaymentStatusCodes = require('dw/order/PaymentStatusCodes'),
-    Transaction        = require('dw/system/Transaction'),
-    PaymentMgr         = require('dw/order/PaymentMgr');
+var OrderMgr = require('dw/order/OrderMgr');
+var Resource = require('dw/web/Resource');
+var PaymentStatusCodes = require('dw/order/PaymentStatusCodes');
+var Transaction = require('dw/system/Transaction');
+var PaymentMgr = require('dw/order/PaymentMgr');
 
 /* Script Modules */
-var hiPayCheckoutModule = require('*/cartridge/scripts/lib/hipay/modules/hipayCheckoutModule'),
-    collections = require('*/cartridge/scripts/util/collections'),
-    sitePrefs   = dw.system.Site.getCurrent().getPreferences();
-
-/**
-* Creates a HiPay PaymentInstrument
-*
-* @return {Object} success if the payment instrument is created, error otherwise
-*/
-function Handle(currentBasket, paymentInformation, paymentUUID) {
-    var basket            = currentBasket,
-        paymentMethod     = session.forms.billing.paymentMethod.value,
-        paymentInstrument;
-
-    if (!empty(paymentMethod)) {
-        paymentInstrument = hiPayCheckoutModule.createPaymentInstrument(basket, paymentMethod, true);
-
-        if (paymentInstrument == null) {
-            return { error : true };
-        }
-
-        hiPayCheckoutModule.hiPayUpdatePaymentInstrument(paymentInstrument, paymentInformation);
-
-        if (paymentMethod === "HIPAY_CREDIT_CARD") {
-            var handleResponse = CreditCardHandle(paymentInstrument, paymentInformation, paymentUUID);
-
-            if (handleResponse.success) {
-                return { success : true };
-            } else {
-                return { fieldErrors: handleResponse.fieldErrors, serverErrors: handleResponse.serverErrors, error: true };
-            }
-        } else {
-            return { success : true };
-        }
-    } else {
-        return { error : true };
-    }
-}
+var hiPayCheckoutModule = require('*/cartridge/scripts/lib/hipay/modules/hipayCheckoutModule');
+var collections = require('*/cartridge/scripts/util/collections');
+var sitePrefs = require('dw/system/Site').getCurrent().getPreferences().getCustom();
 
 /**
 * Verifies a credit card against a valid card number and expiration date
@@ -54,41 +19,41 @@ function Handle(currentBasket, paymentInformation, paymentUUID) {
 * @param  {dw.order.PaymentInstrument} paymentInstrument - The payment instrument
 * @return {Object} Object indicating success or error
 */
-function CreditCardHandle(paymentInstrument, paymentInformation, paymentUUID) {
-    var creditCard           = paymentInformation,
-        hipayEnableOneClick  = sitePrefs.custom["hipayEnableOneClick"],
-        hiPayMultiUseToken   = false,
-        hiPayToken           = null,
-        cardErrors = {},
-        serverErrors = [],
-        creditCardHolder,
-        creditCardStatus,
-        cardNumber,
-        cardSecurityCode,
-        cardType,
-        expirationMonth,
-        expirationYear,
-        paymentCard,
-        hiPayCardBrand,
-        hiPayCardNumber,
-        hiPayCardExpiryMonth,
-        hiPayCardExpiryYear,
-        hiPayCardHolder,
-        hiPayCardCVC,
-        hiPayCardType;
+function creditCardHandle(paymentInstrument, paymentInformation, paymentUUID) {
+    var creditCard = paymentInformation;
+    var hipayEnableOneClick = sitePrefs.hipayEnableOneClick;
+    var hiPayMultiUseToken = false;
+    var hiPayToken = null;
+    var cardErrors = {};
+    var serverErrors = [];
+    var creditCardHolder;
+    var creditCardStatus;
+    var cardNumber;
+    var cardSecurityCode;
+    var cardType;
+    var expirationMonth;
+    var expirationYear;
+    var paymentCard;
+    var hiPayCardBrand;
+    var hiPayCardNumber;
+    var hiPayCardExpiryMonth;
+    var hiPayCardExpiryYear;
+    var hiPayCardHolder;
+    var hiPayCardCVC;
+    var hiPayCardType;
 
     if (empty(paymentUUID)) {
-        cardNumber       = creditCard.cardNumber.value;
+        cardNumber = creditCard.cardNumber.value;
 
         if (!empty(creditCard.securityCode)) {
             cardSecurityCode = creditCard.securityCode.value;
         }
 
-        cardType         = creditCard.cardType.value
-        expirationMonth  = creditCard.expirationMonth.value;
-        expirationYear   = creditCard.expirationYear.value;
+        cardType = creditCard.cardType.value;
+        expirationMonth = creditCard.expirationMonth.value;
+        expirationYear = creditCard.expirationYear.value;
 
-        paymentCard      = PaymentMgr.getPaymentCard(cardType);
+        paymentCard = PaymentMgr.getPaymentCard(cardType);
 
         if (!empty(cardSecurityCode)) {
             creditCardStatus = paymentCard.verify(expirationMonth, expirationYear, cardNumber, cardSecurityCode);
@@ -129,7 +94,7 @@ function CreditCardHandle(paymentInstrument, paymentInformation, paymentUUID) {
     }
 
     if (!empty(creditCard.cardOwner.value)) {
-        if (creditCard.cardType.value == 'Amex') {
+        if (creditCard.cardType.value === 'Amex') {
             var fullName = creditCard.cardOwner.value;
 
             creditCardHolder = fullName.split(' ').join('.');
@@ -138,13 +103,13 @@ function CreditCardHandle(paymentInstrument, paymentInformation, paymentUUID) {
         }
     }
 
-    if (!empty(paymentUUID) && hipayEnableOneClick) { /* If one-click payment */
-        var paymentInstruments   = customer.getProfile().getWallet().getPaymentInstruments("HIPAY_CREDIT_CARD"),
-            uuid                 = paymentUUID,
-            creditCardInstrument = null,
-            selectedCreditCard   = null;
+    if (!empty(paymentUUID) && hipayEnableOneClick) { // If one-click payment
+        var paymentInstruments = customer.getProfile().getWallet().getPaymentInstruments('HIPAY_CREDIT_CARD');
+        var uuid = paymentUUID;
+        var creditCardInstrument = null;
+        var selectedCreditCard = null;
 
-        var instrumentsIter = !empty(uuid) && !empty(paymentInstruments) ? paymentInstruments.iterator() : "";
+        var instrumentsIter = !empty(uuid) && !empty(paymentInstruments) ? paymentInstruments.iterator() : '';
 
         while (!empty(instrumentsIter) && instrumentsIter.hasNext()) {
             creditCardInstrument = instrumentsIter.next();
@@ -156,55 +121,90 @@ function CreditCardHandle(paymentInstrument, paymentInformation, paymentUUID) {
         }
 
         if (empty(selectedCreditCard)) {
-            return { error : true };
+            return { error: true };
         }
 
-        hiPayCardNumber      = selectedCreditCard.creditCardNumber;
+        hiPayCardNumber = selectedCreditCard.creditCardNumber;
         hiPayCardExpiryMonth = selectedCreditCard.creditCardExpirationMonth;
-        hiPayCardExpiryYear  = selectedCreditCard.creditCardExpirationYear;
-        hiPayCardHolder      = selectedCreditCard.creditCardHolder;
-        hiPayMultiUseToken   = session.forms.billing.creditCardFields.saveCard.value;
-        hiPayToken           = selectedCreditCard.creditCardToken;
-        hiPayCardType        = selectedCreditCard.creditCardType;
+        hiPayCardExpiryYear = selectedCreditCard.creditCardExpirationYear;
+        hiPayCardHolder = selectedCreditCard.creditCardHolder;
+        hiPayMultiUseToken = session.forms.billing.creditCardFields.saveCard.value;
+        hiPayToken = selectedCreditCard.creditCardToken;
+        hiPayCardType = selectedCreditCard.creditCardType;
     } else {
-        hiPayCardBrand       = paymentInstrument.custom.hipayProductName;
-        hiPayCardNumber      = creditCard.cardNumber.value;
+        hiPayCardBrand = paymentInstrument.custom.hipayProductName;
+        hiPayCardNumber = creditCard.cardNumber.value;
         hiPayCardExpiryMonth = creditCard.expirationMonth.value;
-        hiPayCardExpiryYear  = creditCard.expirationYear.value;
-        hiPayCardHolder      = creditCardHolder;
+        hiPayCardExpiryYear = creditCard.expirationYear.value;
+        hiPayCardHolder = creditCardHolder;
 
         if (!empty(creditCard.securityCode)) {
             hiPayCardCVC = creditCard.securityCode.value;
         }
 
-        hiPayMultiUseToken   = hipayEnableOneClick && session.forms.billing.creditCardFields.saveCard.value;
-        hiPayCardType        = creditCard.cardType.value;
+        hiPayMultiUseToken = hipayEnableOneClick && session.forms.billing.creditCardFields.saveCard.value;
+        hiPayCardType = creditCard.cardType.value;
 
-        var hiPayTokenResult     = hiPayCheckoutModule.hiPayGenerateToken(hiPayCardBrand, hiPayCardNumber, hiPayCardExpiryMonth,
+        var hiPayTokenResult = hiPayCheckoutModule.hiPayGenerateToken(hiPayCardBrand, hiPayCardNumber, hiPayCardExpiryMonth,
             hiPayCardExpiryYear, hiPayCardHolder, hiPayCardCVC, hiPayMultiUseToken);
 
-        if (!empty(hiPayTokenResult) && hiPayTokenResult.error == false) {
-            hiPayToken      = hiPayTokenResult.HiPayToken;
+        if (!empty(hiPayTokenResult) && hiPayTokenResult.error === false) {
+            hiPayToken = hiPayTokenResult.HiPayToken;
             hiPayCardNumber = hiPayTokenResult.HiPayPan;
         } else {
-            return { error : true };
+            return { error: true };
         }
     }
 
     if (hiPayToken != null) {
-        Transaction.wrap(function() {
-            paymentInstrument.creditCardHolder          = hiPayCardHolder;
-            paymentInstrument.creditCardNumber          = hiPayCardNumber;
-            paymentInstrument.creditCardType            = hiPayCardType;
-            paymentInstrument.creditCardExpirationMonth = hiPayCardExpiryMonth;
-            paymentInstrument.creditCardExpirationYear  = hiPayCardExpiryYear;
-            paymentInstrument.creditCardToken           = hiPayToken;
+        Transaction.wrap(function () {
+            paymentInstrument.setCreditCardHolder(hiPayCardHolder);
+            paymentInstrument.setCreditCardNumber(hiPayCardNumber);
+            paymentInstrument.setCreditCardType(hiPayCardType);
+            paymentInstrument.setCreditCardExpirationMonth(hiPayCardExpiryMonth);
+            paymentInstrument.setCreditCardExpirationYear(hiPayCardExpiryYear);
+            paymentInstrument.setCreditCardToken(hiPayToken);
         });
     } else {
-        return { error : true };
+        return { error: true };
     }
 
-    return { success : true };
+    return { success: true };
+}
+
+/**
+* Creates a HiPay PaymentInstrument
+*
+* @return {Object} success if the payment instrument is created, error otherwise
+*/
+function Handle(currentBasket, paymentInformation, paymentUUID) {
+    var basket = currentBasket;
+    var paymentMethod = session.forms.billing.paymentMethod.value;
+    var paymentInstrument;
+
+    if (!empty(paymentMethod)) {
+        paymentInstrument = hiPayCheckoutModule.createPaymentInstrument(basket, paymentMethod, true);
+
+        if (paymentInstrument == null) {
+            return { error: true };
+        }
+
+        hiPayCheckoutModule.hiPayUpdatePaymentInstrument(paymentInstrument, paymentInformation);
+
+        if (paymentMethod === 'HIPAY_CREDIT_CARD') {
+            var handleResponse = creditCardHandle(paymentInstrument, paymentInformation, paymentUUID);
+
+            if (handleResponse.success) {
+                return { success: true };
+            } else { // eslint-disable-line
+                return { fieldErrors: handleResponse.fieldErrors, serverErrors: handleResponse.serverErrors, error: true };
+            }
+        } else { // eslint-disable-line
+            return { success: true };
+        }
+    } else {
+        return { error: true };
+    }
 }
 
 /**
@@ -215,63 +215,60 @@ function CreditCardHandle(paymentInstrument, paymentInformation, paymentUUID) {
 * @return {Object} Object indicating authorized if successful or error otherwise
 */
 function Authorize(orderNumber, paymentInstrument, paymentProcessor, storedPaymentUUID) {
-    var hipayEnableOneClick    = sitePrefs.custom["hipayEnableOneClick"],
-        orderNo                = orderNumber,
-        order                  = OrderMgr.getOrder(orderNumber),
-        paymentProcessor       = null,
-        paymentMethod          = session.forms.billing.paymentMethod.value,
-        recurring              = false,
-        hiPayDeviceFingerprint,
-        response;
+    var hipayEnableOneClick = sitePrefs.hipayEnableOneClick;
+    var order = OrderMgr.getOrder(orderNumber);
+    var paymentProcessor = null; // eslint-disable-line no-redeclare
+    var paymentMethod = session.forms.billing.paymentMethod.value;
+    var recurring = false;
+    var hiPayDeviceFingerprint;
+    var response;
 
     if (!empty(paymentMethod)) {
         hiPayDeviceFingerprint = session.forms.billing.deviceFingerprint.value;
-        paymentProcessor       = PaymentMgr.getPaymentMethod(paymentMethod).paymentProcessor;
+        paymentProcessor = PaymentMgr.getPaymentMethod(paymentMethod).paymentProcessor; // eslint-disable-line no-param-reassign
 
-        if (paymentMethod === "HIPAY_CREDIT_CARD" && hipayEnableOneClick) { /* if one-click payment */
+        if (paymentMethod === 'HIPAY_CREDIT_CARD' && hipayEnableOneClick) { // if one-click payment
             recurring = !empty(storedPaymentUUID);
         }
 
         if (paymentProcessor != null) {
-            Transaction.wrap(function() {
-                paymentInstrument.paymentTransaction.transactionID    = order.orderNo;
-                paymentInstrument.paymentTransaction.paymentProcessor = paymentProcessor;
+            Transaction.wrap(function () {
+                paymentInstrument.paymentTransaction.setTransactionID(order.orderNo);
+                paymentInstrument.paymentTransaction.setPaymentProcessor(paymentProcessor);
             });
 
             response = hiPayCheckoutModule.hiPayOrderRequest(paymentInstrument, order, hiPayDeviceFingerprint, recurring);
 
             if (response.error === true) {
                 return {
-                    error : true,
-                    PlaceOrderError : response.hiPayPaymentStatus
+                    error: true,
+                    PlaceOrderError: response.hiPayPaymentStatus
                 };
-            } else {
-                if (paymentMethod === "HIPAY_CREDIT_CARD" && hipayEnableOneClick && !paymentInstrument.custom.hipayOneClickDisabled) { /* if one-click payment */
+            } else { // eslint-disable-line
+                if (paymentMethod === 'HIPAY_CREDIT_CARD' && hipayEnableOneClick && !paymentInstrument.custom.hipayOneClickDisabled) { // if one-click payment
                     hiPayCheckoutModule.saveCreditCard(paymentInstrument, order.customerName);
                 }
 
                 if (empty(response.hiPayRedirectURL)) {
-                    return { authorized : true };
-                } else {
+                    return { authorized: true };
+                } else { // eslint-disable-line
                     return {
-                        HiPay : true,
-                        HiPayRedirectURL : response.hiPayRedirectURL,
-                        API : true,
-                        success : true
+                        HiPay: true,
+                        HiPayRedirectURL: response.hiPayRedirectURL,
+                        API: true,
+                        success: true
                     };
                 }
             }
         } else {
-            return { error : true };
+            return { error: true };
         }
     } else {
-        return { error : true };
+        return { error: true };
     }
 }
 
 /** @see {@link module:controllers/Hipay~Handle} */
 exports.Handle = Handle;
-/** @see {@link module:controllers/Hipay~CreditCardHandle} */
-exports.CreditCardHandle = CreditCardHandle;
 /** @see {@link module:controllers/Hipay~Authorize} */
 exports.Authorize = Authorize;

@@ -9,71 +9,74 @@
 */
 
 /* API includes */
-var ISML       = require('dw/template/ISML'),
-    PaymentMgr = require('dw/order/PaymentMgr'),
-    guard      = require('~/cartridge/scripts/guard');
+var ISML = require('dw/template/ISML');
+var PaymentMgr = require('dw/order/PaymentMgr');
+var OrderMgr = require('dw/order/OrderMgr');
+var Resource = require('dw/web/Resource');
+var URLUtils = require('dw/web/URLUtils');
+var guard = require('~/cartridge/scripts/guard');
+
+function cont(args) {
+    var topUrl = URLUtils.url('SiteNavigationBar-ShowMenuitemOverview', 'CurrentMenuItemId', request.httpParameterMap.CurrentMenuItemId);
+    var mainMenuName = request.httpParameterMap.mainmenuname.stringValue;
+
+    ISML.renderTemplate('hipay/searchorder', {
+        ContinueURL: URLUtils.https('HiPayOrderCapture-HandleForm'),
+        CurrentForms: session.forms,
+        Order: args.Order,
+        OperationStatus: args.OperationStatus,
+        TOP_URL: topUrl,
+        MAIN_MENU_NAME: mainMenuName
+    });
+}
 
 function start() {
     var operationStatus = {};
 
     if (!empty(session.forms.searchorder.orderID.value)) {
-        var orderNo = session.forms.searchorder.orderID.value,
-            order   = dw.order.OrderMgr.getOrder(orderNo);
+        var orderNo = session.forms.searchorder.orderID.value;
+        var order = OrderMgr.getOrder(orderNo);
 
         if (empty(order)) { /* can not load requested order. */
             operationStatus.valid = false;
-            operationStatus.msg   = dw.web.Resource.msg('hipay_bm.capture.order.error', 'hipay_bm', null);
+            operationStatus.msg = Resource.msg('hipay_bm.capture.order.error', 'hipay_bm', null);
         } else {
             session.forms.searchorder.clearFormElement();
         }
 
         return cont({
-            Order           : order,
-            OperationStatus : operationStatus
+            Order: order,
+            OperationStatus: operationStatus
         });
     }
 
     return cont({
-        OperationStatus : operationStatus
+        OperationStatus: operationStatus
     });
 }
 
-function cont(args) {
-    var top_url        = dw.web.URLUtils.url('SiteNavigationBar-ShowMenuitemOverview', 'CurrentMenuItemId', request.httpParameterMap.CurrentMenuItemId),
-        main_menu_name = request.httpParameterMap.mainmenuname.stringValue;
-
-    ISML.renderTemplate('hipay/searchorder', {
-        ContinueURL     : dw.web.URLUtils.https('HiPayOrderCapture-HandleForm'),
-        CurrentForms    : session.forms,
-        Order           : args.Order,
-        OperationStatus : args.OperationStatus,
-        TOP_URL         : top_url,
-        MAIN_MENU_NAME  : main_menu_name
-    });
-}
-
-function handleForm() {
-    var triggeredAction = request.triggeredFormAction,
-        operationStatus = {};
+function handleForm() { // eslint-disable-line consistent-return
+    var triggeredAction = request.triggeredFormAction;
+    var operationStatus = {};
 
     if (!empty(triggeredAction) && triggeredAction.formId === 'search') {
         start();
     } else if (!empty(triggeredAction) && triggeredAction.formId === 'capture') {
-        var captureAmount = session.forms.searchorder.captureAmount.value,
-            orderNo       = session.forms.searchorder.captureOrderID.value,
-            order         = dw.order.OrderMgr.getOrder(orderNo),
-            response      = null;
+        var captureAmount = session.forms.searchorder.captureAmount.value;
+        var orderNo = session.forms.searchorder.captureOrderID.value;
+        var order = OrderMgr.getOrder(orderNo);
+        var response = null;
 
-        var hipayPaymentMethod = order.paymentInstrument.paymentMethod,
-            paymentMethod = PaymentMgr.getPaymentMethod(hipayPaymentMethod);
+        var hipayPaymentMethod = order.paymentInstrument.paymentMethod;
+        var paymentMethod = PaymentMgr.getPaymentMethod(hipayPaymentMethod);
 
         if (paymentMethod.custom.hipayOnlyCompleteCapture && captureAmount < order.totalGrossPrice) {
             operationStatus.valid = false;
-            operationStatus.msg   = dw.web.Resource.msg('hipay_bm.capture.partialerror', 'hipay_bm', null);
+            operationStatus.msg = Resource.msg('hipay_bm.capture.partialerror', 'hipay_bm', null);
 
             return cont({
-                OperationStatus : operationStatus,
-                Order           : order
+                OperationStatus: operationStatus,
+                Order: order
             });
         }
 
@@ -85,19 +88,19 @@ function handleForm() {
 
         if (response.error) {
             operationStatus.valid = false;
-            operationStatus.msg   = dw.web.Resource.msg('hipay_bm.capture.error', 'hipay_bm', null);
+            operationStatus.msg = Resource.msg('hipay_bm.capture.error', 'hipay_bm', null);
         } else {
             operationStatus.valid = true;
-            operationStatus.msg   = dw.web.Resource.msg('hipay_bm.capture.success', 'hipay_bm', null);
+            operationStatus.msg = Resource.msg('hipay_bm.capture.success', 'hipay_bm', null);
         }
 
         return cont({
-            OperationStatus : operationStatus,
-            Order           : order
+            OperationStatus: operationStatus,
+            Order: order
         });
     }
 }
 
 /** @see {@link module:controllers/HiPayOrderCapture~start} */
-exports.Start      = guard.ensure(['https', 'get'], start);
+exports.Start = guard.ensure(['https', 'get'], start);
 exports.HandleForm = guard.ensure(['https', 'post'], handleForm);

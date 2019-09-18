@@ -28,12 +28,12 @@ base.handleCreditCardNumber = function (cardFieldSelector, cardTypeSelector) {
                 $('#securityCode').attr('maxlength', 4);
             }
 
-            if (type == 'maestro' || type == 'bancontactMisterCash') {
+            if (type === 'maestro' || type === 'bancontactMisterCash') {
                 $('input[name$="_saveCard"]').prop('checked', false);
                 $('div.save-credit-card').hide();
                 $('div[class*="_securityCode"]').removeClass('required');
 
-                if (type == 'bancontactMisterCash') {
+                if (type === 'bancontactMisterCash') {
                     $('div[class*="_securityCode"]').hide();
                 }
                 $('div[class*="_securityCode"]').removeClass('required');
@@ -49,7 +49,7 @@ base.handleCreditCardNumber = function (cardFieldSelector, cardTypeSelector) {
     }
 };
 
-base.serializeData =  function (form) {
+base.serializeData = function (form) {
     var serializedArray = form.serializeArray();
 
     serializedArray.forEach(function (item) {
@@ -65,6 +65,6 @@ base.serializeData =  function (form) {
 
 base.isCreditCard = function () {
     return $('.tab-pane.active').length > 0 && $('.tab-pane.active').attr('id').toLowerCase().indexOf('credit') > -1 && $('.tab-pane.active').attr('id').toLowerCase().indexOf('hosted') < 0;
-}
+};
 
 module.exports = base;

@@ -16,9 +16,9 @@
  * exports.Show = require('~/guard').ensure(['get','https','loggedIn'],show);
  */
 var CSRFProtection = require('dw/web/CSRFProtection'),
-    app            = require('~/cartridge/scripts/app'),
-    browsing       = require('~/cartridge/scripts/util/Browsing'),
-    LOGGER         = dw.system.Logger.getLogger('guard');
+    app = require('~/cartridge/scripts/app'),
+    browsing = require('~/cartridge/scripts/util/Browsing'),
+    LOGGER = dw.system.Logger.getLogger('guard');
 
 /**
  * This method contains the login to handle a not logged in customer

@@ -3,17 +3,7 @@
 var base = module.superModule;
 
 var PaymentMgr = require('dw/order/PaymentMgr');
-var PaymentInstrument = require('dw/order/PaymentInstrument');
 var collections = require('*/cartridge/scripts/util/collections');
-
-function Payment(currentBasket, currentCustomer, countryCode) {
-    var paymentInstruments = currentBasket.paymentInstruments;
-
-    base.call(this, currentBasket, currentCustomer, countryCode);
-
-    this.selectedPaymentInstruments = paymentInstruments ?
-            getSelectedPaymentInstruments(paymentInstruments) : null;
-}
 
 function getSelectedPaymentInstruments(selectedPaymentInstruments) {
     return collections.map(selectedPaymentInstruments, function (paymentInstrument) {
@@ -38,6 +28,15 @@ function getSelectedPaymentInstruments(selectedPaymentInstruments) {
 
         return results;
     });
+}
+
+function Payment(currentBasket, currentCustomer, countryCode) {
+    var paymentInstruments = currentBasket.paymentInstruments;
+
+    base.call(this, currentBasket, currentCustomer, countryCode);
+
+    this.selectedPaymentInstruments = paymentInstruments ?
+            getSelectedPaymentInstruments(paymentInstruments) : null;
 }
 
 Payment.prototype = Object.create(base.prototype);

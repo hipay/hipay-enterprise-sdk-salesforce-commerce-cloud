@@ -530,16 +530,14 @@ function handlePayments(order, orderNumber, storedPaymentUUID) {
                         result.error = true;
 
                         if (!empty(authorizationResult.PlaceOrderError)) {
-                            if (authorizationResult.PlaceOrderError == 'declined') {
-                                authorizationResult.errorMessage = Resource.msg('hipay.payment.decline','hipay',null);
-                            } else if (authorizationResult.PlaceOrderError == 'cancel') {
-                                authorizationResult.errorMessage = Resource.msg('hipay.payment.cancel','hipay',null);
-                            } else if (authorizationResult.PlaceOrderError == 'error') {
-                                authorizationResult.errorMessage = Resource.msg('hipay.payment.error','hipay',null);
+                            if (authorizationResult.PlaceOrderError === 'declined') {
+                                authorizationResult.errorMessage = Resource.msg('hipay.payment.decline', 'hipay', null);
+                            } else if (authorizationResult.PlaceOrderError === 'cancel') {
+                                authorizationResult.errorMessage = Resource.msg('hipay.payment.cancel', 'hipay', null);
+                            } else if (authorizationResult.PlaceOrderError === 'error') {
+                                authorizationResult.errorMessage = Resource.msg('hipay.payment.error', 'hipay', null);
                             }
-
                         }
-
                         break;
                     }
                 }
@@ -547,7 +545,7 @@ function handlePayments(order, orderNumber, storedPaymentUUID) {
         }
     }
 
-    return authorizationResult;
+    return authorizationResult; // eslint-disable-line block-scoped-var
 }
 
 /**
@@ -605,7 +603,7 @@ function placeOrder(order, fraudDetectionStatus) {
         Transaction.commit();
     } catch (e) {
         Transaction.wrap(function () { OrderMgr.failOrder(order, true); });
-        Logger.error("[checkoutHelpets.js] crashed on line: " + e.lineNumber + " with error: " + e);
+        Logger.error('[checkoutHelpets.js] crashed on line: ' + e.lineNumber + ' with error: ' + e);
         result.error = true;
     }
 

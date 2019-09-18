@@ -1,32 +1,30 @@
 'use strict';
 
-var PaymentMgr  = require('dw/order/PaymentMgr'),
-    Transaction = require('dw/system/Transaction'),
-    OrderMgr    = require('dw/order/OrderMgr');
+var Transaction = require('dw/system/Transaction');
+var OrderMgr = require('dw/order/OrderMgr');
 
 /**
  * Creates a HiPay PaymentInstrument and returns 'success'
  */
-function Handle(currentBasket, paymentInformation) {
-    var basket        = currentBasket,
-        paymentMethod = session.forms.billing.paymentMethod.value,
-        HiPayLogger   = require('*/cartridge/scripts/lib/hipay/hipayLogger'),
-        log           = new HiPayLogger("HIPAY_HOSTED");
+function Handle(currentBasket) {
+    var basket = currentBasket;
+    var paymentMethod = session.forms.billing.paymentMethod.value;
+    var HiPayLogger = require('*/cartridge/scripts/lib/hipay/hipayLogger');
+    var log = new HiPayLogger('HIPAY_HOSTED');
 
     if (!empty(paymentMethod)) {
         try {
-            var hiPayCheckoutModule = require('*/cartridge/scripts/lib/hipay/modules/hipayCheckoutModule'),
-                paymentInstrument   = hiPayCheckoutModule.createPaymentInstrument(basket, paymentMethod, true);
+            var hiPayCheckoutModule = require('*/cartridge/scripts/lib/hipay/modules/hipayCheckoutModule');
+            var paymentInstrument = hiPayCheckoutModule.createPaymentInstrument(basket, paymentMethod, true);
             hiPayCheckoutModule.hiPayUpdatePaymentInstrument(paymentInstrument);
-
         } catch (e) {
             log.error(e);
-            return { error : true };
+            return { error: true };
         }
 
-        return { error : false };
-    } else {
-        return { error : true };
+        return { error: false };
+    } else { // eslint-disable-line
+        return { error: true };
     }
 }
 
@@ -34,42 +32,38 @@ function Handle(currentBasket, paymentInformation) {
  * Authorize HiPay Hosted Page payment
  */
 function Authorize(orderNumber, paymentInstrument, paymentProcessor) {
-    var paymentMethod     = session.forms.billing.paymentMethod.value,
-        orderNo           = orderNumber,
-        order = OrderMgr.getOrder(orderNumber);
-        HiPayLogger       = require('*/cartridge/scripts/lib/hipay/hipayLogger'),
-        log               = new HiPayLogger("HIPAY_HOSTED");
+    var paymentMethod = session.forms.billing.paymentMethod.value;
+    var orderNo = orderNumber;
+    var order = OrderMgr.getOrder(orderNumber);
 
     if (!empty(paymentMethod)) {
         Transaction.wrap(function () {
-            paymentInstrument.paymentTransaction.transactionID    = orderNo;
-            paymentInstrument.paymentTransaction.paymentProcessor = paymentProcessor;
+            paymentInstrument.paymentTransaction.setTransactionID(orderNo);
+            paymentInstrument.paymentTransaction.setPaymentProcessor(paymentProcessor);
         });
 
         var result = require('*/cartridge/scripts/lib/hipay/modules/hipayCheckoutModule').hiPayHostedPageRequest(order, paymentInstrument);
 
         if (result.error) {
-            return { error : true };
+            return { error: true };
         }
 
         if (result.hiPayIFrameEnabled) {
             return {
-                HiPay : true,
-                HiPayRedirectURL : result.hiPayRedirectURL,
-                Iframe : true,
-                Template : 'hipay/hosted/hipayIframe'
+                HiPay: true,
+                HiPayRedirectURL: result.hiPayRedirectURL,
+                Iframe: true,
+                Template: 'hipay/hosted/hipayIframe'
             };
-        } else {
+        } else { // eslint-disable-line
             return {
-                HiPay : true,
-                HiPayRedirectURL : result.hiPayRedirectURL,
-                Hosted : true
+                HiPay: true,
+                HiPayRedirectURL: result.hiPayRedirectURL,
+                Hosted: true
             };
         }
-
-        return { success : true };
-    } else {
-        return { error : true };
+    } else { // eslint-disable-line
+        return { error: true };
     }
 }
 

@@ -5,9 +5,9 @@
 */
 
 function execute(args) {
-    var Cart           = args.Cart,
-        ProcessorID    = args.ProcessorID,
-        PaymentMethod  = args.PaymentMethodID,
+    var Cart = args.Cart,
+        ProcessorID = args.ProcessorID,
+        PaymentMethod = args.PaymentMethodID,
         extensionPoint = 'app.payment.processor.' + ProcessorID;
 
     if (dw.system.HookMgr.hasHook(extensionPoint)) {

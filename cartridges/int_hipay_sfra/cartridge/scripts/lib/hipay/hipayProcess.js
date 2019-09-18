@@ -1,12 +1,11 @@
 'use strict';
 
-var OrderMgr         = require('dw/order/OrderMgr'),
-    Transaction      = require('dw/system/Transaction');
-
+var OrderMgr = require('dw/order/OrderMgr');
+var Transaction = require('dw/system/Transaction');
 var HiPayOrderModule = require('*/cartridge/scripts/lib/hipay/modules/hipayOrderModule');
 
-/** Verifies HiPay requests */
-function VerifyHash() {
+// Verifies HiPay requests
+function verifyHash() {
     return HiPayOrderModule.hiPayVerifyRequest();
 }
 
@@ -15,8 +14,11 @@ function VerifyHash() {
 *
 * @param {dw.order.Order} order
 */
-function ProceedWithOrder(order, res, next) {
-    var hiPayRedirectURL = dw.web.URLUtils.https('COPlaceOrder-Submit', 'order_id', order.orderNo, 'order_token', order.orderToken, dw.web.CSRFProtection.getTokenName(), dw.web.CSRFProtection.generateToken());
+function proceedWithOrder(order, res, next) {
+    var URLUtils = require('dw/web/URLUtils');
+    var CSRFProtection = require('dw/web/CSRFProtection');
+
+    var hiPayRedirectURL = URLUtils.https('COPlaceOrder-Submit', 'order_id', order.orderNo, 'order_token', order.orderToken, CSRFProtection.getTokenName(), CSRFProtection.generateToken());
 
     res.redirect(hiPayRedirectURL);
     next();
@@ -27,23 +29,39 @@ function ProceedWithOrder(order, res, next) {
 *
 * @param {Object} args - Current order and hiPayState
 */
-function FailOrder(args) {
-    var order            = args.order,
-        hiPayState       = args.hiPayState,
-        Status           = require('dw/system/Status'),
-        hiPayRedirectURL,
-        status;
+function failOrder(args) {
+    var URLUtils = require('dw/web/URLUtils');
+    var CSRFProtection = require('dw/web/CSRFProtection');
+    var Status = require('dw/system/Status');
+    var order = args.order;
+    var hiPayState = args.hiPayState;
+    var hiPayRedirectURL;
+    var status;
 
     if (order != null) {
-        Transaction.wrap(function() {
+        Transaction.wrap(function () {
             status = OrderMgr.failOrder(order, true);
         });
         if (status.status === Status.OK) {
-            hiPayRedirectURL = dw.web.URLUtils.https('COPlaceOrder-Submit', 'order_token', order.orderToken, 'order_id', order.orderNo, 'paymentStatus', hiPayState, dw.web.CSRFProtection.getTokenName(), dw.web.CSRFProtection.generateToken());
+            hiPayRedirectURL = URLUtils.https('COPlaceOrder-Submit', 'order_token', order.orderToken, 'order_id', order.orderNo, 'paymentStatus', hiPayState, CSRFProtection.getTokenName(), CSRFProtection.generateToken());
         }
     }
 
     return hiPayRedirectURL;
+}
+
+function failHungOrder(order) {
+    var HiPayLogger = require('*/cartridge/scripts/lib/hipay/hipayLogger');
+    var log = new HiPayLogger('ClearHungOrders');
+
+    try {
+        Transaction.wrap(function () {
+            OrderMgr.failOrder(order, true);
+        });
+    } catch (e) {
+        var error = 'Error while fail hung order ::: ' + e.message;
+        log.error(error);
+    }
 }
 
 /**
@@ -52,41 +70,30 @@ function FailOrder(args) {
 *
 */
 function ClearHungOrders() {
-    var HiPayLogger = require('*/cartridge/scripts/lib/hipay/hipayLogger'),
-        Site        = require('dw/system/Site'),
-        Calendar    = require('dw/util/Calendar'),
-        Order       = require('dw/order/Order'),
-        log         = new HiPayLogger("ClearHungOrders"),
-        minutesBack = Site.getCurrent().getCustomPreferenceValue("hipayHungOrderTimeout"),
-        startDate   = new Calendar();
+    var HiPayLogger = require('*/cartridge/scripts/lib/hipay/hipayLogger');
+    var Site = require('dw/system/Site');
+    var Calendar = require('dw/util/Calendar');
+    var Order = require('dw/order/Order');
+    var log = new HiPayLogger('ClearHungOrders');
+    var minutesBack = Site.getCurrent().getCustomPreferenceValue('hipayHungOrderTimeout');
+    var startDate = new Calendar();
 
     startDate.setTimeZone(Site.current.getTimezone());
     startDate.add(Calendar.MINUTE, -minutesBack);
 
     try {
-        OrderMgr.processOrders(failHungOrder, "status = {0} AND creationDate < {1}", Order.ORDER_STATUS_CREATED, startDate.getTime());
+        OrderMgr.processOrders(failHungOrder, "status = {0} AND creationDate < {1}", Order.ORDER_STATUS_CREATED, startDate.getTime()); // eslint-disable-line quotes
     } catch (e) {
-        var error = "Error while fetching hung orders ::: " + e.message;
-        log.error(error);
-    }
-}
-
-function failHungOrder(order) {
-    try {
-        Transaction.wrap(function () {
-            OrderMgr.failOrder(order, true);
-        });
-    } catch (e) {
-        var error = "Error while fail hung order ::: " + e.message;
+        var error = 'Error while fetching hung orders ::: ' + e.message;
         log.error(error);
     }
 }
 
 /** @see {@link module:controllers/HiPayProcess~VerifyHash} */
-exports.VerifyHash = VerifyHash;
+exports.verifyHash = verifyHash;
 /** @see {@link module:controllers/HiPayProcess~ProceedWithOrder} */
-exports.ProceedWithOrder = ProceedWithOrder;
+exports.proceedWithOrder = proceedWithOrder;
 /** @see {@link module:controllers/HiPayProcess~FailOrder} */
-exports.FailOrder = FailOrder;
+exports.failOrder = failOrder;
 /** @see {@link module:controllers/HiPayOrder~ClearHungOrders} */
 exports.ClearHungOrders = ClearHungOrders;

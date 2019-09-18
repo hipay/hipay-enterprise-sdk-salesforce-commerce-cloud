@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="ISO-8859-1" ?>
 <extensions xmlns="http://www.demandware.com/xml/bmmodules/2007-12-11" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.demandware.com/xml/bmmodules/2007-12-11 bmext.xsd">
 <!-- =============================================================== -->
-<!-- ==                                                           == -->
-<!-- ==  HIPAY SITE   MENU   EXTENSIONS                           == -->
-<!-- ==                                                           == -->
+<!-- ==                        == -->
+<!-- ==  HIPAY SITE   MENU   EXTENSIONS == -->
+<!-- ==                        == -->
 <!-- =============================================================== -->
 <!--
     Menu Action as part of the site main menu (positioned at the bottom of the site main menu)
@@ -83,9 +83,9 @@
 </menuaction>
 </extensions>
 <!-- =============================================================== -->
-<!-- ==                                                           == -->
-<!-- ==  BUSINESS MANAGER MENU IDs                                  == -->
-<!-- ==                                                           == -->
+<!-- ==                        == -->
+<!-- ==  BUSINESS MANAGER MENU IDs == -->
+<!-- ==                        == -->
 <!-- ===============================================================
     SITE MENU **************************************************************************************
         Menu ITEM:  Products and Catalogs         <menuitem id="prod-cat" position="2000" site="true">
