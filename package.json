@@ -10,6 +10,8 @@
     "compile:js": "sgmf-scripts --compile js",
     "compile:scss": "sgmf-scripts --compile css"
   },
+  "repository": {},
+  "license": "ISC",
   "dependencies": {
     "cleave.js": "~1.4.2"
   },
