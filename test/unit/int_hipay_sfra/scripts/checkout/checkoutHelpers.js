@@ -5,8 +5,6 @@ var sinon = require('sinon');
 
 var checkoutHelpers = require('../../../../mocks/helpers/checkoutHelpers');
 
-
-
 describe('checkoutHelpers', function () {
     describe('prepareShippingForm', function () {
         it('should return a processed shipping form object', function () {
