@@ -1,8 +1,6 @@
 node_modules/
-
 coverage/
 npm-debug.log
-
 .idea/
 dw.json
 sitegenesisdata/
@@ -12,3 +10,5 @@ storefrontdata/
 test/appium/webdriver/config.json
 .vscode
 .history
+*.code-workspace
+*.iml

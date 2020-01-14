@@ -14,6 +14,7 @@ function hiPayProcessOrderCall() {
     var Transaction = require('dw/system/Transaction');
     var HiPayLogger = require('*/cartridge/scripts/lib/hipay/hipayLogger');
     var HiPayHelper = require('*/cartridge/scripts/lib/hipay/hipayHelper');
+    var hipayUtils = require('*/cartridge/scripts/lib/hipay/hipayUtils');
     var log = new HiPayLogger('HiPayProcessOrderCall');
     var helper = new HiPayHelper();
     var params = request.httpParameterMap;
@@ -22,9 +23,9 @@ function hiPayProcessOrderCall() {
     var order;
 
     log.info('HiPay Order Call :: ' + params);
-
+    
     if (params.isParameterSubmitted('orderid')) {
-        orderid = params.orderid.stringValue; //= 00000601
+        orderid = hipayUtils.removeFromOrderId(params.orderid.stringValue);
 
         if (empty(orderid)) {
             log.error('The call from HiPay does not have a valid OrderNo!');
@@ -37,7 +38,7 @@ function hiPayProcessOrderCall() {
                 response.error = true;
             }
 
-            if (order.getStatus() !== Order.ORDER_STATUS_CREATED) {
+            if (order.getStatus().value !== Order.ORDER_STATUS_CREATED) {
                 log.error('The HiPay order has already been processed! Probably a second call is made with the same parameters :: ' + orderid);
                 response.error = true;
             }
@@ -59,9 +60,11 @@ function hiPayProcessOrderCall() {
         Transaction.wrap(function () {
             response.hiPayPaymentStatus = state; // completed, declined, pending
             paymentInstr = helper.getOrderPaymentInstrument(order);
-            paymentTransaction = paymentInstr.getPaymentTransaction();
             reference = params.reference.stringValue; // set the reference from hipay = 200628176332
-            paymentTransaction.setTransactionID(reference);
+            if(!empty(reference)){
+                paymentTransaction = paymentInstr.getPaymentTransaction();
+                paymentTransaction.setTransactionID(reference);
+            }
             pp = params.pp.stringValue; // set transaction type = ideal,visa
             paymentInstr.custom.hipayTransactionType = pp;
             helper.updatePaymentStatus(order, paymentInstr, params); // update the payment status
