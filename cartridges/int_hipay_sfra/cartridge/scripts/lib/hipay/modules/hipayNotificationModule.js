@@ -20,6 +20,7 @@ HiPayNotificationModule.hiPayProcessNotificationCall = function (httpParams) {
     var HiPayLogger = require('*/cartridge/scripts/lib/hipay/hipayLogger');
     var HiPayHelper = require('*/cartridge/scripts/lib/hipay/hipayHelper');
     var HiPaySignitureMgr = require('*/cartridge/scripts/lib/hipay/hipaySignitureMgr').HiPaySignitureMgr;
+    var hipayUtils = require('*/cartridge/scripts/lib/hipay/hipayUtils');
     var log = new HiPayLogger('HiPayProcessNotificationCall');
     var helper = new HiPayHelper();
     var shaSignature = request.getHttpHeaders().get('x-allopass-signature');
@@ -37,7 +38,7 @@ HiPayNotificationModule.hiPayProcessNotificationCall = function (httpParams) {
     var order = null;
 
     if (params.isParameterSubmitted('order[id]')) {
-        orderid = params['order[id]'].stringValue; //= 00000601
+        orderid = hipayUtils.removeFromOrderId(params['order[id]'].stringValue);
 
         if (empty(orderid)) {
             log.error('The notification call from HiPay does not have a valid OrderNo!');

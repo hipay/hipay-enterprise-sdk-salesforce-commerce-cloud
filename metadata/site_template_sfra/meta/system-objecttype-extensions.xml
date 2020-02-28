@@ -276,11 +276,11 @@
                 <mandatory-flag>false</mandatory-flag>
                 <externally-managed-flag>false</externally-managed-flag>
                 <value-definitions>
-                    <value-definition default="true">
+                    <value-definition>
                         <display xml:lang="x-default">Bypass 3-D Secure 3-D authentication</display>
                         <value>0</value>
                     </value-definition>
-                    <value-definition>
+                    <value-definition default="true">
                         <display xml:lang="x-default">3-D Secure authentication if available</display>
                         <value>1</value>
                     </value-definition>
@@ -413,4 +413,42 @@
         </group-definitions>
     </type-extension>
 
+    <type-extension type-id="Profile">
+		<custom-attribute-definitions>
+            <attribute-definition attribute-id="datePasswordLastChange">
+                <display-name xml:lang="x-default">date password last change</display-name>
+                <type>string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <min-length>0</min-length>
+            </attribute-definition>
+		</custom-attribute-definitions>
+        <group-definitions>
+            <attribute-group group-id="Standard">
+                <attribute attribute-id="datePasswordLastChange"/>
+            </attribute-group>            
+        </group-definitions>
+    </type-extension>
+	
+    <type-extension type-id="Product">
+        <custom-attribute-definitions>
+            <attribute-definition attribute-id="productDematerialized">
+                <display-name xml:lang="x-default">Product Dematerialized</display-name>
+                <type>boolean</type>
+                <site-specific-flag>false</site-specific-flag>
+                <mandatory-flag>false</mandatory-flag>
+                <visible-flag>true</visible-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <order-required-flag>false</order-required-flag>
+                <externally-defined-flag>false</externally-defined-flag>
+            </attribute-definition>
+        </custom-attribute-definitions>
+        <group-definitions>
+            <attribute-group group-id="dematerializationAttributes">
+                <display-name xml:lang="x-default">Dematerialization Attributes</display-name>
+                <attribute attribute-id="productDematerialized"/>
+            </attribute-group>
+        </group-definitions>
+    </type-extension>	
+	
 </metadata>
