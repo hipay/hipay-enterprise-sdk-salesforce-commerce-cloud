@@ -6,6 +6,7 @@ dw.json
 sitegenesisdata/
 mobilefirstdata/
 storefrontdata/
+test/acceptance/output/
 .DS_Store
 test/appium/webdriver/config.json
 .vscode

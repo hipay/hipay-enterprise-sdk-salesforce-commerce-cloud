@@ -66,8 +66,8 @@ HiPayHelper.prototype.fillHeaderData = function (HiPayConfig, order, params, pi)
         }
     }
 
-    if (language === 'default'){
-      language = "en_GB";
+    if (language === 'default') {
+        language = 'en_GB';
     }
 
     // always send the redirect urls
@@ -79,12 +79,14 @@ HiPayHelper.prototype.fillHeaderData = function (HiPayConfig, order, params, pi)
     params.cancel_url = HiPayConfig.cancelURL;     // eslint-disable-line 
     params.notify_url = HiPayConfig.notifyURL;     // eslint-disable-line 
 
-    if (!empty(session.forms.billing.paymentMethods.hipaymethods.klarna.houseNumber.value)) {
-        params.house_number = session.forms.billing.paymentMethods.hipaymethods.klarna.houseNumber.value; // eslint-disable-line 
+    var hipaymethods = session.forms.billing.paymentMethods.hipaymethods;
+
+    if (hipaymethods && hipaymethods.klarna && hipaymethods.klarna.houseNumber) {
+        params.house_number = hipaymethods.klarna.houseNumber.value; // eslint-disable-line 
     }
 
-    if (!empty(session.forms.billing.paymentMethods.hipaymethods.klarna.birthdate.value)) {
-        var birthdate = session.forms.billing.paymentMethods.hipaymethods.klarna.birthdate.value.replace(/-/g, '');
+    if (hipaymethods && hipaymethods.klarna && hipaymethods.klarna.birthdate) {
+        var birthdate = hipaymethods.klarna.birthdate.value.replace(/-/g, '');
 
         params.birthdate = birthdate; // eslint-disable-line 
     }
@@ -374,18 +376,19 @@ HiPayHelper.prototype.fillOrderData = function (order, params, pi) {
 
     // ### DPS2 params ### //
     if (pi.paymentMethod === 'HIPAY_CREDIT_CARD' || pi.paymentMethod === 'HIPAY_HOSTED_CREDIT_CARD') {
-
+        var paymentMethods = session.forms.billing.paymentMethods;
         // Device channel always 2, BROWSER
         params.device_channel = "2";
         // Add DSP2 browser info
-        params.browser_info = JSON.parse(session.forms.billing.paymentMethods.browserInfo.value);
-        // Add http_accept
-        params.browser_info['http_accept'] = params.http_accept;
-        // Add Ip address
-        params.browser_info['ipaddr'] = params.ipaddr;
+        if (paymentMethods && paymentMethods.browserInfo) {
+            params.browser_info = JSON.parse(paymentMethods.browserInfo.value);
+            // Add http_accept
+            params.browser_info.http_accept = params.http_accept;
+            // Add Ip address
+            params.browser_info.ipaddr = params.ipaddr;
+        }
 
         /* Merchant risk statement */
-
         params.merchant_risk_statement = {};
 
         var allDematerializedProducts = true;

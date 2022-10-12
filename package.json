@@ -3,18 +3,25 @@
   "version": "20.1.0",
   "description": "New overlay cartridge",
   "main": "index.js",
+  "engines": {
+    "node": "16.x"
+  },
   "scripts": {
     "lint": "sgmf-scripts --lint js",
     "upload": "sgmf-scripts --upload -- ",
     "uploadCartridge": "sgmf-scripts --uploadCartridge int_hipay_sfra",
     "compile:js": "sgmf-scripts --compile js",
     "compile:scss": "sgmf-scripts --compile css",
-    "test": "sgmf-scripts --test './test/unit/**/*.js'"
+    "test": "sgmf-scripts --test './test/unit/**/*.js'",
+    "test:sfra": "codeceptjs run tests/GlobalHipay_test.js --steps --config test/acceptance/codecept.conf.sfra.js",
+    "test:sitegenesis": "codeceptjs run tests/GlobalHipay_test.js --steps --config test/acceptance/codecept.conf.siteg.js"
   },
   "repository": {},
   "license": "ISC",
   "dependencies": {
-    "cleave.js": "~1.4.2"
+    "cleave.js": "~1.4.2",
+    "codeceptjs": "^3.3.6",
+    "testcafe": "^2.0.1"
   },
   "devDependencies": {
     "eslint": "^3.2.2",
