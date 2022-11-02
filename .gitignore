@@ -13,3 +13,6 @@ test/appium/webdriver/config.json
 .history
 *.code-workspace
 *.iml
+
+#Exclude external cartridges
+storefront-reference-architecture
