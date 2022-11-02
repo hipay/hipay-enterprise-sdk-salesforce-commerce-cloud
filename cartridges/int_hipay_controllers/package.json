@@ -1,6 +1,6 @@
 {
   "init": [
-    "./cartridge/scripts/init/hiPayServiceInit.js"
+    "./int_hipay_core/cartridge/scripts/init/hiPayServiceInit.js"
   ],
   "hooks": "./cartridge/scripts/hooks.json",
   "name": "int_hipay_controllers",

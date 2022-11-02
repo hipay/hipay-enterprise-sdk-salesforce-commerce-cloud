@@ -23,7 +23,7 @@ function hiPayProcessOrderCall() {
     var order;
 
     log.info('HiPay Order Call :: ' + params);
-    
+
     if (params.isParameterSubmitted('orderid')) {
         orderid = hipayUtils.removeFromOrderId(params.orderid.stringValue);
 
@@ -119,7 +119,7 @@ function hiPayProcessOrderCall() {
 
 /** Executes HiPay signature verification using HiPaySignitureMgr */
 function hiPayVerifyRequest() {
-    var HiPayConfig = require('*/cartridge/config/hipayConfig').HiPayConfig;
+    var HiPayConfig = require('*/cartridge/scripts/lib/hipay/hipayConfig').HiPayConfig;
     var HiPayLogger = require('*/cartridge/scripts/lib/hipay/hipayLogger');
     var HiPaySignitureMgr = require('*/cartridge/scripts/lib/hipay/hipaySignitureMgr').HiPaySignitureMgr;
     var log = new HiPayLogger('HiPayVerifyRequest');

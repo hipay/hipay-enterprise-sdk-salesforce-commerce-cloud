@@ -6,7 +6,7 @@
         helper = new HiPayHelper();
 
     var renderOney = helper.validateOneyAvailability(currentBasket),
-        HiPayConfig = require('*/cartridge/config/hipayConfig').HiPayConfig,
+        HiPayConfig = require('*/cartridge/scripts/lib/hipay/hipayConfig').HiPayConfig,
         isHiPayHostedMode = false;
 
     if(HiPayConfig.hipayOperationMode == HiPayConfig.OPERATION.HOSTED || HiPayConfig.hipayOperationMode == HiPayConfig.OPERATION.IFRAME) {

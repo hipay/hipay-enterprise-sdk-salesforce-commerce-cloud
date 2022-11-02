@@ -8,27 +8,29 @@ var StringUtils = require('dw/util/StringUtils');
 var Decimal = require('dw/util/Decimal');
 var TaxMgr = require('dw/order/TaxMgr');
 var Logger = require('dw/system/Logger');
+var PaymentMgr = require('dw/order/PaymentMgr');
+var PaymentInstrument = require('dw/order/PaymentInstrument');
 var Transaction = require('dw/system/Transaction');
-var statuses = require('~/cartridge/config/hipayStatus').HiPayStatus;
+var statuses = require('*/cartridge/scripts/lib/hipay/hipayStatus').HiPayStatus;
 var hipayUtils = require('*/cartridge/scripts/lib/hipay/hipayUtils');
 
 // Import Constants
 var Constants = require('bm_hipay_controllers/cartridge/scripts/util/Constants');
+// var packageJson = require('~/package');
 
 /**
  * HiPayHelper class manages common HiPay functions.
  *
  * To include this script use:
- * var HiPayHelper = require("~/cartridge/scripts/lib/hipay/hipayHelper");
+ * var HiPayHelper = require("~/cartridge/scripts/lib/hipay/HiPayHelper");
  */
-
 function HiPayHelper() {}
 
-HiPayHelper.prototype.fillHeaderData = function (HiPayConfig, order, params) {
+HiPayHelper.prototype.fillHeaderData = function (HiPayConfig, order, params, pi) {
     var threshold = HiPayConfig.hipayEnable3dSecureThresholdRule;
     var enforceThresholdRule = false;
     var language = request.locale;
-    var hipayForm = session.forms.billing.hipayMethodsFields;
+    var cardType = !empty(pi.creditCardType) ? pi.creditCardType.toLowerCase() : null;
 
     if (threshold !== 0) {
         var totalAmount;
@@ -44,11 +46,16 @@ HiPayHelper.prototype.fillHeaderData = function (HiPayConfig, order, params) {
         }
     }
 
-    // use the rule to enforce 3DS depending on the total
-    params.authentication_indicator = enforceThresholdRule ? HiPayConfig.THREEDSECURE_AUTH.MANDATORY : HiPayConfig.hipayEnable3dSecure;  // eslint-disable-line
-    params.ipaddr = request.getHttpRemoteAddress();  // eslint-disable-line
-    params.http_accept = request.httpHeaders.get('accept');  // eslint-disable-line
-    params.http_user_agent = request.getHttpUserAgent();  // eslint-disable-line
+    // use the rule to enforce 3DS depending on the total. Maestro, Amex and BCMC are not in the 3DS scope, so authentication_indicator = 1 for them.
+    if (cardType === 'maestro' || cardType === 'amex' || cardType === 'bancontactmistercash') {
+        params.authentication_indicator = 1; // eslint-disable-line
+    } else {
+        params.authentication_indicator = enforceThresholdRule ? HiPayConfig.THREEDSECURE_AUTH.MANDATORY : HiPayConfig.hipayEnable3dSecure; // eslint-disable-line
+    }
+
+    params.ipaddr = request.getHttpRemoteAddress();           // eslint-disable-line
+    params.http_accept = request.httpHeaders.get('accept');   // eslint-disable-line
+    params.http_user_agent = request.getHttpUserAgent();      // eslint-disable-line
 
     // if request.getHttpLocale() === null or had only 'ru' or 'ro' or 'en' etc. Try to check geolocation
     if (language.length === 2) {
@@ -60,26 +67,42 @@ HiPayHelper.prototype.fillHeaderData = function (HiPayConfig, order, params) {
     }
 
     if (language === 'default') {
-        language = "en_GB";
+        language = 'en_GB';
     }
 
     // always send the redirect urls
-    params.language = language;  // eslint-disable-line
-    params.accept_url = HiPayConfig.acceptURL;  // eslint-disable-line
-    params.decline_url = HiPayConfig.declineURL;  // eslint-disable-line
-    params.pending_url = HiPayConfig.pendingURL;  // eslint-disable-line
-    params.exception_url = HiPayConfig.errorURL;  // eslint-disable-line
-    params.cancel_url = HiPayConfig.cancelURL;  // eslint-disable-line
-    params.notify_url = HiPayConfig.notifyURL;  // eslint-disable-line
+    params.language = language;                    // eslint-disable-line
+    params.accept_url = HiPayConfig.acceptURL;     // eslint-disable-line
+    params.decline_url = HiPayConfig.declineURL;   // eslint-disable-line
+    params.pending_url = HiPayConfig.pendingURL;   // eslint-disable-line
+    params.exception_url = HiPayConfig.errorURL;   // eslint-disable-line
+    params.cancel_url = HiPayConfig.cancelURL;     // eslint-disable-line
+    params.notify_url = HiPayConfig.notifyURL;     // eslint-disable-line
 
-    if (!empty(hipayForm.klarna.houseNumber.value)) {
-        params.house_number = hipayForm.klarna.houseNumber.value;  // eslint-disable-line
-    }
+    if (!empty(session.forms.billing.paymentMethods && session.forms.billing.paymentMethods.hipaymethods)) {
+        var hipaymethods = session.forms.billing.paymentMethods.hipaymethods;
 
-    if (!empty(hipayForm.klarna.birthdate.value)) {
-        var birthdate = hipayForm.klarna.birthdate.value.replace(/-/g, '');
+        if (hipaymethods && hipaymethods.klarna && hipaymethods.klarna.houseNumber) {
+            params.house_number = hipaymethods.klarna.houseNumber.value; // eslint-disable-line
+        }
 
-        params.birthdate = birthdate;  // eslint-disable-line
+        if (hipaymethods && hipaymethods.klarna && hipaymethods.klarna.birthdate) {
+            var birthdate = hipaymethods.klarna.birthdate.value.replace(/-/g, '');
+
+            params.birthdate = birthdate; // eslint-disable-line
+        }
+    } else {
+        var hipayForm = session.forms.billing.hipayMethodsFields;
+
+        if (!empty(hipayForm) && !empty(hipayForm.klarna.houseNumber.value)) {
+            params.house_number = hipayForm.klarna.houseNumber.value;  // eslint-disable-line
+        }
+
+        if (!empty(hipayForm) && !empty(hipayForm.klarna.birthdate.value)) {
+            var birthdate = hipayForm.klarna.birthdate.value.replace(/-/g, '');
+
+            params.birthdate = birthdate;  // eslint-disable-line
+        }
     }
 };
 
@@ -91,10 +114,12 @@ HiPayHelper.prototype.fillOrderData = function (order, params, pi) {
     var productNames = [];
     var customer = null;
     var gender = '';
+
     var billingAddress = null;
     var shippingAddress = null;
-    // var systemVersion = require('dw/system/System').compatibilityMode.toString();
-    // var brand_version = systemVersion.slice(0, systemVersion.length/2) + '.' +  Number(systemVersion.slice(systemVersion.length/2));
+    // var systemSersion = require('dw/system/System').compatibilityMode.toString();
+    // var brand_version = systemSersion.slice(0, systemSersion.length/2) + '.' + Number(systemSersion.slice(systemSersion.length/2));
+    // var integration_version = packageJson.version;
     var shipments = order.shipments;
 
     if (order.totalGrossPrice.available) {
@@ -113,11 +138,11 @@ HiPayHelper.prototype.fillOrderData = function (order, params, pi) {
         }
     }
 
-    params.currency = order.getCurrencyCode(); // eslint-disable-line
+    params.currency = order.getCurrencyCode();  // eslint-disable-line
     params.orderid = order.orderNo + '_' + Date.now(); // eslint-disable-line
-    params.description = order.orderNo; // eslint-disable-line
-    params.cid = order.customer.ID; // eslint-disable-line
-    params.amount = totalAmount.value; // eslint-disable-line
+    params.description = order.orderNo;         // eslint-disable-line
+    params.cid = order.customer.ID;             // eslint-disable-line
+    params.amount = totalAmount.value;          // eslint-disable-line
     params.shipping = order.getAdjustedShippingTotalPrice().value; // eslint-disable-line
     params.tax = order.getTotalTax().value; // eslint-disable-line
     params.payment_product_category_list = categoryList.join(','); // eslint-disable-line
@@ -148,10 +173,10 @@ HiPayHelper.prototype.fillOrderData = function (order, params, pi) {
         params.phone = !empty(billingAddress.phone) ? billingAddress.phone.replace(/\s/g, '') : null; // eslint-disable-line
 
         if (pi.paymentMethod.indexOf('KLARNA') > -1) {
-            params.msisdn = !empty(params.phone) ? params.phone : null; // eslint-disable-line
+            params.msisdn = !empty(billingAddress.phone) ? billingAddress.phone.replace(/-/g, '').replace(/\s/g, '') : null; // eslint-disable-line
 
             if (empty(gender)) {
-                gender = session.forms.billing.hipayMethodsFields.klarna.gender.value;
+                gender = session.forms.billing.paymentMethods.hipaymethods.klarna.gender.value;
             }
         }
 
@@ -182,7 +207,7 @@ HiPayHelper.prototype.fillOrderData = function (order, params, pi) {
 
     // Shipping info
     if (pi.paymentMethod.indexOf('KLARNA') < 0) {
-        shippingAddress = order.defaultShipment.shippingAddress; // eslint-disable-line
+        shippingAddress = order.defaultShipment.shippingAddress;
         params.shipto_firstname = shippingAddress.firstName; // eslint-disable-line
         params.shipto_lastname = shippingAddress.lastName; // eslint-disable-line
         params.shipto_recipientinfo = shippingAddress.companyName; // eslint-disable-line
@@ -286,7 +311,10 @@ HiPayHelper.prototype.fillOrderData = function (order, params, pi) {
             itemObject.discount = appliedProductTotalDiscount.get();
             itemObject.tax_rate = Number(pli.getTaxRate() * 100).toFixed(2);
             itemObject.total_amount = pli.getAdjustedPrice().getValue();
-            itemObject.product_category = Number(productCategory);
+
+            if (pi.paymentMethod.indexOf('HIPAY_HOSTED_ONEY_FACILITY_PAY') > -1 || pi.paymentMethod.indexOf('HIPAY_ONEY_FACILITY_PAY') > -1) {
+                itemObject.product_category = Number(productCategory);
+            }
 
             basketObject.push(itemObject);
         }
@@ -305,7 +333,10 @@ HiPayHelper.prototype.fillOrderData = function (order, params, pi) {
             shippingObject.discount = orderShipment.getAdjustedShippingTotalPrice().getValue() - orderShipment.getShippingTotalPrice().getValue();
             shippingObject.tax_rate = empty(shippingLineItem) ? 0 : Number(shippingLineItem.getTaxRate() * 100).toFixed(2);
             shippingObject.total_amount = orderShipment.getAdjustedShippingTotalPrice().getValue();
-            shippingObject.product_category = 1;
+
+            if (pi.paymentMethod.indexOf('HIPAY_HOSTED_ONEY_FACILITY_PAY') > -1 || pi.paymentMethod.indexOf('HIPAY_ONEY_FACILITY_PAY') > -1) {
+                shippingObject.product_category = 1;
+            }
 
             basketObject.push(shippingObject);
         }
@@ -344,7 +375,10 @@ HiPayHelper.prototype.fillOrderData = function (order, params, pi) {
                     orderDiscountObject.discount = appliedOrderTotalDiscount.get();
                     orderDiscountObject.tax_rate = 0;
                     orderDiscountObject.total_amount = appliedOrderTotalDiscount.get();
-                    orderDiscountObject.product_category = 1;
+
+                    if (pi.paymentMethod.indexOf('HIPAY_HOSTED_ONEY_FACILITY_PAY') > -1 || pi.paymentMethod.indexOf('HIPAY_ONEY_FACILITY_PAY') > -1) {
+                        orderDiscountObject.product_category = 1;
+                    }
 
                     basketObject.push(orderDiscountObject);
                 }
@@ -354,20 +388,21 @@ HiPayHelper.prototype.fillOrderData = function (order, params, pi) {
         params.basket = JSON.stringify(basketObject); // eslint-disable-line
     }
 
-    // ### DPS2 params for Credit cards ### //
+    // ### DPS2 params ### //
     if (pi.paymentMethod === 'HIPAY_CREDIT_CARD' || pi.paymentMethod === 'HIPAY_HOSTED_CREDIT_CARD') {
-
+        var paymentMethods = session.forms.billing.paymentMethods;
         // Device channel always 2, BROWSER
         params.device_channel = "2";
         // Add DSP2 browser info
-        params.browser_info = JSON.parse(session.forms.billing.browserInfo.value);
-        // Add http_accept
-        params.browser_info['http_accept'] = params.http_accept;
-        // Add Ip address
-        params.browser_info['ipaddr'] = params.ipaddr;
+        if (paymentMethods && paymentMethods.browserInfo) {
+            params.browser_info = JSON.parse(paymentMethods.browserInfo.value);
+            // Add http_accept
+            params.browser_info.http_accept = params.http_accept;
+            // Add Ip address
+            params.browser_info.ipaddr = params.ipaddr;
+        }
 
         /* Merchant risk statement */
-
         params.merchant_risk_statement = {};
 
         var allDematerializedProducts = true;
@@ -633,7 +668,7 @@ HiPayHelper.prototype.fillOrderData = function (order, params, pi) {
                         ) {
                             // break while condition
                             addressFound = true;
-                        
+
                             // Set shipping_indicator to 2
                             if (params.merchant_risk_statement.shipping_indicator === 3){
                                 params.merchant_risk_statement.shipping_indicator = 2;
@@ -884,5 +919,18 @@ HiPayHelper.prototype.validateOneyAvailability = function (basket) {
 
     return decision;
 };
+
+HiPayHelper.prototype.getApplicablePaymentCards = function () {
+    var applicablePaymentCards = null;
+
+    try {
+        applicablePaymentCards = PaymentMgr.getPaymentMethod(PaymentInstrument.METHOD_CREDIT_CARD).getActivePaymentCards();
+    } catch (e) {
+        Logger.error('[HiPayHelper.js] crashed on line: ' + e.lineNumber + ' with error: ' + e);
+    }
+
+    return applicablePaymentCards;
+};
+
 
 module.exports = HiPayHelper;

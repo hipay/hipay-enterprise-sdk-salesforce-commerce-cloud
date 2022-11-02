@@ -9,7 +9,7 @@
 */
 
 /* Script includes */
-var guard = require('~/cartridge/scripts/guard');
+var guard = require('*/cartridge/scripts/guard');
 
 /* API includes */
 var ISML = require('dw/template/ISML');

@@ -14,7 +14,7 @@ var PaymentMgr = require('dw/order/PaymentMgr');
 var OrderMgr = require('dw/order/OrderMgr');
 var Resource = require('dw/web/Resource');
 var URLUtils = require('dw/web/URLUtils');
-var guard = require('~/cartridge/scripts/guard');
+var guard = require('*/cartridge/scripts/guard');
 
 function cont(args) {
     var topUrl = URLUtils.url('SiteNavigationBar-ShowMenuitemOverview', 'CurrentMenuItemId', request.httpParameterMap.CurrentMenuItemId);
@@ -81,9 +81,9 @@ function handleForm() { // eslint-disable-line consistent-return
         }
 
         try {
-            response = require('int_hipay_controllers/cartridge/scripts/lib/hipay/HiPayMaintenanceModule').hiPayMaintenanceRequest(order, captureAmount);
+            response = require('int_hipay_core/cartridge/scripts/lib/hipay/modules/hipayMaintenanceModule').hiPayMaintenanceRequest(order, captureAmount);
         } catch (e) {
-            response = require('int_hipay_sfra/cartridge/scripts/lib/hipay/modules/hipayMaintenanceModule').hiPayMaintenanceRequest(order, captureAmount);
+            response = require('int_hipay_core/cartridge/scripts/lib/hipay/modules/hipayMaintenanceModule').hiPayMaintenanceRequest(order, captureAmount);
         }
 
         if (response.error) {

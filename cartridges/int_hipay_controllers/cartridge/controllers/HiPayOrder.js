@@ -1,8 +1,8 @@
 'use strict';
 
-var guard = require('~/cartridge/scripts/guard');
+var guard = require('*/cartridge/scripts/guard');
 var ISML = require('dw/template/ISML');
-var HiPayOrderModule = require('*/cartridge/scripts/lib/hipay/HiPayOrderModule');
+var HiPayOrderModule = require('*/cartridge/scripts/lib/hipay/modules/hipayOrderModule');
 var HiPayProcess = require('*/cartridge/controllers/HiPayProcess');
 
 /** Handles HiPay accepted payment */

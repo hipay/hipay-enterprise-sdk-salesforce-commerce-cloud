@@ -43,9 +43,9 @@
             var HiPayHelper;
 
             try {
-                HiPayHelper = require("int_hipay_controllers/cartridge/scripts/lib/hipay/HiPayHelper");
+                HiPayHelper = require("int_hipay_core/cartridge/scripts/lib/hipay/hipayHelper");
             } catch(e) {
-                HiPayHelper = require("int_hipay_sfra/cartridge/scripts/lib/hipay/hipayHelper");
+                HiPayHelper = require("int_hipay_core/cartridge/scripts/lib/hipay/hipayHelper");
             }
 
             var helper = new HiPayHelper();
@@ -73,7 +73,7 @@
                 hipayTransactionState = paymentInstr.custom.hipayTransactionState;
             }
         }
-        
+
     </isscript>
     <br/>
     <isif condition="${!empty(pdict.Order)}">

@@ -1,6 +1,6 @@
 'use strict';
 
-var HiPayOrderModule = require('*/cartridge/scripts/lib/hipay/HiPayOrderModule');
+var HiPayOrderModule = require('*/cartridge/scripts/lib/hipay/modules/hipayOrderModule');
 
 /** Verifies HiPay requests */
 function verifyHash() {
@@ -56,7 +56,7 @@ function failOrder(args) {
 }
 
 function failHungOrder(order) {
-    var HiPayLogger = require('*/cartridge/scripts/lib/hipay/HiPayLogger');
+    var HiPayLogger = require('*/cartridge/scripts/lib/hipay/hipayLogger');
     var log = new HiPayLogger('ClearHungOrders');
     try {
         require('dw/system/Transaction').wrap(function () {
@@ -74,7 +74,7 @@ function failHungOrder(order) {
 *
 */
 function ClearHungOrders() {
-    var HiPayLogger = require('*/cartridge/scripts/lib/hipay/HiPayLogger');
+    var HiPayLogger = require('*/cartridge/scripts/lib/hipay/hipayLogger');
     var Site = require('dw/system/Site');
     var Calendar = require('dw/util/Calendar');
     var OrderMgr = require('dw/order/OrderMgr');

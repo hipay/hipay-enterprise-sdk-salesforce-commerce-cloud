@@ -25,7 +25,7 @@ var guard = require('~/cartridge/scripts/guard');
  */
 function continueShopping() {
 
-    var location = require('~/cartridge/scripts/util/Browsing').lastCatalogURL();
+    var location = require('*/cartridge/scripts/util/Browsing').lastCatalogURL();
 
     if (location) {
         response.redirect(location);

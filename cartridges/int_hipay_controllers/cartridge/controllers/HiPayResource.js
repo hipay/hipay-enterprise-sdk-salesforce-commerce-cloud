@@ -8,7 +8,7 @@
 
 /* API includes */
 var ISML = require('dw/template/ISML');
-var guard = require('~/cartridge/scripts/guard');
+var guard = require('*/cartridge/scripts/guard');
 
 /* Load merchant CSS style for HiPay*/
 function style() {

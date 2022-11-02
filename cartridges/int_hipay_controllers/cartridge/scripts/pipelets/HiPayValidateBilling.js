@@ -3,11 +3,11 @@
  */
 
 function execute(args) {
-    var HiPayLogger = require('*/cartridge/scripts/lib/hipay/HiPayLogger');
+    var HiPayLogger = require('*/cartridge/scripts/lib/hipay/hipayLogger');
     var log = new HiPayLogger('HiPayValidateBilling');
 
     try {
-        if (require('*/cartridge/scripts/lib/hipay/HiPayCheckoutModule').validateBilling()) {
+        if (require('*/cartridge/scripts/lib/hipay/modules/hipayCheckoutModule').validateBilling()) {
             return PIPELET_NEXT;
         } else {
             return PIPELET_ERROR;

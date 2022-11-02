@@ -18,7 +18,7 @@
 var CSRFProtection = require('dw/web/CSRFProtection');
 
 var app = require('~/cartridge/scripts/app');
-var browsing = require('~/cartridge/scripts/util/Browsing');
+var browsing = require('*/cartridge/scripts/util/Browsing');
 var LOGGER = dw.system.Logger.getLogger('guard');
 
 /**
@@ -119,7 +119,7 @@ function ensure (filters, action, params) {
         var error;
         var filtersPassed = true;
         var errors = [];
-        params = require('~/cartridge/scripts/object').extend(params,args);
+        params = require('*/cartridge/scripts/object').extend(params,args);
 
         for (var i = 0; i < filters.length; i++) {
             LOGGER.debug('Ensuring guard "{0}"...',filters[i]);

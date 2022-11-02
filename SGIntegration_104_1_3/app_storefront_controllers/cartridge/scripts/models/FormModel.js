@@ -30,7 +30,7 @@ var FormModel = AbstractModel.extend(
          */
         get: function (groupName) {
             if (this.object) {
-                return FormModel.get(require('~/cartridge/scripts/object').resolve(this.object,groupName));
+                return FormModel.get(require('*/cartridge/scripts/object').resolve(this.object,groupName));
             }
             return new FormModel();
         },
@@ -193,7 +193,7 @@ var FormModel = AbstractModel.extend(
 FormModel.get = function (formReference) {
     var formInstance = null;
     if (typeof formReference === 'string') {
-        formInstance = require('~/cartridge/scripts/object').resolve(session.forms, formReference);
+        formInstance = require('*/cartridge/scripts/object').resolve(session.forms, formReference);
     } else if (typeof formReference === 'object') {
         formInstance = formReference;
     }

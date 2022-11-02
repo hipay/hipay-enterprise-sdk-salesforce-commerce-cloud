@@ -4,11 +4,11 @@
  */
 
 function execute(args) {
-    var HiPayLogger = require("*/cartridge/scripts/lib/hipay/HiPayLogger"),
+    var HiPayLogger = require("*/cartridge/scripts/lib/hipay/hipayLogger"),
         log = new HiPayLogger("HiPayResetPaymentForms");
 
     try {
-        if (require('*/cartridge/scripts/lib/hipay/HiPayCheckoutModule').resetPaymentForms()) {
+        if (require('*/cartridge/scripts/lib/hipay/modules/hipayCheckoutModule').resetPaymentForms()) {
             return PIPELET_NEXT;
         } else {
             return PIPELET_ERROR;

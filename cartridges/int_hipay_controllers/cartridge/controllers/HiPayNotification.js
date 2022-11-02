@@ -8,12 +8,12 @@
 
 /* API includes */
 var ISML = require('dw/template/ISML');
-var guard = require('~/cartridge/scripts/guard');
+var guard = require('*/cartridge/scripts/guard');
 
 /* Handles HiPay server notifications */
 function notify() {
     var httpParams = request.httpParameterMap;
-    require('*/cartridge/scripts/lib/hipay/HiPayNotificationModule').hiPayProcessNotificationCall(httpParams);
+    require('*/cartridge/scripts/lib/hipay/modules/hipayNotificationModule').hiPayProcessNotificationCall(httpParams);
     ISML.renderTemplate('hipay/notifications/hipaynotification');
 }
 

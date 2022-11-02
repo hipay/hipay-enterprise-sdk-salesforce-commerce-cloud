@@ -52,7 +52,7 @@ var EmailModel = AbstractModel.extend({
      */
     send: function (args) {
         // Add some default keys
-        var params = require('~/cartridge/scripts/object').toHashMap(args);
+        var params = require('*/cartridge/scripts/object').toHashMap(args);
         params.CurrentForms = session.forms;
         params.CurrentHttpParameterMap = request.httpParameterMap;
         params.CurrentCustomer = customer;
@@ -119,7 +119,7 @@ EmailModel.sendMail = function (options) {
     mail.addTo(options.recipient);
     mail.setSubject(options.subject);
     mail.setFrom(options.from || Site.getCurrent().getCustomPreferenceValue('customerServiceEmail') || 'no-reply@salesforce.com');
-    var context = require('~/cartridge/scripts/object').toHashMap(options.context);
+    var context = require('*/cartridge/scripts/object').toHashMap(options.context);
     context.CurrentForms = session.forms;
     context.CurrentHttpParameterMap = request.httpParameterMap;
     context.CurrentCustomer = customer;

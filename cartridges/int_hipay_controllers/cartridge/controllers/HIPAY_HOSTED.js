@@ -15,12 +15,12 @@ var ISML = require('dw/template/ISML');
 function Handle(args) {
     var basket = args.Basket;
     var paymentMethod = session.forms.billing.paymentMethods.selectedPaymentMethodID.value;
-    var HiPayLogger = require('*/cartridge/scripts/lib/hipay/HiPayLogger');
+    var HiPayLogger = require('*/cartridge/scripts/lib/hipay/hipayLogger');
     var log = new HiPayLogger('HIPAY_HOSTED');
 
     if (!empty(paymentMethod)) {
         try {
-            var hiPayCheckoutModule = require('*/cartridge/scripts/lib/hipay/HiPayCheckoutModule');
+            var hiPayCheckoutModule = require('*/cartridge/scripts/lib/hipay/modules/hipayCheckoutModule');
             var paymentInstrument = hiPayCheckoutModule.createPaymentInstrument(basket, paymentMethod, true);
             hiPayCheckoutModule.hiPayUpdatePaymentInstrument(paymentInstrument);
         } catch (e) {
@@ -49,7 +49,7 @@ function Authorize(args) {
             paymentInstrument.paymentTransaction.setPaymentProcessor(paymentProcessor);
         });
 
-        var result = require('*/cartridge/scripts/lib/hipay/HiPayCheckoutModule').hiPayHostedPageRequest(order, paymentInstrument);
+        var result = require('*/cartridge/scripts/lib/hipay/modules/hipayCheckoutModule').hiPayHostedPageRequest(order, paymentInstrument);
 
         if (result.error) {
             return { error: true };

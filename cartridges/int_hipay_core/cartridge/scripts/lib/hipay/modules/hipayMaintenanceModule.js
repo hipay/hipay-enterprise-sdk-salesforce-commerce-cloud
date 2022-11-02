@@ -25,7 +25,7 @@ HiPayMaintenanceModule.hiPayMaintenanceRequest = function (order, amount) {
     return Transaction.wrap(function () {
         var HiPayMaintenanceService = require('~/cartridge/scripts/lib/hipay/services/hipayMaintenanceService');
         var HiPayLogger = require('~/cartridge/scripts/lib/hipay/hipayLogger');
-        var HiPayHelper = require('~/cartridge/scripts/lib/hipay/hipayHelper');
+        var HiPayHelper = require('*/cartridge/scripts/lib/hipay/hipayHelper');
         var log = new HiPayLogger('HiPayMaintenanceRequest');
         var helper = new HiPayHelper();
         var hiPayMaintenanceService = new HiPayMaintenanceService();

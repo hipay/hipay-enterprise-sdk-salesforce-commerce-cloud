@@ -19,7 +19,7 @@ var CSRFProtection = require('dw/web/CSRFProtection');
 var Resource = require('dw/web/Resource');
 
 var app = require('~/cartridge/scripts/app');
-var browsing = require('~/cartridge/scripts/util/Browsing');
+var browsing = require('*/cartridge/scripts/util/Browsing');
 
 /**
  * This method contains the login to handle a not logged in customer
@@ -122,7 +122,7 @@ function ensure (filters, action, params) {
         var error;
         var filtersPassed = true;
         var errors = [];
-        params = require('~/cartridge/scripts/object').extend(params,args);
+        params = require('*/cartridge/scripts/object').extend(params,args);
 
         for (var i = 0; i < filters.length; i++) {
 

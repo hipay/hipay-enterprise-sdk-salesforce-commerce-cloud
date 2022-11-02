@@ -1,23 +1,31 @@
-/**
- * HiPaySignitureMgr object is responsible for calculating and verifying SHA-256 hash string in HiPay requests.
- */
+'use strict';
 
-var MessageDigest = require('dw/crypto/MessageDigest');
+var MessageDigest = require('dw/crypto/WeakMessageDigest');
 var Encoding = require('dw/crypto/Encoding');
 var Bytes = require('dw/util/Bytes');
 
+/**
+ * HiPaySignitureMgr object is responsible for calculating and verifying SHA-1 hash string in HiPay requests.
+ *
+ * To include this script use:
+ * var HiPaySignitureMgr = require('~/cartridge/scripts/lib/hipay/hipaySignitureMgr.ds').HiPaySignitureMgr;
+ */
 function HiPaySignitureMgr() {}
 
-/* Validates if the hashed string based on the parameters is correct. */
+/**
+ * Validates if the hashed string based on the parameters is correct.
+ */
 HiPaySignitureMgr.checkIsValidResponse = function (paramsMap, passPhrase) {
     var shaSign = paramsMap.get('hash')[0];
     var shaOut = HiPaySignitureMgr.calculateSigniture(paramsMap, passPhrase);
-    var isValid = shaSign === shaOut;
 
+    var isValid = shaSign === shaOut;
     return isValid;
 };
 
-/* Validates if the hashed string based on the parameters is correct. */
+/**
+ * Validates if the hashed string based on the parameters is correct.
+ */
 HiPaySignitureMgr.checkIsValidNotification = function (paramsMap, passPhrase, shaSign) {
     var shaOut = HiPaySignitureMgr.calculateNotificationSigniture(paramsMap, passPhrase);
     var isValid = shaSign === shaOut;
@@ -27,7 +35,7 @@ HiPaySignitureMgr.checkIsValidNotification = function (paramsMap, passPhrase, sh
 
 /**
  * Generate SHA1 hash based on the given parameters and pass phrase.
- * Empty parameters are exluded.
+ * Empty parameters are excluded.
  */
 HiPaySignitureMgr.calculateSigniture = function (paramsMap, passPhrase) {
     var names = [];
@@ -39,15 +47,17 @@ HiPaySignitureMgr.calculateSigniture = function (paramsMap, passPhrase) {
         }
     }
 
-    names.sort(); /* Sort the elements of the Array in alphabetical order */
+    names.sort(); // Sort the elements of the Array in alphabetical order
 
-    var stringToHash = ''; /* Construct the string to be hashed */
+    // Construct the string to be hashed
+    var stringToHash = '';
     for (var i = 0; i < names.length; i++) {
         stringToHash += names[i] + paramsMap.get(names[i])[0] + passPhrase;
     }
 
+    // SHA-1 Hash the final string
     var digest = new MessageDigest(MessageDigest.DIGEST_SHA_256);
-    var sha1Hash = Encoding.toHex(digest.digest(MessageDigest.DIGEST_SHA_256, new Bytes(stringToHash, 'UTF-8'))); /* SHA-256 Hash the final string */
+    var sha1Hash = Encoding.toHex(digest.digest(MessageDigest.DIGEST_SHA_256, new Bytes(stringToHash, 'UTF-8')));
 
     return sha1Hash;
 };
@@ -57,7 +67,8 @@ HiPaySignitureMgr.calculateSigniture = function (paramsMap, passPhrase) {
  * Empty parameters are exluded.
  */
 HiPaySignitureMgr.calculateNotificationSigniture = function (paramsMap, passPhrase) {
-    var paramsList = []; /* Construct the string to be hashed */
+    // Construct the string to be hashed
+    var paramsList = [];
 
     var entrysSet = paramsMap.entrySet();
 
@@ -67,8 +78,9 @@ HiPaySignitureMgr.calculateNotificationSigniture = function (paramsMap, passPhra
 
     var paramsString = paramsList.join('&');
     var stringToHash = paramsString + passPhrase;
+    // SHA-1 Hash the final string
     var digest = new MessageDigest(MessageDigest.DIGEST_SHA_256);
-    var sha1Hash = Encoding.toHex(digest.digest(MessageDigest.DIGEST_SHA_256, new Bytes(stringToHash, 'UTF-8'))); /* SHA-256 Hash the final string */
+    var sha1Hash = Encoding.toHex(digest.digest(MessageDigest.DIGEST_SHA_256, new Bytes(stringToHash, 'UTF-8')));
 
     return sha1Hash;
 };
