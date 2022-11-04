@@ -1,5 +1,5 @@
 /**
- * HiPaySignitureMgr object is responsible for calculating and verifying SHA-1 hash string in HiPay requests.
+ * HiPaySignitureMgr object is responsible for calculating and verifying SHA-256 hash string in HiPay requests.
  */
 
 var MessageDigest = require('dw/crypto/MessageDigest');
@@ -46,8 +46,8 @@ HiPaySignitureMgr.calculateSigniture = function (paramsMap, passPhrase) {
         stringToHash += names[i] + paramsMap.get(names[i])[0] + passPhrase;
     }
 
-    var digest = new MessageDigest(MessageDigest.DIGEST_SHA_1);
-    var sha1Hash = Encoding.toHex(digest.digest(MessageDigest.DIGEST_SHA_1, new Bytes(stringToHash, 'UTF-8'))); /* SHA-1 Hash the final string */
+    var digest = new MessageDigest(MessageDigest.DIGEST_SHA_256);
+    var sha1Hash = Encoding.toHex(digest.digest(MessageDigest.DIGEST_SHA_256, new Bytes(stringToHash, 'UTF-8'))); /* SHA-256 Hash the final string */
 
     return sha1Hash;
 };
@@ -67,8 +67,8 @@ HiPaySignitureMgr.calculateNotificationSigniture = function (paramsMap, passPhra
 
     var paramsString = paramsList.join('&');
     var stringToHash = paramsString + passPhrase;
-    var digest = new MessageDigest(MessageDigest.DIGEST_SHA_1);
-    var sha1Hash = Encoding.toHex(digest.digest(MessageDigest.DIGEST_SHA_1, new Bytes(stringToHash, 'UTF-8'))); /* SHA-1 Hash the final string */
+    var digest = new MessageDigest(MessageDigest.DIGEST_SHA_256);
+    var sha1Hash = Encoding.toHex(digest.digest(MessageDigest.DIGEST_SHA_256, new Bytes(stringToHash, 'UTF-8'))); /* SHA-256 Hash the final string */
 
     return sha1Hash;
 };

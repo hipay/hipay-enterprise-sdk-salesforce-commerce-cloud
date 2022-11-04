@@ -2,9 +2,9 @@ Feature('Gloabl Hipay Test');
 
 const Resource = require('../resource');
 
-Before(({ I, loginPage, checkoutPage }) => {
-    // login
-    loginPage.loginOrCreateAccount();
+Before(async ({ I, loginPage, checkoutPage }) => {
+    // waiting fo login process
+    await loginPage.loginOrCreateAccount();
     // checkout
     checkoutPage.initCheckout();
 

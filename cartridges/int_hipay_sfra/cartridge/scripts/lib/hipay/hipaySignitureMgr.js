@@ -56,8 +56,8 @@ HiPaySignitureMgr.calculateSigniture = function (paramsMap, passPhrase) {
     }
 
     // SHA-1 Hash the final string
-    var digest = new MessageDigest(MessageDigest.DIGEST_SHA_1);
-    var sha1Hash = Encoding.toHex(digest.digest(MessageDigest.DIGEST_SHA_1, new Bytes(stringToHash, 'UTF-8')));
+    var digest = new MessageDigest(MessageDigest.DIGEST_SHA_256);
+    var sha1Hash = Encoding.toHex(digest.digest(MessageDigest.DIGEST_SHA_256, new Bytes(stringToHash, 'UTF-8')));
 
     return sha1Hash;
 };
@@ -79,8 +79,8 @@ HiPaySignitureMgr.calculateNotificationSigniture = function (paramsMap, passPhra
     var paramsString = paramsList.join('&');
     var stringToHash = paramsString + passPhrase;
     // SHA-1 Hash the final string
-    var digest = new MessageDigest(MessageDigest.DIGEST_SHA_1);
-    var sha1Hash = Encoding.toHex(digest.digest(MessageDigest.DIGEST_SHA_1, new Bytes(stringToHash, 'UTF-8')));
+    var digest = new MessageDigest(MessageDigest.DIGEST_SHA_256);
+    var sha1Hash = Encoding.toHex(digest.digest(MessageDigest.DIGEST_SHA_256, new Bytes(stringToHash, 'UTF-8')));
 
     return sha1Hash;
 };

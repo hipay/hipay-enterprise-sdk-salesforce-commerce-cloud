@@ -18,12 +18,14 @@ module.exports = {
         confirmPassword: '#registration-form-password-confirm'
     },
 
-    loginOrCreateAccount() {
+    async loginOrCreateAccount() {
         I.amOnPage(pageUrl)
         this.confirmTrackingConsent();
         I.click('a[aria-label="Login to your account"]');
-        tryTo(() => this.loginAccount())
-            .then(() => tryTo(() => this.createAccout()));
+        const iAmLogged = await tryTo(() => this.loginAccount());
+        if (!iAmLogged) {
+            this.createAccout();
+        }
     },
 
     createAccout() {

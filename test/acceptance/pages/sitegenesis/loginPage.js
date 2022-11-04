@@ -17,12 +17,14 @@ module.exports = {
         confirmPassword: 'dwfrm_profile_login_passwordconfirm'
     },
 
-    loginOrCreateAccount() {
-        I.amOnPage(pageUrl)
+    async loginOrCreateAccount() {
+        I.amOnPage(pageUrl);
         this.confirmTrackingConsent();
         I.click('.fa-user');
-        tryTo(() => this.loginAccount())
-            .then(() => tryTo(() => this.createAccout()));
+        const iAmLogged = await tryTo(() => this.loginAccount());
+        if (!iAmLogged) {
+            this.createAccout();
+        }
     },
 
     createAccout() {
