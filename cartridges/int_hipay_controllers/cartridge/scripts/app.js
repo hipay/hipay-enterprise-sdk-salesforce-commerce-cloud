@@ -8,7 +8,7 @@
  * Returns the model for the given name. The model is expected under the models directory.
  */
 exports.getModel = function (modelName) {
-    return require('./models/' + modelName + 'Model');
+    return require('*/cartridge/scripts/models/' + modelName + 'Model');
 };
 
 /**
@@ -43,7 +43,7 @@ exports.getView = function (viewName, parameters) {
             View = require('./views/View');
         }
     } catch (e) {
-        View = require('./views/View');
+        View = require('*/cartridge/scripts/views/View');
     }
     return new View(parameters || {});
 };
@@ -72,7 +72,7 @@ exports.getView = function (viewName, parameters) {
 exports.getForm = function (formReference) {
     var formInstance, FormModel;
 
-    FormModel = require('~/cartridge/scripts/models/FormModel');
+    FormModel = require('*/cartridge/scripts/models/FormModel');
     formInstance = null;
     if (typeof formReference === 'string') {
         formInstance = require('*/cartridge/scripts/object').resolve(session.forms, formReference);
@@ -87,5 +87,5 @@ exports.getForm = function (formReference) {
  * Returns the controller with the given name.
  */
 exports.getController = function (controllerName) {
-    return require('~/cartridge/controllers/' + controllerName);
+    return require('*/cartridge/controllers/' + controllerName);
 };
