@@ -1,5 +1,7 @@
 'use strict';
 
+var base = module.superModule;
+
 var server = require('server');
 var BasketMgr = require('dw/order/BasketMgr');
 var HookMgr = require('dw/system/HookMgr');
@@ -720,7 +722,7 @@ function writeToCustomObject(params) {
     var objectUUID = UUIDUtils.createUUID();
     try {
         Transaction.wrap(function () {
-            var instance = CustomObjectMgr.createCustomObject(params.objName, objectUUID);            
+            var instance = CustomObjectMgr.createCustomObject(params.objName, objectUUID);
             instance.custom.customerNo = params.data.customerNo;
             instance.custom.attemptDate = params.data.attemptDate;
         });
@@ -728,7 +730,7 @@ function writeToCustomObject(params) {
         Logger.error('writeToCustomObject ERROR :' + e);
         return Constants.STATUS_ERROR;
     }
-    return Constants.STATUS_OK;    
+    return Constants.STATUS_OK;
 }
 
 
@@ -737,6 +739,7 @@ module.exports = {
     ensureNoEmptyShipments: ensureNoEmptyShipments,
     getProductLineItem: getProductLineItem,
     isShippingAddressInitialized: isShippingAddressInitialized,
+    prepareCustomerForm: base.prepareCustomerForm,
     prepareShippingForm: prepareShippingForm,
     prepareBillingForm: prepareBillingForm,
     copyCustomerAddressToShipment: copyCustomerAddressToShipment,
@@ -744,6 +747,7 @@ module.exports = {
     copyShippingAddressToShipment: copyShippingAddressToShipment,
     copyBillingAddressToBasket: copyBillingAddressToBasket,
     validateFields: validateFields,
+    validateCustomerForm: base.validateCustomerForm,
     validateShippingForm: validateShippingForm,
     validateBillingForm: validateBillingForm,
     validatePayment: validatePayment,
