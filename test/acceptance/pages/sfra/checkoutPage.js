@@ -66,19 +66,21 @@ module.exports = {
     selectAndSubmitHiPayCreditCardForm(cardType) {
         const card = config[cardType] || 'creditCard';
         I.click('.nav-item[data-method-id="HIPAY_CREDIT_CARD"] .nav-link');
+        tryTo(() => I.click('.user-payment-instruments .add-payment'));
         I.fillField('.phone', config.user.phone);
         I.fillField('#cardNumber', card.cardNumber);
-        I.moveCursorTo('.tooltip', 5, 5);
+        tryTo(() => I.moveCursorTo('.tooltip', 5, 5));
         I.moveCursorTo('#cardNumber', 5, 5);
-        I.moveCursorTo('.tooltip', 5, 5);
+        tryTo(() => I.moveCursorTo('.tooltip', 5, 5));
         I.moveCursorTo('#cardNumber', 5, 5);
         I.selectOption('#expirationMonth', card.expMonth);
         I.selectOption('#expirationYear', card.expYear);
         I.fillField('#securityCode', card.cvc);
+        I.fillField('input[name="dwfrm_billing_creditCardFields_phone"]', config.user.phone);
         I.seeElement('.submit-payment');
         I.click('.submit-payment');
     },
-    
+
     selectAndSubmitHiPayGriopayForm() {
         I.click('.nav-item[data-method-id="HIPAY_GIROPAY"] .nav-link');
         I.seeElement('input[name="dwfrm_billing_hipayMethodsFields_giropay_bic"]');

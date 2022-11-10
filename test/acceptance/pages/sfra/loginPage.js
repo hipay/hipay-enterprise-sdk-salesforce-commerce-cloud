@@ -21,7 +21,7 @@ module.exports = {
     async loginOrCreateAccount() {
         I.amOnPage(pageUrl)
         this.confirmTrackingConsent();
-        I.click('a[aria-label="Login to your account"]');
+        I.click('span[class="user-message"]');
         const iAmLogged = await tryTo(() => this.loginAccount());
         if (!iAmLogged) {
             this.createAccout();

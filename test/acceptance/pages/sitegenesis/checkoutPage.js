@@ -76,14 +76,43 @@ module.exports = {
         I.switchTo('#cardExpiryDate>iframe');
         I.fillField('input[name="cc-exp"]', `${card.expMonth}/${card.expYear.slice(-2)}`);
         I.switchTo();
-        
+
         I.switchTo('#cardSecurityCode>iframe');
         I.fillField('input[name="cvc"]', card.cvc);
         I.switchTo();
-        
+
         I.click('#submit-button');
+
+        // New Hosted Page.
+        // I.wait(2);
+
+        // I.switchTo('#hipay-card-field-cardNumber>iframe');
+        // I.fillField('input[name="cardnumber"]', card.cardNumber);
+        // I.switchTo();
+
+        // I.wait(3);
+
+        // I.switchTo('#hipay-card-field-cardHolder>iframe');
+        // I.fillField('input[name="ccname"]', `${config.user.firstName} ${config.user.lastName}`);
+        // I.switchTo();
+
+        // I.wait(2);
+
+        // I.switchTo('#hipay-card-field-expiryDate>iframe');
+        // I.fillField('input[name="cc-exp"]', `${card.expMonth}/${card.expYear.slice(-2)}`);
+        // I.switchTo();
+
+        // I.wait(5);
+
+        // I.switchTo('#hipay-card-field-cvc>iframe');
+        // I.fillField('input[name="cvc"]', card.cvc);
+        // I.switchTo();
+
+        // I.wait(1);
+
+        // I.click('button[aria-label="pay-button"]');
     },
-    
+
     selectAndSubmitHiPayGriopayForm() {
         I.checkOption('#is-HIPAY_HOSTED_GIROPAY');
         I.click('.button-fancy-large');
