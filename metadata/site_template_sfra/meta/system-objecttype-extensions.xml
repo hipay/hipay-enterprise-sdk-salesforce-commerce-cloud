@@ -383,6 +383,12 @@
                     </value-definition>
                 </value-definitions>
             </attribute-definition>
+            <attribute-definition attribute-id="hipaySFRAVersion">
+                <display-name xml:lang="x-default">Use SFRA &gt;= 6</display-name>
+                <type>boolean</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+            </attribute-definition>
             <attribute-definition attribute-id="hipaySiteShippingMethodsList">
                 <display-name xml:lang="x-default">List of shipping methods</display-name>
                 <description xml:lang="x-default">Comma-separated list of all shipping methods that will be in use for Oney payment method</description>
@@ -409,6 +415,7 @@
                 <attribute attribute-id="hipayDisplayCardSelector"/>
                 <attribute attribute-id="hipayHungOrderTimeout"/>
                 <attribute attribute-id="hipaySiteShippingMethodsList"/>
+                <attribute attribute-id="hipaySFRAVersion"/>
             </attribute-group>
         </group-definitions>
     </type-extension>
@@ -426,10 +433,10 @@
         <group-definitions>
             <attribute-group group-id="Standard">
                 <attribute attribute-id="datePasswordLastChange"/>
-            </attribute-group>            
+            </attribute-group>
         </group-definitions>
     </type-extension>
-	
+
     <type-extension type-id="Product">
         <custom-attribute-definitions>
             <attribute-definition attribute-id="productDematerialized">
@@ -449,6 +456,6 @@
                 <attribute attribute-id="productDematerialized"/>
             </attribute-group>
         </group-definitions>
-    </type-extension>	
-	
+    </type-extension>
+
 </metadata>

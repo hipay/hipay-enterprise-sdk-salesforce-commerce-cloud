@@ -42,6 +42,6 @@
     "sass-loader": "^7.0.3"
   },
   "paths": {
-    "base": "./storefront-reference-architecture-master/cartridges/app_storefront_base/"
+    "base": "../storefront-reference-architecture/cartridges/app_storefront_base/"
   }
 }

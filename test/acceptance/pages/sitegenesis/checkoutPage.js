@@ -64,11 +64,11 @@ module.exports = {
         I.checkOption('#is-HIPAY_HOSTED_CREDIT_CARD');
         I.click('.button-fancy-large');
         I.click('.button-fancy-large');
-        
+
         I.switchTo('#cardNumber>iframe');
         I.fillField('input[name="cardnumber"]', card.cardNumber);
         I.switchTo();
-        
+
         I.switchTo('#cardHolder>iframe');
         I.fillField('input[name="ccname"]', `${config.user.firstName} ${config.user.lastName}`);
         I.switchTo();
@@ -162,7 +162,7 @@ module.exports = {
         I.click('.btn-primary');
         I.click('.btn-primary');
     },
-    
+
     selectAndSubmitINGForm() {
         I.checkOption('#is-HIPAY_HOSTED_ING_HOMEPAY');
         I.click('.button-fancy-large');
@@ -183,7 +183,7 @@ module.exports = {
         I.click('#submit-button');
         I.click('#submit-button');
     },
-    
+
     selectAndSubmitHostedSofortForm() {
         I.checkOption('#is-HIPAY_HOSTED_SOFORT_UBERWEISUNG');
         I.click('.button-fancy-large');
