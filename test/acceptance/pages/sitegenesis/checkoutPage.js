@@ -65,21 +65,23 @@ module.exports = {
         I.click('.button-fancy-large');
         I.click('.button-fancy-large');
 
-        I.switchTo('#cardNumber>iframe');
-        I.fillField('input[name="cardnumber"]', card.cardNumber);
-        I.switchTo();
+        I.click('#cardNumber');
+        I.fillField('input[name="cardNumber"]', card.cardNumber);
+        // I.switchTo();
 
-        I.switchTo('#cardHolder>iframe');
-        I.fillField('input[name="ccname"]', `${config.user.firstName} ${config.user.lastName}`);
-        I.switchTo();
+        I.click('#cardHolder');
+        I.fillField('input[name="cardHolder"]', `${config.user.firstName} ${config.user.lastName}`);
+        // I.switchTo();
 
-        I.switchTo('#cardExpiryDate>iframe');
-        I.fillField('input[name="cc-exp"]', `${card.expMonth}/${card.expYear.slice(-2)}`);
-        I.switchTo();
+        I.click('#cardExpiryMonth');
+        I.click('option[value="12"]');
 
-        I.switchTo('#cardSecurityCode>iframe');
-        I.fillField('input[name="cvc"]', card.cvc);
-        I.switchTo();
+        I.click('#cardExpiryYear');
+        I.click('option[value="2023"]');
+
+        I.click('#cardSecurityCode');
+        I.fillField('input[name="cardSecurityCode"]', card.cvc);
+        // I.switchTo();
 
         I.click('#submit-button');
 

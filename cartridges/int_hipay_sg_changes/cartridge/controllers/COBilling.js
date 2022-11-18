@@ -155,7 +155,7 @@ function initCreditCardList(cart) {
     if (customer.authenticated) {
         /* HiPay custom code - start */
         if (!empty(sitePrefs.hipayEnabled) && sitePrefs.hipayEnabled && !empty(sitePrefs.hipayEnableOneClick) && sitePrefs.hipayEnableOneClick) { /* if hipay and one click payment enabled */
-    		applicableCreditCards = require('int_hipay_core/cartridge/scripts/lib/hipay/modules/hipayCheckoutModule').getApplicableCreditCards(countryCode, paymentAmount.getValue()).ValidPaymentInstruments;
+    		applicableCreditCards = require('int_hipay_controllers/cartridge/scripts/lib/hipay/modules/hipayCheckoutModule').getApplicableCreditCards(countryCode, paymentAmount.getValue()).ValidPaymentInstruments;
     	} else {
             var profile = app.getModel('Profile').get();
             if (profile) {
@@ -358,7 +358,7 @@ function updateCreditCardSelection() {
 function resetPaymentForms() {
     /* HiPay custom code - start */
     if (!empty(sitePrefs.hipayEnabled) && sitePrefs.hipayEnabled) {
-        return require('int_hipay_core/cartridge/scripts/lib/hipay/modules/hipayCheckoutModule').resetPaymentForms();
+        return require('int_hipay_controllers/cartridge/scripts/lib/hipay/modules/hipayCheckoutModule').resetPaymentForms();
     }
     /* HiPay custom code - end */
 
@@ -399,7 +399,7 @@ function resetPaymentForms() {
 function validateBilling() {
     /* HiPay custom code - start */
     if (!empty(sitePrefs.hipayEnabled) && sitePrefs.hipayEnabled) {
-        return require('int_hipay_core/cartridge/scripts/lib/hipay/modules/hipayCheckoutModule').validateBilling();
+        return require('int_hipay_controllers/cartridge/scripts/lib/hipay/modules/hipayCheckoutModule').validateBilling();
     }
     /* HiPay custom code - end */
 
@@ -803,7 +803,7 @@ function saveCreditCard() {
 
     /* HiPay custom code - start */
     if (!empty(sitePrefs.hipayEnabled) && sitePrefs.hipayEnabled && !empty(sitePrefs.hipayEnableOneClick) && sitePrefs.hipayEnableOneClick) {
-        return require('int_hipay_core/cartridge/scripts/lib/hipay/modules/hipayCheckoutModule').validateBilling();
+        return require('int_hipay_controllers/cartridge/scripts/lib/hipay/modules/hipayCheckoutModule').validateBilling();
     }
     /* HiPay custom code - end */
 

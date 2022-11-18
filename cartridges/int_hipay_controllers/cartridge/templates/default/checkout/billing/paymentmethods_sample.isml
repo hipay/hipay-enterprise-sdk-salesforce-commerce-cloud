@@ -20,7 +20,7 @@
                     helper = new HiPayHelper();
                 var renderOney = helper.validateOneyAvailability(pdict.Basket);
                 var applicablePaymentCards = helper.getApplicablePaymentCards(pdict.Basket);
-                var HiPayConfig = require('int_hipay_core/cartridge/scripts/lib/hipay/hiPayConfig').HiPayConfig,
+                var HiPayConfig = require('*/cartridge/scripts/lib/hipay/hipayConfig').HiPayConfig,
                     isHiPayHostedMode = false;
                     if (HiPayConfig.hipayOperationMode == HiPayConfig.OPERATION.HOSTED || HiPayConfig.hipayOperationMode == HiPayConfig.OPERATION.IFRAME) {
                         isHiPayHostedMode = true;
