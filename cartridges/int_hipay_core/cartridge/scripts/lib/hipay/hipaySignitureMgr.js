@@ -5,7 +5,7 @@ var Encoding = require('dw/crypto/Encoding');
 var Bytes = require('dw/util/Bytes');
 
 /**
- * HiPaySignitureMgr object is responsible for calculating and verifying SHA-1 hash string in HiPay requests.
+ * HiPaySignitureMgr object is responsible for calculating and verifying SHA hash string in HiPay requests.
  *
  * To include this script use:
  * var HiPaySignitureMgr = require('~/cartridge/scripts/lib/hipay/hipaySignitureMgr.ds').HiPaySignitureMgr;
@@ -55,11 +55,11 @@ HiPaySignitureMgr.calculateSigniture = function (paramsMap, passPhrase) {
         stringToHash += names[i] + paramsMap.get(names[i])[0] + passPhrase;
     }
 
-    // SHA-1 Hash the final string
+    // Hash the final string
     var digest = new MessageDigest(MessageDigest.DIGEST_SHA_256);
-    var sha1Hash = Encoding.toHex(digest.digest(MessageDigest.DIGEST_SHA_256, new Bytes(stringToHash, 'UTF-8')));
+    var hash = Encoding.toHex(digest.digestBytes(new Bytes(stringToHash, 'UTF-8')));
 
-    return sha1Hash;
+    return hash;
 };
 
 /**
@@ -78,11 +78,11 @@ HiPaySignitureMgr.calculateNotificationSigniture = function (paramsMap, passPhra
 
     var paramsString = paramsList.join('&');
     var stringToHash = paramsString + passPhrase;
-    // SHA-1 Hash the final string
+    // SHA Hash the final string
     var digest = new MessageDigest(MessageDigest.DIGEST_SHA_256);
-    var sha1Hash = Encoding.toHex(digest.digest(MessageDigest.DIGEST_SHA_256, new Bytes(stringToHash, 'UTF-8')));
+    var hash = Encoding.toHex(digest.digestBytes(new Bytes(stringToHash, 'UTF-8')));
 
-    return sha1Hash;
+    return hash;
 };
 
 module.exports.HiPaySignitureMgr = HiPaySignitureMgr;
