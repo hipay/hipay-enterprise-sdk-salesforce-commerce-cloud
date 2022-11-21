@@ -19,7 +19,7 @@ var Status = require('dw/system/Status');
 var StringUtils = require('dw/util/StringUtils');
 var Transaction = require('dw/system/Transaction');
 var URLUtils = require('dw/web/URLUtils');
-var Countries = require('app_storefront_core/cartridge/scripts/util/Countries');
+var Countries = require('*/cartridge/scripts/util/Countries');
 /* HiPay custom code - start */
 var sitePrefs = require('dw/system/Site').getCurrent().getPreferences().getCustom();
 /* HiPay custom code - end */

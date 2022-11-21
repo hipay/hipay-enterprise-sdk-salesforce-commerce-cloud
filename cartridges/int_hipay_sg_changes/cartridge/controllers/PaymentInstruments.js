@@ -104,7 +104,7 @@ function handlePaymentForm() {
  * @param {dw.web.FormGroup} params.CreditCardFormFields - new credit card form.
  */
 function save(params) {
-    var saveCustomerCreditCard = require('app_storefront_core/cartridge/scripts/checkout/SaveCustomerCreditCard');
+    var saveCustomerCreditCard = require('*/cartridge/scripts/checkout/SaveCustomerCreditCard');
     var result = saveCustomerCreditCard.save(params);
     if (result === PIPELET_ERROR) {
         throw new Error('Problem saving credit card');

@@ -86,7 +86,7 @@ HiPayHelper.prototype.fillHeaderData = function (HiPayConfig, order, params, pi)
             params.house_number = hipaymethods.klarna.houseNumber.value; // eslint-disable-line
         }
 
-        if (hipaymethods && hipaymethods.klarna && hipaymethods.klarna.birthdate) {
+        if (hipaymethods && hipaymethods.klarna && hipaymethods.klarna.birthdate && !empty(hipaymethods.klarna.birthdate.value)) {
             var birthdate = hipaymethods.klarna.birthdate.value.replace(/-/g, '');
 
             params.birthdate = birthdate; // eslint-disable-line

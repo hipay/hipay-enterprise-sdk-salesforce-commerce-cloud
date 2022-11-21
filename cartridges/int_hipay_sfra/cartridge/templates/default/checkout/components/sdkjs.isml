@@ -6,4 +6,4 @@
     assets.addJs('/js/hipayCheckout.js');
 </isscript>
 
-<input type="hidden" name="${pdict.CurrentForms.billing.browserInfo.htmlName}"" id="browserInfo">
+<input type="hidden" name="${pdict.CurrentForms.billing.paymentMethods.browserInfo.htmlName}" id="browserInfo">
