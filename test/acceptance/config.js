@@ -48,13 +48,13 @@ module.exports = {
         cvc: '123'
     },
     masterCard: {
-        cardNumber: '5404000000000001',
+        cardNumber: '5399999999999999',
         expMonth: '12',
         expYear: '2023',
         cvc: '123'
     },
     masterCard3DS: {
-        cardNumber: '5454545454545454',
+        cardNumber: '5300000000000006',
         expMonth: '12',
         expYear: '2023',
         cvc: '123'
