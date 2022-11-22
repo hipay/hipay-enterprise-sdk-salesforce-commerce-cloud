@@ -77,6 +77,7 @@ module.exports = {
         I.selectOption('#expirationYear', card.expYear);
         I.fillField('#securityCode', card.cvc);
         I.fillField('input[name="dwfrm_billing_creditCardFields_phone"]', config.user.phone);
+        I.fillField('input[name="dwfrm_billing_contactInfoFields_email"]', config.user.email);
         I.seeElement('.submit-payment');
         I.click('.submit-payment');
     },
