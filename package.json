@@ -14,7 +14,7 @@
     "compile:scss": "sgmf-scripts --compile css",
     "test": "sgmf-scripts --test './test/unit/**/*.js'",
     "test:sfra": "codeceptjs run tests/GlobalHipay_test.js --steps --config test/acceptance/codecept.conf.sfra.js",
-    "test:sitegenesis": "codeceptjs run tests/GlobalHipay_test.js --steps --config test/acceptance/codecept.conf.siteg.js"
+    "test:sitegenesis": "codeceptjs run tests/GlobalHipay_test.js --steps --config test/acceptance/codecept.conf.siteg.js --grep '@hosted'"
   },
   "repository": {},
   "license": "ISC",

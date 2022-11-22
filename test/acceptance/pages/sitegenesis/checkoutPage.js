@@ -15,7 +15,7 @@ module.exports = {
         zipcode: '#dwfrm_singleshipping_shippingAddress_addressFields_postal',
         phone: '#dwfrm_singleshipping_shippingAddress_addressFields_phone',
         useAsBillingAddress: '#dwfrm_singleshipping_shippingAddress_useAsBillingAddress'
-      },
+    },
 
     initCheckout() {
         this.goToMenCategory();
@@ -46,6 +46,12 @@ module.exports = {
         I.click(locate('button').withAttr({name: 'dwfrm_cart_checkoutCart'}));
     },
 
+    selectPaymentMethod(paymentMethodId) {
+        I.checkOption('#is-' + paymentMethodId);
+        I.click('.button-fancy-large');
+        I.click('.button-fancy-large');
+    },
+
     submitCheckout() {
         I.fillField(this.fields.firstName, config.user.firstName);
         I.fillField(this.fields.lastName, config.user.lastName);
@@ -61,9 +67,8 @@ module.exports = {
 
     selectAndSubmitHiPayCreditCardForm(cardType) {
         const card = config[cardType] || 'creditCard';
-        I.checkOption('#is-HIPAY_HOSTED_CREDIT_CARD');
-        I.click('.button-fancy-large');
-        I.click('.button-fancy-large');
+
+//        I.switchTo('#hipay-iframe');
 
         I.click('#cardNumber');
         I.fillField('input[name="cardNumber"]', card.cardNumber);
@@ -77,7 +82,7 @@ module.exports = {
         I.click('option[value="12"]');
 
         I.click('#cardExpiryYear');
-        I.click('option[value="2023"]');
+        I.click('option[value="2030"]');
 
         I.click('#cardSecurityCode');
         I.fillField('input[name="cardSecurityCode"]', card.cvc);
@@ -116,9 +121,6 @@ module.exports = {
     },
 
     selectAndSubmitHiPayGriopayForm() {
-        I.checkOption('#is-HIPAY_HOSTED_GIROPAY');
-        I.click('.button-fancy-large');
-        I.click('.button-fancy-large');
         I.fillField('#issuer_bank_id', config.giropay.code);
         I.seeElement('.submit-button');
         I.click('#submit-button');
@@ -138,12 +140,10 @@ module.exports = {
     },
 
     selectAndSubmitiDEALForm() {
-        I.checkOption('#is-HIPAY_HOSTED_IDEAL');
-        I.click('.button-fancy-large');
-        I.click('.button-fancy-large');
     },
 
     validateiDEALPayment() {
+//        I.switchTo('#hipay-iframe');
         I.click('#submit-button');
         I.fillField('input[name="bic"]', config.iDEAL.BIC);
         I.click('.btn-primary');
@@ -153,21 +153,9 @@ module.exports = {
         I.click('.btn-primary');
     },
 
-    selectAndSubmitHostedSisalForm() {
-        I.checkOption('#is-HIPAY_HOSTED_SISAL');
-        I.click('.button-fancy-large');
-        I.click('.button-fancy-large');
-    },
-
     validateHostedSisalPayment() {
         I.click('#submit-button');
         I.click('#submit-button');
-    },
-
-    selectAndSubmitHostedSofortForm() {
-        I.checkOption('#is-HIPAY_HOSTED_SOFORT_UBERWEISUNG');
-        I.click('.button-fancy-large');
-        I.click('.button-fancy-large');
     },
 
     validateHostedSofortPayment() {
@@ -183,12 +171,6 @@ module.exports = {
         I.click('.button-right');
     },
 
-    selectAndSubmitHipayHostedCreditCardForm() {
-        I.checkOption('#is-HIPAY_CREDIT_CARD');
-        I.click('.button-fancy-large');
-        I.click('.button-fancy-large');
-    },
-
     validateHipayHostedCreditCard() {
 
     },
@@ -201,6 +183,7 @@ module.exports = {
     },
 
     placeOrderWithSecure(secure) {
+//        I.switchTo();
         if (secure) {
             this.validateSecure();
         }
