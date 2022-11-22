@@ -3,7 +3,7 @@
 /**
 * Auxiliary functions of the HiPay integration cartridge
 *
-* @module cartridge/scripts/lib/hipay/HiPayCheckoutModule
+* @module cartridge/scripts/lib/hipay/hipayCheckoutModule
 */
 
 var Logger = require('dw/system/Logger');
@@ -97,8 +97,8 @@ HiPayCheckoutModule.hiPayUpdatePaymentInstrument = function (paymentInstrument) 
 */
 HiPayCheckoutModule.hiPayGenerateToken = function (hiPayCardNumber, hiPayCardExpiryMonth,
     hiPayCardExpiryYear, hiPayCardHolder, hiPayCardCVC, hiPayMultiUseToken) {
-    var HiPayTokenService = require('*/cartridge/scripts/lib/hipay/services/HiPayTokenService');
-    var HiPayLogger = require('*/cartridge/scripts/lib/hipay/HiPayLogger');
+    var HiPayTokenService = require('*/cartridge/scripts/lib/hipay/services/hipayTokenService');
+    var HiPayLogger = require('*/cartridge/scripts/lib/hipay/hipayLogger');
     var log = new HiPayLogger('HiPayGenerateToken');
     var hiPayTokenService = new HiPayTokenService();
     var params = {};
@@ -260,11 +260,11 @@ HiPayCheckoutModule.calculateNonGiftCertificateAmount = function (basket) {
  */
 HiPayCheckoutModule.hiPayOrderRequest = function (paymentInstrument, order, deviceFingerprint, recurring) {
     var Transaction = require('dw/system/Transaction');
-    var HiPayOrderService = require('*/cartridge/scripts/lib/hipay/services/HiPayOrderService');
-    var HiPayLogger = require('*/cartridge/scripts/lib/hipay/HiPayLogger');
-    var HiPayHelper = require('*/cartridge/scripts/lib/hipay/HiPayHelper');
-    var HiPayConfig = require('*/cartridge/scripts/lib/hipay/HiPayConfig').HiPayConfig;
-    var status = require('*/cartridge/scripts/lib/hipay/HiPayStatus').HiPayStatus;
+    var HiPayOrderService = require('*/cartridge/scripts/lib/hipay/services/hipayOrderService');
+    var HiPayLogger = require('*/cartridge/scripts/lib/hipay/hipayLogger');
+    var HiPayHelper = require('*/cartridge/scripts/lib/hipay/hipayHelper');
+    var HiPayConfig = require('*/cartridge/scripts/lib/hipay/hipayConfig').HiPayConfig;
+    var status = require('*/cartridge/scripts/lib/hipay/hipayStatus').HiPayStatus;
     var log = new HiPayLogger('HiPayOrderRequest');
     var hiPayOrderService = new HiPayOrderService();
     var helper = new HiPayHelper();
@@ -401,10 +401,10 @@ HiPayCheckoutModule.hiPayHostedPageRequest = function (order, paymentInstrument)
     var URLUtils = require('dw/web/URLUtils');
 
     return Transaction.wrap(function () {
-        var HiPayHostedService = require('*/cartridge/scripts/lib/hipay/services/HiPayHostedService');
-        var HiPayLogger = require('*/cartridge/scripts/lib/hipay/HiPayLogger');
-        var HiPayHelper = require('*/cartridge/scripts/lib/hipay/HiPayHelper');
-        var HiPayConfig = require('*/cartridge/scripts/lib/hipay/HiPayConfig').HiPayConfig;
+        var HiPayHostedService = require('*/cartridge/scripts/lib/hipay/services/hipayHostedService');
+        var HiPayLogger = require('*/cartridge/scripts/lib/hipay/hipayLogger');
+        var HiPayHelper = require('*/cartridge/scripts/lib/hipay/hipayHelper');
+        var HiPayConfig = require('*/cartridge/scripts/lib/hipay/hipayConfig').HiPayConfig;
         var log = new HiPayLogger('HiPayHostedPageRequest');
         var hiPayHostedService = new HiPayHostedService();
         var helper = new HiPayHelper();
