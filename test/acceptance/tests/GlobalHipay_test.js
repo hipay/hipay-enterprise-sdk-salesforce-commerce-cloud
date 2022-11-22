@@ -56,18 +56,21 @@ Scenario('Commande avec HiPay GiroPay OK', ({ I, checkoutPage }) => {
 
 Scenario('Commande avec HiPay iDEAL OK', ({ I, checkoutPage }) => {
     checkoutPage.selectPaymentMethod('HIPAY_HOSTED_IDEAL');
+    checkoutPage.submitHipayForm();
     checkoutPage.validateiDEALPayment();
     checkoutPage.placeOrderWithSecure(false);
 }).tag('@hosted');
 
 Scenario('Commande avec Hosted Sisal OK', ({ I, checkoutPage }) => {
     checkoutPage.selectPaymentMethod('HIPAY_HOSTED_SISAL');
+    checkoutPage.submitHipayForm();
     checkoutPage.validateHostedSisalPayment();
     checkoutPage.placeOrderWithSecure(false);
 }).tag('@hosted');
 
 Scenario('Commande avec Hosted Sofort OK', ({ I, checkoutPage }) => {
     checkoutPage.selectPaymentMethod('HIPAY_HOSTED_SOFORT_UBERWEISUNG');
+    checkoutPage.submitHipayForm();
     checkoutPage.validateHostedSofortPayment();
     checkoutPage.placeOrderWithSecure(false);
 }).tag('@hosted');
