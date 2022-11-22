@@ -69,10 +69,6 @@ i.payment-product-sprite-sisal {
     background-position: -0px -90px;
 }
 
-i.payment-product-sprite-yandex {
-    background-position: -75px -90px;
-}
-
 i.payment-product-sprite-webmoney-transfer {
     background-position: -150px -90px;
 }
@@ -217,5 +213,5 @@ i.payment-product-sprite-carte-accord {
 .payment-method-options .form-row {
     clear: both;
     float: none;
-    width: 33%; 
+    width: 33%;
 }

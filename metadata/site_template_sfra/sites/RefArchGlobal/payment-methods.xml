@@ -12,18 +12,6 @@
         </custom-attributes>
     </payment-method>
 
-    <payment-method method-id="HIPAY_HOSTED_DEXIA_DIRECTNET">
-        <name xml:lang="x-default">Hosted Belfius Direct Net</name>
-        <description xml:lang="x-default">HiPay Belfius Direct Net Payment Method</description>
-        <enabled-flag>true</enabled-flag>
-        <processor-id>HIPAY_HOSTED</processor-id>
-        <custom-attributes>
-            <custom-attribute attribute-id="hipayPaymentCategoryList">realtime-banking</custom-attribute>
-            <custom-attribute attribute-id="hipayPaymentProductList">dexia-directnet</custom-attribute>
-            <custom-attribute attribute-id="hipayProductName">dexia-directnet</custom-attribute>
-        </custom-attributes>
-    </payment-method>
-
     <payment-method method-id="HIPAY_HOSTED_GIROPAY">
         <name xml:lang="x-default">Hosted Giropay</name>
         <description xml:lang="x-default">HiPay Giropay Payment Method</description>
@@ -45,18 +33,6 @@
             <custom-attribute attribute-id="hipayPaymentCategoryList">realtime-banking</custom-attribute>
             <custom-attribute attribute-id="hipayPaymentProductList">ideal</custom-attribute>
             <custom-attribute attribute-id="hipayProductName">ideal</custom-attribute>
-        </custom-attributes>
-    </payment-method>
-
-    <payment-method method-id="HIPAY_HOSTED_ING_HOMEPAY">
-        <name xml:lang="x-default">Hosted ING HomePay</name>
-        <description xml:lang="x-default">HiPay ING HomePay Payment Method</description>
-        <enabled-flag>true</enabled-flag>
-        <processor-id>HIPAY_HOSTED</processor-id>
-        <custom-attributes>
-            <custom-attribute attribute-id="hipayPaymentCategoryList">realtime-banking</custom-attribute>
-            <custom-attribute attribute-id="hipayPaymentProductList">ing-homepay</custom-attribute>
-            <custom-attribute attribute-id="hipayProductName">ing-homepay</custom-attribute>
         </custom-attributes>
     </payment-method>
 
@@ -115,21 +91,6 @@
         </custom-attributes>
     </payment-method>
 
-    <payment-method method-id="HIPAY_HOSTED_QIWI_WALLET">
-        <name xml:lang="x-default">Hosted QIWI Wallet</name>
-        <description xml:lang="x-default">HiPay VISA QIWI Wallet Payment Method</description>
-        <enabled-flag>true</enabled-flag>
-        <processor-id>HIPAY_HOSTED</processor-id>
-        <currencies>
-            <currency>RUB</currency>
-        </currencies>
-        <custom-attributes>
-            <custom-attribute attribute-id="hipayPaymentCategoryList">ewallet</custom-attribute>
-            <custom-attribute attribute-id="hipayPaymentProductList">qiwi-wallet</custom-attribute>
-            <custom-attribute attribute-id="hipayProductName">qiwi-wallet</custom-attribute>
-        </custom-attributes>
-    </payment-method>
-
     <payment-method method-id="HIPAY_HOSTED_WEBMONEY_TRANSFER">
         <name xml:lang="x-default">Hosted WebMoney Transfer</name>
         <description xml:lang="x-default">HiPay WebMoney Transfer Payment Method</description>
@@ -145,21 +106,6 @@
         </custom-attributes>
     </payment-method>
 
-    <payment-method method-id="HIPAY_HOSTED_YANDEX">
-        <name xml:lang="x-default">Hosted Yandex Money</name>
-        <description xml:lang="x-default">HiPay Yandex.Money Payment Method</description>
-        <enabled-flag>true</enabled-flag>
-        <processor-id>HIPAY_HOSTED</processor-id>
-        <currencies>
-            <currency>RUB</currency>
-        </currencies>
-        <custom-attributes>
-            <custom-attribute attribute-id="hipayPaymentCategoryList">ewallet</custom-attribute>
-            <custom-attribute attribute-id="hipayPaymentProductList">yandex</custom-attribute>
-            <custom-attribute attribute-id="hipayProductName">yandex</custom-attribute>
-        </custom-attributes>
-    </payment-method>
-
     <payment-method method-id="HIPAY_CREDIT_CARD">
         <name xml:lang="x-default">Credit Card</name>
         <description xml:lang="x-default">HiPay Credit Card</description>
@@ -168,16 +114,6 @@
         <custom-attributes>
             <custom-attribute attribute-id="hipayPaymentProductList">cb, visa,american-express,maestro,mastercard,bcmc</custom-attribute>
             <custom-attribute attribute-id="hipayProductName">visa</custom-attribute>
-        </custom-attributes>
-    </payment-method>
-
-    <payment-method method-id="HIPAY_DEXIA_DIRECTNET">
-        <name xml:lang="x-default">Belfius Direct Net</name>
-        <description xml:lang="x-default">HiPay Belfius Direct Net Payment Method</description>
-        <enabled-flag>true</enabled-flag>
-        <processor-id>HIPAY</processor-id>
-        <custom-attributes>
-            <custom-attribute attribute-id="hipayProductName">dexia-directnet</custom-attribute>
         </custom-attributes>
     </payment-method>
 
@@ -199,16 +135,6 @@
         <custom-attributes>
             <custom-attribute attribute-id="hipayPaymentProductList">ideal</custom-attribute>
             <custom-attribute attribute-id="hipayProductName">ideal</custom-attribute>
-        </custom-attributes>
-    </payment-method>
-
-    <payment-method method-id="HIPAY_ING_HOMEPAY">
-        <name xml:lang="x-default">ING HomePay</name>
-        <description xml:lang="x-default">HiPay ING HomePay Payment Method</description>
-        <enabled-flag>true</enabled-flag>
-        <processor-id>HIPAY</processor-id>
-        <custom-attributes>
-            <custom-attribute attribute-id="hipayProductName">ing-homepay</custom-attribute>
         </custom-attributes>
     </payment-method>
 
@@ -260,19 +186,6 @@
         </custom-attributes>
     </payment-method>
 
-    <payment-method method-id="HIPAY_QIWI_WALLET">
-        <name xml:lang="x-default">QIWI Wallet</name>
-        <description xml:lang="x-default">HiPay VISA QIWI Wallet Payment Method</description>
-        <enabled-flag>true</enabled-flag>
-        <processor-id>HIPAY</processor-id>
-        <currencies>
-            <currency>RUB</currency>
-        </currencies>
-        <custom-attributes>
-            <custom-attribute attribute-id="hipayProductName">qiwi-wallet</custom-attribute>
-        </custom-attributes>
-    </payment-method>
-
     <payment-method method-id="HIPAY_WEBMONEY_TRANSFER">
         <name xml:lang="x-default">WebMoney Transfer</name>
         <description xml:lang="x-default">HiPay WebMoney Transfer Payment Method</description>
@@ -283,19 +196,6 @@
         </currencies>
         <custom-attributes>
             <custom-attribute attribute-id="hipayProductName">webmoney-transfer</custom-attribute>
-        </custom-attributes>
-    </payment-method>
-
-    <payment-method method-id="HIPAY_YANDEX">
-        <name xml:lang="x-default">Yandex Money</name>
-        <description xml:lang="x-default">HiPay Yandex.Money Payment Method</description>
-        <enabled-flag>true</enabled-flag>
-        <processor-id>HIPAY</processor-id>
-        <currencies>
-            <currency>RUB</currency>
-        </currencies>
-        <custom-attributes>
-            <custom-attribute attribute-id="hipayProductName">yandex</custom-attribute>
         </custom-attributes>
     </payment-method>
 

@@ -7,9 +7,6 @@
             <isinclude template="checkout/billing/paymentOptions/creditCardContent" />
         </isif>
 
-        <iscomment>Belfius Direct Net</iscomment>
-        <isif condition="${!empty(paymentOption.ID) && paymentOption.ID=='HIPAY_DEXIA_DIRECTNET'}"></isif>
-
         <iscomment>Giropay</iscomment>
         <isif condition="${!empty(paymentOption.ID) && paymentOption.ID=='HIPAY_GIROPAY'}">
             <div class="form-group
@@ -38,9 +35,6 @@
                 <div class="invalid-feedback"></div>
             </div>
         </isif>
-
-        <iscomment>ING HomePay</iscomment>
-        <isif condition="${!empty(paymentOption.ID) && paymentOption.ID=='HIPAY_ING_HOMEPAY'}"></isif>
 
         <iscomment>Klarna</iscomment>
         <isif condition="${!empty(paymentOption.ID) && paymentOption.ID=='HIPAY_KLARNA'}">
@@ -74,9 +68,6 @@
         <iscomment>Przelewy24</iscomment>
         <isif condition="${!empty(paymentOption.ID) && paymentOption.ID=='HIPAY_PRZELEWY24'}"></isif>
 
-        <iscomment>QIWI Wallet</iscomment>
-        <isif condition="${!empty(paymentOption.ID) && paymentOption.ID=='HIPAY_QIWI_WALLET'}"></isif>
-
         <iscomment>Sisal</iscomment>
         <isif condition="${!empty(paymentOption.ID) && paymentOption.ID=='HIPAY_SISAL'}"></isif>
 
@@ -85,9 +76,6 @@
 
         <iscomment>WebMoney Transfer</iscomment>
         <isif condition="${!empty(paymentOption.ID) && paymentOption.ID=='HIPAY_WEBMONEY_TRANSFER'}"></isif>
-
-        <iscomment>Yandex Money</iscomment>
-        <isif condition="${!empty(paymentOption.ID) && paymentOption.ID=='HIPAY_YANDEX'}"></isif>
 
     </div>
 </isloop>

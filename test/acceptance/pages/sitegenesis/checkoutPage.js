@@ -137,18 +137,6 @@ module.exports = {
         I.pressKey('Enter');
     },
 
-    selectAndSubmitBelfiusForm() {
-        I.checkOption('#is-HIPAY_HOSTED_DEXIA_DIRECTNET');
-        I.click('.button-fancy-large');
-        I.click('.button-fancy-large');
-    },
-
-    validateBelfiusPayement() {
-        I.click('#submit-button');
-        I.click('#submit1');
-        I.click('#btn_Accept');
-    },
-
     selectAndSubmitiDEALForm() {
         I.checkOption('#is-HIPAY_HOSTED_IDEAL');
         I.click('.button-fancy-large');
@@ -163,16 +151,6 @@ module.exports = {
         I.fillField('input[name="tan"]', config.iDEAL.TAN);
         I.click('.btn-primary');
         I.click('.btn-primary');
-    },
-
-    selectAndSubmitINGForm() {
-        I.checkOption('#is-HIPAY_HOSTED_ING_HOMEPAY');
-        I.click('.button-fancy-large');
-        I.click('.button-fancy-large');
-    },
-
-    validateINGPayment() {
-        I.click('#submit-button');
     },
 
     selectAndSubmitHostedSisalForm() {

@@ -54,24 +54,10 @@ Scenario('Commande avec HiPay GiroPay OK', ({ I, checkoutPage }) => {
     checkoutPage.placeOrderWithSecure(false);
 });
 
-Scenario('Commande avec HiPay Belfius OK', ({ I, checkoutPage }) => {
-    checkoutPage.selectAndSubmitBelfiusForm();
-
-    checkoutPage.validateBelfiusPayement();
-    checkoutPage.placeOrderWithSecure(false);
-});
-
 Scenario('Commande avec HiPay iDEAL OK', ({ I, checkoutPage }) => {
     checkoutPage.selectAndSubmitiDEALForm();
 
     checkoutPage.validateiDEALPayment();
-    checkoutPage.placeOrderWithSecure(false);
-});
-
-Scenario('Commande avec HiPay IBN OK', ({ I, checkoutPage }) => {
-    checkoutPage.selectAndSubmitINGForm();
-
-    checkoutPage.validateINGPayment();
     checkoutPage.placeOrderWithSecure(false);
 });
 
