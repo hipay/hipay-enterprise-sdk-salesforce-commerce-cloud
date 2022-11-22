@@ -52,6 +52,14 @@ module.exports = {
         I.click('.button-fancy-large');
     },
 
+    switchToHipayIframe() {
+        I.switchTo('#hipay-iframe');
+    },
+
+    leaveHipayIframe() {
+        I.switchTo();
+    },
+
     submitCheckout() {
         I.fillField(this.fields.firstName, config.user.firstName);
         I.fillField(this.fields.lastName, config.user.lastName);
