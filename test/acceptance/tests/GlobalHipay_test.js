@@ -124,32 +124,35 @@ Scenario('Commande avec HiPay GiroPay OK', ({ I, checkoutPage }) => {
     checkoutPage.selectPaymentMethod('HIPAY_HOSTED_GIROPAY');
     checkoutPage.switchToHipayIframe();
     checkoutPage.selectAndSubmitHiPayGriopayForm();
-    checkoutPage.validateGiroPayPayment();
     checkoutPage.leaveHipayIframe();
+    checkoutPage.validateGiroPayPayment();
     checkoutPage.placeOrderWithSecure(false);
 }).tag('@iframe');
 
 Scenario('Commande avec HiPay iDEAL OK', ({ I, checkoutPage }) => {
     checkoutPage.selectPaymentMethod('HIPAY_HOSTED_IDEAL');
     checkoutPage.switchToHipayIframe();
-    checkoutPage.validateiDEALPayment();
+    checkoutPage.submitHipayForm();
     checkoutPage.leaveHipayIframe();
+    checkoutPage.validateiDEALPayment();
     checkoutPage.placeOrderWithSecure(false);
 }).tag('@iframe');
 
 Scenario('Commande avec Hosted Sisal OK', ({ I, checkoutPage }) => {
     checkoutPage.selectPaymentMethod('HIPAY_HOSTED_SISAL');
     checkoutPage.switchToHipayIframe();
-    checkoutPage.validateHostedSisalPayment();
+    checkoutPage.submitHipayForm();
     checkoutPage.leaveHipayIframe();
+    checkoutPage.validateHostedSisalPayment();
     checkoutPage.placeOrderWithSecure(false);
 }).tag('@iframe');
 
 Scenario('Commande avec Hosted Sofort OK', ({ I, checkoutPage }) => {
     checkoutPage.selectPaymentMethod('HIPAY_HOSTED_SOFORT_UBERWEISUNG');
     checkoutPage.switchToHipayIframe();
-    checkoutPage.validateHostedSofortPayment();
+    checkoutPage.submitHipayForm();
     checkoutPage.leaveHipayIframe();
+    checkoutPage.validateHostedSofortPayment();
     checkoutPage.placeOrderWithSecure(false);
 }).tag('@iframe');
 

@@ -147,12 +147,7 @@ module.exports = {
         I.pressKey('Enter');
     },
 
-    selectAndSubmitiDEALForm() {
-    },
-
     validateiDEALPayment() {
-//        I.switchTo('#hipay-iframe');
-        I.click('#submit-button');
         I.fillField('input[name="bic"]', config.iDEAL.BIC);
         I.click('.btn-primary');
         I.click('.btn-primary');
@@ -161,13 +156,15 @@ module.exports = {
         I.click('.btn-primary');
     },
 
-    validateHostedSisalPayment() {
+    submitHipayForm() {
         I.click('#submit-button');
+    },
+
+    validateHostedSisalPayment() {
         I.click('#submit-button');
     },
 
     validateHostedSofortPayment() {
-        I.click('#submit-button');
         I.click('.cookie-modal-accept-all');
         I.fillField('#SenderBank', config.sofort.bank);
         I.click('.button-right');
