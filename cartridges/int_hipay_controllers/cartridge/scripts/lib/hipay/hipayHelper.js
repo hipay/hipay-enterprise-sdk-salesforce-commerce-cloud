@@ -11,8 +11,8 @@ var Logger = require('dw/system/Logger');
 var PaymentMgr = require('dw/order/PaymentMgr');
 var PaymentInstrument = require('dw/order/PaymentInstrument');
 var Transaction = require('dw/system/Transaction');
-var statuses = require('*/cartridge/scripts/lib/hipay/hipayStatus').HiPayStatus;
-var hipayUtils = require('*/cartridge/scripts/lib/hipay/hipayUtils');
+var statuses = require('*/cartridge/scripts/lib/hipay/HiPayStatus').HiPayStatus;
+var hipayUtils = require('*/cartridge/scripts/lib/hipay/HipayUtils');
 
 // Import Constants
 var Constants = require('bm_hipay_controllers/cartridge/scripts/util/Constants');
@@ -79,30 +79,16 @@ HiPayHelper.prototype.fillHeaderData = function (HiPayConfig, order, params, pi)
     params.cancel_url = HiPayConfig.cancelURL;     // eslint-disable-line
     params.notify_url = HiPayConfig.notifyURL;     // eslint-disable-line
 
-    if (!empty(session.forms.billing.paymentMethods && session.forms.billing.paymentMethods.hipaymethods)) {
-        var hipaymethods = session.forms.billing.paymentMethods.hipaymethods;
+    var hipaymethods = session.forms.billing.paymentMethods.hipaymethods;
 
-        if (hipaymethods && hipaymethods.klarna && hipaymethods.klarna.houseNumber) {
-            params.house_number = hipaymethods.klarna.houseNumber.value; // eslint-disable-line
-        }
+    if (hipaymethods && hipaymethods.klarna && hipaymethods.klarna.houseNumber) {
+        params.house_number = hipaymethods.klarna.houseNumber.value; // eslint-disable-line
+    }
 
-        if (hipaymethods && hipaymethods.klarna && hipaymethods.klarna.birthdate && !empty(hipaymethods.klarna.birthdate.value)) {
-            var birthdate = hipaymethods.klarna.birthdate.value.replace(/-/g, '');
+    if (hipaymethods && hipaymethods.klarna && hipaymethods.klarna.birthdate) {
+        var birthdate = hipaymethods.klarna.birthdate.value.replace(/-/g, '');
 
-            params.birthdate = birthdate; // eslint-disable-line
-        }
-    } else {
-        var hipayForm = session.forms.billing.hipayMethodsFields;
-
-        if (!empty(hipayForm) && !empty(hipayForm.klarna.houseNumber.value)) {
-            params.house_number = hipayForm.klarna.houseNumber.value;  // eslint-disable-line
-        }
-
-        if (!empty(hipayForm) && !empty(hipayForm.klarna.birthdate.value)) {
-            var birthdate = hipayForm.klarna.birthdate.value.replace(/-/g, '');
-
-            params.birthdate = birthdate;  // eslint-disable-line
-        }
+        params.birthdate = birthdate; // eslint-disable-line
     }
 };
 
@@ -853,10 +839,6 @@ HiPayHelper.prototype.validateOneyAvailability = function (basket) {
         var shippingConfig = JSON.parse(shippingCO);
         var categoriesCO = CustomObjectMgr.getCustomObject('OneyExtensionConfig', 'category').custom.settings;
         var categoriesConfig = JSON.parse(categoriesCO);
-
-        if (empty(shippingConfig) || empty(categoriesConfig)) {
-            return false;
-        }
 
         // check if the selected shipping method compatible (has configuration) with Oney payment method
         var shipments = basket.shipments;
