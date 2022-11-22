@@ -1,17 +1,12 @@
 'use strict';
 
 /**
- * Auxiliary functions of the HiPay integration cartridge
- */
+* Auxiliary functions of the HiPay integration cartridge
+*
+* @module cartridge/scripts/lib/hipay/HiPayCheckoutModule
+*/
 
 var Logger = require('dw/system/Logger');
-var Transaction = require('dw/system/Transaction');
-var PaymentMgr = require('dw/order/PaymentMgr');
-var PaymentInstrument = require('dw/order/PaymentInstrument');
-
-var HiPayLogger = require('*/cartridge/scripts/lib/hipay/hipayLogger');
-var HiPayConfig = require('*/cartridge/scripts/lib/hipay/hipayConfig').HiPayConfig;
-var HiPayHelper = require('*/cartridge/scripts/lib/hipay/hipayHelper');
 
 var HiPayCheckoutModule = function () {};
 
@@ -28,6 +23,7 @@ var HiPayCheckoutModule = function () {};
 HiPayCheckoutModule.createPaymentInstrument = function (basket, paymentType, removeExisting) {
     var amount = null;
     var paymentInstr = null;
+    var Transaction = require('dw/system/Transaction');
 
     // verify that we have a basket and a valid credit card form
     if (basket == null || paymentType == null || removeExisting == null) {
@@ -53,23 +49,22 @@ HiPayCheckoutModule.createPaymentInstrument = function (basket, paymentType, rem
 * @param {dw.order.PaymentInstrument} paymentInstrument
 *
 */
-HiPayCheckoutModule.hiPayUpdatePaymentInstrument = function (paymentInstrument, paymentInformation) {
-    var paymentMethod = null;// the payment method
+HiPayCheckoutModule.hiPayUpdatePaymentInstrument = function (paymentInstrument) {
+    var PaymentMgr = require('dw/order/PaymentMgr');
+    var Transaction = require('dw/system/Transaction');
+    var paymentMethod = null; // the payment method
     var pi = paymentInstrument;
     var ccType; // credit card type
     var card; // payment card
 
     if (pi.paymentMethod.equals('HIPAY_CREDIT_CARD')) {
-        ccType = paymentInformation.cardType.value;
+        ccType = session.forms.billing.paymentMethods.creditCard.type.value;
         card = PaymentMgr.getPaymentCard(ccType);
-
         Transaction.wrap(function () {
             pi.custom.hipayProductName = card.custom.hipayProductName;
-            pi.custom.hipayOneClickDisabled = card.custom.hipayOneClickDisabled;
         });
     } else {
         paymentMethod = PaymentMgr.getPaymentMethod(pi.paymentMethod);
-
         Transaction.wrap(function () {
             pi.custom.hipayProductName = paymentMethod.custom.hipayProductName;
             pi.custom.hipayPaymentProductList = paymentMethod.custom.hipayPaymentProductList;
@@ -78,11 +73,11 @@ HiPayCheckoutModule.hiPayUpdatePaymentInstrument = function (paymentInstrument, 
 
         if (pi.paymentMethod.equals('HIPAY_IDEAL')) {
             Transaction.wrap(function () {
-                pi.custom.hipayIdealBankID = session.forms.billing.hipayMethodsFields.ideal.issuer_bank_id.value;
+                pi.custom.hipayIdealBankID = session.forms.billing.paymentMethods.hipaymethods.issuer_bank_id.value;
             });
         } else if (pi.paymentMethod.equals('HIPAY_GIROPAY')) {
             Transaction.wrap(function () {
-                pi.custom.hipayBic = session.forms.billing.hipayMethodsFields.giropay.bic.value;
+                pi.custom.hipayBic = session.forms.billing.paymentMethods.hipaymethods.giropay.bic.value;
             });
         }
     }
@@ -91,7 +86,6 @@ HiPayCheckoutModule.hiPayUpdatePaymentInstrument = function (paymentInstrument, 
 /**
 * Make a call to HiPay to generate a token for the Credit Card payment using the information provided
 *
-* @param  {String} hiPayCardBrand
 * @param  {String} hiPayCardNumber
 * @param  {Number} hiPayCardExpiryMonth
 * @param  {Number} hiPayCardExpiryYear
@@ -101,14 +95,14 @@ HiPayCheckoutModule.hiPayUpdatePaymentInstrument = function (paymentInstrument, 
 *
 * @return {String} the hiPayToken if successful, null otherwise
 */
-HiPayCheckoutModule.hiPayGenerateToken = function (hiPayCardBrand, hiPayCardNumber, hiPayCardExpiryMonth,
+HiPayCheckoutModule.hiPayGenerateToken = function (hiPayCardNumber, hiPayCardExpiryMonth,
     hiPayCardExpiryYear, hiPayCardHolder, hiPayCardCVC, hiPayMultiUseToken) {
-    var HiPayTokenService = require('*/cartridge/scripts/lib/hipay/services/hipayTokenService');
+    var HiPayTokenService = require('*/cartridge/scripts/lib/hipay/services/HiPayTokenService');
+    var HiPayLogger = require('*/cartridge/scripts/lib/hipay/HiPayLogger');
     var log = new HiPayLogger('HiPayGenerateToken');
     var hiPayTokenService = new HiPayTokenService();
     var params = {};
     var month;
-    var multiUse;
     var hipayResponse;
     var token;
     var msg;
@@ -120,8 +114,7 @@ HiPayCheckoutModule.hiPayGenerateToken = function (hiPayCardBrand, hiPayCardNumb
     params.card_expiry_year = hiPayCardExpiryYear;
     params.card_holder = hiPayCardHolder;
     params.cvc = hiPayCardCVC;
-    multiUse = hiPayMultiUseToken;
-    params.multi_use = multiUse ? 1 : 0;
+    params.multi_use = hiPayMultiUseToken ? 1 : 0;
     hipayResponse = hiPayTokenService.generateToken(params);
 
     if (hipayResponse.ok === true) {
@@ -162,9 +155,9 @@ HiPayCheckoutModule.invalidatePaymentCardFormElements = function (status, credit
     var items;
 
     // verify that we have a status object and a valid credit card form
-    if (status === null || !creditCardForm.valid) {
-        return { error: true };
-    }
+    // if (status == null || !creditCardForm.valid) {
+    //    return { error : true };
+    // }
 
     // we are fine, if status is OK
     if (status.status === Status.OK) {
@@ -179,16 +172,16 @@ HiPayCheckoutModule.invalidatePaymentCardFormElements = function (status, credit
 
         switch (item.code) { // eslint-disable-line
             case PaymentStatusCodes.CREDITCARD_INVALID_CARD_NUMBER:
-                creditCardForm.cardNumber.invalidateFormElement();
+                creditCardForm.number.invalidateFormElement();
                 continue; // eslint-disable-line
 
             case PaymentStatusCodes.CREDITCARD_INVALID_EXPIRATION_DATE:
-                creditCardForm.expirationMonth.invalidateFormElement();
-                creditCardForm.expirationYear.invalidateFormElement();
+                creditCardForm.expiration.month.invalidateFormElement();
+                creditCardForm.expiration.year.invalidateFormElement();
                 continue; // eslint-disable-line
 
             case PaymentStatusCodes.CREDITCARD_INVALID_SECURITY_CODE:
-                creditCardForm.securityCode.invalidateFormElement();
+                creditCardForm.cvn.invalidateFormElement();
         }
     }
 
@@ -207,6 +200,7 @@ HiPayCheckoutModule.removeExistingPaymentInstruments = function (basket, payment
     // get all credit card payment instruments
     var ccPaymentInstrs = basket.getPaymentInstruments(paymentType);
     var iter = ccPaymentInstrs.iterator();
+    var Transaction = require('dw/system/Transaction');
     var existingPI;
 
     // remove them
@@ -265,8 +259,12 @@ HiPayCheckoutModule.calculateNonGiftCertificateAmount = function (basket) {
  *
  */
 HiPayCheckoutModule.hiPayOrderRequest = function (paymentInstrument, order, deviceFingerprint, recurring) {
-    var HiPayOrderService = require('*/cartridge/scripts/lib/hipay/services/hipayOrderService');
-    var status = require('*/cartridge/scripts/lib/hipay/hipayStatus').HiPayStatus;
+    var Transaction = require('dw/system/Transaction');
+    var HiPayOrderService = require('*/cartridge/scripts/lib/hipay/services/HiPayOrderService');
+    var HiPayLogger = require('*/cartridge/scripts/lib/hipay/HiPayLogger');
+    var HiPayHelper = require('*/cartridge/scripts/lib/hipay/HiPayHelper');
+    var HiPayConfig = require('*/cartridge/scripts/lib/hipay/HiPayConfig').HiPayConfig;
+    var status = require('*/cartridge/scripts/lib/hipay/HiPayStatus').HiPayStatus;
     var log = new HiPayLogger('HiPayOrderRequest');
     var hiPayOrderService = new HiPayOrderService();
     var helper = new HiPayHelper();
@@ -318,14 +316,13 @@ HiPayCheckoutModule.hiPayOrderRequest = function (paymentInstrument, order, devi
             Transaction.wrap(function () {
                 pi.custom.hipayTransactionType = responseMsg.paymentProduct; // set transaction type = ideal,visa;
             });
-            Transaction.wrap(function () {
-                // helper.updatePaymentStatus(order, pi, responseMsg); // update the payment status
-            });
+            // Transaction.wrap(function () {
+            //    helper.updatePaymentStatus(order, pi, responseMsg); //update the payment status
+            // });
+            paymentState = responseMsg.state;
             Transaction.wrap(function () {
                 pi.custom.hipayTransactionState = paymentState;
             });
-
-            paymentState = responseMsg.state;
 
             // process cards only
             if (!empty(responseMsg.paymentMethod)) {
@@ -399,10 +396,15 @@ HiPayCheckoutModule.hiPayOrderRequest = function (paymentInstrument, order, devi
  */
 
 HiPayCheckoutModule.hiPayHostedPageRequest = function (order, paymentInstrument) {
+    var Transaction = require('dw/system/Transaction');
+    var Site = require('dw/system/Site');
+    var URLUtils = require('dw/web/URLUtils');
+
     return Transaction.wrap(function () {
-        var Site = require('dw/system/Site');
-        var URLUtils = require('dw/web/URLUtils');
-        var HiPayHostedService = require('*/cartridge/scripts/lib/hipay/services/hipayHostedService');
+        var HiPayHostedService = require('*/cartridge/scripts/lib/hipay/services/HiPayHostedService');
+        var HiPayLogger = require('*/cartridge/scripts/lib/hipay/HiPayLogger');
+        var HiPayHelper = require('*/cartridge/scripts/lib/hipay/HiPayHelper');
+        var HiPayConfig = require('*/cartridge/scripts/lib/hipay/HiPayConfig').HiPayConfig;
         var log = new HiPayLogger('HiPayHostedPageRequest');
         var hiPayHostedService = new HiPayHostedService();
         var helper = new HiPayHelper();
@@ -422,7 +424,7 @@ HiPayCheckoutModule.hiPayHostedPageRequest = function (order, paymentInstrument)
             params.merchant_display_name = Site.current.getName();
             params.display_selector = HiPayConfig.hipayDisplayCardSelector ? 1 : 0;
             params.multi_use = 1;
-            params.cdata1 = order.orderToken;
+            params.cdata1 = order.getOrderToken();
 
             if (!empty(pi.custom.hipayPaymentProductList)) {
                 params.payment_product_list = pi.custom.hipayPaymentProductList;
@@ -449,7 +451,6 @@ HiPayCheckoutModule.hiPayHostedPageRequest = function (order, paymentInstrument)
             } else {
                 log.error(hipayResponse.msg);
                 response.error = true;
-
                 return response;
             }
 
@@ -458,47 +459,43 @@ HiPayCheckoutModule.hiPayHostedPageRequest = function (order, paymentInstrument)
         } catch (e) {
             log.error(e);
             response.error = true;
-
             return response;
         }
 
         response.error = false;
-
         return response;
     });
 };
 
-HiPayCheckoutModule.saveCreditCard = function (paymentInstrument, creditCardHolder) {
+HiPayCheckoutModule.saveCreditCard = function (paymentInstrument) {
+    var Transaction = require('dw/system/Transaction');
     var paymentMethod = 'HIPAY_CREDIT_CARD';
     var creditCards;
     var newCreditCard;
     var status;
 
-    if (customer.authenticated && session.forms.billing.creditCardFields.saveCard.value) {
+    if (customer.authenticated && session.forms.billing.paymentMethods.creditCard.saveCard.value) {
         creditCards = customer.getProfile().getWallet().getPaymentInstruments('HIPAY_CREDIT_CARD');
         status = Transaction.wrap(function () {
             newCreditCard = customer.getProfile().getWallet().createPaymentInstrument('HIPAY_CREDIT_CARD');
 
             if (!newCreditCard) { // no payment instrument given
                 Logger.debug('No customer payment instrument given to store credit card data');
-
                 return false;
             }
 
             if (!paymentMethod.equals(newCreditCard.paymentMethod)) { // given customer payment instrument not a hipay credit card
                 Logger.debug('Customer payment instrument is of type ' + newCreditCard.paymentMethod + ', type ' + paymentMethod + ' required.');
-
                 return false;
             }
 
             if (!paymentMethod.equals(paymentInstrument.paymentMethod)) { // given order payment instrument not a hipay credit card
                 Logger.debug('Order payment instrument is of type ' + paymentInstrument.paymentMethod + ', type ' + paymentMethod + ' required.');
-
                 return false;
             }
 
             // copy the credit card details to the payment instrument
-            newCreditCard.setCreditCardHolder(creditCardHolder);
+            newCreditCard.setCreditCardHolder(paymentInstrument.creditCardHolder);
             newCreditCard.setCreditCardNumber(paymentInstrument.creditCardNumber);
             newCreditCard.setCreditCardExpirationMonth(paymentInstrument.creditCardExpirationMonth);
             newCreditCard.setCreditCardExpirationYear(paymentInstrument.creditCardExpirationYear);
@@ -523,6 +520,8 @@ HiPayCheckoutModule.saveCreditCard = function (paymentInstrument, creditCardHold
 };
 
 HiPayCheckoutModule.getApplicableCreditCards = function (countryCode, amount) {
+    var PaymentMgr = require('dw/order/PaymentMgr');
+    var PaymentInstrument = require('dw/order/PaymentInstrument');
     var ArrayList = require('dw/util/ArrayList');
     var List = require('dw/util/List');
     var paymentInstruments = customer.getProfile().getWallet().getPaymentInstruments('HIPAY_CREDIT_CARD');
@@ -579,6 +578,8 @@ HiPayCheckoutModule.getApplicableCreditCards = function (countryCode, amount) {
 
 HiPayCheckoutModule.resetPaymentForms = function () {
     var BasketMgr = require('dw/order/BasketMgr');
+    var PaymentInstrument = require('dw/order/PaymentInstrument');
+    var Transaction = require('dw/system/Transaction');
     var basket = BasketMgr.getCurrentBasket();
     var paymentMethodsForm = session.forms.billing.paymentMethods;
 
@@ -621,6 +622,7 @@ HiPayCheckoutModule.resetPaymentForms = function () {
 };
 
 HiPayCheckoutModule.validateBilling = function () {
+    var PaymentInstrument = require('dw/order/PaymentInstrument');
     var paymentMethodsForm = session.forms.billing.paymentMethods;
     var creditCardForm = paymentMethodsForm.creditCard;
 
