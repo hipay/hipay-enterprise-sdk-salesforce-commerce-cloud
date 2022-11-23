@@ -1,0 +1,20 @@
+{
+    "hooks": [
+        {
+            "name"   : "app.payment.processor.hipay_hosted",
+            "script" : "./cartridge/scripts/hooks/hipayHosted"
+        },
+        {
+            "name"   : "app.payment.processor.hipay",
+            "script" : "./cartridge/scripts/hooks/hipay"
+        },
+        {
+            "name": "app.payment.form.processor.hipay",
+            "script": "./cartridge/scripts/hooks/payment/processor/hipay"
+        },
+        {
+            "name": "app.payment.form.processor.hipay_hosted",
+            "script": "./cartridge/scripts/hooks/payment/processor/hipayHosted"
+        }
+    ]
+}

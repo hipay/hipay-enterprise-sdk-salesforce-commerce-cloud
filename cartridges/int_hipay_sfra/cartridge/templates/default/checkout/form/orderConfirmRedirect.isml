@@ -1,0 +1,10 @@
+<form id="orderConfirmRedirect" action="${pdict.url}" method="POST">
+    <input type="hidden" name="orderID" value="${pdict.ID}">
+    <input type="hidden" name="orderToken" value="${pdict.token}">
+</form>
+
+<script language="javascript">
+    window.addEventListener('DOMContentLoaded', () => {
+        document.getElementById('orderConfirmRedirect').submit();
+    });
+</script>

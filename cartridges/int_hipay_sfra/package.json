@@ -1,8 +1,8 @@
 {
+  "hooks": "./hooks.json",
   "init": [
     "../int_hipay_core/cartridge/scripts/init/hiPayServiceInit.js"
   ],
-  "hooks": "./cartridge/scripts/hooks.json",
   "name": "int_hipay_sfra",
   "version": "1.0.0",
   "description": "HiPay integration cartridge",
