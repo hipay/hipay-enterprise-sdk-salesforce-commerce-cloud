@@ -14,6 +14,7 @@
     "compile:scss": "sgmf-scripts --compile css",
     "test": "sgmf-scripts --test './test/unit/**/*.js'",
     "test:sfra": "codeceptjs run tests/GlobalHipay_test.js --steps --config test/acceptance/codecept.conf.sfra.js",
+    "test:sfra:api": "codeceptjs run tests/GlobalHipay_test.js --steps --config test/acceptance/codecept.conf.sfra.js --grep '@api'",
     "test:sfra:hosted": "codeceptjs run tests/GlobalHipay_test.js --steps --config test/acceptance/codecept.conf.sfra.js --grep '@hosted'",
     "test:sfra:iframe": "codeceptjs run tests/GlobalHipay_test.js --steps --config test/acceptance/codecept.conf.sfra.js --grep '@iframe'",
     "test:sitegenesis:hosted": "codeceptjs run tests/GlobalHipay_test.js --steps --config test/acceptance/codecept.conf.siteg.js --grep '@hosted'",

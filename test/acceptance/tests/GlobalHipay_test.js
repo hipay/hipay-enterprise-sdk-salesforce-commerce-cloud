@@ -159,6 +159,71 @@ Scenario('Commande avec Hosted Sofort OK', ({ I, checkoutPage }) => {
     checkoutPage.placeOrderWithSecure(false);
 }).tag('@iframe');
 
+
+Scenario('Commande avec HiPay Credit Card OK', ({ I, checkoutPage }) => {
+    checkoutPage.selectPaymentMethod('HIPAY_CREDIT_CARD', true);
+    checkoutPage.selectAndSubmitHiPayCreditCardForm('creditCard', true);
+    checkoutPage.placeOrderWithSecure(false);
+}).tag('@api');
+
+Scenario('Commande avec HiPay Credit Card 3DS OK', ({ I, checkoutPage }) => {
+    checkoutPage.selectPaymentMethod('HIPAY_CREDIT_CARD', true);
+    checkoutPage.selectAndSubmitHiPayCreditCardForm('creditCard3DS', true);
+    checkoutPage.placeOrderWithSecure(true);
+}).tag('@api');
+
+Scenario('Commande avec HiPay Credit Card 3DS V2 OK', ({ I, checkoutPage }) => {
+    checkoutPage.selectPaymentMethod('HIPAY_CREDIT_CARD', true);
+    checkoutPage.selectAndSubmitHiPayCreditCardForm('creditCard3DSV2', true);
+    checkoutPage.placeOrderWithSecure(true);
+}).tag('@api');
+
+Scenario('Commande avec HiPay Master Card OK', ({ I, checkoutPage }) => {
+    checkoutPage.selectPaymentMethod('HIPAY_CREDIT_CARD', true);
+    checkoutPage.selectAndSubmitHiPayCreditCardForm('masterCard', true);
+    checkoutPage.placeOrderWithSecure(false);
+}).tag('@api');
+
+Scenario('Commande avec HiPay Master Card 3DS OK', ({ I, checkoutPage }) => {
+    checkoutPage.selectPaymentMethod('HIPAY_CREDIT_CARD', true);
+    checkoutPage.selectAndSubmitHiPayCreditCardForm('masterCard3DS', true);
+    checkoutPage.placeOrderWithSecure(true);
+}).tag('@api');
+
+Scenario('Commande avec HiPay Master Card 3DS V2 OK', ({ I, checkoutPage }) => {
+    checkoutPage.selectPaymentMethod('HIPAY_CREDIT_CARD', true);
+    checkoutPage.selectAndSubmitHiPayCreditCardForm('masterCard3DSV2', true);
+    checkoutPage.placeOrderWithSecure(true);
+}).tag('@api');
+
+Scenario('Commande avec HiPay GiroPay OK', ({ I, checkoutPage }) => {
+    checkoutPage.selectPaymentMethod('HIPAY_GIROPAY', true);
+    checkoutPage.selectAndSubmitHiPayGriopayForm(true);
+    checkoutPage.validateGiroPayPayment();
+    checkoutPage.placeOrderWithSecure(false);
+}).tag('@api');
+
+Scenario('Commande avec HiPay iDEAL OK', ({ I, checkoutPage }) => {
+    checkoutPage.selectPaymentMethod('HIPAY_IDEAL', true);
+    checkoutPage.validateIdealForm();
+    checkoutPage.validateiDEALPayment();
+    checkoutPage.placeOrderWithSecure(false);
+}).tag('@api');
+
+Scenario('Commande Sisal OK', ({ I, checkoutPage }) => {
+    checkoutPage.selectPaymentMethod('HIPAY_SISAL', true);
+    checkoutPage.validateSisalPayment();
+    checkoutPage.placeOrderWithSecure(false);
+}).tag('@api');
+
+Scenario('Commande Sofort OK', ({ I, checkoutPage }) => {
+    checkoutPage.selectPaymentMethod('HIPAY_SOFORT_UBERWEISUNG', true);
+    checkoutPage.validateSofortPayment();
+    checkoutPage.validateHostedSofortPayment();
+    checkoutPage.placeOrderWithSecure(false);
+}).tag('@api');
+
+
 After(({ I }) => {
     I.wait(3);
 });
