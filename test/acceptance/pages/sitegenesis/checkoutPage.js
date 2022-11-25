@@ -46,12 +46,14 @@ module.exports = {
         I.click(locate('button').withAttr({name: 'dwfrm_cart_checkoutCart'}));
     },
 
-    selectPaymentMethod(paymentMethodId, isApi) {
+    selectPaymentMethod(paymentMethodId) {
         I.checkOption('#is-' + paymentMethodId);
-        if (!isApi) {
-            I.click('.button-fancy-large');
-            I.click('.button-fancy-large');
-        }
+    },
+
+    selectHostedPaymentMethod(paymentMethodId) {
+        this.selectPaymentMethod(paymentMethodId);
+        I.click('.button-fancy-large');
+        I.click('.button-fancy-large');
     },
 
     switchToHipayIframe() {
@@ -140,58 +142,6 @@ module.exports = {
         }
     },
 
-    selectAndSubmitHiPayGriopayForm() {
-        I.fillField('#issuer_bank_id', config.giropay.code);
-        I.seeElement('.submit-button');
-        I.click('#submit-button');
-    },
-
-    validateGiroPayPayment() {
-        I.fillField('input[name="account/addition[@name=benutzerkennung]"]', config.giropay.account);
-        I.fillField('input[name="ticket/pin"]', config.giropay.PIN);
-        I.pressKey('Enter');
-        I.checkOption('input[name="aumethod"]');
-        I.pressKey('Enter');
-        I.fillField('input[name="ticket/tan"]', config.giropay.TAN);
-        I.pressKey('Enter');
-        I.click('.btn-primary[name="weiterButton"]');
-        I.fillField('input[name="ticket/tan"]', config.giropay.TAN);
-        I.pressKey('Enter');
-    },
-
-    validateiDEALPayment() {
-        I.fillField('input[name="bic"]', config.iDEAL.BIC);
-        I.click('.btn-primary');
-        I.click('.btn-primary');
-        I.fillField('input[name="tan"]', config.iDEAL.TAN);
-        I.click('.btn-primary');
-        I.click('.btn-primary');
-    },
-
-    submitHipayForm() {
-        I.click('#submit-button');
-    },
-
-    validateHostedSisalPayment() {
-        I.click('#submit-button');
-    },
-
-    validateHostedSofortPayment() {
-        I.click('.cookie-modal-accept-all');
-        I.fillField('#SenderBank', config.sofort.bank);
-        I.click('.button-right');
-        I.fillField('#BackendFormLOGINNAMEUSERID', config.sofort.id);
-        I.fillField('#BackendFormUSERPIN', config.sofort.password);
-        I.click('.button-right');
-        I.click('.button-right');
-        I.fillField('#BackendFormTAN', config.sofort.confirmCode);
-        I.click('.button-right');
-    },
-
-    validateHipayHostedCreditCard() {
-
-    },
-
     validateSecure() {
         I.wait(1);
         I.seeElement('#continue-transaction');
@@ -200,7 +150,6 @@ module.exports = {
     },
 
     placeOrderWithSecure(secure) {
-//        I.switchTo();
         if (secure) {
             this.validateSecure();
         }

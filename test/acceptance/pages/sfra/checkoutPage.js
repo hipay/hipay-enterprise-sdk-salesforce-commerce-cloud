@@ -183,25 +183,6 @@ module.exports = {
         I.switchTo('#hipay-iframe');
     },
 
-    submitHipayForm() {
-        I.click('#submit-button');
-    },
-
-    validateHostedSisalPayment() {
-        I.click('#submit-button');
-    },
-
-    validateSisalPayment() {
-        I.click('.submit-payment');
-        I.click('.place-order');
-        I.click('#submit-button');
-    },
-
-    validateSofortPayment() {
-        I.click('.submit-payment');
-        I.click('.place-order');
-    },
-
     leaveHipayIframe() {
         I.switchTo();
     },
