@@ -46,10 +46,12 @@ module.exports = {
         I.click(locate('button').withAttr({name: 'dwfrm_cart_checkoutCart'}));
     },
 
-    selectPaymentMethod(paymentMethodId) {
+    selectPaymentMethod(paymentMethodId, isApi) {
         I.checkOption('#is-' + paymentMethodId);
-        I.click('.button-fancy-large');
-        I.click('.button-fancy-large');
+        if (!isApi) {
+            I.click('.button-fancy-large');
+            I.click('.button-fancy-large');
+        }
     },
 
     switchToHipayIframe() {
@@ -73,59 +75,69 @@ module.exports = {
         I.click('.button-fancy-large');
     },
 
-    selectAndSubmitHiPayCreditCardForm(cardType) {
+    selectAndSubmitHiPayCreditCardForm(cardType, isApi) {
         const card = config[cardType] || 'creditCard';
 
-//        I.switchTo('#hipay-iframe');
+        if (isApi) {
+            //I.click('#cardNumber');
+            I.fillField('#dwfrm_billing_paymentMethods_creditCard_owner', [config.user.firstName, config.user.lastName].join(' '));
+            I.fillField('#dwfrm_billing_paymentMethods_creditCard_type', card.type);
+            I.fillField('#dwfrm_billing_paymentMethods_creditCard_number', card.cardNumber);
+            I.fillField('#dwfrm_billing_paymentMethods_creditCard_expiration_month', '3');
+            I.fillField('#dwfrm_billing_paymentMethods_creditCard_expiration_year', '2030');
+            I.fillField('#dwfrm_billing_paymentMethods_creditCard_cvn', card.cvc);
 
-        I.click('#cardNumber');
-        I.fillField('input[name="cardNumber"]', card.cardNumber);
-        // I.switchTo();
+            I.click('.button-fancy-large');
+            I.click('.button-fancy-large');
 
-        I.click('#cardHolder');
-        I.fillField('input[name="cardHolder"]', `${config.user.firstName} ${config.user.lastName}`);
-        // I.switchTo();
+        } else {
+            I.click('#cardNumber');
+            I.fillField('input[name="cardNumber"]', card.cardNumber);
 
-        I.click('#cardExpiryMonth');
-        I.click('option[value="12"]');
+            I.click('#cardHolder');
+            I.fillField('input[name="cardHolder"]', `${config.user.firstName} ${config.user.lastName}`);
 
-        I.click('#cardExpiryYear');
-        I.click('option[value="2030"]');
+            I.click('#cardExpiryMonth');
+            I.click('option[value="12"]');
 
-        I.click('#cardSecurityCode');
-        I.fillField('input[name="cardSecurityCode"]', card.cvc);
-        // I.switchTo();
+            I.click('#cardExpiryYear');
+            I.click('option[value="2030"]');
 
-        I.click('#submit-button');
+            I.click('#cardSecurityCode');
+            I.fillField('input[name="cardSecurityCode"]', card.cvc);
 
-        // New Hosted Page.
-        // I.wait(2);
+            I.click('#submit-button');
 
-        // I.switchTo('#hipay-card-field-cardNumber>iframe');
-        // I.fillField('input[name="cardnumber"]', card.cardNumber);
-        // I.switchTo();
 
-        // I.wait(3);
+            // New Hosted Page v2
+            // I.wait(2);
 
-        // I.switchTo('#hipay-card-field-cardHolder>iframe');
-        // I.fillField('input[name="ccname"]', `${config.user.firstName} ${config.user.lastName}`);
-        // I.switchTo();
+            // I.switchTo('#hipay-card-field-cardNumber>iframe');
+            // I.fillField('input[name="cardnumber"]', card.cardNumber);
+            // I.switchTo();
 
-        // I.wait(2);
+            // I.wait(3);
 
-        // I.switchTo('#hipay-card-field-expiryDate>iframe');
-        // I.fillField('input[name="cc-exp"]', `${card.expMonth}/${card.expYear.slice(-2)}`);
-        // I.switchTo();
+            // I.switchTo('#hipay-card-field-cardHolder>iframe');
+            // I.fillField('input[name="ccname"]', `${config.user.firstName} ${config.user.lastName}`);
+            // I.switchTo();
 
-        // I.wait(5);
+            // I.wait(2);
 
-        // I.switchTo('#hipay-card-field-cvc>iframe');
-        // I.fillField('input[name="cvc"]', card.cvc);
-        // I.switchTo();
+            // I.switchTo('#hipay-card-field-expiryDate>iframe');
+            // I.fillField('input[name="cc-exp"]', `${card.expMonth}/${card.expYear.slice(-2)}`);
+            // I.switchTo();
 
-        // I.wait(1);
+            // I.wait(5);
 
-        // I.click('button[aria-label="pay-button"]');
+            // I.switchTo('#hipay-card-field-cvc>iframe');
+            // I.fillField('input[name="cvc"]', card.cvc);
+            // I.switchTo();
+
+            // I.wait(1);
+
+            // I.click('button[aria-label="pay-button"]');
+        }
     },
 
     selectAndSubmitHiPayGriopayForm() {

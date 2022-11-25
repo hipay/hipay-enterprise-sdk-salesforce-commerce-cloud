@@ -17,6 +17,7 @@
     "test:sfra:api": "codeceptjs run tests/GlobalHipay_test.js --steps --config test/acceptance/codecept.conf.sfra.js --grep '@api'",
     "test:sfra:hosted": "codeceptjs run tests/GlobalHipay_test.js --steps --config test/acceptance/codecept.conf.sfra.js --grep '@hosted'",
     "test:sfra:iframe": "codeceptjs run tests/GlobalHipay_test.js --steps --config test/acceptance/codecept.conf.sfra.js --grep '@iframe'",
+    "test:sitegenesis:api": "codeceptjs run tests/GlobalHipay_test.js --steps --config test/acceptance/codecept.conf.siteg.js --grep '@api'",
     "test:sitegenesis:hosted": "codeceptjs run tests/GlobalHipay_test.js --steps --config test/acceptance/codecept.conf.siteg.js --grep '@hosted'",
     "test:sitegenesis:iframe": "codeceptjs run tests/GlobalHipay_test.js --steps --config test/acceptance/codecept.conf.siteg.js --grep '@iframe'"
   },

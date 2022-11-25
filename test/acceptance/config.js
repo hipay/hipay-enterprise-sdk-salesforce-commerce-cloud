@@ -33,37 +33,43 @@ module.exports = {
         cardNumber: '4111111111111111',
         expMonth: '12',
         expYear: '2023',
-        cvc: '123'
+        cvc: '123',
+        type: 'Visa'
     },
     creditCard3DS: {
         cardNumber: '4000000000000002',
         expMonth: '12',
         expYear: '2023',
-        cvc: '123'
+        cvc: '123',
+        type: 'Visa'
     },
     creditCard3DSV2: {
         cardNumber: '4874970686672022',
         expMonth: '12',
         expYear: '2023',
-        cvc: '123'
+        cvc: '123',
+        type: 'Visa'
     },
     masterCard: {
         cardNumber: '5399999999999999',
         expMonth: '12',
         expYear: '2023',
-        cvc: '123'
+        cvc: '123',
+        type: 'MasterCard'
     },
     masterCard3DS: {
         cardNumber: '5300000000000006',
         expMonth: '12',
         expYear: '2023',
-        cvc: '123'
+        cvc: '123',
+        type: 'MasterCard'
     },
     masterCard3DSV2: {
         cardNumber: '5130257474533310',
         expMonth: '12',
         expYear: '2023',
-        cvc: '123'
+        cvc: '123',
+        type: 'MasterCard'
     },
     giropay: {
         code: 'TESTDETT421',
