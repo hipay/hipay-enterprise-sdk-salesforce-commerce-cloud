@@ -78,11 +78,11 @@ HiPayHelper.prototype.fillHeaderData = function (HiPayConfig, order, params, pi)
 
     var hipaymethods = session.forms.billing.paymentMethods.hipaymethods;
 
-    if (hipaymethods && hipaymethods.klarna && hipaymethods.klarna.houseNumber) {
+    if (hipaymethods && hipaymethods.klarna && hipaymethods.klarna.houseNumber && hipaymethods.klarna.houseNumber.value) {
         params.house_number = hipaymethods.klarna.houseNumber.value; // eslint-disable-line
     }
 
-    if (hipaymethods && hipaymethods.klarna && hipaymethods.klarna.birthdate) {
+    if (hipaymethods && hipaymethods.klarna && hipaymethods.klarna.birthdate && hipaymethods.klarna.birthdate.value) {
         var birthdate = hipaymethods.klarna.birthdate.value.replace(/-/g, '');
 
         params.birthdate = birthdate; // eslint-disable-line
