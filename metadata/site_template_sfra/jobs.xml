@@ -8,7 +8,7 @@
             <step step-id="ClearHungOrders" type="ExecuteScriptModule" enforce-restart="false">
                 <description/>
                 <parameters>
-                    <parameter name="ExecuteScriptModule.Module">int_hipay_sfra/cartridge/scripts/lib/hipay/HiPayProcess.js</parameter>
+                    <parameter name="ExecuteScriptModule.Module">int_hipay_sfra/cartridge/scripts/lib/hipay/hipayProcess.js</parameter>
                     <parameter name="ExecuteScriptModule.FunctionName">ClearHungOrders</parameter>
                     <parameter name="ExecuteScriptModule.Transactional">false</parameter>
                 </parameters>

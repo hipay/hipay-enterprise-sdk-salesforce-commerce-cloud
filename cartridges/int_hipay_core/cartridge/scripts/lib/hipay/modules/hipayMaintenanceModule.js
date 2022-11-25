@@ -3,7 +3,7 @@
 /**
 * Auxiliary functions of the HiPay integration cartridge
 *
-* @module cartridge/scripts/lib/hipay/HiPayMaintenanceModule
+* @module cartridge/scripts/lib/hipay/hipayMaintenanceModule
 */
 
 var HiPayMaintenanceModule = function () {};
