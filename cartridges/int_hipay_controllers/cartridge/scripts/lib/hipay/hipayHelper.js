@@ -837,6 +837,10 @@ HiPayHelper.prototype.validateOneyAvailability = function (basket) {
         var categoriesCO = CustomObjectMgr.getCustomObject('OneyExtensionConfig', 'category').custom.settings;
         var categoriesConfig = JSON.parse(categoriesCO);
 
+        if (empty(shippingConfig) || empty(categoriesCO)) {
+            return false;
+        }
+
         // check if the selected shipping method compatible (has configuration) with Oney payment method
         var shipments = basket.shipments;
 
