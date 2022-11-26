@@ -154,16 +154,14 @@ module.exports = {
         I.see(Resource.msg('thanks'));
     },
 
-    selectPaymentMethod(paymentMethodId, isApi) {
-        if (isApi) {
-            I.click('li[data-method-id="' + paymentMethodId + '"]');
-        } else {
-            I.click('li[data-method-id="' + paymentMethodId + '"]');
-            I.click('.submit-payment');
-            I.click('.place-order');
-        }
+    selectPaymentMethod(paymentMethodId) {
+        I.click('li[data-method-id="' + paymentMethodId + '"]');
+    },
 
-
+    selectHostedPaymentMethod(paymentMethodId) {
+        this.selectPaymentMethod(paymentMethodId);
+        I.click('.submit-payment');
+        I.click('.place-order');
     },
 
     validateHostedSofortPayment() {

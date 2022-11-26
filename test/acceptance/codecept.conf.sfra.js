@@ -10,6 +10,7 @@ exports.config = {
     },
     include: {
         checkoutPage: './pages/sfra/checkoutPage.js',
+        hostedPage: './pages/hipay/hostedPage.js',
         loginPage: './pages/sfra/loginPage.js'
     },
     bootstrap: null,

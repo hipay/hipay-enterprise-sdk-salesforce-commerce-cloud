@@ -50,6 +50,13 @@ module.exports = {
         cvc: '123',
         type: 'Visa'
     },
+    creditCardDeclined: {
+        cardNumber: '4450022237973103',
+        expMonth: '12',
+        expYear: '2023',
+        cvc: '123',
+        type: 'Visa'
+    },
     masterCard: {
         cardNumber: '5399999999999999',
         expMonth: '12',

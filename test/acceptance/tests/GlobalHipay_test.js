@@ -99,6 +99,15 @@ Scenario('Commande avec HiPay Credit Card 3DS V2 OK', ({ I, checkoutPage, hosted
     checkoutPage.placeOrderWithSecure(true);
 }).tag('@iframe');
 
+Scenario('Commande avec HiPay Credit Card Declined', ({ I, checkoutPage, hostedPage }) => {
+    checkoutPage.selectHostedPaymentMethod('HIPAY_HOSTED_CREDIT_CARD');
+    checkoutPage.switchToHipayIframe();
+    hostedPage.fillAndSubmitHiPayCreditCardForm('creditCardDeclined');
+    checkoutPage.leaveHipayIframe();
+    checkoutPage.validateSecure();
+    I.see('Payment was declined');
+}).tag('@iframe');
+
 Scenario('Commande avec HiPay Master Card OK', ({ I, checkoutPage, hostedPage }) => {
     checkoutPage.selectHostedPaymentMethod('HIPAY_HOSTED_CREDIT_CARD');
     checkoutPage.switchToHipayIframe();
