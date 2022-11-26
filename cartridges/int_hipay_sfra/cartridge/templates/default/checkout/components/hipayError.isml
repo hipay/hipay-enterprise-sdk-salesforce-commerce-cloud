@@ -1,0 +1,5 @@
+<isif condition="${!empty(pdict.CurrentHttpParameterMap.authMessage) && !empty(pdict.CurrentHttpParameterMap.authMessage.stringValue)}">
+    <div class="alert alert-danger" role="alert">
+        <p class="error-message-text"><isprint value="${pdict.CurrentHttpParameterMap.authMessage}"/></p>
+    </div>
+</isif>

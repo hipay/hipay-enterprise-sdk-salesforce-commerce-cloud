@@ -46,11 +46,9 @@
                     <p class="error-message-text"></p>
                 </div>
 
-                <isif condition="${!empty(pdict.CurrentHttpParameterMap.authMessage) && !empty(pdict.CurrentHttpParameterMap.authMessage.stringValue)}">
-                    <div class="alert alert-danger" role="alert">
-                         <p class="error-message-text"><isprint value="${pdict.CurrentHttpParameterMap.authMessage}"/></p>
-                    </div>
-                </isif>
+                <iscomment>HiPay custom code - start</iscomment>
+                <isinclude template="checkout/components/hipayError" />
+                <iscomment>HiPay custom code - end</iscomment>
 
                 <!-- Step 1: Shipping -->
                 <isinclude template="checkout/shipping/shipping" />
