@@ -50,24 +50,41 @@
                 <isinclude template="checkout/components/hipayError" />
                 <iscomment>HiPay custom code - end</iscomment>
 
-                <!-- Step 1: Shipping -->
+                <!-- Step 1: Customer -->
+                <iscomment>We only allow edits for non-registered customers</iscomment>
+                <isif condition="${!pdict.customer.registeredUser}">
+                    <isinclude template="checkout/customer/customer" />
+                </isif>
+                 <div class="card customer-summary">
+                    <div class="card-header clearfix">
+                        <h2 class="pull-left card-header-custom">${Resource.msg('heading.checkout.customer', 'checkout', null)}</h2>
+                        <isif condition="${!pdict.customer.registeredUser}">
+                            <button class="edit-button pull-right" aria-label="${Resource.msg('action.edit.step.msg.customer', 'checkout', null)}">${Resource.msg('action.edit.step', 'checkout', null)}</button>
+                        </isif>
+                    </div>
+                    <div class="card-body">
+                        <isinclude template="checkout/customer/customerSummary" />
+                    </div>
+                </div>
+
+                <!-- Step 2: Shipping -->
                 <isinclude template="checkout/shipping/shipping" />
                 <div class="card shipping-summary">
                     <div class="card-header clearfix">
-                        <h4 class="pull-left">${Resource.msg('heading.checkout.shipping', 'checkout', null)}</h4>
-                        <span class="edit-button pull-right">${Resource.msg('action.edit.step', 'checkout', null)}</span>
+                        <h2 class="pull-left card-header-custom">${Resource.msg('heading.checkout.shipping', 'checkout', null)}</h2>
+                        <button class="edit-button pull-right" aria-label="${Resource.msg('action.edit.step.msg.shipping', 'checkout', null)}">${Resource.msg('action.edit.step', 'checkout', null)}</button>
                     </div>
                     <div class="card-body">
                         <isinclude template="checkout/shipping/shippingSummary" />
                     </div>
                 </div>
 
-                <!-- Step 2: Payment and Billing-->
+                <!-- Step 3: Payment and Billing-->
                 <isinclude template="checkout/billing/billing" />
                 <div class="card payment-summary">
                     <div class="card-header clearfix">
-                        <h4 class="pull-left">${Resource.msg('heading.payment', 'checkout', null)}</h4>
-                        <span class="edit-button pull-right">${Resource.msg('action.edit.step', 'checkout', null)}</span>
+                        <h2 class="pull-left card-header-custom">${Resource.msg('heading.payment', 'checkout', null)}</h2>
+                        <button class="edit-button pull-right" aria-label="${Resource.msg('action.edit.step.msg.payment', 'checkout', null)}">${Resource.msg('action.edit.step', 'checkout', null)}</button>
                     </div>
 
                     <div class="card-body">
@@ -75,12 +92,13 @@
                     </div>
                 </div>
 
+
                 <!----------------------------------------------------------------------------------->
                 <!-- Checkout Workflow Buttons -->
                 <!----------------------------------------------------------------------------------->
                 <div class="row">
                     <div class="col-12 next-step-button">
-                        <div>
+                        <div class="mb-sm-3">
                             <button class="btn btn-primary btn-block submit-shipping" type="submit" name="submit" value="submit-shipping" <isif condition="${pdict.order.usingMultiShipping && !pdict.order.shippable}">disabled</isif>>
                                 ${Resource.msg('button.next.payment', 'checkout', null)}
                             </button>
@@ -105,7 +123,7 @@
 
                 <div class="card">
                     <div class="card-header">
-                        <h4>${Resource.msg('heading.order.summary', 'checkout', null)}</h4>
+                        <h2 class="card-header-custom">${Resource.msg('heading.order.summary', 'checkout', null)}</h2>
                     </div>
                     <div class="card-body order-total-summary">
                         <isinclude template="checkout/orderTotalSummary" />
