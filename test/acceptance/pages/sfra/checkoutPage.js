@@ -63,40 +63,21 @@ module.exports = {
         I.click('.submit-shipping');
     },
 
-    selectAndSubmitHiPayCreditCardForm(cardType, isApi) {
+    selectAndSubmitHiPayCreditCardForm(cardType) {
         const card = config[cardType] || 'creditCard';
 
-        if (isApi) {
-            I.click('#cardNumber');
-            I.fillField('input[id="cardNumber"]', card.cardNumber);
-            tryTo(() => I.moveCursorTo('.tooltip', 5, 5));
-            I.moveCursorTo('#cardNumber', 5, 5);
-            tryTo(() => I.moveCursorTo('.tooltip', 5, 5));
-            I.moveCursorTo('#cardNumber', 5, 5);
-            I.selectOption('#expirationMonth', card.expMonth);
-            I.selectOption('#expirationYear', card.expYear);
-            I.fillField('#securityCode', card.cvc);
-            I.fillField('input[name="dwfrm_billing_creditCardFields_phone"]', config.user.phone);
-            I.click('.submit-payment');
-            I.click('.place-order');
-        } else {
-            I.click('#cardNumber');
-            I.fillField('input[name="cardNumber"]', card.cardNumber);
-
-            I.click('#cardHolder');
-            I.fillField('input[name="cardHolder"]', `${config.user.firstName} ${config.user.lastName}`);
-
-            I.click('#cardExpiryMonth');
-            I.click('option[value="12"]');
-
-            I.click('#cardExpiryYear');
-            I.click('option[value="2030"]');
-
-            I.click('#cardSecurityCode');
-            I.fillField('input[name="cardSecurityCode"]', card.cvc);
-
-            I.click('#submit-button');
-        }
+        I.click('#cardNumber');
+        I.fillField('input[id="cardNumber"]', card.cardNumber);
+        tryTo(() => I.moveCursorTo('.tooltip', 5, 5));
+        I.moveCursorTo('#cardNumber', 5, 5);
+        tryTo(() => I.moveCursorTo('.tooltip', 5, 5));
+        I.moveCursorTo('#cardNumber', 5, 5);
+        I.selectOption('#expirationMonth', card.expMonth);
+        I.selectOption('#expirationYear', card.expYear);
+        I.fillField('#securityCode', card.cvc);
+        I.fillField('input[name="dwfrm_billing_creditCardFields_phone"]', config.user.phone);
+        I.click('.submit-payment');
+        I.click('.place-order');
     },
 
     selectAndSubmitHiPayGriopayForm(isApi) {
