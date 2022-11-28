@@ -5,7 +5,8 @@ var shippingHelpers = require('base/checkout/shipping');
 var billingHelpers = require('./billing');
 var summaryHelpers = require('base/checkout/summary');
 var formHelpers = require('base/checkout/formErrors');
-
+var customerHelpers = require('base/checkout/customer');
+var scrollAnimate = require('base/components/scrollAnimate');
 
 /**
  * Create the jQuery Checkout Plugin.
@@ -27,6 +28,9 @@ var formHelpers = require('base/checkout/formErrors');
         // Collect form data from user input
         //
         var formData = {
+            // Customer Data
+            customer: {},
+
             // Shipping Address
             shipping: {},
 
@@ -44,6 +48,7 @@ var formHelpers = require('base/checkout/formErrors');
         // The different states/stages of checkout
         //
         var checkoutStages = [
+            'customer',
             'shipping',
             'payment',
             'placeOrder',
@@ -82,7 +87,37 @@ var formHelpers = require('base/checkout/formErrors');
                 var stage = checkoutStages[members.currentStage];
                 var defer = $.Deferred(); // eslint-disable-line
 
-                if (stage === 'shipping') {
+                if (stage === 'customer') {
+                    //
+                    // Clear Previous Errors
+                    //
+                    customerHelpers.methods.clearErrors();
+                    //
+                    // Submit the Customer Form
+                    //
+                    var customerFormSelector = customerHelpers.methods.isGuestFormActive() ? customerHelpers.vars.GUEST_FORM : customerHelpers.vars.REGISTERED_FORM;
+                    var customerForm = $(customerFormSelector);
+                    $.ajax({
+                        url: customerForm.attr('action'),
+                        type: 'post',
+                        data: customerForm.serialize(),
+                        success: function (data) {
+                            if (data.redirectUrl) {
+                                window.location.href = data.redirectUrl;
+                            } else {
+                                customerHelpers.methods.customerFormResponse(defer, data);
+                            }
+                        },
+                        error: function (err) {
+                            if (err.responseJSON && err.responseJSON.redirectUrl) {
+                                window.location.href = err.responseJSON.redirectUrl;
+                            }
+                            // Server error submitting form
+                            defer.reject(err.responseJSON);
+                        }
+                    });
+                    return defer;
+                } else if (stage === 'shipping') {
                     //
                     // Clear Previous Errors
                     //
@@ -349,6 +384,16 @@ var formHelpers = require('base/checkout/formErrors');
                     .indexOf($('.data-checkout-stage').data('checkout-stage'));
                 $(plugin).attr('data-checkout-stage', checkoutStages[members.currentStage]);
 
+                $('body').on('click', '.submit-customer-login', function (e) {
+                    e.preventDefault();
+                    members.nextStage();
+                });
+
+                $('body').on('click', '.submit-customer', function (e) {
+                    e.preventDefault();
+                    members.nextStage();
+                });
+
                 //
                 // Handle Payment option selection
                 //
@@ -504,6 +549,7 @@ var exports = {
 
     updateCheckoutView: function () {
         $('body').on('checkout:updateCheckoutView', function (e, data) {
+            customerHelpers.methods.updateCustomerInformation(data.customer, data.order);
             shippingHelpers.methods.updateMultiShipInformation(data.order);
             summaryHelpers.updateTotals(data.order.totals);
             data.order.shipping.forEach(function (shipping) {
@@ -525,7 +571,7 @@ var exports = {
     }
 };
 
-[billingHelpers, shippingHelpers, addressHelpers].forEach(function (library) {
+[customerHelpers, billingHelpers, shippingHelpers, addressHelpers].forEach(function (library) {
     Object.keys(library).forEach(function (item) {
         if (typeof library[item] === 'object') {
             exports[item] = $.extend({}, exports[item], library[item]);
