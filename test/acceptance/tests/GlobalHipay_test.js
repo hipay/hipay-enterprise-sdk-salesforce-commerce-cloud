@@ -2,9 +2,9 @@ Feature('Gloabl Hipay Test');
 
 const Resource = require('../resource');
 
-Before(async ({ I, loginPage, checkoutPage }) => {
+Before(({ I, loginPage, checkoutPage }) => {
     // waiting fo login process
-    await loginPage.loginOrCreateAccount();
+    loginPage.loginOrCreateAccount();
     // checkout
     checkoutPage.initCheckout();
 
@@ -24,7 +24,7 @@ Scenario('Commande avec HiPay Credit Card 3DS OK', ({ I, checkoutPage, hostedPag
 }).tag('@hosted');
 
 Scenario('Commande avec HiPay Credit Card 3DS V2 OK', ({ I, checkoutPage, hostedPage }) => {
-    checkoutPage.selectHostedPaymentMethod('HIPAY_HOSTED_CREDIT_CARD');bb
+    checkoutPage.selectHostedPaymentMethod('HIPAY_HOSTED_CREDIT_CARD');
     hostedPage.fillAndSubmitHiPayCreditCardForm('creditCard3DSV2');
     checkoutPage.placeOrderWithSecure(true);
 }).tag('@hosted');

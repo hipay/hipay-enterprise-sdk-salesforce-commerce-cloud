@@ -14,7 +14,11 @@ module.exports = {
         city: '#dwfrm_singleshipping_shippingAddress_addressFields_city',
         zipcode: '#dwfrm_singleshipping_shippingAddress_addressFields_postal',
         phone: '#dwfrm_singleshipping_shippingAddress_addressFields_phone',
-        useAsBillingAddress: '#dwfrm_singleshipping_shippingAddress_useAsBillingAddress'
+        useAsBillingAddress: '#dwfrm_singleshipping_shippingAddress_useAsBillingAddress',
+        //saveBilling: 'button[name="dwfrm_billing_save"]',
+        buttonPlaceOrder: '.submit-order button',
+        buttonSaveBilling: 'button[name="dwfrm_billing_save"]',
+        buttonCart: 'button[name="dwfrm_cart_checkoutCart"]'
     },
 
     initCheckout() {
@@ -30,33 +34,49 @@ module.exports = {
 
     goToMenCategory() {
         I.click('.primary-logo');
+        I.waitForNavigation();
     },
 
     addProductToCart() {
         I.click('.product-image');
-        tryTo(() => I.click(locate('.size .selectable').first()));
+        I.waitForNavigation();
+        I.waitForVisible('.size .selectable', 3);
+        I.click('.size .selectable');
         I.click('#add-to-cart');
     },
 
     goToCart() {
+        I.waitForVisible('a.mini-cart-link')
         I.click('a.mini-cart-link');
+        I.waitForNavigation();
     },
 
     goToCheckout() {
-        I.click(locate('button').withAttr({name: 'dwfrm_cart_checkoutCart'}));
+        I.waitForVisible(this.fields.buttonCart)
+        I.click(this.fields.buttonCart);
+        I.waitForNavigation();
     },
 
     selectPaymentMethod(paymentMethodId) {
+        I.waitForVisible('button[name="dwfrm_billing_save"]', 3);
         I.checkOption('#is-' + paymentMethodId);
     },
 
     selectHostedPaymentMethod(paymentMethodId) {
         this.selectPaymentMethod(paymentMethodId);
-        I.click('.button-fancy-large');
-        I.click('.button-fancy-large');
+
+        I.waitForVisible(this.fields.buttonSaveBilling);
+        I.click(this.fields.buttonSaveBilling);
+        //I.wait(2);
+        //I.waitForNavigation();
+        I.waitForVisible(this.fields.buttonPlaceOrder);
+        I.click(this.fields.buttonPlaceOrder);
+        I.waitForNavigation();
+        //I.wait(2);
     },
 
     switchToHipayIframe() {
+        I.waitForVisible('#hipay-iframe', 3);
         I.switchTo('#hipay-iframe');
     },
 
@@ -65,6 +85,13 @@ module.exports = {
     },
 
     submitCheckout() {
+        I.waitForVisible(this.fields.firstName, 3);
+        I.waitForVisible(this.fields.lastName, 3);
+        I.waitForVisible(this.fields.adress1, 3);
+        I.waitForVisible(this.fields.zipcode, 3);
+        I.waitForVisible(this.fields.city, 3);
+        I.waitForVisible(this.fields.country, 3);
+
         I.fillField(this.fields.firstName, config.user.firstName);
         I.fillField(this.fields.lastName, config.user.lastName);
         I.fillField(this.fields.adress1, config.adress.address1);
@@ -72,8 +99,9 @@ module.exports = {
         I.fillField(this.fields.city, config.adress.city);
         I.selectOption(this.fields.country, config.adress.country);
         I.fillField(this.fields.phone, config.user.phone);
-        tryTo(() => I.selectOption(this.fields.state, config.adress.state));
+        //tryTo(() => I.selectOption(this.fields.state, config.adress.state));
         I.checkOption(this.fields.useAsBillingAddress);
+
         I.click('.button-fancy-large');
     },
 
@@ -89,20 +117,22 @@ module.exports = {
         I.fillField('#dwfrm_billing_paymentMethods_creditCard_cvn', card.cvc);
 
         I.click('.button-fancy-large');
+        //I.wait(3);
         I.click('.button-fancy-large');
     },
 
     validateSecure() {
-        I.wait(1);
         I.seeElement('#continue-transaction');
         I.click('#continue-transaction');
-        I.wait(1);
+        I.waitForNavigation();
     },
 
     placeOrderWithSecure(secure) {
         if (secure) {
             this.validateSecure();
         }
+        I.waitInUrl('COPlaceOrder-Submit', 20);
+        //I.waitForVisible('.confirmation-message', 15);
         I.see(Resource.msg('thanks'));
     }
 }

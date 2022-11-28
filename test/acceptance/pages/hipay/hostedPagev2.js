@@ -40,10 +40,10 @@ module.exports = {
 
         // New Hosted Page v2
 
-        I.waitForVisible('#hipay-card-field-cardNumber>iframe', 3);
-        I.waitForVisible('#hipay-card-field-cardHolder>iframe', 3);
-        I.waitForVisible('#hipay-card-field-expiryDate>iframe', 3);
-        I.waitForVisible('#hipay-card-field-cvc>iframe', 3);
+        I.waitForVisible('#hipay-card-field-cardNumber>iframe', 5);
+        I.waitForVisible('#hipay-card-field-cardHolder>iframe', 5);
+        I.waitForVisible('#hipay-card-field-expiryDate>iframe', 5);
+        I.waitForVisible('#hipay-card-field-cvc>iframe', 5);
 
         // I.switchTo('#hipay-card-field-expiryDate>iframe');
         // I.fillField('input[name="cc-exp"]', card.expMonth + '/' + card.expYear.slice(-2));
@@ -67,9 +67,12 @@ module.exports = {
 
         I.click('button[aria-label="pay-button"]');
         //Paiement effectué avec succès
-        I.wait(10);
-        I.see('Paiement effectué avec succès');
-        I.wait(6);
+        //I.wait(15);
+
+        I.waitForNavigation();
+
+        //I.see('Paiement effectué avec succès');
+        //I.wait(6);
     },
 
     fillAndSubmitHiPayGriopayForm() {
