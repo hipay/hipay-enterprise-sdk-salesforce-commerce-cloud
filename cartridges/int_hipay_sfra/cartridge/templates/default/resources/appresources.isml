@@ -1,5 +1,0 @@
-<script type="text/javascript">
-(function(){
-    window.SFRA6Enabled = <isprint value="${require('dw/system/Site').getCurrent().getCustomPreferenceValue('hipaySFRAVersion')}" encoding="off"/>;
-}());
-</script>

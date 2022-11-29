@@ -7,7 +7,7 @@ module.exports = [{
     name: 'js',
     entry: sgmfScripts.createJsPath(),
     output: {
-        path: path.resolve('./Cartridges/int_hipay_sfra/cartridge/static'),
+        path: path.resolve('./cartridges/int_hipay_sfra/cartridge/static'),
         filename: '[name].js'
     }
 }, {
