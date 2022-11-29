@@ -42,7 +42,9 @@ module.exports = {
         I.waitForNavigation();
         I.waitForVisible('.size .selectable', 3);
         I.click('.size .selectable');
+        I.waitForInvisible('.loader');
         I.click('#add-to-cart');
+        I.waitForInvisible('.loader');
     },
 
     goToCart() {
@@ -103,6 +105,7 @@ module.exports = {
         I.checkOption(this.fields.useAsBillingAddress);
 
         I.click('.button-fancy-large');
+        I.waitForNavigation();
     },
 
     selectAndSubmitHiPayCreditCardForm(cardType) {

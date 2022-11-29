@@ -40,7 +40,7 @@ module.exports = {
 
         // New Hosted Page v2
 
-        I.waitForVisible('#hipay-card-field-cardNumber>iframe', 5);
+        I.waitForVisible('#hipay-card-field-cardNumber>iframe', 10);
         I.waitForVisible('#hipay-card-field-cardHolder>iframe', 5);
         I.waitForVisible('#hipay-card-field-expiryDate>iframe', 5);
         I.waitForVisible('#hipay-card-field-cvc>iframe', 5);

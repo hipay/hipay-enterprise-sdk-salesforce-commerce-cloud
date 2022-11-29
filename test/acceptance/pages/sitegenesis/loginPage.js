@@ -26,8 +26,6 @@ module.exports = {
 
     loginOrCreateAccount() {
         I.amOnPage(pageUrl);
-        I.waitInUrl('SiteGenesis', 5);
-        I.waitInUrl('Global', 5);
         this.confirmTrackingConsent();
         I.click('.fa-user');
         // const iAmLogged = await tryTo(() => this.loginAccount());
@@ -50,6 +48,7 @@ module.exports = {
 
     loginAccount() {
         I.click(locate('.user-links a').withText(Resource.msg('login')));
+        I.waitForNavigation();
         I.waitForVisible(this.fields.loginEmail, 3);
         I.waitForVisible(this.fields.loginPassword, 3);
         I.fillField(this.fields.loginEmail, config.user.email);
