@@ -14,6 +14,7 @@ function processForm(req, paymentForm, viewFormData) {
     var PaymentMgr = require('dw/order/PaymentMgr');
 
     var viewData = viewFormData;
+    var hiPayErrors = {};
     var creditCardErrors = {};
 
     if (!req.form.storedPaymentUUID) {
