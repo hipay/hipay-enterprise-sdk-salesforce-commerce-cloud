@@ -84,43 +84,6 @@ server.append(
                     currentBasket.setCustomerEmail(req.currentCustomer.profile.email);
                 }
             });
-
-            // check to make sure there is a payment processor
-            if (!PaymentMgr.getPaymentMethod(paymentMethodID).paymentProcessor) {
-                throw new Error(Resource.msg(
-                    'error.payment.processor.missing',
-                    'checkout',
-                    null
-                ));
-            }
-
-            if (billingData.storedPaymentUUID
-                && req.currentCustomer.raw.authenticated
-                && req.currentCustomer.raw.registered
-            ) {
-                var paymentInstruments = req.currentCustomer.wallet.paymentInstruments;
-                var paymentInstrument = array.find(paymentInstruments, function (item) {
-                    return billingData.storedPaymentUUID === item.UUID;
-                });
-
-                billingData.paymentInformation.cardNumber.value = paymentInstrument
-                    .creditCardNumber;
-                billingData.paymentInformation.cardType.value = paymentInstrument
-                    .creditCardType;
-
-                if (empty(billingData.storedPaymentUUID)) {
-                    billingData.paymentInformation.securityCode.value = req.form.securityCode;
-                }
-
-                billingData.paymentInformation.expirationMonth.value = paymentInstrument
-                    .creditCardExpirationMonth;
-                billingData.paymentInformation.expirationYear.value = paymentInstrument
-                    .creditCardExpirationYear;
-                billingData.paymentInformation.creditCardToken = paymentInstrument
-                    .raw.creditCardToken;
-                billingData.paymentInformation.cardOwner = paymentInstrument
-                .raw.creditCardHolder;
-            }
         });
 
         return next();

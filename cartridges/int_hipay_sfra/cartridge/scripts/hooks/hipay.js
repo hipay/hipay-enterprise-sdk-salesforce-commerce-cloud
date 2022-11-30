@@ -19,7 +19,7 @@ var sitePrefs = require('dw/system/Site').getCurrent().getPreferences().getCusto
 * @param  {dw.order.PaymentInstrument} paymentInstrument - The payment instrument
 * @return {Object} Object indicating success or error
 */
-function creditCardHandle(paymentInstrument, paymentInformation, paymentUUID) {
+function creditCardHandle(paymentInstrument, paymentInformation, paymentUUID, req) {
     var creditCard = paymentInformation;
     var hipayEnableOneClick = sitePrefs.hipayEnableOneClick;
     var hiPayMultiUseToken = false;
@@ -42,7 +42,9 @@ function creditCardHandle(paymentInstrument, paymentInformation, paymentUUID) {
     var hiPayCardCVC;
     var hiPayCardType;
 
-    if (empty(paymentUUID)) {
+    var paymentUUID = req.form && req.form.storedPaymentUUID ? req.form.storedPaymentUUID : null;
+
+    if (empty(paymentUUID) && !empty(paymentInformation.cardNumber.value)) {
         cardNumber = creditCard.cardNumber.value;
 
         if (!empty(creditCard.securityCode)) {
@@ -103,7 +105,12 @@ function creditCardHandle(paymentInstrument, paymentInformation, paymentUUID) {
         }
     }
 
-    if (!empty(paymentUUID) && hipayEnableOneClick) { // If one-click payment
+    if (
+        !empty(paymentUUID)
+        && hipayEnableOneClick
+        && !empty(customer.getProfile().wallet)
+        && customer.getProfile().getWallet().getPaymentInstruments('HIPAY_CREDIT_CARD').length > 0
+        ) { // If one-click payment
         var paymentInstruments = customer.getProfile().getWallet().getPaymentInstruments('HIPAY_CREDIT_CARD');
         var uuid = paymentUUID;
         var creditCardInstrument = null;
@@ -113,7 +120,6 @@ function creditCardHandle(paymentInstrument, paymentInformation, paymentUUID) {
 
         while (!empty(instrumentsIter) && instrumentsIter.hasNext()) {
             creditCardInstrument = instrumentsIter.next();
-
             if (uuid.equals(creditCardInstrument.UUID)) {
                 selectedCreditCard = creditCardInstrument;
                 break;
@@ -177,7 +183,7 @@ function creditCardHandle(paymentInstrument, paymentInformation, paymentUUID) {
 *
 * @return {Object} success if the payment instrument is created, error otherwise
 */
-function Handle(currentBasket, paymentInformation, paymentUUID) {
+function Handle(currentBasket, paymentInformation, paymentUUID, req) {
     var basket = currentBasket;
     var paymentMethod = session.forms.billing.paymentMethod.value;
     var paymentInstrument;
@@ -192,7 +198,7 @@ function Handle(currentBasket, paymentInformation, paymentUUID) {
         hiPayCheckoutModule.hiPayUpdatePaymentInstrument(paymentInstrument, paymentInformation);
 
         if (paymentMethod === 'HIPAY_CREDIT_CARD') {
-            var handleResponse = creditCardHandle(paymentInstrument, paymentInformation, paymentUUID);
+            var handleResponse = creditCardHandle(paymentInstrument, paymentInformation, paymentUUID, req);
 
             if (handleResponse.success) {
                 return { success: true };
