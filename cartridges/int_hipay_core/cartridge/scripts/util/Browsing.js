@@ -10,7 +10,7 @@
  */
 exports.lastUrl = function lastUrl() {
     var location = dw.web.URLUtils.url('Home-Show'),
-        click = session.clickStream.last;
+    click = session.clickStream.last;
 
     if (click) {
         location = dw.web.URLUtils.url(click.pipelineName);
@@ -19,7 +19,7 @@ exports.lastUrl = function lastUrl() {
             var params = click.queryString.split('&');
 
             params.forEach(function (param) {
-                location.append.apply(location,param.split('='));
+                location.append.apply(location, param.split('='));
             });
         }
     }
@@ -49,5 +49,5 @@ exports.lastCatalogURL = function lastCatalogURL() {
     return dw.web.URLUtils.httpHome().toString();
 };
 
-//add url parser (libUrl)
-//add continue shopping here
+// add url parser (libUrl)
+// add continue shopping here

@@ -74,9 +74,9 @@ server.append(
 
             // Init flag saveCardChecked (depending on the storedPaymentUUID)
             if (billingData.storedPaymentUUID) {
-                req.session.raw.custom['saveCardChecked'] = false;
+                req.session.raw.custom.saveCardChecked = false;
             } else {
-                req.session.raw.custom['saveCardChecked'] = billingData.saveCard;
+                req.session.raw.custom.saveCardChecked = billingData.saveCard;
             }
 
             Transaction.wrap(function () {
@@ -103,7 +103,7 @@ server.replace('PlaceOrder', server.middleware.https, function (req, res, next) 
     var array = require('*/cartridge/scripts/util/array');
 
     var currentBasket = BasketMgr.getCurrentBasket();
-    var saveCardChecked = req.session.raw.custom['saveCardChecked'];
+    var saveCardChecked = req.session.raw.custom.saveCardChecked;
 
     if (!currentBasket) {
         res.json({
@@ -230,7 +230,7 @@ server.replace('PlaceOrder', server.middleware.https, function (req, res, next) 
                 data: {
                     customerNo: currentBasket.customerNo,
                     attemptDate: new Date()
-                    }
+                }
             };
             var result = COHelpers.writeToCustomObject(params);
             if (result === Constants.STATUS_ERROR) {
@@ -307,7 +307,7 @@ server.replace('PlaceOrder', server.middleware.https, function (req, res, next) 
         orderID: order.orderNo,
         orderToken: order.orderToken,
         continueUrl: URLUtils.url('Order-Confirm').toString(),
-        sfraVersion: Site.getCurrent().getCustomPreferenceValue('hipaySFRAVersion'), // SFRA version greater than or equal to 6 (boolean)
+        sfraVersion: Site.getCurrent().getCustomPreferenceValue('hipaySFRAVersion') // SFRA version greater than or equal to 6 (boolean)
     });
 
     return next();

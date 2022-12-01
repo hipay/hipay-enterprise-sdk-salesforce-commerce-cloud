@@ -291,9 +291,9 @@ server.post(
                                 newCustomerProfile.email = registrationForm.email;
 
                                 // Updated the date of the last password change
-                                var dateNow = new Date();                   
+                                var dateNow = new Date();
                                 Transaction.wrap(function () {
-                                    newCustomerProfile.custom.datePasswordLastChange = dateNow.toISOString().slice(0,10).replace(/-/g,"");
+                                    newCustomerProfile.custom.datePasswordLastChange = dateNow.toISOString().slice(0, 10).replace(/-/g, '');
                                 });
                             }
                         });
@@ -454,12 +454,12 @@ server.post(
 
                 if (customerLogin) {
                 	var emailType = emailHelpers.emailTypes.accountEdited;
-                	if (profile.getFirstName()+profile.getLastName() != formInfo.firstName+formInfo.lastName) {
+                	if (profile.getFirstName() + profile.getLastName() != formInfo.firstName + formInfo.lastName) {
                 		emailType = emailHelpers.emailTypes.accountNameChanged;
                 	}
                 	if (profile.getEmail() != formInfo.email) {
                 		emailType = emailHelpers.emailTypes.accountEmailChanged;
-                	}               	
+                	}
 
                     Transaction.wrap(function () {
                         profile.setFirstName(formInfo.firstName);
@@ -547,7 +547,7 @@ server.post(
 
         var Site = require('dw/system/Site');
         var emailHelpers = require('*/cartridge/scripts/helpers/emailHelpers');
-        
+
         var profileForm = server.forms.getForm('profile');
         var newPasswords = profileForm.login.newpasswords;
         // form validation
@@ -569,7 +569,7 @@ server.post(
         if (profileForm.valid) {
             res.setViewData(result);
             this.on('route:BeforeComplete', function () { // eslint-disable-line no-shadow
-                var formInfo = res.getViewData();                
+                var formInfo = res.getViewData();
                 var customer = CustomerMgr.getCustomerByCustomerNumber(
                     session.customer.profile.customerNo  //     req.currentCustomer.profile.customerNo
                 );
@@ -604,27 +604,27 @@ server.post(
                     var email = customer.profile.email;
                     var url = URLUtils.https('Account-EditPassword');
                     var objectForEmail = {
-                                 firstName: customer.profile.firstName,
-                                 lastName: customer.profile.lastName,
-                                  url: url,
-                                  resettingCustomer:customer
-                                 };
+                        firstName: customer.profile.firstName,
+                        lastName: customer.profile.lastName,
+                        url: url,
+                        resettingCustomer: customer
+                    };
 
                     var emailObj = {
-                           to: email,
-                           subject: Resource.msg('subject.profile.resetpassword.email', 'login', null),
-                           from: Site.current.getCustomPreferenceValue('customerServiceEmail') || 'no-reply@salesforce.com',
-                           type: emailHelpers.emailTypes.passwordChanged
-                            };
+                        to: email,
+                        subject: Resource.msg('subject.profile.resetpassword.email', 'login', null),
+                        from: Site.current.getCustomPreferenceValue('customerServiceEmail') || 'no-reply@salesforce.com',
+                        type: emailHelpers.emailTypes.passwordChanged
+                    };
 
-                    emailHelpers.sendEmail(emailObj, 'account/password/passwordChangedEmail', objectForEmail);        
-                   
+                    emailHelpers.sendEmail(emailObj, 'account/password/passwordChangedEmail', objectForEmail);
+
                     // Updated the date of the last password change
-                    var dateNow = new Date();                   
+                    var dateNow = new Date();
                     Transaction.wrap(function () {
-                        customer.profile.custom.datePasswordLastChange = dateNow.toISOString().slice(0,10).replace(/-/g,"");
+                        customer.profile.custom.datePasswordLastChange = dateNow.toISOString().slice(0, 10).replace(/-/g, '');
                     });
-                    
+
                     res.json({
                         success: true,
                         redirectUrl: URLUtils.url('Account-Show').toString()
@@ -763,27 +763,27 @@ server.post('SaveNewPassword', server.middleware.https, function (req, res, next
                 var email = resettingCustomer.profile.email;
                 var url = URLUtils.https('Login-Show');
                 var objectForEmail = {
-                        firstName: resettingCustomer.profile.firstName,
-                        lastName: resettingCustomer.profile.lastName,
-                        url: url,
-                        resettingCustomer:resettingCustomer
-                    };
+                    firstName: resettingCustomer.profile.firstName,
+                    lastName: resettingCustomer.profile.lastName,
+                    url: url,
+                    resettingCustomer: resettingCustomer
+                };
 
                 var emailObj = {
-                        to: email,
-                        subject: Resource.msg('subject.profile.resetpassword.email', 'login', null),
-                        from: Site.current.getCustomPreferenceValue('customerServiceEmail') || 'no-reply@salesforce.com',         
-                        type: emailHelpers.emailTypes.passwordChanged
-                    };
+                    to: email,
+                    subject: Resource.msg('subject.profile.resetpassword.email', 'login', null),
+                    from: Site.current.getCustomPreferenceValue('customerServiceEmail') || 'no-reply@salesforce.com',
+                    type: emailHelpers.emailTypes.passwordChanged
+                };
 
                 emailHelpers.sendEmail(emailObj, 'account/password/passwordChangedEmail', objectForEmail);
 
                 // Updated the date of the last password change
-                var dateNow = new Date();                   
+                var dateNow = new Date();
                 Transaction.wrap(function () {
-                    resettingCustomer.profile.custom.datePasswordLastChange = dateNow.toISOString().slice(0,10).replace(/-/g,"");
+                    resettingCustomer.profile.custom.datePasswordLastChange = dateNow.toISOString().slice(0, 10).replace(/-/g, '');
                 });
-                
+
                 res.redirect(URLUtils.url('Login-Show'));
             }
         });

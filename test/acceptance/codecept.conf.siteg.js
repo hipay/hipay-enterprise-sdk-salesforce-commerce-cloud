@@ -8,15 +8,15 @@ exports.config = {
         //     show: true
         // }
         Puppeteer: {
-            url: "http://localhost",
+            url: 'http://localhost',
             show: false,
             // waitForAction: 1000,
             // waitForNavigation: "networkidle0",
             waitForNavigation: ['networkidle0', 'domcontentloaded'],
-            "chrome": {
-                "defaultViewport": {
-                    "width": 900,
-                    "height": 960
+            'chrome': {
+                'defaultViewport': {
+                    'width': 900,
+                    'height': 960
                 }
             }
 

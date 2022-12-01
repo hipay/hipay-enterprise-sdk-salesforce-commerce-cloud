@@ -30,8 +30,7 @@ function processForm(req, paymentForm, viewFormData) {
             }
 
             creditCardErrors = COHelpers.validateCreditCard(paymentForm);
-        }
-        else if (paymentForm.paymentMethod.htmlValue === 'HIPAY_KLARNA' && paymentForm.hipayMethodsFields.klarna) {
+        } else if (paymentForm.paymentMethod.htmlValue === 'HIPAY_KLARNA' && paymentForm.hipayMethodsFields.klarna) {
             hiPayErrors = COHelpers.validateFields(paymentForm.hipayMethodsFields.klarna);
             paymentForm.hipayMethodsFields = paymentForm.hipayMethodsFields.klarna;
         } else if (paymentForm.paymentMethod.htmlValue === 'HIPAY_IDEAL' && paymentForm.hipayMethodsFields.ideal) {
@@ -157,7 +156,6 @@ function savePaymentInformation(req, basket, billingData) {
             raw: saveCardResult
         });
     }
-
 }
 
 exports.processForm = processForm;

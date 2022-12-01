@@ -113,11 +113,11 @@ function creditCardHandle(paymentInstrument) {
         }
     }
 
-    //Init flag saveCardChecked (depending on the storedPaymentUUID)
+    // Init flag saveCardChecked (depending on the storedPaymentUUID)
     if (empty(creditCard.uuid.value) && session.forms.billing.paymentMethods.creditCard.saveCard.value) {
-        session.custom['saveCardChecked'] = session.forms.billing.paymentMethods.creditCard.saveCard.value;
+        session.custom.saveCardChecked = session.forms.billing.paymentMethods.creditCard.saveCard.value;
     } else {
-        session.custom['saveCardChecked'] = false;
+        session.custom.saveCardChecked = false;
     }
 
     if (hiPayToken != null) {

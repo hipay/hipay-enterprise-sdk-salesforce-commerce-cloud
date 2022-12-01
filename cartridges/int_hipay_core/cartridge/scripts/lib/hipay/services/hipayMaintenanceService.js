@@ -11,10 +11,10 @@ HiPayMaintenanceService.prototype.initiateCapture = function (transactionReferen
     service.URL += transactionReference;
 
     var params = {
-        operation: operation,
+        operation: operation
     };
     if (!empty(amount)) {
-    params.amount = amount;
+        params.amount = amount;
     }
 
     var response = service.call(params);

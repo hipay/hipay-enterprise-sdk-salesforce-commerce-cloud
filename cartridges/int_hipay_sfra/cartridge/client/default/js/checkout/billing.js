@@ -118,8 +118,7 @@ base.methods.updatePaymentInformation = function (order) {
     var $paymentSummary = $('.payment-details');
     var htmlToAppend = '';
 
-    if (order.billing.payment && order.billing.payment.selectedPaymentInstruments
-        && order.billing.payment.selectedPaymentInstruments.length > 0) {
+    if (order.billing.payment && order.billing.payment.selectedPaymentInstruments && order.billing.payment.selectedPaymentInstruments.length > 0) {
 
         if (order.billing.payment.selectedPaymentInstruments[0].paymentMethod.indexOf('CREDIT_CARD') > -1 && order.billing.payment.selectedPaymentInstruments[0].paymentMethod.indexOf('HOSTED') < 0) {
             htmlToAppend += '<span>' + order.resources.cardType + ' '
@@ -132,7 +131,7 @@ base.methods.updatePaymentInformation = function (order) {
                 + '/' + order.billing.payment.selectedPaymentInstruments[0].expirationYear
                 + '</span></div>';
         } else {
-            htmlToAppend += '<span>' + order.billing.payment.selectedPaymentInstruments[0].name+ '</span></div>';
+            htmlToAppend += '<span>' + order.billing.payment.selectedPaymentInstruments[0].name + '</span></div>';
         }
     }
 

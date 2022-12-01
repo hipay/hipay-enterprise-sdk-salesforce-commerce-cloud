@@ -21,7 +21,7 @@ exports.extend = function (target, source) {
         _source = arguments[i];
         for (var prop in _source) {
             // recurse for non-API objects
-            if (_source[prop] && 'object' === typeof _source[prop] && !_source[prop].class) {
+            if (_source[prop] && typeof _source[prop] === 'object' && !_source[prop].class) {
                 target[prop] = this.extend(target[prop], _source[prop]);
             } else {
                 target[prop] = _source[prop];

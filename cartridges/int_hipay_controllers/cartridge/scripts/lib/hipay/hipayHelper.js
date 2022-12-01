@@ -375,7 +375,7 @@ HiPayHelper.prototype.fillOrderData = function (order, params, pi) {
     if (pi.paymentMethod === 'HIPAY_CREDIT_CARD' || pi.paymentMethod === 'HIPAY_HOSTED_CREDIT_CARD') {
         var paymentMethods = session.forms.billing.paymentMethods;
         // Device channel always 2, BROWSER
-        params.device_channel = "2";
+        params.device_channel = '2';
         // Add DSP2 browser info
         if (paymentMethods && paymentMethods.browserInfo) {
             params.browser_info = JSON.parse(paymentMethods.browserInfo.value);
@@ -449,7 +449,7 @@ HiPayHelper.prototype.fillOrderData = function (order, params, pi) {
             params.merchant_risk_statement.purchase_indicator = 2;
             if (latestDatePreOrderProduct) {
                 params.merchant_risk_statement.pre_order_date =
-                    parseInt(latestDatePreOrderProduct.toISOString().slice(0,10).replace(/-/g,""), 10);
+                    parseInt(latestDatePreOrderProduct.toISOString().slice(0, 10).replace(/-/g, ''), 10);
             }
         } else {
             params.merchant_risk_statement.purchase_indicator = 1;
@@ -486,8 +486,8 @@ HiPayHelper.prototype.fillOrderData = function (order, params, pi) {
             /* Previous auth info*/
 
             // Get last processed order
-            var lastProcessedOrder = OrderMgr.searchOrders("customerNo = {0} AND status >= {1} AND status <= {2}",
-                "creationDate desc", customerNo, 3, 8).first();
+            var lastProcessedOrder = OrderMgr.searchOrders('customerNo = {0} AND status >= {1} AND status <= {2}',
+                'creationDate desc', customerNo, 3, 8).first();
 
             if (!empty(lastProcessedOrder) && !empty(lastProcessedOrder.paymentTransaction)) {
                 // Get transaction ID of order
@@ -501,7 +501,7 @@ HiPayHelper.prototype.fillOrderData = function (order, params, pi) {
                     // Fill transaction reference
                     params.previous_auth_info = {
                         transaction_reference: transaction_reference
-                    }
+                    };
                 }
             }
 
@@ -516,26 +516,26 @@ HiPayHelper.prototype.fillOrderData = function (order, params, pi) {
             /* Account info - payment */
 
             // Identify one-click payment if eci = 9
-            if (!empty(params.eci) && params.eci === "9" && !empty(pi.creationDate)) {
+            if (!empty(params.eci) && params.eci === '9' && !empty(pi.creationDate)) {
                 // Get creation date of payment instrument
-                var oneClickCreationDate = pi.getCreationDate().toISOString().slice(0,10).replace(/-/g,"");
+                var oneClickCreationDate = pi.getCreationDate().toISOString().slice(0, 10).replace(/-/g, '');
 
                 if (!empty(oneClickCreationDate)) {
                     params.account_info.payment = {
                         enrollment_date: parseInt(oneClickCreationDate, 10)
-                    }
+                    };
                 }
             }
 
             /* Account info - Customer */
 
-            var creationDate = customer.profile.getCreationDate().toISOString().slice(0, 10).replace(/-/g, "");
+            var creationDate = customer.profile.getCreationDate().toISOString().slice(0, 10).replace(/-/g, '');
 
             // Add opening_account_date
             params.account_info.customer.opening_account_date = parseInt(creationDate, 10);
             // Add account_change
             params.account_info.customer.account_change =
-                parseInt(customer.profile.getLastModified().toISOString().slice(0, 10).replace(/-/g, ""), 10);
+                parseInt(customer.profile.getLastModified().toISOString().slice(0, 10).replace(/-/g, ''), 10);
             // Add password_change
             var datePasswordLastChange = customer.profile.custom.datePasswordLastChange;
             if (!empty(datePasswordLastChange)) {
@@ -559,7 +559,7 @@ HiPayHelper.prototype.fillOrderData = function (order, params, pi) {
 
             // Add card_stored_24h (List of attempts by customerNo)
             var listAttempts = CustomObjectMgr.queryCustomObjects(Constants.OBJ_SAVE_ONE_CLICK,
-                "custom.customerNo = {0} AND custom.attemptDate >= {1}", "custom.attemptDate desc", customerNo, lastDay);
+                'custom.customerNo = {0} AND custom.attemptDate >= {1}', 'custom.attemptDate desc', customerNo, lastDay);
             if ('count' in listAttempts) {
                 params.account_info.purchase.card_stored_24h = listAttempts.count;
             } else {
@@ -567,8 +567,8 @@ HiPayHelper.prototype.fillOrderData = function (order, params, pi) {
             }
 
             // Get last processed orders from the last 24 hours
-            var ordersLastDay = OrderMgr.searchOrders("customerNo = {0} AND creationDate >= {1}",
-                "creationDate desc", customerNo, lastDay);
+            var ordersLastDay = OrderMgr.searchOrders('customerNo = {0} AND creationDate >= {1}',
+                'creationDate desc', customerNo, lastDay);
 
             var ordersNumberLastDay = 0;
             if (ordersLastDay && ordersLastDay.getCount() > 0) {
@@ -592,8 +592,8 @@ HiPayHelper.prototype.fillOrderData = function (order, params, pi) {
             params.account_info.purchase.payment_attempts_24h = ordersNumberLastDay;
 
             // Get last processed orders from the last year
-            var ordersLastYear = OrderMgr.searchOrders("customerNo = {0} AND creationDate >= {1}",
-                "creationDate desc", customerNo, lastYear);
+            var ordersLastYear = OrderMgr.searchOrders('customerNo = {0} AND creationDate >= {1}',
+                'creationDate desc', customerNo, lastYear);
 
             var ordersNumberLastYear = 0;
             if (ordersLastYear && ordersLastYear.getCount() > 0) {
@@ -617,19 +617,18 @@ HiPayHelper.prototype.fillOrderData = function (order, params, pi) {
             params.account_info.purchase.payment_attempts_1y = ordersNumberLastYear;
 
             // Add count (Number of orders during 6 previous months)
-            var ordersLastSixMonth = OrderMgr.searchOrders("customerNo = {0} AND creationDate >= {1}",
-                "creationDate desc", customerNo, lastSixMonth);
+            var ordersLastSixMonth = OrderMgr.searchOrders('customerNo = {0} AND creationDate >= {1}',
+                'creationDate desc', customerNo, lastSixMonth);
             if (ordersLastSixMonth && ordersLastSixMonth.getCount() > 0) {
                 params.account_info.purchase.count = ordersLastSixMonth.getCount();
-            }
-            else {
+            } else {
                 params.account_info.purchase.count = 0;
             }
 
             /* Account info - Shipping */
 
             // Get all orders of customer
-            var ordersAll = OrderMgr.searchOrders("customerNo = {0}", "creationDate asc", customerNo);
+            var ordersAll = OrderMgr.searchOrders('customerNo = {0}', 'creationDate asc', customerNo);
 
             var addressFound = false;
             var reOrderFound = false;
@@ -653,12 +652,12 @@ HiPayHelper.prototype.fillOrderData = function (order, params, pi) {
                             addressFound = true;
 
                             // Set shipping_indicator to 2
-                            if (params.merchant_risk_statement.shipping_indicator === 3){
+                            if (params.merchant_risk_statement.shipping_indicator === 3) {
                                 params.merchant_risk_statement.shipping_indicator = 2;
                             }
                             // Add shipping_used_date (Date of first order with the same shipping address)
                             params.account_info.shipping.shipping_used_date =
-                                parseInt(currentOrderAddress.getCreationDate().toISOString().slice(0, 10).replace(/-/g, ""), 10);
+                                parseInt(currentOrderAddress.getCreationDate().toISOString().slice(0, 10).replace(/-/g, ''), 10);
                         }
                     }
 
@@ -677,14 +676,13 @@ HiPayHelper.prototype.fillOrderData = function (order, params, pi) {
                             if (!empty(productLineItem.product)) {
                                 // Check if ID exists in order basket
                                 var indexId = basketProductIDS.indexOf(productLineItem.productID);
-                                if (indexId >= 0){
+                                if (indexId >= 0) {
                                     // If ID exists, check if same quantity
                                     if (basketProductQuantities[indexId] !== productLineItem.quantity.value) {
                                         reOrderBasket = false;
                                         break;
                                     }
-                                }
-                                else {
+                                } else {
                                     reOrderBasket = false;
                                     break;
                                 }
@@ -692,7 +690,7 @@ HiPayHelper.prototype.fillOrderData = function (order, params, pi) {
                         }
                     }
 
-                    if (reOrderBasket){
+                    if (reOrderBasket) {
                         reOrderFound = true;
                     }
                 }
