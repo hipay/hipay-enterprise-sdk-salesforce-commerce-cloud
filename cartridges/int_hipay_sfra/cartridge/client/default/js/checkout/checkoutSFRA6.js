@@ -317,48 +317,31 @@ var scrollAnimate = require('base/components/scrollAnimate');
                                     // go to appropriate stage and display error message
                                     defer.reject(data);
                                 }
-                            } else {
-                                // SFRA version >= 6
-                                if (data.sfraVersion) {
-                                    var redirect = $('<form>')
-                                    .appendTo(document.body)
+                            }
+                            else {
+                                var redirect = $('<form>')
+                                .appendTo(document.body)
+                                .attr({
+                                    method: 'POST',
+                                    action: data.continueUrl
+                                });
+
+                                $('<input>')
+                                    .appendTo(redirect)
                                     .attr({
-                                        method: 'POST',
-                                        action: data.continueUrl
+                                        name: 'orderID',
+                                        value: data.orderID
                                     });
 
-                                    $('<input>')
-                                        .appendTo(redirect)
-                                        .attr({
-                                            name: 'orderID',
-                                            value: data.orderID
-                                        });
+                                $('<input>')
+                                    .appendTo(redirect)
+                                    .attr({
+                                        name: 'orderToken',
+                                        value: data.orderToken
+                                    });
 
-                                    $('<input>')
-                                        .appendTo(redirect)
-                                        .attr({
-                                            name: 'orderToken',
-                                            value: data.orderToken
-                                        });
-
-                                    redirect.submit();
-                                    defer.resolve(data);
-
-                                } else { // SFRA version < 6
-                                    var continueUrl = data.continueUrl;
-                                    var urlParams = {
-                                        ID: data.orderID,
-                                        token: data.orderToken
-                                    };
-
-                                    continueUrl += (continueUrl.indexOf('?') !== -1 ? '&' : '?') +
-                                        Object.keys(urlParams).map(function (key) {
-                                            return key + '=' + encodeURIComponent(urlParams[key]);
-                                        }).join('&');
-
-                                    window.location.href = continueUrl;
-                                    defer.resolve(data);
-                                }
+                                redirect.submit();
+                                defer.resolve(data);
                             }
                         },
                         error: function () {

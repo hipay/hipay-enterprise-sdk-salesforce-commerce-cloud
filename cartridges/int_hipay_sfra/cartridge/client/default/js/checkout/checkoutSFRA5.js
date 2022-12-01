@@ -283,47 +283,19 @@ var formHelpers = require('base/checkout/formErrors');
                                     defer.reject(data);
                                 }
                             } else {
-                                // SFRA version >= 6
-                                if (data.sfraVersion) {
-                                    var redirect = $('<form>')
-                                    .appendTo(document.body)
-                                    .attr({
-                                        method: 'POST',
-                                        action: data.continueUrl
-                                    });
+                                var continueUrl = data.continueUrl;
+                                var urlParams = {
+                                    ID: data.orderID,
+                                    token: data.orderToken
+                                };
 
-                                    $('<input>')
-                                        .appendTo(redirect)
-                                        .attr({
-                                            name: 'orderID',
-                                            value: data.orderID
-                                        });
+                                continueUrl += (continueUrl.indexOf('?') !== -1 ? '&' : '?') +
+                                    Object.keys(urlParams).map(function (key) {
+                                        return key + '=' + encodeURIComponent(urlParams[key]);
+                                    }).join('&');
 
-                                    $('<input>')
-                                        .appendTo(redirect)
-                                        .attr({
-                                            name: 'orderToken',
-                                            value: data.orderToken
-                                        });
-
-                                    redirect.submit();
-                                    defer.resolve(data);
-
-                                } else { // SFRA version < 6
-                                    var continueUrl = data.continueUrl;
-                                    var urlParams = {
-                                        ID: data.orderID,
-                                        token: data.orderToken
-                                    };
-
-                                    continueUrl += (continueUrl.indexOf('?') !== -1 ? '&' : '?') +
-                                        Object.keys(urlParams).map(function (key) {
-                                            return key + '=' + encodeURIComponent(urlParams[key]);
-                                        }).join('&');
-
-                                    window.location.href = continueUrl;
-                                    defer.resolve(data);
-                                }
+                                window.location.href = continueUrl;
+                                defer.resolve(data);
                             }
                         },
                         error: function () {
