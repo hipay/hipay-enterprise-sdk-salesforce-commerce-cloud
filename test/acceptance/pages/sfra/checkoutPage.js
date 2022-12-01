@@ -116,8 +116,9 @@ module.exports = {
     },
 
     validateIdealForm() {
-        I.click('select[name="dwfrm_billing_hipayMethodsFields_ideal_issuer__bank__id"]');
-        I.click('option[value="SNSBNL2A"]');
+        //I.click('select[name="dwfrm_billing_hipayMethodsFields_ideal_issuer__bank__id"]');
+        //I.click('option[value="SNSBNL2A"]');
+        I.fillField('select[name="dwfrm_billing_hipayMethodsFields_ideal_issuer__bank__id"]', 'SNSBNL2A')
         this.submitPayment();
         this.placeOrder();
     },

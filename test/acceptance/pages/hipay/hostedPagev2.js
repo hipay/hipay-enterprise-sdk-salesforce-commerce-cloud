@@ -96,6 +96,10 @@ module.exports = {
     },
 
     validateiDEALPayment() {
+        I.waitForNavigation();
+        // https://r3.girogate.de/ti/simideal?...
+        I.waitInUrl('simideal');
+        I.waitForVisible('input[name="bic"]', 10);
         I.fillField('input[name="bic"]', config.iDEAL.BIC);
         I.click('.btn-primary');
         I.click('.btn-primary');
