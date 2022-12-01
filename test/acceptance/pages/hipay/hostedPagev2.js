@@ -20,34 +20,10 @@ module.exports = {
     fillAndSubmitHiPayCreditCardForm(cardType) {
         const card = config[cardType] || 'creditCard';
 
-        // I.click('#cardNumber');
-        // I.fillField('input[name="cardNumber"]', card.cardNumber);
-
-        // I.click('#cardHolder');
-        // I.fillField('input[name="cardHolder"]', `${config.user.firstName} ${config.user.lastName}`);
-
-        // I.click('#cardExpiryMonth');
-        // I.click('option[value="12"]');
-
-        // I.click('#cardExpiryYear');
-        // I.click('option[value="2030"]');
-
-        // I.click('#cardSecurityCode');
-        // I.fillField('input[name="cardSecurityCode"]', card.cvc);
-
-        // I.click('#submit-button');
-
-
-        // New Hosted Page v2
-
         I.waitForVisible('#hipay-card-field-cardNumber>iframe', 10);
         I.waitForVisible('#hipay-card-field-cardHolder>iframe', 5);
         I.waitForVisible('#hipay-card-field-expiryDate>iframe', 5);
         I.waitForVisible('#hipay-card-field-cvc>iframe', 5);
-
-        // I.switchTo('#hipay-card-field-expiryDate>iframe');
-        // I.fillField('input[name="cc-exp"]', card.expMonth + '/' + card.expYear.slice(-2));
-        // I.switchTo();
 
         I.switchTo('#hipay-card-field-cardNumber>iframe');
         I.fillField('input[name="cardnumber"]', card.cardNumber);
@@ -66,13 +42,13 @@ module.exports = {
         I.switchTo();
 
         I.click('button[aria-label="pay-button"]');
-        //Paiement effectué avec succès
-        //I.wait(15);
 
         I.waitForNavigation();
+    },
 
-        //I.see('Paiement effectué avec succès');
-        //I.wait(6);
+
+    submitHipayForm() {
+        I.click('#submit-button');
     },
 
     fillAndSubmitHiPayGriopayForm() {
@@ -106,10 +82,6 @@ module.exports = {
         I.fillField('input[name="tan"]', config.iDEAL.TAN);
         I.click('.btn-primary');
         I.click('.btn-primary');
-    },
-
-    submitHipayForm() {
-        I.click('#submit-button');
     },
 
     validateSisalPayment() {
