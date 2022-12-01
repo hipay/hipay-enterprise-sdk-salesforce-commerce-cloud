@@ -1,11 +1,11 @@
 node_modules/
+
+cartridges/int_hipay_sfra/cartridge/static/default/js/*
+
 coverage/
 npm-debug.log
 .idea/
 dw.json
-sitegenesisdata/
-mobilefirstdata/
-storefrontdata/
 test/acceptance/output/
 .DS_Store
 test/appium/webdriver/config.json
@@ -14,5 +14,3 @@ test/appium/webdriver/config.json
 *.code-workspace
 *.iml
 
-#Exclude external cartridges
-storefront-reference-architecture
