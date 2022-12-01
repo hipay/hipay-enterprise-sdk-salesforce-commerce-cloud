@@ -59,7 +59,6 @@ module.exports = {
     },
 
     confirmTrackingConsent() {
-        //tryTo(() => I.click('.affirm'));
         I.waitForVisible('.affirm');
         I.click('.affirm');
         I.waitForInvisible(this.fields.consentTracking);

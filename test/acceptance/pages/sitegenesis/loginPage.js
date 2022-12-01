@@ -26,6 +26,7 @@ module.exports = {
 
     loginOrCreateAccount() {
         I.amOnPage(pageUrl);
+        I.waitForNavigation();
         this.confirmTrackingConsent();
         I.click('.fa-user');
         // const iAmLogged = await tryTo(() => this.loginAccount());

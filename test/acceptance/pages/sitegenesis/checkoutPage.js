@@ -86,7 +86,7 @@ module.exports = {
         I.switchTo();
     },
 
-    submitCheckout() {
+    submitShipping() {
         I.waitForVisible(this.fields.firstName, 3);
         I.waitForVisible(this.fields.lastName, 3);
         I.waitForVisible(this.fields.adress1, 3);
@@ -125,7 +125,8 @@ module.exports = {
     },
 
     validateSecure() {
-        I.seeElement('#continue-transaction');
+        I.waitInUrl('/challenge');
+        I.waitForVisible('#continue-transaction', 15);
         I.click('#continue-transaction');
         I.waitForNavigation();
     },

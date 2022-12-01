@@ -7,8 +7,7 @@ Before(({ I, loginPage, checkoutPage }) => {
     loginPage.loginOrCreateAccount();
     // checkout
     checkoutPage.initCheckout();
-
-    checkoutPage.submitCheckout();
+    checkoutPage.submitShipping();
 });
 
 Scenario('Commande avec HiPay Credit Card OK', ({ I, checkoutPage, hostedPage }) => {
@@ -207,32 +206,32 @@ Scenario('Commande avec HiPay Master Card 3DS V2 OK', ({ I, checkoutPage }) => {
 
 Scenario('Commande avec HiPay GiroPay OK', ({ I, checkoutPage }) => {
     checkoutPage.selectPaymentMethod('HIPAY_GIROPAY', true);
-    checkoutPage.selectAndSubmitHiPayGriopayForm(true);
-    checkoutPage.validateGiroPayPayment();
+    checkoutPage.selectAndSubmitHiPayGriopayForm();
+    hostedPage.validateGiroPayPayment();
     checkoutPage.placeOrderWithSecure(false);
 }).tag('@api');
 
 Scenario('Commande avec HiPay iDEAL OK', ({ I, checkoutPage }) => {
     checkoutPage.selectPaymentMethod('HIPAY_IDEAL', true);
     checkoutPage.validateIdealForm();
-    checkoutPage.validateiDEALPayment();
+    hosted.validateiDEALPayment();
     checkoutPage.placeOrderWithSecure(false);
 }).tag('@api');
 
 Scenario('Commande Sisal OK', ({ I, checkoutPage }) => {
     checkoutPage.selectPaymentMethod('HIPAY_SISAL', true);
-    checkoutPage.validateSisalPayment();
+    hosted.validateSisalPayment();
     checkoutPage.placeOrderWithSecure(false);
 }).tag('@api');
 
 Scenario('Commande Sofort OK', ({ I, checkoutPage }) => {
     checkoutPage.selectPaymentMethod('HIPAY_SOFORT_UBERWEISUNG', true);
     checkoutPage.validateSofortPayment();
-    checkoutPage.validateHostedSofortPayment();
+    hostedPage.validateHostedSofortPayment();
     checkoutPage.placeOrderWithSecure(false);
 }).tag('@api');
 
 
-After(({ I }) => {
-    I.wait(3);
-});
+// After(({ I }) => {
+//     I.wait(3);
+// });

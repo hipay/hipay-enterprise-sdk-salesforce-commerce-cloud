@@ -82,6 +82,7 @@ module.exports = {
     },
 
     validateGiroPayPayment() {
+        I.waitInUrl('giropay');
         I.fillField('input[name="account/addition[@name=benutzerkennung]"]', config.giropay.account);
         I.fillField('input[name="ticket/pin"]', config.giropay.PIN);
         I.pressKey('Enter');
