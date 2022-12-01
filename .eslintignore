@@ -14,6 +14,10 @@ cartridges/int_hipay_controllers/cartridge/scripts/guard.js
 cartridges/int_hipay_controllers/cartridge/scripts/app.js
 cartridges/int_hipay_sfra/cartridge/static/
 cartridges/int_hipay_sfra/cartridge/client/default/
+
+cartridges/int_hipay_sg_changes
+
+
 coverage/
 doc/
 bin/
