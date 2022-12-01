@@ -13,51 +13,72 @@ module.exports = {
         state: '#shippingStatedefault',
         city: '#shippingAddressCitydefault',
         zipcode: '#shippingZipCodedefault',
-        phone: '#shippingPhoneNumberdefault'
-      },
+        phone: '#shippingPhoneNumberdefault',
+        billing: {
+            phone: '#phoneNumber'
+        }
+    },
 
     initCheckout() {
         this.goToMenCategory();
         this.addProductToCart();
         this.goToCart();
         this.goToCheckout();
-        I.see(Resource.msg('checkout'));
     },
 
     goToTopSellerCategory() {
         I.click('#top-seller');
+        I.waitForNavigation();
     },
 
     goToMenCategory() {
         I.moveCursorTo('.dropdown-toggle#mens');
         I.click('#mens-clothing');
+        I.waitForNavigation();
     },
 
     addProductToCart() {
         I.click(locate('.pdp-link .link').withText(config.product.name));
-        tryTo(() => I.click(locate('.color-attribute .selectable').first()));
+        I.waitForNavigation();
+        //tryTo(() => I.click(locate('.color-attribute .selectable').first()))
+        I.click('.color-attribute .selectable');
+        I.waitForInvisible('.veil');
         I.selectOption('#size-1', config.product.size);
+        I.waitForInvisible('.veil');
         I.selectOption('#quantity-1', config.product.quantity);
+        I.waitForInvisible('.veil');
         I.click('.add-to-cart');
+        I.waitForInvisible('.veil');
     },
 
     goToCart() {
         I.click('a.minicart-link');
+        I.waitForNavigation();
         I.see(Resource.msg('yourCart'));
     },
 
     goToCheckout() {
         I.click('.btn.btn-primary.btn-block.checkout-btn');
+        I.waitForNavigation();
+        //I.waitForText(Resource.msg('checkout'));
+
     },
 
+
     submitCheckout() {
+        I.waitForVisible(this.fields.firstName);
         I.fillField(this.fields.firstName, config.user.firstName);
+        I.waitForVisible(this.fields.lastName);
         I.fillField(this.fields.lastName, config.user.lastName);
+        I.waitForVisible(this.fields.adress1);
         I.fillField(this.fields.adress1, config.adress.address1);
         I.selectOption(this.fields.country, config.adress.country);
-        tryTo(() => I.selectOption(this.fields.state, config.adress.state));
+        //tryTo(() => I.selectOption(this.fields.state, config.adress.state));
+        I.waitForVisible(this.fields.city);
         I.fillField(this.fields.city, config.adress.city);
+        I.waitForVisible(this.fields.zipcode);
         I.fillField(this.fields.zipcode, config.adress.zipCode);
+        I.waitForVisible(this.fields.phone);
         I.fillField(this.fields.phone, config.user.phone.replace(/\s/g, ''));
         I.seeElement('.submit-shipping');
         I.click('.submit-shipping');
@@ -66,18 +87,16 @@ module.exports = {
     selectAndSubmitHiPayCreditCardForm(cardType) {
         const card = config[cardType] || 'creditCard';
 
-        I.click('#cardNumber');
+        I.fillField(this.fields.billing.phone, config.user.phone);
+
         I.fillField('input[id="cardNumber"]', card.cardNumber);
-        tryTo(() => I.moveCursorTo('.tooltip', 5, 5));
-        I.moveCursorTo('#cardNumber', 5, 5);
-        tryTo(() => I.moveCursorTo('.tooltip', 5, 5));
-        I.moveCursorTo('#cardNumber', 5, 5);
         I.selectOption('#expirationMonth', card.expMonth);
         I.selectOption('#expirationYear', card.expYear);
         I.fillField('#securityCode', card.cvc);
-        I.fillField('input[name="dwfrm_billing_creditCardFields_phone"]', config.user.phone);
         I.click('.submit-payment');
+        I.waitForVisible('.place-order');
         I.click('.place-order');
+        I.waitForNavigation();
     },
 
     selectAndSubmitHiPayGriopayForm(isApi) {
@@ -122,17 +141,16 @@ module.exports = {
     },
 
     validateSecure() {
-        I.wait(1);
-        I.seeElement('#continue-transaction');
+        I.waitForVisible('#continue-transaction');
         I.click('#continue-transaction');
-        I.wait(1);
+        I.waitForNavigation();
     },
 
     placeOrderWithSecure(secure) {
         if (secure) {
             this.validateSecure();
         }
-        I.see(Resource.msg('thanks'));
+        I.waitForText(Resource.msg('thanks'), 10);
     },
 
     selectPaymentMethod(paymentMethodId) {

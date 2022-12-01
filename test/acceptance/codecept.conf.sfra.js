@@ -2,15 +2,21 @@ exports.config = {
     tests: './tests/*_test.js',
     output: './output',
     helpers: {
-        /*TestCafe: {
-            url: 'https://bdjt-008.sandbox.us01.dx.commercecloud.salesforce.com',
-            browser: 'chrome',
-            show: true
-        },*/
+        // TestCafe: {
+        //     url: 'https://bdjt-008.sandbox.us01.dx.commercecloud.salesforce.com',
+        //     browser: 'chrome',
+        //     show: true
+        // },
         Puppeteer: {
             url: "http://localhost",
             show: true,
-            waitForAction: 1000
+            waitForNavigation: ['networkidle0', 'domcontentloaded'],
+            "chrome": {
+                "defaultViewport": {
+                    "width": 900,
+                    "height": 960
+                }
+            }
         }
     },
     include: {
@@ -22,13 +28,16 @@ exports.config = {
     mocha: {},
     name: 'acceptance',
     plugins: {
-        retryFailedStep: {
-            enabled: true
-        },
+        // retryFailedStep: {
+        //     enabled: true
+        // },
         screenshotOnFail: {
             enabled: true
         },
-        tryTo: {
+        // tryTo: {
+        //     enabled: true
+        // },
+        stepByStepReport: {
             enabled: true
         }
     }
