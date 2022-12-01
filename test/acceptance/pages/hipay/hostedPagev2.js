@@ -112,8 +112,13 @@ module.exports = {
         I.click('#submit-button');
     },
 
-    validateHostedSisalPayment() {
+    validateSisalPayment() {
+        I.waitForNavigation()
+        // https://stage-secure-gateway.hipay-tpp.com/provider/sisal/display-reference/...
+        I.waitInUrl('sisal');
+        I.waitForVisible('#submit-button');
         I.click('#submit-button');
+        I.waitForNavigation();
     },
 
     validateHostedSofortPayment() {

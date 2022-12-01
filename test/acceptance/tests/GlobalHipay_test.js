@@ -219,19 +219,8 @@ Scenario('Commande avec HiPay iDEAL OK', ({ I, checkoutPage, hostedPage }) => {
 }).tag('@api');
 
 Scenario('Commande Sisal OK', ({ I, checkoutPage, hostedPage }) => {
-    checkoutPage.selectPaymentMethod('HIPAY_SISAL', true);
+    checkoutPage.selectHostedPaymentMethod('HIPAY_SISAL', true);
     hostedPage.validateSisalPayment();
     checkoutPage.placeOrderWithSecure(false);
 }).tag('@api');
 
-Scenario('Commande Sofort OK', ({ I, checkoutPage, hostedPage }) => {
-    checkoutPage.selectPaymentMethod('HIPAY_SOFORT_UBERWEISUNG', true);
-    checkoutPage.validateSofortPayment();
-    hostedPage.validateHostedSofortPayment();
-    checkoutPage.placeOrderWithSecure(false);
-}).tag('@api');
-
-
-// After(({ I }) => {
-//     I.wait(3);
-// });
