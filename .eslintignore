@@ -17,7 +17,5 @@ cartridges/int_hipay_sfra/cartridge/client/default/
 
 cartridges/int_hipay_sg_changes
 
+test/
 
-coverage/
-doc/
-bin/

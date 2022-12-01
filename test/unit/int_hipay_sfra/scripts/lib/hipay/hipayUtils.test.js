@@ -74,13 +74,13 @@ describe('hipayUtils', function () {
 
     describe('removeFromOrderId', function () {
         var orderidOne = 'SG01_00009801_1574781117343';
-        var expected_orderidOne = 'SG01_00009801';
+        var expectedOrderidOne = 'SG01_00009801';
         var orderidTwo = 'NIJI_01_00009801_1234745117890';
-        var expected_orderidTwo = 'NIJI_01_00009801';
+        var expectedOrderidTwo = 'NIJI_01_00009801';
 
         it('should return true when remove time-stamp from orderId (even if there are several underscore)', function () {
-            assert.equal(hipayUtils.removeFromOrderId(orderidOne), expected_orderidOne);
-            assert.equal(hipayUtils.removeFromOrderId(orderidTwo), expected_orderidTwo);
+            assert.equal(hipayUtils.removeFromOrderId(orderidOne), expectedOrderidOne);
+            assert.equal(hipayUtils.removeFromOrderId(orderidTwo), expectedOrderidTwo);
         });
     });
 });
