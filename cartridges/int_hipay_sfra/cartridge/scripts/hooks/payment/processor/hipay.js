@@ -14,7 +14,6 @@ function processForm(req, paymentForm, viewFormData) {
     var PaymentMgr = require('dw/order/PaymentMgr');
 
     var viewData = viewFormData;
-    var hiPayErrors = {};
     var creditCardErrors = {};
 
     if (!req.form.storedPaymentUUID) {
@@ -32,13 +31,13 @@ function processForm(req, paymentForm, viewFormData) {
 
             creditCardErrors = COHelpers.validateCreditCard(paymentForm);
         } else if (paymentForm.paymentMethod.htmlValue === 'HIPAY_KLARNA' && paymentForm.hipayMethodsFields.klarna) {
-            hiPayErrors = COHelpers.validateFields(paymentForm.hipayMethodsFields.klarna);
+            COHelpers.validateFields(paymentForm.hipayMethodsFields.klarna);
             paymentForm.hipayMethodsFields = paymentForm.hipayMethodsFields.klarna;
         } else if (paymentForm.paymentMethod.htmlValue === 'HIPAY_IDEAL' && paymentForm.hipayMethodsFields.ideal) {
-            hiPayErrors = COHelpers.validateFields(paymentForm.hipayMethodsFields.ideal);
+            COHelpers.validateFields(paymentForm.hipayMethodsFields.ideal);
             paymentForm.hipayMethodsFields = paymentForm.hipayMethodsFields.ideal;
         } else if (paymentForm.paymentMethod.htmlValue === 'HIPAY_GIROPAY' && paymentForm.hipayMethodsFields.giropay) {
-            hiPayErrors = COHelpers.validateFields(paymentForm.hipayMethodsFields.giropay);
+            COHelpers.validateFields(paymentForm.hipayMethodsFields.giropay);
             paymentForm.hipayMethodsFields = paymentForm.hipayMethodsFields.giropay;
         }
     }

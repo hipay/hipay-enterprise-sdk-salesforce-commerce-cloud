@@ -61,11 +61,7 @@ server.append(
         }
 
         this.on('route:BeforeComplete', function (req, res) { // eslint-disable-line no-shadow
-            var CustomerMgr = require('dw/customer/CustomerMgr');
-            var Resource = require('dw/web/Resource');
-            var array = require('*/cartridge/scripts/util/array');
             var BasketMgr = require('dw/order/BasketMgr');
-            var basketCalculationHelpers = require('*/cartridge/scripts/helpers/basketCalculationHelpers');
             var Transaction = require('dw/system/Transaction');
 
             var currentBasket = BasketMgr.getCurrentBasket();

@@ -354,7 +354,7 @@ HiPayHelper.prototype.fillOrderData = function (order, params, pi) {
         params.basket = JSON.stringify(basketObject); // eslint-disable-line
     }
 
-    // ### DPS2 params for Credit cards ### //
+    // ### DPS2 params for Credit cards ### //
     if (pi.paymentMethod === 'HIPAY_CREDIT_CARD' || pi.paymentMethod === 'HIPAY_HOSTED_CREDIT_CARD') {
         // Device channel always 2, BROWSER
         params.device_channel = '2';
@@ -378,8 +378,8 @@ HiPayHelper.prototype.fillOrderData = function (order, params, pi) {
         var basketProductQuantities = [];
 
         // Check all items of basket
-        for (var i = 0; i < items.length; i++) {
-            productLineItem = items[i];
+        for (var j = 0; j < items.length; j++) {
+            productLineItem = items[j];
 
             if (!empty(productLineItem.product)) {
                 // Construct simple basket for auth users
@@ -440,24 +440,23 @@ HiPayHelper.prototype.fillOrderData = function (order, params, pi) {
         // If all products dematerialized, shipping_indicator = 5
         if (allDematerializedProducts) {
             params.merchant_risk_statement.shipping_indicator = 5;
-        } else {
+
             // Compare shipping and billing addresses
-            // If equals, shipping_indicator = 1
-            if (
-                !empty(billingAddress)
-                && hipayUtils.compareStrings(shippingAddress.address1, billingAddress.address1)
-                && hipayUtils.compareStrings(shippingAddress.address2, billingAddress.address2)
-                && hipayUtils.compareStrings(shippingAddress.postalCode, billingAddress.postalCode)
-                && hipayUtils.compareStrings(shippingAddress.city, billingAddress.city)
-                && hipayUtils.compareStrings(shippingAddress.countryCode.value, billingAddress.countryCode.value)
-            ) {
-                params.merchant_risk_statement.shipping_indicator = 1;
-            } else {
-                // Else, check if shipping address known for auth user (shipping_indicator = 2)
-                // We check it later with other params
-                // Else, shipping_indicator = 3
-                params.merchant_risk_statement.shipping_indicator = 3;
-            }
+        // If equals, shipping_indicator = 1
+        } else if (
+            !empty(billingAddress)
+            && hipayUtils.compareStrings(shippingAddress.address1, billingAddress.address1)
+            && hipayUtils.compareStrings(shippingAddress.address2, billingAddress.address2)
+            && hipayUtils.compareStrings(shippingAddress.postalCode, billingAddress.postalCode)
+            && hipayUtils.compareStrings(shippingAddress.city, billingAddress.city)
+            && hipayUtils.compareStrings(shippingAddress.countryCode.value, billingAddress.countryCode.value)
+        ) {
+            params.merchant_risk_statement.shipping_indicator = 1;
+        } else {
+            // Else, check if shipping address known for auth user (shipping_indicator = 2)
+            // We check it later with other params
+            // Else, shipping_indicator = 3
+            params.merchant_risk_statement.shipping_indicator = 3;
         }
 
         // Add DSP2 account info
@@ -472,16 +471,16 @@ HiPayHelper.prototype.fillOrderData = function (order, params, pi) {
 
             if (!empty(lastProcessedOrder) && !empty(lastProcessedOrder.paymentTransaction)) {
                 // Get transaction ID of order
-                var transaction_reference = lastProcessedOrder.paymentTransaction.transactionID;
+                var transactionReference = lastProcessedOrder.paymentTransaction.transactionID;
 
-                if (!empty(transaction_reference)) {
+                if (!empty(transactionReference)) {
                     // If longer than 16 digits, truncate
-                    if (transaction_reference.length > 16) {
-                        transaction_reference = transaction_reference.substring(0, 16);
+                    if (transactionReference.length > 16) {
+                        transactionReference = transactionReference.substring(0, 16);
                     }
                     // Fill transaction reference
                     params.previous_auth_info = {
-                        transaction_reference: transaction_reference
+                        transactionReference: transactionReference
                     };
                 }
             }
@@ -550,11 +549,12 @@ HiPayHelper.prototype.fillOrderData = function (order, params, pi) {
             // Get last processed orders from the last 24 hours
             var ordersLastDay = OrderMgr.searchOrders('customerNo = {0} AND creationDate >= {1}',
                 'creationDate desc', customerNo, lastDay);
+            var currentOrder;
 
             var ordersNumberLastDay = 0;
             if (ordersLastDay && ordersLastDay.getCount() > 0) {
                 while (ordersLastDay.hasNext()) {
-                    var currentOrder = ordersLastDay.next();
+                    currentOrder = ordersLastDay.next();
                     if (currentOrder
                         && !empty(currentOrder.paymentTransaction)
                         && !empty(currentOrder.paymentTransaction.transactionID)
@@ -562,7 +562,7 @@ HiPayHelper.prototype.fillOrderData = function (order, params, pi) {
                         && !empty(currentOrder.paymentTransaction.paymentInstrument.paymentMethod)
                         && (
                             currentOrder.paymentTransaction.paymentInstrument.paymentMethod === 'HIPAY_CREDIT_CARD'
-                            || currentOrder.paymentTransaction.paymentInstrument.paymentMethod === 'HIPAY_HOSTED_CREDIT_CARD'
+                            || currentOrder.paymentTransaction.paymentInstrument.paymentMethod === 'HIPAY_HOSTED_CREDIT_CARD'
                         )
                     ) {
                         ordersNumberLastDay++;
@@ -579,7 +579,7 @@ HiPayHelper.prototype.fillOrderData = function (order, params, pi) {
             var ordersNumberLastYear = 0;
             if (ordersLastYear && ordersLastYear.getCount() > 0) {
                 while (ordersLastYear.hasNext()) {
-                    var currentOrder = ordersLastYear.next();
+                    currentOrder = ordersLastYear.next();
                     if (currentOrder
                         && !empty(currentOrder.paymentTransaction)
                         && !empty(currentOrder.paymentTransaction.transactionID)
@@ -587,7 +587,7 @@ HiPayHelper.prototype.fillOrderData = function (order, params, pi) {
                         && !empty(currentOrder.paymentTransaction.paymentInstrument.paymentMethod)
                         && (
                             currentOrder.paymentTransaction.paymentInstrument.paymentMethod === 'HIPAY_CREDIT_CARD'
-                            || currentOrder.paymentTransaction.paymentInstrument.paymentMethod === 'HIPAY_HOSTED_CREDIT_CARD'
+                            || currentOrder.paymentTransaction.paymentInstrument.paymentMethod === 'HIPAY_HOSTED_CREDIT_CARD'
                         )
                     ) {
                         ordersNumberLastYear++;
@@ -617,7 +617,7 @@ HiPayHelper.prototype.fillOrderData = function (order, params, pi) {
             // Loop over all orders to check if shipping address used before
             if (ordersAll && ordersAll.getCount() > 0) {
                 while ((!reOrderFound || !addressFound) && ordersAll.hasNext()) {
-                    var currentOrder = ordersAll.next();
+                    currentOrder = ordersAll.next();
 
                     if (!empty(currentOrder.defaultShipment) && !empty(currentOrder.defaultShipment.shippingAddress)) {
                         var currentOrderAddress = currentOrder.defaultShipment.shippingAddress;
@@ -649,10 +649,10 @@ HiPayHelper.prototype.fillOrderData = function (order, params, pi) {
                     // If baskets not same length, it is not reorder
                     if (basketProductIDS.length !== currentOrderProducts.length) {
                         reOrderBasket = false;
-                    } else {
+                    } else {
                         // Loop over current order basket to check each product
-                        for (var i = 0; i < currentOrderProducts.length; i++) {
-                            var productLineItem = currentOrderProducts[i];
+                        for (var k = 0; k < currentOrderProducts.length; k++) {
+                            productLineItem = currentOrderProducts[k];
 
                             if (!empty(productLineItem.product)) {
                                 // Check if ID exists in order basket

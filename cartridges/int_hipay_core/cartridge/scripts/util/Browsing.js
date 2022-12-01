@@ -3,17 +3,18 @@
 /**
  * @module util/Browsing
  */
+var URLUtils = require('dw/web/URLUtils');
 
 /**
  * Recovers the last url from the click stream
  * @return {dw.web.URL} the last called URL
  */
 exports.lastUrl = function lastUrl() {
-    var location = dw.web.URLUtils.url('Home-Show'),
-    click = session.clickStream.last;
+    var location = URLUtils.url('Home-Show');
+    var click = session.clickStream.last;
 
     if (click) {
-        location = dw.web.URLUtils.url(click.pipelineName);
+        location = URLUtils.url(click.pipelineName);
 
         if (!empty(click.queryString) && click.queryString.indexOf('=') !== -1) {
             var params = click.queryString.split('&');
@@ -46,7 +47,7 @@ exports.lastCatalogURL = function lastCatalogURL() {
         }
     }
 
-    return dw.web.URLUtils.httpHome().toString();
+    return URLUtils.httpHome().toString();
 };
 
 // add url parser (libUrl)

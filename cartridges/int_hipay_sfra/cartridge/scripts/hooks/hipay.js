@@ -42,7 +42,7 @@ function creditCardHandle(paymentInstrument, paymentInformation, paymentUUID, re
     var hiPayCardCVC;
     var hiPayCardType;
 
-    var paymentUUID = req.form && req.form.storedPaymentUUID ? req.form.storedPaymentUUID : null;
+    paymentUUID = req.form && req.form.storedPaymentUUID ? req.form.storedPaymentUUID : null;
 
     if (empty(paymentUUID) && !empty(paymentInformation.cardNumber.value)) {
         cardNumber = creditCard.cardNumber.value;

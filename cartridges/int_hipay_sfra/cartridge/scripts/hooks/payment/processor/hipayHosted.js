@@ -15,6 +15,7 @@ function processForm(req, paymentForm, viewFormData) {
 
     var viewData = viewFormData;
     var creditCardErrors = {};
+    var hiPayErrors = {};
 
     if (!req.form.storedPaymentUUID) {
         if (paymentForm.paymentMethod.htmlValue === 'CREDIT_CARD' || paymentForm.paymentMethod.htmlValue === 'HIPAY_CREDIT_CARD') {

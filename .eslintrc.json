@@ -11,11 +11,14 @@
     "rules": {
         "import/no-unresolved": "off",
         "indent": ["error", 4, { "SwitchCase": 1, "VariableDeclarator": 0 }],
+        "block-scoped-var": "off",
         "func-names": 0,
         "require-jsdoc": "off",
         "valid-jsdoc": "off",
         "vars-on-top": "off",
         "global-require": "off",
+        "no-param-reassign": "off",
+        "default-case": "off",
         "no-shadow": ["error", { "allow": ["err", "callback"]}],
         "max-len": "off",
         "linebreak-style": 0

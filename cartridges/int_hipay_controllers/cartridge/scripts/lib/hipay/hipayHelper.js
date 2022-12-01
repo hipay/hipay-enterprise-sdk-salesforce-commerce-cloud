@@ -371,7 +371,7 @@ HiPayHelper.prototype.fillOrderData = function (order, params, pi) {
         params.basket = JSON.stringify(basketObject); // eslint-disable-line
     }
 
-    // ### DPS2 params ### //
+    // ### DPS2 params ### //
     if (pi.paymentMethod === 'HIPAY_CREDIT_CARD' || pi.paymentMethod === 'HIPAY_HOSTED_CREDIT_CARD') {
         var paymentMethods = session.forms.billing.paymentMethods;
         // Device channel always 2, BROWSER
@@ -491,16 +491,16 @@ HiPayHelper.prototype.fillOrderData = function (order, params, pi) {
 
             if (!empty(lastProcessedOrder) && !empty(lastProcessedOrder.paymentTransaction)) {
                 // Get transaction ID of order
-                var transaction_reference = lastProcessedOrder.paymentTransaction.transactionID;
+                var transactionReference = lastProcessedOrder.paymentTransaction.transactionID;
 
-                if (!empty(transaction_reference)) {
+                if (!empty(transactionReference)) {
                     // If longer than 16 digits, truncate
-                    if (transaction_reference.length > 16) {
-                        transaction_reference = transaction_reference.substring(0, 16);
+                    if (transactionReference.length > 16) {
+                        transactionReference = transactionReference.substring(0, 16);
                     }
                     // Fill transaction reference
                     params.previous_auth_info = {
-                        transaction_reference: transaction_reference
+                        transactionReference: transactionReference
                     };
                 }
             }
@@ -581,7 +581,7 @@ HiPayHelper.prototype.fillOrderData = function (order, params, pi) {
                         && !empty(currentOrder.paymentTransaction.paymentInstrument.paymentMethod)
                         && (
                             currentOrder.paymentTransaction.paymentInstrument.paymentMethod === 'HIPAY_CREDIT_CARD'
-                            || currentOrder.paymentTransaction.paymentInstrument.paymentMethod === 'HIPAY_HOSTED_CREDIT_CARD'
+                            || currentOrder.paymentTransaction.paymentInstrument.paymentMethod === 'HIPAY_HOSTED_CREDIT_CARD'
                         )
                     ) {
                         ordersNumberLastDay++;
@@ -606,7 +606,7 @@ HiPayHelper.prototype.fillOrderData = function (order, params, pi) {
                         && !empty(currentOrder.paymentTransaction.paymentInstrument.paymentMethod)
                         && (
                             currentOrder.paymentTransaction.paymentInstrument.paymentMethod === 'HIPAY_CREDIT_CARD'
-                            || currentOrder.paymentTransaction.paymentInstrument.paymentMethod === 'HIPAY_HOSTED_CREDIT_CARD'
+                            || currentOrder.paymentTransaction.paymentInstrument.paymentMethod === 'HIPAY_HOSTED_CREDIT_CARD'
                         )
                     ) {
                         ordersNumberLastYear++;
@@ -668,10 +668,10 @@ HiPayHelper.prototype.fillOrderData = function (order, params, pi) {
                     // If baskets not same length, it is not reorder
                     if (basketProductIDS.length !== currentOrderProducts.length) {
                         reOrderBasket = false;
-                    } else {
+                    } else {
                         // Loop over current order basket to check each product
                         for (var i = 0; i < currentOrderProducts.length; i++) {
-                            var productLineItem = currentOrderProducts[i];
+                            productLineItem = currentOrderProducts[i];
 
                             if (!empty(productLineItem.product)) {
                                 // Check if ID exists in order basket
