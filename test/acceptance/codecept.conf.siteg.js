@@ -9,7 +9,7 @@ exports.config = {
         // }
         Puppeteer: {
             url: 'http://localhost',
-            show: false,
+            show: true,
             // waitForAction: 1000,
             // waitForNavigation: "networkidle0",
             waitForNavigation: ['networkidle0', 'domcontentloaded'],

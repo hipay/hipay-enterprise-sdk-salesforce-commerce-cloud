@@ -26,7 +26,6 @@ module.exports = {
 
     loginOrCreateAccount() {
         I.amOnPage(pageUrl);
-        I.waitForNavigation();
         this.confirmTrackingConsent();
         I.click('.fa-user');
         // const iAmLogged = await tryTo(() => this.loginAccount());
@@ -63,6 +62,8 @@ module.exports = {
 
     confirmTrackingConsent() {
         //tryTo(() => I.click(locate('.ui-dialog-buttonset .ui-button').withText('Yes')));
+        I.waitForVisible(locate('.ui-dialog-buttonset .ui-button').withText('Yes'))
         I.click(locate('.ui-dialog-buttonset .ui-button').withText('Yes'))
+        I.waitForInvisible('.ui-widget-overlay');
     },
 };

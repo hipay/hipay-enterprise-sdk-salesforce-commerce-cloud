@@ -3,10 +3,10 @@
 module.exports = {
     storefront: {
         sfra: {
-            url: 'https://zzye-001.dx.commercecloud.salesforce.com/on/demandware.store/Sites-RefArchGlobal-Site'
+            url: 'https://bdjt-008.sandbox.us01.dx.commercecloud.salesforce.com/on/demandware.store/Sites-RefArchGlobal-Site'
         },
         siteg: {
-            url: 'https://zzye-001.dx.commercecloud.salesforce.com/on/demandware.store/Sites-SiteGenesisGlobal-Site'
+            url: 'https://bdjt-008.sandbox.us01.dx.commercecloud.salesforce.com/on/demandware.store/Sites-SiteGenesisGlobal-Site'
         }
     },
     currentLocale: 'fr_FR',

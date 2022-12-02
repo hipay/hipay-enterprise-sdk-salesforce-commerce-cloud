@@ -125,6 +125,7 @@ module.exports = {
     },
 
     validateSecure() {
+        I.waitForNavigation();
         I.waitInUrl('/challenge');
         I.waitForVisible('#continue-transaction', 15);
         I.click('#continue-transaction');
