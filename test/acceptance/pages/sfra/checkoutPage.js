@@ -106,6 +106,7 @@ module.exports = {
         I.selectOption('#expirationMonth', card.expMonth);
         I.selectOption('#expirationYear', card.expYear);
         I.fillField('#securityCode', card.cvc);
+
         this.submitPayment();
         this.placeOrder();
     },

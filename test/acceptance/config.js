@@ -29,6 +29,20 @@ module.exports = {
         city: 'Lille',
         zipCode: '59000'
     },
+    amex: {
+        cardNumber: '371449635311004',
+        expMonth: '12',
+        expYear: '2023',
+        cvc: '123',
+        type: 'Amex'
+    },
+    bancontact: {
+        cardNumber: '67030000000000003',
+        expMonth: '12',
+        expYear: '2023',
+        cvc: '123',
+        type: 'BancontactMisterCash'
+    },
     creditCard: {
         cardNumber: '4111111111111111',
         expMonth: '12',
@@ -85,7 +99,8 @@ module.exports = {
         PIN: '12345',
         TAN: '123456'
     },
-    iDEAL: {
+    ideal: {
+        bank: 'SNSBNL2A',
         BIC: 'Testbank',
         TAN: '1234'
     },

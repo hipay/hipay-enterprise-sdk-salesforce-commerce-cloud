@@ -15,9 +15,15 @@ module.exports = {
         zipcode: '#dwfrm_singleshipping_shippingAddress_addressFields_postal',
         phone: '#dwfrm_singleshipping_shippingAddress_addressFields_phone',
         useAsBillingAddress: '#dwfrm_singleshipping_shippingAddress_useAsBillingAddress',
-        //saveBilling: 'button[name="dwfrm_billing_save"]',
-        buttonPlaceOrder: '.submit-order button',
+
+        billing: {
+            giropay: '#dwfrm_billing_paymentMethods_hipaymethods_giropay_bic',
+            ideal: '#dwfrm_billing_paymentMethods_hipaymethods_issuer__bank__id'
+        },
+
+        buttonSaveShipping: 'button[name="dwfrm_singleshipping_shippingAddress_save"]',
         buttonSaveBilling: 'button[name="dwfrm_billing_save"]',
+        buttonPlaceOrder: '.submit-order button',
         buttonCart: 'button[name="dwfrm_cart_checkoutCart"]'
     },
 
@@ -66,15 +72,8 @@ module.exports = {
 
     selectHostedPaymentMethod(paymentMethodId) {
         this.selectPaymentMethod(paymentMethodId);
-
-        I.waitForVisible(this.fields.buttonSaveBilling);
-        I.click(this.fields.buttonSaveBilling);
-        //I.wait(2);
-        //I.waitForNavigation();
-        I.waitForVisible(this.fields.buttonPlaceOrder);
-        I.click(this.fields.buttonPlaceOrder);
-        I.waitForNavigation();
-        //I.wait(2);
+        this.submitPayment();
+        this.placeOrder();
     },
 
     switchToHipayIframe() {
@@ -104,14 +103,25 @@ module.exports = {
         //tryTo(() => I.selectOption(this.fields.state, config.adress.state));
         I.checkOption(this.fields.useAsBillingAddress);
 
-        I.click('.button-fancy-large');
+        I.click(this.fields.buttonSaveShipping);
         I.waitForNavigation();
+    },
+
+    submitPayment() {
+        I.waitForVisible(this.fields.buttonSaveBilling);
+        I.click(this.fields.buttonSaveBilling);
+        I.waitForNavigation();
+    },
+
+    placeOrder() {
+        I.waitForVisible(this.fields.buttonPlaceOrder);
+        I.click(this.fields.buttonPlaceOrder);
+        //I.waitForNavigation();
     },
 
     selectAndSubmitHiPayCreditCardForm(cardType) {
         const card = config[cardType] || 'creditCard';
 
-        //I.click('#cardNumber');
         I.fillField('#dwfrm_billing_paymentMethods_creditCard_owner', [config.user.firstName, config.user.lastName].join(' '));
         I.fillField('#dwfrm_billing_paymentMethods_creditCard_type', card.type);
         I.fillField('#dwfrm_billing_paymentMethods_creditCard_number', card.cardNumber);
@@ -119,9 +129,20 @@ module.exports = {
         I.fillField('#dwfrm_billing_paymentMethods_creditCard_expiration_year', '2030');
         I.fillField('#dwfrm_billing_paymentMethods_creditCard_cvn', card.cvc);
 
-        I.click('.button-fancy-large');
-        //I.wait(3);
-        I.click('.button-fancy-large');
+        this.submitPayment();
+        this.placeOrder();
+    },
+
+    selectAndSubmitHiPayGriopayForm() {
+        I.fillField(this.fields.billing.giropay, config.giropay.code);
+        this.submitPayment();
+        this.placeOrder();
+    },
+
+    validateIdealForm() {
+        I.fillField(this.fields.billing.ideal, config.ideal.bank);
+        this.submitPayment();
+        this.placeOrder();
     },
 
     validateSecure() {
@@ -136,8 +157,11 @@ module.exports = {
         if (secure) {
             this.validateSecure();
         }
-        I.waitInUrl('COPlaceOrder-Submit', 20);
+        //I.waitInUrl('COPlaceOrder-Submit', 20);
+        https://bdjt-008.sandbox.us01.dx.commercecloud.salesforce.com/on/demandware.store/Sites-SiteGenesisGlobal-Site/fr_FR/COPlaceOrder-Submit?order_id=00002711&order_token=vF31Fm-LblWh7ZxYQBSRsQ2QKShPeX2jhIA9764cO-k&csrf_token=Z3FuzXj-d9ZQuRgse3ll6LMWLR7X0yZ-51Jm2JDanEFMvxmZ_x4ysEHaxCsaGHTahL6rinoH6Dnil9dIF6IfcqOKJeelMCQ11d79Kg1uE4T_nWTSh61jWCH9eMKWHu7QhdFxR3qPjTugGpmxMyL0ksjGmCnBRyL-sNnFzY8xvayazTHSe4s%3d
+        //I.waitInUrl('COSummary-Submit', 20);
         //I.waitForVisible('.confirmation-message', 15);
-        I.see(Resource.msg('thanks'));
+        //I.see(Resource.msg('thanks'));
+        I.waitForText(Resource.msg('thanks'), 20);
     }
 }

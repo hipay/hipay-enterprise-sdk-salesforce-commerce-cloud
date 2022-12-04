@@ -76,10 +76,10 @@ module.exports = {
         // https://r3.girogate.de/ti/simideal?...
         I.waitInUrl('simideal');
         I.waitForVisible('input[name="bic"]', 10);
-        I.fillField('input[name="bic"]', config.iDEAL.BIC);
+        I.fillField('input[name="bic"]', config.ideal.BIC);
         I.click('.btn-primary');
         I.click('.btn-primary');
-        I.fillField('input[name="tan"]', config.iDEAL.TAN);
+        I.fillField('input[name="tan"]', config.ideal.TAN);
         I.click('.btn-primary');
         I.click('.btn-primary');
     },
