@@ -580,17 +580,20 @@ HiPayHelper.prototype.fillOrderData = function (order, params, pi) {
             if (ordersLastYear && ordersLastYear.getCount() > 0) {
                 while (ordersLastYear.hasNext()) {
                     currentOrder = ordersLastYear.next();
-                    if (currentOrder
-                        && !empty(currentOrder.paymentTransaction)
-                        && !empty(currentOrder.paymentTransaction.transactionID)
-                        && !empty(currentOrder.paymentTransaction.paymentInstrument)
-                        && !empty(currentOrder.paymentTransaction.paymentInstrument.paymentMethod)
-                        && (
-                            currentOrder.paymentTransaction.paymentInstrument.paymentMethod === 'HIPAY_CREDIT_CARD'
-                            || currentOrder.paymentTransaction.paymentInstrument.paymentMethod === 'HIPAY_HOSTED_CREDIT_CARD'
-                        )
-                    ) {
-                        ordersNumberLastYear++;
+                    if (currentOrder && !empty(currentOrder.getPaymentInstruments())) {
+                        var paymentTransaction = currentOrder.getPaymentInstruments()[0].getPaymentTransaction();
+                        if (
+                            !empty(paymentTransaction)
+                            && !empty(paymentTransaction.transactionID)
+                            && !empty(paymentTransaction.paymentInstrument)
+                            && !empty(paymentTransaction.paymentInstrument.paymentMethod)
+                            && (
+                                currentOrder.paymentTransaction.paymentInstrument.paymentMethod === 'HIPAY_CREDIT_CARD'
+                                || currentOrder.paymentTransaction.paymentInstrument.paymentMethod === 'HIPAY_HOSTED_CREDIT_CARD'
+                            )
+                        ) {
+                            ordersNumberLastYear++;
+                        }
                     }
                 }
             }
