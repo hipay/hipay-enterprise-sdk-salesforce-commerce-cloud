@@ -163,37 +163,49 @@ Scenario('Commande avec Hosted Sofort OK', ({ I, checkoutPage, hostedPage }) => 
 
 Scenario('Commande avec HiPay Credit Card OK', ({ I, checkoutPage }) => {
     checkoutPage.selectPaymentMethod('HIPAY_CREDIT_CARD', true);
-    checkoutPage.selectAndSubmitHiPayCreditCardForm('creditCard', true);
+    checkoutPage.selectAndSubmitHiPayCreditCardForm('creditCard');
     checkoutPage.placeOrderWithSecure(false);
 }).tag('@api');
 
 Scenario('Commande avec HiPay Credit Card 3DS OK', ({ I, checkoutPage }) => {
     checkoutPage.selectPaymentMethod('HIPAY_CREDIT_CARD', true);
-    checkoutPage.selectAndSubmitHiPayCreditCardForm('creditCard3DS', true);
+    checkoutPage.selectAndSubmitHiPayCreditCardForm('creditCard3DS');
     checkoutPage.placeOrderWithSecure(true);
 }).tag('@api');
 
 Scenario('Commande avec HiPay Credit Card 3DS V2 OK', ({ I, checkoutPage }) => {
     checkoutPage.selectPaymentMethod('HIPAY_CREDIT_CARD', true);
-    checkoutPage.selectAndSubmitHiPayCreditCardForm('creditCard3DSV2', true);
+    checkoutPage.selectAndSubmitHiPayCreditCardForm('creditCard3DSV2');
     checkoutPage.placeOrderWithSecure(true);
 }).tag('@api');
 
+Scenario('Commande avec American Express', ({ I, checkoutPage }) => {
+    checkoutPage.selectPaymentMethod('HIPAY_CREDIT_CARD', true);
+    checkoutPage.selectAndSubmitHiPayCreditCardForm('amex');
+    checkoutPage.placeOrderWithSecure(false);
+}).tag('@api').tag('@wip');
+
+Scenario('Commande avec Ban', ({ I, checkoutPage }) => {
+    checkoutPage.selectPaymentMethod('HIPAY_CREDIT_CARD', true);
+    checkoutPage.selectAndSubmitHiPayCreditCardForm('bancontact');
+    checkoutPage.placeOrderWithSecure(true);
+}).tag('@api').tag('@wip');
+
 Scenario('Commande avec HiPay Master Card OK', ({ I, checkoutPage }) => {
     checkoutPage.selectPaymentMethod('HIPAY_CREDIT_CARD', true);
-    checkoutPage.selectAndSubmitHiPayCreditCardForm('masterCard', true);
+    checkoutPage.selectAndSubmitHiPayCreditCardForm('masterCard');
     checkoutPage.placeOrderWithSecure(false);
 }).tag('@api');
 
 Scenario('Commande avec HiPay Master Card 3DS OK', ({ I, checkoutPage }) => {
     checkoutPage.selectPaymentMethod('HIPAY_CREDIT_CARD', true);
-    checkoutPage.selectAndSubmitHiPayCreditCardForm('masterCard3DS', true);
+    checkoutPage.selectAndSubmitHiPayCreditCardForm('masterCard3DS');
     checkoutPage.placeOrderWithSecure(true);
 }).tag('@api');
 
 Scenario('Commande avec HiPay Master Card 3DS V2 OK', ({ I, checkoutPage }) => {
     checkoutPage.selectPaymentMethod('HIPAY_CREDIT_CARD', true);
-    checkoutPage.selectAndSubmitHiPayCreditCardForm('masterCard3DSV2', true);
+    checkoutPage.selectAndSubmitHiPayCreditCardForm('masterCard3DSV2');
     checkoutPage.placeOrderWithSecure(true);
 }).tag('@api');
 

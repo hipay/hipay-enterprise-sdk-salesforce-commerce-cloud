@@ -33,7 +33,7 @@ module.exports = {
         cardNumber: '371449635311004',
         expMonth: '12',
         expYear: '2023',
-        cvc: '123',
+        cvc: '1234',
         type: 'Amex'
     },
     bancontact: {

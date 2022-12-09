@@ -13,13 +13,7 @@ exports.config = {
             // waitForAction: 1000,
             // waitForNavigation: "networkidle0",
             waitForNavigation: ['networkidle0', 'domcontentloaded'],
-            'chrome': {
-                'defaultViewport': {
-                    'width': 900,
-                    'height': 960
-                }
-            }
-
+            windowSize: "1280x960",
         }
     },
     include: {
@@ -62,8 +56,8 @@ exports.config = {
         // tryTo: {
         //     enabled: true
         // },
-        stepByStepReport: {
-            enabled: true
-        }
+        // stepByStepReport: {
+        //     enabled: true
+        // }
     }
 };
