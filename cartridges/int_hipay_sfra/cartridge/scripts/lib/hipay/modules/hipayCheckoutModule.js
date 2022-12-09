@@ -41,6 +41,8 @@ HiPayCheckoutModule.createPaymentInstrument = function (basket, paymentType, rem
 
     amount = HiPayCheckoutModule.calculateNonGiftCertificateAmount(basket); // calculate the amount to be charged for the credit card
     paymentInstr = Transaction.wrap(function () {
+        basket.removeAllPaymentInstruments();
+
         return basket.createPaymentInstrument(paymentType, amount);
     }); // create a payment instrument for this credit card
 
