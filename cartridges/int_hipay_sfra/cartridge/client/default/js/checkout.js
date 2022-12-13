@@ -3,5 +3,5 @@
 var processInclude = require('base/util');
 
 $(document).ready(function () {
-    processInclude(require(`./checkout/checkoutSFRA5`));
+    processInclude(require(`./checkout/checkout-hipay`));
 });

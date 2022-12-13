@@ -77,7 +77,7 @@ module.exports = {
     },
 
     switchToHipayIframe() {
-        I.waitForVisible('#hipay-iframe', 3);
+        I.waitForVisible('#hipay-iframe', 10);
         I.switchTo('#hipay-iframe');
     },
 
