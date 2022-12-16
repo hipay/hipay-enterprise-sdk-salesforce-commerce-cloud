@@ -309,7 +309,7 @@ server.replace('PlaceOrder', server.middleware.https, function (req, res, next) 
     return next();
 });
 
-server.get('RenderIFrame',
+server.post('RenderIFrame',
     server.middleware.https,
     function (req, res, next) {
         res.render(req.querystring.templatename, {
