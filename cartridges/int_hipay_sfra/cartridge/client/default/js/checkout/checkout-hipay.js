@@ -2,13 +2,11 @@
 
 var base = require('base/checkout/checkout');
 
-var addressHelpers = require('base/checkout/address');
 var shippingHelpers = require('base/checkout/shipping');
 var billingHelpers = require('./billing');
 var summaryHelpers = require('base/checkout/summary');
-var formHelpers = require('base/checkout/formErrors');
 var customerHelpers = require('base/checkout/customer');
-var scrollAnimate = require('base/components/scrollAnimate');
+var cleave = require('base/components/cleave');
 
 base.updateCheckoutView = function() {
     console.log('updateCheckoutView HIPAY v2');
@@ -33,5 +31,20 @@ base.updateCheckoutView = function() {
         summaryHelpers.updateOrderProductSummaryInformation(data.order, data.options);
     });
 }
+
+base.paymentTabs = function () {
+    $('.payment-options .nav-item').on('click', function (e) {
+        e.preventDefault();
+        var methodID = $(this).data('method-id');
+        $('.payment-information').data('payment-method-id', methodID);
+        $('.paymentMethod').val(methodID);
+    });
+};
+
+base.handleCreditCardNumber = function () {
+    if ($('.cardNumber').length) {
+        cleave.handleCreditCardNumber('.cardNumber', '#cardType');
+    }
+};
 
 module.exports = base;
