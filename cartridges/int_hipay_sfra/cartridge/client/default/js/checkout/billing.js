@@ -31,6 +31,27 @@ base.methods.updatePaymentInformation = function (order) {
     $paymentSummary.empty().append(htmlToAppend);
 };
 
+/**
+* Validate and update payment instrument form fields
+* @param {Object} order - the order model
+*/
+base.methods.validateAndUpdateBillingPaymentInstrument = function (order) {
+    console.warn('validateAndUpdateBillingPaymentInstrument HIPAY v2');
+   var billing = order.billing;
+   if (!billing.payment || !billing.payment.selectedPaymentInstruments
+       || billing.payment.selectedPaymentInstruments.length <= 0) return;
+
+   var form = $('form[name=dwfrm_billing]');
+   if (!form) return;
+
+   var instrument = billing.payment.selectedPaymentInstruments[0];
+   $('select[name$=expirationMonth]', form).val(instrument.expirationMonth);
+   $('select[name$=expirationYear]', form).val(instrument.expirationYear);
+   // Force security code and card number clear
+   $('input[name$=securityCode]', form).val('');
+   $('input[name$=cardNumber]').lengh && $('input[name$=cardNumber]').data('cleave').setRawValue('');
+}
+
 base.paymentTabs = function () {
     $('.payment-options .nav-item').on('click', function (e) {
         e.preventDefault();
