@@ -84,12 +84,13 @@ module.exports = {
         I.fillField(this.fields.phone, config.user.phone.replace(/\s/g, ''));
         I.seeElement('.submit-shipping');
         I.click('.submit-shipping');
-        I.waitForVisible('.submit-payment', 5);
+        I.waitForVisible('.submit-payment', 10);
     },
 
     submitPayment() {
         I.click('.submit-payment');
-        I.waitForVisible('.place-order', 5);
+        I.wait(5);
+        I.waitForVisible('.place-order', 10);
     },
 
     placeOrder() {
@@ -124,7 +125,7 @@ module.exports = {
     },
 
     validateSecure() {
-        I.waitForNavigation();
+        //I.waitForNavigation();
         I.waitInUrl('/challenge');
         I.waitForVisible('#continue-transaction', 15);
         I.click('#continue-transaction');

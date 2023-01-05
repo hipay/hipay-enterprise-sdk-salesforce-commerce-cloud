@@ -52,9 +52,16 @@ module.exports = {
     },
 
     fillAndSubmitHiPayGriopayForm() {
-        I.fillField('#issuer_bank_id', config.giropay.code);
-        I.seeElement('.submit-button');
-        I.click('#submit-button');
+        I.waitForVisible('#hipay-giropay-field-issuer_bank_id>iframe', 10);
+
+        I.switchTo('#hipay-giropay-field-issuer_bank_id>iframe');
+        I.waitForVisible('input[name="bic"]', 10);
+        I.fillField('input[name="bic"]', config.giropay.code);
+        I.switchTo();
+
+        I.click('button[aria-label="pay-button"]');
+
+        I.waitForNavigation();
     },
 
     validateGiroPayPayment() {
