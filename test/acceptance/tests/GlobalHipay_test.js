@@ -51,14 +51,14 @@ Scenario('Commande avec HiPay GiroPay', ({ I, checkoutPage, hostedPage }) => {
     hostedPage.fillAndSubmitHiPayGriopayForm();
     hostedPage.validateGiroPayPayment();
     checkoutPage.placeOrderWithSecure(false);
-}).tag('@hosted').tag('@toto');
+}).tag('@hosted');
 
 Scenario('Commande avec HiPay iDEAL', ({ I, checkoutPage, hostedPage }) => {
     checkoutPage.selectHostedPaymentMethod('HIPAY_HOSTED_IDEAL');
-    hostedPage.submitHipayForm();
+    hostedPage.fillAndSubmitHiPayiDEALForm();
     hostedPage.validateiDEALPayment();
     checkoutPage.placeOrderWithSecure(false);
-}).tag('@hosted');
+}).tag('@hosted').tag('@toto');
 
 Scenario('Commande avec Hosted Sisal', ({ I, checkoutPage, hostedPage }) => {
     checkoutPage.selectHostedPaymentMethod('HIPAY_HOSTED_SISAL');

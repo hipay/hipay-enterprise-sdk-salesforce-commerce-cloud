@@ -46,9 +46,10 @@ module.exports = {
         I.waitForNavigation();
     },
 
-
     submitHipayForm() {
-        I.click('#submit-button');
+        //I.click('#submit-button');
+        I.waitForVisible('button[aria-label="pay-button"]');
+        I.click('button[aria-label="pay-button"]');
     },
 
     fillAndSubmitHiPayGriopayForm() {
@@ -78,8 +79,20 @@ module.exports = {
         I.pressKey('Enter');
     },
 
-    validateiDEALPayment() {
+    fillAndSubmitHiPayiDEALForm() {
+        I.waitForVisible('#hipay-ideal-field-issuer_bank_id>iframe', 10);
+
+        I.switchTo('#hipay-ideal-field-issuer_bank_id>iframe');
+        I.waitForVisible('input[name="issuer_bank_id"]', 10);
+        I.switchTo();
+
+        I.click('button[aria-label="pay-button"]');
+
         I.waitForNavigation();
+    },
+
+    validateiDEALPayment() {
+        //I.waitForNavigation();
         // https://r3.girogate.de/ti/simideal?...
         I.waitInUrl('simideal');
         I.waitForVisible('input[name="bic"]', 10);
