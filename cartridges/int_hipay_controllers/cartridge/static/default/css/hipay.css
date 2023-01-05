@@ -29,6 +29,10 @@ i.payment-product-sprite-american-express {
     background-position: -225px 0px;
 }
 
+i.payment-product-sprite-multibanco {
+    background-position: -375px 0px;
+}
+
 i.payment-product-sprite-kbc-online {
     background-position: -450px 0px;
 }
