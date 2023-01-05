@@ -14,7 +14,6 @@ var PaymentMgr = require('dw/order/PaymentMgr');
 var OrderMgr = require('dw/order/OrderMgr');
 var Resource = require('dw/web/Resource');
 var URLUtils = require('dw/web/URLUtils');
-var guard = require('*/cartridge/scripts/guard');
 
 function cont(args) {
     var topUrl = URLUtils.url('SiteNavigationBar-ShowMenuitemOverview', 'CurrentMenuItemId', request.httpParameterMap.CurrentMenuItemId);
@@ -101,6 +100,9 @@ function handleForm() { // eslint-disable-line consistent-return
     }
 }
 
-/** @see {@link module:controllers/HiPayOrderCapture~start} */
-exports.Start = guard.ensure(['https', 'get'], start);
-exports.HandleForm = guard.ensure(['https', 'post'], handleForm);
+exports.Start = start;
+exports.Start.public = true;
+
+exports.HandleForm = handleForm;
+exports.HandleForm.public = true;
+

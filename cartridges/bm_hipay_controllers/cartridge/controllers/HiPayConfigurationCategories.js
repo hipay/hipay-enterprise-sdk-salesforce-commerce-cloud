@@ -8,9 +8,6 @@
 * @module  controllers/HiPayConfigurationCategories
 */
 
-/* Script includes */
-var guard = require('*/cartridge/scripts/guard');
-
 /* API includes */
 var ISML = require('dw/template/ISML');
 var URLUtils = require('dw/web/URLUtils');
@@ -118,6 +115,9 @@ function handleForm() {
     response.redirect(URLUtils.https('HiPayConfigurationCategories-Start'));
 }
 
-/** @see {@link module:controllers/HiPayConfigurationCategories~start} */
-exports.Start = guard.ensure(['https', 'get'], start);
-exports.HandleForm = guard.ensure(['https', 'post'], handleForm);
+exports.Start = start;
+exports.Start.public = true;
+
+exports.HandleForm = handleForm;
+exports.HandleForm.public = true;
+
