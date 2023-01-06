@@ -210,9 +210,10 @@ server.replace('PlaceOrder', server.middleware.https, function (req, res, next) 
     // Check if the Card exists in the list of PaymentInstruments Only for Customer Authenticated
     if (req.currentCustomer && !empty(req.currentCustomer.wallet)) {
         var incrementAttempt = false;
+        var basketPaymentInstrument = currentBasket.getPaymentInstruments()[0];
         var paymentInstruments = req.currentCustomer.wallet.paymentInstruments;
         var paymentInstrument = array.find(paymentInstruments, function (item) {
-            return currentBasket.paymentInstrument.UUID === item.UUID;
+            return item.UUID === basketPaymentInstrument.UUID;
         });
         if (saveCardChecked && !paymentInstrument) {
             incrementAttempt = true;

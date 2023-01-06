@@ -75,7 +75,7 @@ function hiPayProcessOrderCall() {
             }
 
             // process cards only
-            if (params.isParameterSubmitted('cardtoken')) { // we assume the payment is done with a credit card
+            if (params.isParameterSubmitted('cardtoken') && !empty(params.cardtoken.stringValue)) { // we assume the payment is done with a credit card
                 // Fill payment info if not masked
                 if (!paymentInstr.permanentlyMasked) {
                     var cardcountry = params.cardcountry; // US
