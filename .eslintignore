@@ -1,10 +1,9 @@
 cartridges/bm_hipay/cartridge/static/
-cartridges/bm_hipay_controllers/cartridge/static/
-cartridges/bm_hipay_controllers/cartridge/scripts/util/Browsing.js
-cartridges/bm_hipay_controllers/cartridge/scripts/object.js
-cartridges/bm_hipay_controllers/cartridge/scripts/guard.js
-cartridges/bm_hipay_controllers/cartridge/scripts/app.js
-cartridges/bm_hipay_controllers/cartridge/scripts/common/inputField.js
+cartridges/bm_hipay/cartridge/scripts/util/Browsing.js
+cartridges/bm_hipay/cartridge/scripts/object.js
+cartridges/bm_hipay/cartridge/scripts/guard.js
+cartridges/bm_hipay/cartridge/scripts/app.js
+cartridges/bm_hipay/cartridge/scripts/common/inputField.js
 cartridges/int_hipay/cartridge/static/
 cartridges/int_hipay_controllers/cartridge/static/
 cartridges/int_hipay_controllers/cartridge/scripts/pipelets/

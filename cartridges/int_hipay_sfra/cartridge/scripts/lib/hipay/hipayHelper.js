@@ -13,7 +13,7 @@ var statuses = require('*/cartridge/scripts/lib/hipay/hipayStatus').HiPayStatus;
 var hipayUtils = require('*/cartridge/scripts/lib/hipay/hipayUtils');
 
 // Import Constants
-var Constants = require('bm_hipay_controllers/cartridge/scripts/util/Constants');
+var Constants = require('bm_hipay/cartridge/scripts/util/Constants');
 
 /**
  * HiPayHelper class manages common HiPay functions.

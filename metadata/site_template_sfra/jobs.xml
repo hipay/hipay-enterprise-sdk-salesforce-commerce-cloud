@@ -47,7 +47,7 @@
             <step step-id="StepCleanSaveOneclick" type="ExecuteScriptModule" enforce-restart="false">
                 <description>Step-job to clean custom objects SaveOneclick with more than 24 hours</description>
                 <parameters>
-                    <parameter name="ExecuteScriptModule.Module">bm_hipay_controllers/cartridge/controllers/jobs/stepCleanSaveOneclick</parameter>
+                    <parameter name="ExecuteScriptModule.Module">bm_hipay/cartridge/controllers/jobs/stepCleanSaveOneclick</parameter>
                     <parameter name="ExecuteScriptModule.FunctionName">StepCleanSaveOneclick</parameter>
                     <parameter name="ExecuteScriptModule.Transactional">true</parameter>
                 </parameters>

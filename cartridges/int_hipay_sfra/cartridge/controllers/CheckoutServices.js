@@ -7,7 +7,7 @@ var Site = require('dw/system/Site');
 var COHelpers = require('*/cartridge/scripts/checkout/checkoutHelpers');
 
 // Import Constants
-var Constants = require('bm_hipay_controllers/cartridge/scripts/util/Constants');
+var Constants = require('bm_hipay/cartridge/scripts/util/Constants');
 
 server.extend(page);
 
