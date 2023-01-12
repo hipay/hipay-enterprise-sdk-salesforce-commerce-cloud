@@ -23,7 +23,7 @@ var collections = require('*/cartridge/scripts/util/collections');
 var basketCalculationHelpers = require('*/cartridge/scripts/helpers/basketCalculationHelpers');
 
 // Import Constants
-var Constants = require('bm_hipay/cartridge/scripts/util/Constants');
+var Constants = require('*/cartridge/scripts/util/hipayConstants');
 
 // static functions needed for Checkout Controller logic
 

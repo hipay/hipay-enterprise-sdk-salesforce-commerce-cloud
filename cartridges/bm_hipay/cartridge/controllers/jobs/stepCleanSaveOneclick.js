@@ -11,7 +11,7 @@ var Logger = require('dw/system/Logger').getLogger('Hipay-stepCleanSaveOneclick'
 var Status = require('dw/system/Status');
 
 var CustomObjectMgr = require('dw/object/CustomObjectMgr');
-var Constants = require('~/cartridge/scripts/util/Constants');
+var Constants = require('*/cartridge/scripts/util/hipayConstants');
 
 /**
  * Script is used in a step-job to delete attempts that are more than 24 hours old

@@ -1,7 +1,7 @@
 'use strict';
 
 /**
- * @module util/Constants
+ * @module util/hipayConstants
  */
 
 module.exports = Object.freeze({
