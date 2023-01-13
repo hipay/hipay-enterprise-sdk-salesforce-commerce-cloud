@@ -1,0 +1,52 @@
+{
+  "step-types": {
+    "script-module-step": [
+      {
+        "@supports-organization-context": "false",
+        "@supports-site-context": "true",
+        "@type-id": "custom.Hipay.ClearHungOrders",
+        "description": "Clear all orders which are hung status CREATED",
+        "module": "bm_hipay/cartridge/scripts/jobsteps/ClearHungOrders.js",
+        "function": "execute",
+        "parameters": {
+
+        },
+        "status-codes": {
+          "status": [
+            {
+              "@code": "ERROR",
+              "description": "Used when an error occurred."
+            },
+            {
+              "@code": "OK",
+              "description": "Used when everything went well."
+            }
+          ]
+        }
+      },
+      {
+        "@supports-organization-context": "false",
+        "@supports-site-context": "true",
+        "@type-id": "custom.Hipay.CleanSaveOneclick",
+        "description": "Step-job to clean custom objects SaveOneclick with more than 24 hours",
+        "module": "bm_hipay/cartridge/scripts/jobsteps/CleanSaveOneclick.js",
+        "function": "execute",
+        "parameters": {
+
+        },
+        "status-codes": {
+          "status": [
+            {
+              "@code": "ERROR",
+              "description": "Used when an error occurred."
+            },
+            {
+              "@code": "OK",
+              "description": "Used when everything went well."
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

@@ -55,50 +55,8 @@ function failOrder(args) {
     });
 }
 
-function failHungOrder(order) {
-    var HiPayLogger = require('*/cartridge/scripts/lib/hipay/hipayLogger');
-    var log = new HiPayLogger('ClearHungOrders');
-    try {
-        require('dw/system/Transaction').wrap(function () {
-            require('dw/order/OrderMgr').failOrder(order, true);
-        });
-    } catch (e) {
-        var error = 'Error while fail hung order ::: ' + e.message;
-        log.error(error);
-    }
-}
-
-/**
-* This function fails all Orders that are in CREATED state.
-* Such orders are considered hung in the system during the two step checkout.
-*
-*/
-function ClearHungOrders() {
-    var HiPayLogger = require('*/cartridge/scripts/lib/hipay/hipayLogger');
-    var Site = require('dw/system/Site');
-    var Calendar = require('dw/util/Calendar');
-    var OrderMgr = require('dw/order/OrderMgr');
-    var Order = require('dw/order/Order');
-    var log = new HiPayLogger('ClearHungOrders');
-    var minutesBack = Site.getCurrent().getCustomPreferenceValue('hipayHungOrderTimeout');
-    var startDate = new Calendar();
-
-    startDate.setTimeZone(Site.current.getTimezone());
-    startDate.add(Calendar.MINUTE, -minutesBack);
-
-    try {
-        OrderMgr.processOrders(failHungOrder, "status = {0} AND creationDate < {1}", Order.ORDER_STATUS_CREATED, startDate.getTime()); // eslint-disable-line
-    } catch (e) {
-        var error = 'Error while fetching hung orders ::: ' + e.message;
-        log.error(error);
-    }
-}
 
 /** @see {@link module:controllers/HiPayProcess~VerifyHash} */
 exports.verifyHash = verifyHash;
 /** @see {@link module:controllers/HiPayProcess~ProceedWithOrder} */
 exports.proceedWithOrder = proceedWithOrder;
-/** @see {@link module:controllers/HiPayProcess~FailOrder} */
-exports.failOrder = failOrder;
-/** @see {@link module:controllers/HiPayOrder~ClearHungOrders} */
-exports.ClearHungOrders = ClearHungOrders;
