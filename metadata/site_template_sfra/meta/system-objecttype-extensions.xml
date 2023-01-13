@@ -135,7 +135,6 @@
                 <type>boolean</type>
                 <mandatory-flag>false</mandatory-flag>
                 <externally-managed-flag>false</externally-managed-flag>
-                <default-value>false</default-value>
             </attribute-definition>
         </custom-attribute-definitions>
         <group-definitions>
@@ -179,14 +178,12 @@
                 <type>boolean</type>
                 <mandatory-flag>false</mandatory-flag>
                 <externally-managed-flag>false</externally-managed-flag>
-                <default-value>false</default-value>
             </attribute-definition>
             <attribute-definition attribute-id="hipayCVVIgnored">
                 <display-name xml:lang="x-default">CVV Ignored</display-name>
                 <type>boolean</type>
                 <mandatory-flag>false</mandatory-flag>
                 <externally-managed-flag>false</externally-managed-flag>
-                <default-value>false</default-value>
             </attribute-definition>
         </custom-attribute-definitions>
         <group-definitions>

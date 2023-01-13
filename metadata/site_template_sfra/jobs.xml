@@ -1,17 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jobs xmlns="http://www.demandware.com/xml/impex/jobs/2015-07-01">
-    <job job-id="ClearHungOrders" priority="0">
+    <job job-id="HipayClearHungOrders" priority="0">
         <description>Clear all orders which are hung status CREATED</description>
         <parameters/>
         <flow>
             <context site-id="RefArchGlobal"/>
-            <step step-id="ClearHungOrders" type="ExecuteScriptModule" enforce-restart="false">
+            <step step-id="Clear hung orders" type="custom.Hipay.ClearHungOrders" enforce-restart="false">
                 <description/>
-                <parameters>
-                    <parameter name="ExecuteScriptModule.Module">int_hipay_sfra/cartridge/scripts/lib/hipay/hipayProcess.js</parameter>
-                    <parameter name="ExecuteScriptModule.FunctionName">ClearHungOrders</parameter>
-                    <parameter name="ExecuteScriptModule.Transactional">false</parameter>
-                </parameters>
+                <parameters/>
             </step>
         </flow>
         <rules>
@@ -39,23 +35,14 @@
         </triggers>
     </job>
 
-	<job job-id="HipayClear" priority="0">
+	<job job-id="HipayCleanOneClick" priority="0">
         <description>Job to clean custom objects and others</description>
         <parameters/>
         <flow>
             <context site-id="RefArchGlobal"/>
-            <step step-id="StepCleanSaveOneclick" type="ExecuteScriptModule" enforce-restart="false">
-                <description>Step-job to clean custom objects SaveOneclick with more than 24 hours</description>
-                <parameters>
-                    <parameter name="ExecuteScriptModule.Module">bm_hipay/cartridge/controllers/jobs/stepCleanSaveOneclick</parameter>
-                    <parameter name="ExecuteScriptModule.FunctionName">StepCleanSaveOneclick</parameter>
-                    <parameter name="ExecuteScriptModule.Transactional">true</parameter>
-                </parameters>
-                <rules>
-                    <on-exit status="ERROR">
-                        <continue/>
-                    </on-exit>
-                </rules>
+            <step step-id="CleanSaveOneClick" type="custom.Hipay.CleanSaveOneclick" enforce-restart="false">
+                <description/>
+                <parameters/>
             </step>
         </flow>
         <rules/>
