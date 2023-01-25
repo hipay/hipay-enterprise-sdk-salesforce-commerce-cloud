@@ -33,7 +33,6 @@ base.methods.updatePaymentInformation = function (order) {
 * @param {Object} order - the order model
 */
 base.methods.validateAndUpdateBillingPaymentInstrument = function (order) {
-    console.warn('validateAndUpdateBillingPaymentInstrument HIPAY v2');
     var billing = order.billing;
     if (!billing.payment || !billing.payment.selectedPaymentInstruments
         || billing.payment.selectedPaymentInstruments.length <= 0) return;

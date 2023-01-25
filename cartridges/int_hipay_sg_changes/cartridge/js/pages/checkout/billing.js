@@ -11,14 +11,14 @@ var ajax = require('../../ajax'),
  * @param {Object} data The Credit Card data (holder, type, masked number, expiration month/year)
  */
 function setCCFields(data) {
-    /* HiPay custom code - start */  
-    if (SitePreferences.HIPAY_ENABLED) { 
-        var $creditCard = $('[data-method="HIPAY_CREDIT_CARD"]'); 
-        $creditCard.find('input[name$="uuid"]').val(data.uuid).trigger('change'); 
-    } else { 
-        var $creditCard = $('[data-method="CREDIT_CARD"]'); 
-    } 
-    /* HiPay custom code - end */ 
+    /* HiPay custom code - start */
+    if (SitePreferences.HIPAY_ENABLED) {
+        var $creditCard = $('[data-method="HIPAY_CREDIT_CARD"]');
+        $creditCard.find('input[name$="uuid"]').val(data.uuid).trigger('change');
+    } else {
+        var $creditCard = $('[data-method="CREDIT_CARD"]');
+    }
+    /* HiPay custom code - end */
     $creditCard.find('input[name$="creditCard_owner"]').val(data.holder).trigger('change');
     $creditCard.find('select[name$="_type"]').val(data.type).trigger('change');
     $creditCard.find('input[name*="_creditCard_number"]').val(data.maskedNumber).trigger('change');
@@ -27,22 +27,22 @@ function setCCFields(data) {
     $creditCard.find('input[name$="_cvn"]').val('').trigger('change');
 }
 
-/* HiPay custom code – start */ 
-/** 
- * @function 
- * @description Clears the Credit Card form and show fields 
- */ 
-function clearCCFields() { 
-    var $creditCard = $('[data-method="HIPAY_CREDIT_CARD"]'); 
-    $creditCard.find('input[name$="creditCard_owner"]').val('').trigger('change'); 
-    $creditCard.find('input[name$="creditCard_uuid"]').val('').trigger('change'); 
-    $creditCard.find('select[name$="_type"]').val('').trigger('change'); 
-    $creditCard.find('input[name*="_creditCard_number"]').val('').trigger('change'); 
-    $creditCard.find('[name$="_month"]').val('').trigger('change'); 
-    $creditCard.find('[name$="_year"]').val('').trigger('change'); 
-    $creditCard.find('input[name$="_cvn"]').val('').trigger('change'); 
-} 
-/* HiPay custom code - end */ 
+/* HiPay custom code – start */
+/**
+ * @function
+ * @description Clears the Credit Card form and show fields
+ */
+function clearCCFields() {
+    var $creditCard = $('[data-method="HIPAY_CREDIT_CARD"]');
+    $creditCard.find('input[name$="creditCard_owner"]').val('').trigger('change');
+    $creditCard.find('input[name$="creditCard_uuid"]').val('').trigger('change');
+    $creditCard.find('select[name$="_type"]').val('').trigger('change');
+    $creditCard.find('input[name*="_creditCard_number"]').val('').trigger('change');
+    $creditCard.find('[name$="_month"]').val('').trigger('change');
+    $creditCard.find('[name$="_year"]').val('').trigger('change');
+    $creditCard.find('input[name$="_cvn"]').val('').trigger('change');
+}
+/* HiPay custom code - end */
 
 /**
  * @function
@@ -61,12 +61,12 @@ function populateCreditCardForm(cardID) {
             }
             setCCFields(data);
 
-            /* HiPay custom code – start */ 
-            if (SitePreferences.HIPAY_ENABLED && SitePreferences.HIPAY_ENABLE_ONECLICK) { 
-                $('[data-method="HIPAY_CREDIT_CARD"]').find('.ccfields-wrap').hide(); 
-                formPrepare.validateForm(); 
-            } 
-            /* HiPay custom code - end */ 
+            /* HiPay custom code – start */
+            if (SitePreferences.HIPAY_ENABLED && SitePreferences.HIPAY_ENABLE_ONECLICK) {
+                $('[data-method="HIPAY_CREDIT_CARD"]').find('.ccfields-wrap').hide();
+                formPrepare.validateForm();
+            }
+            /* HiPay custom code - end */
         }
     });
 }
@@ -111,7 +111,7 @@ exports.init = function () {
         continueSelector: '[name$="billing_save"]'
     });
 
-    /* HiPay custom code - start */ 
+    /* HiPay custom code - start */
     if (SitePreferences.HIPAY_ENABLED) {
         // select payment method if available
         if(selectedPaymentMethod){
@@ -128,12 +128,12 @@ exports.init = function () {
             updatePaymentMethod($(this).val());
         });
     }
-    /* HiPay custom code - end */ 
+    /* HiPay custom code - end */
 
     // select credit card from list
     $('#creditCardList').on('change', function () {
         var cardUUID = $(this).val();
-        /* HiPay custom code - start */ 
+        /* HiPay custom code - start */
         if (!cardUUID) {
             if (SitePreferences.HIPAY_ENABLED && SitePreferences.HIPAY_ENABLE_ONECLICK) {
                 clearCCFields();
@@ -151,7 +151,7 @@ exports.init = function () {
         $('.error-message').remove();
     });
 
-    /* HiPay custom code - start */ 
+    /* HiPay custom code - start */
     if (SitePreferences.HIPAY_ENABLED) {
         var $creditCard = $('[data-method="HIPAY_CREDIT_CARD"]');
     	//on init, set limit for a selected card. After change limits accordingly
@@ -163,7 +163,6 @@ exports.init = function () {
         }
 
         $creditCard.find('select[name$="_type"]').on('change', function () {
-        	console.log('another card selected');
 
            var cvv = $creditCard.find('.cvn-wrap');
            var hiPaySaveOptions = $('*[data-hipay-cardtype="'+$(this).val()+'"]');
@@ -190,7 +189,7 @@ exports.init = function () {
                $creditCard.find('input[name$="_cvn"]').val(' ');
                $creditCard.find('div.cvn').removeClass('required');
                $creditCard.find('div.cvn').find('span.required-indicator').hide();
-               
+
                if (selectedCard == 'Maestro') {
             	   $creditCard.find('input[name$="_cvn"]').addClass('optional');
             	   $creditCard.find('div.cvn').addClass('optional');
@@ -198,18 +197,18 @@ exports.init = function () {
             	   $creditCard.find('input[name$="_cvn"]').removeClass('optional');
             	   $creditCard.find('div.cvn').removeClass('optional');
                }
-               
+
            } else {
         	   $creditCard.find('input[name$="_cvn"]').addClass('required');
         	   $creditCard.find('div.cvn').addClass('required');
         	   $creditCard.find('span.required-indicator').show();
-        	   
+
         	   if (selectedCard != 'Maestro') {
         		   $creditCard.find('input[name$="_cvn"]').removeClass('optional');
             	   $creditCard.find('div.cvn').removeClass('optional');
         	   }
            }
-           
+
            if (selectedCard == "Amex") {
               $(".owner-single").addClass("hide");
               $(".owner-split").removeClass("hide");
@@ -217,7 +216,7 @@ exports.init = function () {
               $(".owner-split").addClass("hide");
     	      $(".owner-single").removeClass("hide");
     	   }
-           
+
            //hide 'Save Card' based on custom.hipayOneClickDisabled
            var saveCard = $creditCard.find('.save-card');
            var saveCardBox = saveCard.find('input[name$="_saveCard"]');
@@ -230,7 +229,7 @@ exports.init = function () {
            }
         });
    	}
-    /* HiPay custom code - end */ 
+    /* HiPay custom code - end */
 
     $('#check-giftcert').on('click', function (e) {
         e.preventDefault();

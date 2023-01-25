@@ -2,6 +2,7 @@
 
 module.exports = {
     storefront: {
+        // TODO: Use dw.json to retrieve HOST.
         sfra: {
             url: 'https://zzye-001.dx.commercecloud.salesforce.com/on/demandware.store/Sites-RefArchGlobal-Site'
         },

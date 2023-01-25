@@ -9,7 +9,6 @@ var customerHelpers = require('base/checkout/customer');
 var cleave = require('base/components/cleave');
 
 base.updateCheckoutView = function() {
-    console.log('updateCheckoutView HIPAY v2');
     $('body').on('checkout:updateCheckoutView', function (e, data) {
         customerHelpers.methods.updateCustomerInformation(data.customer, data.order);
         shippingHelpers.methods.updateMultiShipInformation(data.order);
