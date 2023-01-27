@@ -50,8 +50,8 @@ function failOrder(args) {
     return hiPayRedirectURL;
 }
 
-
-/** @see {@link module:controllers/HiPayProcess~VerifyHash} */
-exports.verifyHash = verifyHash;
-/** @see {@link module:controllers/HiPayProcess~ProceedWithOrder} */
-exports.proceedWithOrder = proceedWithOrder;
+module.exports = {
+    failOrder: failOrder,
+    proceedWithOrder: proceedWithOrder,
+    verifyHash: verifyHash,
+}
