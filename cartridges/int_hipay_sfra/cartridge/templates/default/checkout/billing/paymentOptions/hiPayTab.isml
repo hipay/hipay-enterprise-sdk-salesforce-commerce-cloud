@@ -28,7 +28,7 @@
 
 
         <li class="nav-item" data-method-id="${paymentOption.ID}">
-            <a class="nav-link" data-toggle="tab" href="${'#'+paymentOption.ID+'-content'}" role="tab">
+            <a class="nav-link <isif condition="${paymentOption.ID === 'HIPAY_CREDIT_CARD'}">active</isif>" data-toggle="tab" href="${'#'+paymentOption.ID+'-content'}" role="tab">
                 <i class="payment-product-sprite-${hipayProductName}"></i>
             </a>
         </li>
