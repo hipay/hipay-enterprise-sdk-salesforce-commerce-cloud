@@ -10,14 +10,14 @@ var statuses = require('*/cartridge/scripts/lib/hipay/hipayStatus').HiPayStatus;
 
 function acceptPayment(res, next, mode) {
     var isHashValid = HiPayProcess.verifyHash();
-    var statusValid = HiPayOrderModule.hiPayVerifyStatus();
+    var isStatusValid = HiPayOrderModule.hiPayVerifyStatus(mode);
     var params = {};
     var processOrder;
     var order;
     var error;
     var redirectURL;
 
-    if (isHashValid && statusValid === mode) {
+    if (isHashValid && isStatusValid) {
         processOrder = HiPayOrderModule.hiPayProcessOrderCall();
         order = processOrder.order;
         error = processOrder.error;
@@ -44,9 +44,9 @@ function acceptPayment(res, next, mode) {
     return next();
 }
 
-function declinePayment(req, res, next) {
+function declinePayment(req, res, next, mode) {
     var isHashValid = HiPayProcess.verifyHash();
-    var statusValid = HiPayOrderModule.hiPayVerifyStatus();
+    var isStatusValid = HiPayOrderModule.hiPayVerifyStatus(mode);
     var order = OrderMgr.getOrder(req.querystring.orderid);
     var hiPayState = req.querystring.state;
     var result;
@@ -55,7 +55,7 @@ function declinePayment(req, res, next) {
         hiPayState = 'decline';
     }
 
-    if (!isHashValid || statusValid !== mode) {
+    if (!isHashValid || isStatusValid) {
         res.redirect(URLUtils.url('Home-Show'));
     } else {
         var processOrder = HiPayOrderModule.hiPayProcessOrderCall();
@@ -100,7 +100,7 @@ server.get(
     'Decline',
     server.middleware.https,
     function (req, res, next) {
-        acceptPayment(res, next, statuses['DECLINED'].code);
+        declinePayment(req, res, next, statuses['DECLINED'].code);
     }
 );
 
@@ -109,7 +109,7 @@ server.get(
     'Cancel',
     server.middleware.https,
     function (req, res, next) {
-        acceptPayment(res, next, statuses['CANCEL'].code);
+        declinePayment(req, res, next, statuses['CANCEL'].code);
     }
 );
 

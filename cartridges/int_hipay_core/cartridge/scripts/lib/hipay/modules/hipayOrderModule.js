@@ -141,9 +141,17 @@ function hiPayVerifyRequest() {
     return true;
 }
 
+/** check if an element is present in an array */
+function isInArray(value, array) {
+    for (var i = 0; i < array.length; i++) {
+    if (array[i] == value)
+        return true;
+    }
+    return false;
+}
 
 /** verify Hipay status */
-function hiPayVerifyStatus() {
+function hiPayVerifyStatus(status) {
     var params = request.httpParameterMap;
     var statusValue = params.status.value;
     var statusName = '';
@@ -151,11 +159,16 @@ function hiPayVerifyStatus() {
 
     for (var statusKey in statuses) { 
         var statusType = statuses[statusKey];
-        if (!empty(statusType.paymentStatus) && statusType.paymentStatus.indexOf(statusValue) !==  -1) {
+        if (!empty(statusType.paymentStatus)  && isInArray(statusValue, statusType.paymentStatus)) {
+            var ps = statusType.paymentStatus;
+
             statusName = statusType.code;
         }
     }
-    return statusName;
+    if (statusName !== status) {
+        return false;
+    }
+    return true;
 }
 
 /** @see {@link module:cartridge/scripts/lib/hipay/order/HiPayOrderModule~hiPayProcessOrderCall} */

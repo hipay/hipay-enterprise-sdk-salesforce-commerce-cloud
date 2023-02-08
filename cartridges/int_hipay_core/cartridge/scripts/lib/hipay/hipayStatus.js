@@ -15,23 +15,23 @@ var HiPayStatus = {
     },
     PENDING: {
         code: 'pending',
-        value: 'PENDING',
-        paymentStatus: '112, 142, 177, 200'
+        paymentStatus: [112, 142, 177, 200],
+        value: 'PENDING'
     },
     DECLINED: {
         code: 'declined',
-        value: 'DECLINED',
-        paymentStatus: '109, 110, 111, 113, 178'
+        paymentStatus: [109, 110, 111, 113, 178],
+        value: 'DECLINED'
     },
     ACCEPT: {
         code: 'accept',
-        value: 'ACCEPT',
-        paymentStatus: '112, 116, 117, 118, 119'
+        paymentStatus: [112, 116, 117, 118, 119],
+        value: 'ACCEPT'
     },
     CANCEL: {
         code: 'cancel',
+        paymentStatus: [115],
         value: 'CANCEL',
-        paymentStatus: '115'
     },
     ERROR: {
         code: 'error',
