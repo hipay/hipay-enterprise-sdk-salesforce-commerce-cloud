@@ -1,49 +1,53 @@
 [class^="payment-product-sprite-"] {
     display: block;
-    height: 83px;
+    height: 80px;
     width: 75px;
     background-image: url("../images/payment-products/paymentProductSpritesSmall.png");
     background-repeat: no-repeat;
-    cursor: pointer
+    cursor: pointer;
+    margin: 0 5px;
 }
 
 i.payment-product-sprite-hosted {
-    background-position: -204px -125px;
+    background-position: -404px -185px;
 }
-
-i.payment-product-sprite-mastercard {
-    background-position: 0em 0em;
+i.payment-product-sprite-carte-accord,
+i.payment-product-sprite-sisal,
+i.payment-product-sprite-mastercard,
+i.payment-product-sprite-ing-homepay,
+i.payment-product-sprite-dexia-directnet {
+    background-position: 0 15px;
 }
 
 i.payment-product-sprite-visa {
-    background-position: -118px -15px;
+    background-position: -98px 15px;
 }
 
 i.payment-product-sprite-maestro {
-    background-position: -205px -15px;
+    background-position: -199px 15px;
 }
 
 i.payment-product-sprite-american-express {
-    background-position: -300px -15px;
+    background-position: -300px 15px;
 }
 
 i.payment-product-sprite-multibanco {
-    background-position: -400px -15px;
+    background-position: -400px 15px;
 }
 i.payment-product-sprite-mbway {
-    background-position: -492px -15px;
+    background-position: -504px 15px;
 }
 
 i.payment-product-sprite-sofort-uberweisung {
-    background-position: -570px -10px;
+    background-position: -605px 14px;
 }
 
 i.payment-product-sprite-ideal {
-    background-position: -20px -125px;
+    background-position: 5px -52px;
 }
 
 i.payment-product-sprite-giropay {
-    background-position: -110px -122px;
+    background-position: -97px -52px;
 }
 
 i.payment-product-sprite-cb {
@@ -51,63 +55,58 @@ i.payment-product-sprite-cb {
 }
 
 i.payment-product-sprite-sisal {
-    background-position: -300px -115px;
+    background-position: -199px -52px;
 }
 
 i.payment-product-sprite-przelewy24 {
-    background-position: -388px -120px;
+    background-position: -401px -52px;
 }
 
 i.payment-product-sprite-paysafecard {
-    background-position: -395px -225px;
+    background-position: -402px -116px;
 }
 
 i.payment-product-sprite-paypal {
-    background-position: -10px -218px;
+    background-position: -10px -115px;
 }
 
 i.payment-product-sprite-3xcb {
-    background-position: -20px -315px;
+    background-position: 4px -182px;
 }
 
 i.payment-product-sprite-4xcb {
-    background-position: -206px -315px;
+    background-position: -200px -182px;
 }
 
 i.payment-product-sprite-3xcb-no-fees {
-    background-position: -110px -315px;
+    background-position: -97px -182px;
 }
 
 i.payment-product-sprite-4xcb-no-fees {
-    background-position: -295px -315px;
-}
-
-i.payment-product-sprite-carte-accord {
-    background-position: 0em -15em;
+    background-position: -300px -182px;
 }
 
 i.payment-product-sprite-myb {
-    background-position: -300px -225px;
+    background-position: -300px -112px;
 }
 i.payment-product-sprite-3xbnp {
-    background-position: -485px -122px;
+    background-position: -505px -52px;
 }
 i.payment-product-sprite-4xbnp {
-    background-position: -575px -122px;
+    background-position: -605px -52px;
 }
 i.payment-product-sprite-mooney {
-    background-position: -300px -120px;
+    background-position: -300px -49px;
 }
 i.payment-product-sprite-sepa {
-    background-position: -114px -225px;
+    background-position: -97px -115px;
 }
 i.payment-product-sprite-pe {
-    background-position: -487px -225px;
+    background-position: -503px -115px;
 }
 i.payment-product-sprite-bct {
-    background-position: -580px -225px;
+    background-position: -603px -115px;
 }
-
 .payment-method-options .form-row {
     clear: none;
     float: left;
@@ -120,4 +119,7 @@ i.payment-product-sprite-bct {
 }
 .payment-options .nav-item .nav-link.active {
     background-color: transparent;
+}
+.payment-options .nav-item {
+    flex: 1 0 20%;
 }
