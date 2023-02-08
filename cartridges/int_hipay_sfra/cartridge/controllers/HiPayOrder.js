@@ -6,16 +6,18 @@ var OrderMgr = require('dw/order/OrderMgr');
 
 var HiPayOrderModule = require('*/cartridge/scripts/lib/hipay/modules/hipayOrderModule');
 var HiPayProcess = require('*/cartridge/scripts/lib/hipay/hipayProcess');
+var statuses = require('*/cartridge/scripts/lib/hipay/hipayStatus').HiPayStatus;
 
-function acceptPayment(res, next) {
+function acceptPayment(res, next, mode) {
     var isHashValid = HiPayProcess.verifyHash();
+    var statusValid = HiPayOrderModule.hiPayVerifyStatus();
     var params = {};
     var processOrder;
     var order;
     var error;
     var redirectURL;
 
-    if (isHashValid) {
+    if (isHashValid && statusValid === mode) {
         processOrder = HiPayOrderModule.hiPayProcessOrderCall();
         order = processOrder.order;
         error = processOrder.error;
@@ -44,6 +46,7 @@ function acceptPayment(res, next) {
 
 function declinePayment(req, res, next) {
     var isHashValid = HiPayProcess.verifyHash();
+    var statusValid = HiPayOrderModule.hiPayVerifyStatus();
     var order = OrderMgr.getOrder(req.querystring.orderid);
     var hiPayState = req.querystring.state;
     var result;
@@ -52,7 +55,7 @@ function declinePayment(req, res, next) {
         hiPayState = 'decline';
     }
 
-    if (!isHashValid) {
+    if (!isHashValid || statusValid !== mode) {
         res.redirect(URLUtils.url('Home-Show'));
     } else {
         var processOrder = HiPayOrderModule.hiPayProcessOrderCall();
@@ -79,7 +82,7 @@ server.get(
     'Accept',
     server.middleware.https,
     function (req, res, next) {
-        acceptPayment(res, next);
+        acceptPayment(res, next, statuses['ACCEPT'].code);
     }
 );
 
@@ -88,7 +91,7 @@ server.get(
     'Pending',
     server.middleware.https,
     function (req, res, next) {
-        acceptPayment(res, next);
+        acceptPayment(res, next, statuses['PENDING'].code);
     }
 );
 
@@ -97,7 +100,7 @@ server.get(
     'Decline',
     server.middleware.https,
     function (req, res, next) {
-        declinePayment(req, res, next);
+        acceptPayment(res, next, statuses['DECLINED'].code);
     }
 );
 
@@ -106,7 +109,7 @@ server.get(
     'Cancel',
     server.middleware.https,
     function (req, res, next) {
-        declinePayment(req, res, next);
+        acceptPayment(res, next, statuses['CANCEL'].code);
     }
 );
 

@@ -141,7 +141,25 @@ function hiPayVerifyRequest() {
     return true;
 }
 
+
+/** verify Hipay status */
+function hiPayVerifyStatus() {
+    var params = request.httpParameterMap;
+    var statusValue = params.status.value;
+    var statusName = '';
+    var statuses = require('*/cartridge/scripts/lib/hipay/hipayStatus').HiPayStatus;
+
+    for (var statusKey in statuses) { 
+        var statusType = statuses[statusKey];
+        if (!empty(statusType.paymentStatus) && statusType.paymentStatus.indexOf(statusValue) !==  -1) {
+            statusName = statusType.code;
+        }
+    }
+    return statusName;
+}
+
 /** @see {@link module:cartridge/scripts/lib/hipay/order/HiPayOrderModule~hiPayProcessOrderCall} */
 exports.hiPayProcessOrderCall = hiPayProcessOrderCall;
 /** @see {@link module:cartridge/scripts/lib/hipay/order/HiPayOrderModule~hiPayVerifyRequest} */
 exports.hiPayVerifyRequest = hiPayVerifyRequest;
+exports.hiPayVerifyStatus = hiPayVerifyStatus;
