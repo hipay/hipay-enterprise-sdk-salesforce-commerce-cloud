@@ -11,11 +11,8 @@
 i.payment-product-sprite-hosted {
     background-position: -404px -185px;
 }
-i.payment-product-sprite-carte-accord,
-i.payment-product-sprite-sisal,
-i.payment-product-sprite-mastercard,
-i.payment-product-sprite-ing-homepay,
-i.payment-product-sprite-dexia-directnet {
+
+i.payment-product-sprite-mastercard {
     background-position: 0 15px;
 }
 
@@ -85,9 +82,11 @@ i.payment-product-sprite-3xcb-no-fees {
 i.payment-product-sprite-4xcb-no-fees {
     background-position: -300px -182px;
 }
-
-i.payment-product-sprite-myb {
+i.payment-product-sprite-mybank {
     background-position: -300px -112px;
+}
+i.payment-product-sprite-sisal {
+    background-position: -300px -49px;
 }
 i.payment-product-sprite-3xbnp {
     background-position: -505px -52px;
@@ -95,16 +94,13 @@ i.payment-product-sprite-3xbnp {
 i.payment-product-sprite-4xbnp {
     background-position: -605px -52px;
 }
-i.payment-product-sprite-mooney {
-    background-position: -300px -49px;
-}
 i.payment-product-sprite-sepa {
     background-position: -97px -115px;
 }
 i.payment-product-sprite-pe {
     background-position: -503px -115px;
 }
-i.payment-product-sprite-bct {
+i.payment-product-sprite-bancontact {
     background-position: -603px -115px;
 }
 .payment-method-options .form-row {
