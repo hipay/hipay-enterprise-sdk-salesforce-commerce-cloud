@@ -88,11 +88,14 @@ i.payment-product-sprite-mybank {
 i.payment-product-sprite-sisal {
     background-position: -300px -49px;
 }
-i.payment-product-sprite-3xbnp {
+i.payment-product-sprite-bnpp-3xcb {
     background-position: -505px -52px;
 }
-i.payment-product-sprite-4xbnp {
+i.payment-product-sprite-bnpp-4xcb {
     background-position: -605px -52px;
+}
+i.payment-product-sprite-mooney {
+    background-position: -300px -120px;
 }
 i.payment-product-sprite-sepa {
     background-position: -97px -115px;

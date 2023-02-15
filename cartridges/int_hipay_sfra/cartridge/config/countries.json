@@ -19,4 +19,14 @@
 }, {
     "id": "pl_PL",
     "currencyCode": "PLN"
+}, {
+    "id": "nl_NL",
+    "currencyCode": "EUR"
+}, {
+    "id": "pt_PT",
+    "currencyCode": "EUR"
+}, {
+    "id": "de_DE",
+    "currencyCode": "EUR",
+    "countryCode": "DE"
 }]
