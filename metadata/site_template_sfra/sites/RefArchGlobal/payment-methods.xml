@@ -199,16 +199,6 @@
         </custom-attributes>
     </payment-method>
 
-    <payment-method method-id="HIPAY_MASTERCARD">
-        <name xml:lang="x-default">MasterCard</name>
-        <description xml:lang="x-default">HiPay MasterCard</description>
-        <enabled-flag>false</enabled-flag>
-        <processor-id>HIPAY_HOSTED</processor-id>
-        <custom-attributes>
-            <custom-attribute attribute-id="hipayProductName">mastercard</custom-attribute>
-        </custom-attributes>
-    </payment-method>
-
     <payment-method method-id="HIPAY_HOSTED_PAYPAL">
         <name xml:lang="x-default">PayPal</name>
         <description xml:lang="x-default">HiPay PayPal</description>
