@@ -141,34 +141,13 @@ function hiPayVerifyRequest() {
     return true;
 }
 
-/** check if an element is present in an array */
-function isInArray(value, array) {
-    for (var i = 0; i < array.length; i++) {
-    if (array[i] == value)
-        return true;
-    }
-    return false;
-}
-
 /** verify Hipay status */
-function hiPayVerifyStatus(status) {
-    var params = request.httpParameterMap;
-    var statusValue = params.status.value;
-    var statusName = '';
+function hiPayVerifyStatus(mode) {
     var statuses = require('*/cartridge/scripts/lib/hipay/hipayStatus').HiPayStatus;
+    var statusValue = parseInt(request.httpParameterMap.status.value, 10);
+    var allowedStatuses = statuses[mode].paymentStatus;
 
-    for (var statusKey in statuses) { 
-        var statusType = statuses[statusKey];
-        if (!empty(statusType.paymentStatus)  && isInArray(statusValue, statusType.paymentStatus)) {
-            var ps = statusType.paymentStatus;
-
-            statusName = statusType.code;
-        }
-    }
-    if (statusName !== status) {
-        return false;
-    }
-    return true;
+    return allowedStatuses.indexOf(statusValue) !== -1;
 }
 
 /** @see {@link module:cartridge/scripts/lib/hipay/order/HiPayOrderModule~hiPayProcessOrderCall} */

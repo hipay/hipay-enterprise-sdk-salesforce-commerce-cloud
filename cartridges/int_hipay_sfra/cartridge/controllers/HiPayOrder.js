@@ -82,7 +82,7 @@ server.get(
     'Accept',
     server.middleware.https,
     function (req, res, next) {
-        acceptPayment(res, next, statuses['ACCEPT'].code);
+        acceptPayment(res, next, statuses.ACCEPT.value);
     }
 );
 
@@ -91,7 +91,7 @@ server.get(
     'Pending',
     server.middleware.https,
     function (req, res, next) {
-        acceptPayment(res, next, statuses['PENDING'].code);
+        acceptPayment(res, next, statuses.PENDING.value);
     }
 );
 
@@ -100,7 +100,7 @@ server.get(
     'Decline',
     server.middleware.https,
     function (req, res, next) {
-        declinePayment(req, res, next, statuses['DECLINED'].code);
+        declinePayment(req, res, next, statuses.DECLINED.value);
     }
 );
 
@@ -109,7 +109,7 @@ server.get(
     'Cancel',
     server.middleware.https,
     function (req, res, next) {
-        declinePayment(req, res, next, statuses['CANCEL'].code);
+        declinePayment(req, res, next, statuses.CANCEL.value);
     }
 );
 

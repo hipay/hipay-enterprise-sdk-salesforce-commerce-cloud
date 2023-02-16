@@ -35,7 +35,6 @@ function failOrder(args) {
     var Status = require('dw/system/Status');
     var order = args.order;
     var hiPayState = args.hiPayState;
-    var hiPayRedirectURL;
     var status;
 
     if (order != null) {
@@ -43,11 +42,11 @@ function failOrder(args) {
             status = OrderMgr.failOrder(order, true);
         });
         if (status.status === Status.OK) {
-            hiPayRedirectURL = URLUtils.https('COPlaceOrder-Submit', 'order_token', order.orderToken, 'order_id', order.orderNo, 'paymentStatus', hiPayState, CSRFProtection.getTokenName(), CSRFProtection.generateToken());
+            return URLUtils.https('COPlaceOrder-Submit', 'order_token', order.orderToken, 'order_id', order.orderNo, 'paymentStatus', hiPayState, CSRFProtection.getTokenName(), CSRFProtection.generateToken());
         }
     }
 
-    return hiPayRedirectURL;
+    return URLUtils.https('Error-Start');
 }
 
 module.exports = {
