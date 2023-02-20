@@ -151,16 +151,6 @@ Scenario('Commande avec Hosted Sisal', ({ I, checkoutPage, hostedPage }) => {
     checkoutPage.placeOrderWithSecure(false);
 }).tag('@iframe');
 
-Scenario('Commande avec Hosted Sofort', ({ I, checkoutPage, hostedPage }) => {
-    checkoutPage.selectHostedPaymentMethod('HIPAY_HOSTED_SOFORT_UBERWEISUNG');
-    checkoutPage.switchToHipayIframe();
-    hostedPage.submitHipayForm();
-    checkoutPage.leaveHipayIframe();
-    hostedPage.validateHostedSofortPayment();
-    checkoutPage.placeOrderWithSecure(false);
-}).tag('@iframe');
-
-
 Scenario('Commande avec HiPay Credit Card', ({ I, checkoutPage }) => {
     checkoutPage.selectPaymentMethod('HIPAY_CREDIT_CARD', true);
     checkoutPage.selectAndSubmitHiPayCreditCardForm('creditCard');

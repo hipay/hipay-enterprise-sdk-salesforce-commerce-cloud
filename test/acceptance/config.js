@@ -104,11 +104,5 @@ module.exports = {
         bank: 'SNSBNL2A',
         BIC: 'Testbank',
         TAN: '1234'
-    },
-    sofort: {
-        bank: 'Demo Bank',
-        id: '00000',
-        password: '123456789',
-        confirmCode: '12345'
     }
 };
