@@ -79,33 +79,6 @@
         </custom-attributes>
     </payment-method>
 
-    <payment-method method-id="HIPAY_HOSTED_SOFORT_UBERWEISUNG">
-        <name xml:lang="x-default">Hosted Sofort Überweisung</name>
-        <description xml:lang="x-default">HiPay Sofort Überweisung Payment Method</description>
-        <enabled-flag>true</enabled-flag>
-        <processor-id>HIPAY_HOSTED</processor-id>
-        <custom-attributes>
-            <custom-attribute attribute-id="hipayPaymentCategoryList">realtime-banking</custom-attribute>
-            <custom-attribute attribute-id="hipayPaymentProductList">sofort-uberweisung</custom-attribute>
-            <custom-attribute attribute-id="hipayProductName">sofort-uberweisung</custom-attribute>
-        </custom-attributes>
-    </payment-method>
-
-    <payment-method method-id="HIPAY_HOSTED_WEBMONEY_TRANSFER">
-        <name xml:lang="x-default">Hosted WebMoney Transfer</name>
-        <description xml:lang="x-default">HiPay WebMoney Transfer Payment Method</description>
-        <enabled-flag>true</enabled-flag>
-        <processor-id>HIPAY_HOSTED</processor-id>
-        <currencies>
-            <currency>RUB</currency>
-        </currencies>
-        <custom-attributes>
-            <custom-attribute attribute-id="hipayPaymentCategoryList">ewallet</custom-attribute>
-            <custom-attribute attribute-id="hipayPaymentProductList">webmoney-transfer</custom-attribute>
-            <custom-attribute attribute-id="hipayProductName">webmoney-transfer</custom-attribute>
-        </custom-attributes>
-    </payment-method>
-
     <payment-method method-id="HIPAY_CREDIT_CARD">
         <name xml:lang="x-default">Credit Card</name>
         <description xml:lang="x-default">HiPay Credit Card</description>
@@ -175,27 +148,13 @@
             <custom-attribute attribute-id="hipayProductName">sisal</custom-attribute>
         </custom-attributes>
     </payment-method>
-
-    <payment-method method-id="HIPAY_SOFORT_UBERWEISUNG">
-        <name xml:lang="x-default">Sofort Überweisung</name>
-        <description xml:lang="x-default">HiPay Sofort Überweisung Payment Method</description>
-        <enabled-flag>true</enabled-flag>
-        <processor-id>HIPAY</processor-id>
+    <payment-method method-id="HIPAY_MASTERCARD">
+        <name xml:lang="x-default">MasterCard</name>
+        <description xml:lang="x-default">HiPay MasterCard</description>
+        <enabled-flag>false</enabled-flag>
+        <processor-id>HIPAY_HOSTED</processor-id>
         <custom-attributes>
-            <custom-attribute attribute-id="hipayProductName">sofort-uberweisung</custom-attribute>
-        </custom-attributes>
-    </payment-method>
-
-    <payment-method method-id="HIPAY_WEBMONEY_TRANSFER">
-        <name xml:lang="x-default">WebMoney Transfer</name>
-        <description xml:lang="x-default">HiPay WebMoney Transfer Payment Method</description>
-        <enabled-flag>true</enabled-flag>
-        <processor-id>HIPAY</processor-id>
-        <currencies>
-            <currency>RUB</currency>
-        </currencies>
-        <custom-attributes>
-            <custom-attribute attribute-id="hipayProductName">webmoney-transfer</custom-attribute>
+            <custom-attribute attribute-id="hipayProductName">mastercard</custom-attribute>
         </custom-attributes>
     </payment-method>
 

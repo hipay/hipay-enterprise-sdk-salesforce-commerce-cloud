@@ -73,11 +73,6 @@
                 <iscomment>Sisal</iscomment>
                 <isif condition="${!empty(paymentOption.ID) && paymentOption.ID == 'HIPAY_SISAL'}"></isif>
 
-                <iscomment>Sofort Uberweisung</iscomment>
-                <isif condition="${!empty(paymentOption.ID) && paymentOption.ID == 'HIPAY_SOFORT_UBERWEISUNG'}"></isif>
-
-                <iscomment>WebMoney Transfer</iscomment>
-                <isif condition="${!empty(paymentOption.ID) && paymentOption.ID == 'HIPAY_WEBMONEY_TRANSFER'}"></isif>
             </fieldset>
 
         </div>

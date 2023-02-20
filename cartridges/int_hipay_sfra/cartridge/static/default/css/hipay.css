@@ -27,12 +27,9 @@ i.payment-product-sprite-american-express {
 i.payment-product-sprite-multibanco {
     background-position: -400px 15px;
 }
+
 i.payment-product-sprite-mbway {
     background-position: -504px 15px;
-}
-
-i.payment-product-sprite-sofort-uberweisung {
-    background-position: -605px 14px;
 }
 
 i.payment-product-sprite-ideal {
@@ -45,10 +42,6 @@ i.payment-product-sprite-giropay {
 
 i.payment-product-sprite-cb {
     background-position: -18px -15px;
-}
-
-i.payment-product-sprite-sisal {
-    background-position: -199px -52px;
 }
 
 i.payment-product-sprite-przelewy24 {
@@ -89,9 +82,6 @@ i.payment-product-sprite-bnpp-3xcb {
 }
 i.payment-product-sprite-bnpp-4xcb {
     background-position: -605px -52px;
-}
-i.payment-product-sprite-mooney {
-    background-position: -300px -120px;
 }
 i.payment-product-sprite-sepa {
     background-position: -97px -115px;
