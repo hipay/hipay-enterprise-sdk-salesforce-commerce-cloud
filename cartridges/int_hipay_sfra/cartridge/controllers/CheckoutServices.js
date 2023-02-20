@@ -38,9 +38,6 @@ server.append(
                 }
 
                 creditCardErrors = COHelpers.validateCreditCard(paymentForm);
-            } else if (paymentMethodID === 'HIPAY_KLARNA') {
-                hiPayErrors = COHelpers.validateFields(paymentForm.hipayMethodsFields.klarna);
-                paymentForm.hipayMethodsFields = paymentForm.hipayMethodsFields.klarna;
             } else if (paymentMethodID === 'HIPAY_IDEAL') {
                 hiPayErrors = COHelpers.validateFields(paymentForm.hipayMethodsFields.ideal);
                 paymentForm.hipayMethodsFields = paymentForm.hipayMethodsFields.ideal;

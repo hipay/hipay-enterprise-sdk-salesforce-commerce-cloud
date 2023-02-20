@@ -36,21 +36,6 @@
         </custom-attributes>
     </payment-method>
 
-    <payment-method method-id="HIPAY_HOSTED_KLARNA">
-        <name xml:lang="x-default">Hosted Klarna</name>
-        <description xml:lang="x-default">HiPay Klarna Payment Method</description>
-        <enabled-flag>false</enabled-flag>
-        <processor-id>HIPAY_HOSTED</processor-id>
-        <countries>
-            <country country-code="DE"/>
-        </countries>
-        <custom-attributes>
-            <custom-attribute attribute-id="hipayPaymentCategoryList">realtime-banking</custom-attribute>
-            <custom-attribute attribute-id="hipayPaymentProductList">klarnainvoice</custom-attribute>
-            <custom-attribute attribute-id="hipayProductName">klarnainvoice</custom-attribute>
-        </custom-attributes>
-    </payment-method>
-
     <payment-method method-id="HIPAY_HOSTED_PRZELEWY24">
         <name xml:lang="x-default">Hosted Przelewy24</name>
         <description xml:lang="x-default">HiPay Przelewy24 Payment Method</description>
@@ -67,9 +52,9 @@
         </custom-attributes>
     </payment-method>
 
-    <payment-method method-id="HIPAY_HOSTED_SISAL">
-        <name xml:lang="x-default">Hosted Sisal</name>
-        <description xml:lang="x-default">HiPay Sisal Payment Method</description>
+    <payment-method method-id="HIPAY_HOSTED_MOONEY">
+        <name xml:lang="x-default">Hosted Mooney</name>
+        <description xml:lang="x-default">HiPay Mooney Payment Method</description>
         <enabled-flag>true</enabled-flag>
         <processor-id>HIPAY_HOSTED</processor-id>
         <custom-attributes>
@@ -110,19 +95,6 @@
         <custom-attributes>
             <custom-attribute attribute-id="hipayPaymentProductList">ideal</custom-attribute>
             <custom-attribute attribute-id="hipayProductName">ideal</custom-attribute>
-        </custom-attributes>
-    </payment-method>
-
-    <payment-method method-id="HIPAY_KLARNA">
-        <name xml:lang="x-default">Klarna</name>
-        <description xml:lang="x-default">HiPay Klarna Payment Method</description>
-        <enabled-flag>true</enabled-flag>
-        <processor-id>HIPAY</processor-id>
-        <countries>
-            <country country-code="DE"/>
-        </countries>
-        <custom-attributes>
-            <custom-attribute attribute-id="hipayProductName">klarnainvoice</custom-attribute>
         </custom-attributes>
     </payment-method>
 
@@ -186,9 +158,9 @@
         </custom-attributes>
     </payment-method>
 
-    <payment-method method-id="HIPAY_SISAL">
-        <name xml:lang="x-default">Sisal</name>
-        <description xml:lang="x-default">HiPay Sisal Payment Method</description>
+    <payment-method method-id="HIPAY_MOONEY">
+        <name xml:lang="x-default">MOONEY</name>
+        <description xml:lang="x-default">HiPay Mooney Payment Method</description>
         <enabled-flag>true</enabled-flag>
         <processor-id>HIPAY</processor-id>
         <custom-attributes>

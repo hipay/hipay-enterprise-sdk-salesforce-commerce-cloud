@@ -104,7 +104,7 @@ module.exports = {
         I.click('.btn-primary');
     },
 
-    validateSisalPayment() {
+    validateMooneyPayment() {
         I.waitForNavigation()
         // https://stage-secure-gateway.hipay-tpp.com/provider/sisal/display-reference/...
         I.waitInUrl('sisal');

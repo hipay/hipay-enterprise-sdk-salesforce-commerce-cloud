@@ -147,14 +147,6 @@ HiPayHelper.prototype.fillOrderData = function (order, params, pi) {
         params.email = order.customerEmail; // eslint-disable-line
         params.phone = !empty(billingAddress.phone) ? billingAddress.phone.replace(/\s/g, '') : null; // eslint-disable-line
 
-        if (pi.paymentMethod.indexOf('KLARNA') > -1) {
-            params.msisdn = !empty(params.phone) ? params.phone : null; // eslint-disable-line
-
-            if (empty(gender)) {
-                gender = session.forms.billing.hipayMethodsFields.klarna.gender.value;
-            }
-        }
-
         params.firstname = billingAddress.firstName; // eslint-disable-line
         params.lastname = billingAddress.lastName; // eslint-disable-line
     }
@@ -181,34 +173,30 @@ HiPayHelper.prototype.fillOrderData = function (order, params, pi) {
     }
 
     // Shipping info
-    if (pi.paymentMethod.indexOf('KLARNA') < 0) {
-        shippingAddress = order.defaultShipment.shippingAddress; // eslint-disable-line
-        params.shipto_firstname = shippingAddress.firstName; // eslint-disable-line
-        params.shipto_lastname = shippingAddress.lastName; // eslint-disable-line
-        params.shipto_recipientinfo = shippingAddress.companyName; // eslint-disable-line
-        params.shipto_streetaddress = shippingAddress.address1; // eslint-disable-line
-        params.shipto_streetaddress2 = shippingAddress.address2; // eslint-disable-line
-        params.shipto_city = shippingAddress.city; // eslint-disable-line
+    shippingAddress = order.defaultShipment.shippingAddress; // eslint-disable-line
+    params.shipto_firstname = shippingAddress.firstName; // eslint-disable-line
+    params.shipto_lastname = shippingAddress.lastName; // eslint-disable-line
+    params.shipto_recipientinfo = shippingAddress.companyName; // eslint-disable-line
+    params.shipto_streetaddress = shippingAddress.address1; // eslint-disable-line
+    params.shipto_streetaddress2 = shippingAddress.address2; // eslint-disable-line
+    params.shipto_city = shippingAddress.city; // eslint-disable-line
 
-        if (!empty(shippingAddress.stateCode)) {
-            params.shipto_state = shippingAddress.stateCode; // eslint-disable-line
-        }
-
-        params.shipto_zipcode = shippingAddress.postalCode; // eslint-disable-line
-        params.shipto_country = shippingAddress.countryCode.value.toUpperCase(); // eslint-disable-line
-        params.shipto_phone = shippingAddress.phone; // eslint-disable-line
+    if (!empty(shippingAddress.stateCode)) {
+        params.shipto_state = shippingAddress.stateCode; // eslint-disable-line
     }
 
-    if (pi.paymentMethod.indexOf('HIPAY_HOSTED_ONEY_FACILITY_PAY') > -1 || pi.paymentMethod.indexOf('HIPAY_ONEY_FACILITY_PAY') > -1 || pi.paymentMethod.indexOf('KLARNA') > -1) {
+    params.shipto_zipcode = shippingAddress.postalCode; // eslint-disable-line
+    params.shipto_country = shippingAddress.countryCode.value.toUpperCase(); // eslint-disable-line
+    params.shipto_phone = shippingAddress.phone; // eslint-disable-line
+
+    if (pi.paymentMethod.indexOf('HIPAY_HOSTED_ONEY_FACILITY_PAY') > -1 || pi.paymentMethod.indexOf('HIPAY_ONEY_FACILITY_PAY') > -1) {
         var basketObject = [];
         var categoriesCO = CustomObjectMgr.getCustomObject('OneyExtensionConfig', 'category').custom.settings;
         var categoriesConfig = JSON.parse(categoriesCO);
         var shippingCO = CustomObjectMgr.getCustomObject('OneyExtensionConfig', 'shipping').custom.settings;
         var shippingConfig = JSON.parse(shippingCO);
 
-        if (pi.paymentMethod.indexOf('KLARNA') < 0) {
-            params.shipto_gender = gender; // eslint-disable-line
-        }
+        params.shipto_gender = gender; // eslint-disable-line
 
         if (pi.paymentMethod.indexOf('HIPAY_HOSTED_ONEY_FACILITY_PAY') > -1 || pi.paymentMethod.indexOf('HIPAY_ONEY_FACILITY_PAY') > -1) {
             if (!empty(shipments)) {

@@ -101,7 +101,7 @@ module.exports = {
         I.click('#submit-button');
     },
 
-    validateHostedSisalPayment() {
+    validateHostedMooneyPayment() {
         I.click('#submit-button');
     },
 }

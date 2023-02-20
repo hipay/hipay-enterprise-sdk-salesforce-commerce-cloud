@@ -60,10 +60,10 @@ Scenario('Commande avec HiPay iDEAL', ({ I, checkoutPage, hostedPage }) => {
     checkoutPage.placeOrderWithSecure(false);
 }).tag('@hosted').tag('@toto');
 
-Scenario('Commande avec Hosted Sisal', ({ I, checkoutPage, hostedPage }) => {
-    checkoutPage.selectHostedPaymentMethod('HIPAY_HOSTED_SISAL');
+Scenario('Commande avec Hosted Mooney', ({ I, checkoutPage, hostedPage }) => {
+    checkoutPage.selectHostedPaymentMethod('HIPAY_HOSTED_MOONEY');
     hostedPage.submitHipayForm();
-    hostedPage.validateHostedSisalPayment();
+    hostedPage.validateHostedMooneyPayment();
     checkoutPage.placeOrderWithSecure(false);
 }).tag('@hosted');
 
@@ -142,12 +142,12 @@ Scenario('Commande avec HiPay iDEAL', ({ I, checkoutPage, hostedPage }) => {
     checkoutPage.placeOrderWithSecure(false);
 }).tag('@iframe');
 
-Scenario('Commande avec Hosted Sisal', ({ I, checkoutPage, hostedPage }) => {
-    checkoutPage.selectHostedPaymentMethod('HIPAY_HOSTED_SISAL');
+Scenario('Commande avec Hosted Mooney', ({ I, checkoutPage, hostedPage }) => {
+    checkoutPage.selectHostedPaymentMethod('HIPAY_HOSTED_MOONEY');
     checkoutPage.switchToHipayIframe();
     hostedPage.submitHipayForm();
     checkoutPage.leaveHipayIframe();
-    hostedPage.validateHostedSisalPayment();
+    hostedPage.validateHostedMooneyPayment();
     checkoutPage.placeOrderWithSecure(false);
 }).tag('@iframe');
 
@@ -213,9 +213,9 @@ Scenario('Commande avec HiPay iDEAL', ({ I, checkoutPage, hostedPage }) => {
     checkoutPage.placeOrderWithSecure(false);
 }).tag('@api').tag('@wip');
 
-Scenario('Commande Sisal', ({ I, checkoutPage, hostedPage }) => {
-    checkoutPage.selectHostedPaymentMethod('HIPAY_SISAL', true);
-    hostedPage.validateSisalPayment();
+Scenario('Commande Mooney', ({ I, checkoutPage, hostedPage }) => {
+    checkoutPage.selectHostedPaymentMethod('HIPAY_MOONEY', true);
+    hostedPage.validateMooneyPayment();
     checkoutPage.placeOrderWithSecure(false);
 }).tag('@api').tag('@wip');
 
