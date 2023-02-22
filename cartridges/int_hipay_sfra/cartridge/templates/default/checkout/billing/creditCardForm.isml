@@ -1,3 +1,23 @@
-<form>
-    <div id="card"></div>
+<form id="hipay-form">
+    <label>Fullname</label>
+    <iscomment> Cardholder field will be inserted here </iscomment>
+    <div class="hostedfield" id="hipay-card-holder"></div>
+
+    <label>Card number</label>
+    <iscomment> Card number field will be inserted here </iscomment>
+    <div class="hostedfield" id="hipay-card-number"></div>
+
+    <label>Expiry date</label>
+    <iscomment> Expiry date field will be inserted here </iscomment>
+    <div class="hostedfield" id="hipay-expiry-date"></div>
+
+    <label>CVC</label>
+    <iscomment> CVC field will be inserted here </iscomment>
+    <div class="hostedfield" id="hipay-cvc"></div>
+
+    <button type="submit" id="hipay-submit-button" disabled="true">
+        PAY
+    </button>
+
+    <div id="hipay-error-message"></div>
 </form>
