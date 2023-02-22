@@ -8,16 +8,17 @@ var HiPayOrderModule = require('*/cartridge/scripts/lib/hipay/modules/hipayOrder
 var HiPayProcess = require('*/cartridge/scripts/lib/hipay/hipayProcess');
 var statuses = require('*/cartridge/scripts/lib/hipay/hipayStatus').HiPayStatus;
 
-function acceptPayment(res, next, mode) {
+function acceptPayment(req, res, next, mode) {
     var isHashValid = HiPayProcess.verifyHash();
     var isStatusValid = HiPayOrderModule.hiPayVerifyStatus(mode);
+    var hiPayState = req.querystring.state;
     var params = {};
     var processOrder;
     var order;
     var error;
     var redirectURL;
 
-    if (isHashValid && isStatusValid) {
+    if (isHashValid && hiPayState == "completed" && isStatusValid) {
         processOrder = HiPayOrderModule.hiPayProcessOrderCall();
         order = processOrder.order;
         error = processOrder.error;
@@ -82,7 +83,7 @@ server.get(
     'Accept',
     server.middleware.https,
     function (req, res, next) {
-        acceptPayment(res, next, statuses.ACCEPT.value);
+        acceptPayment(req, res, next, statuses.ACCEPT.value);
     }
 );
 
