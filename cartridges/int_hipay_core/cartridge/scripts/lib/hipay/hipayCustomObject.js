@@ -28,5 +28,5 @@ function writeToCustomObject(params) {
 }
 
 module.exports = {
-    writeToCustomObject: writeToCustomObject;
+    writeToCustomObject: writeToCustomObject
 };

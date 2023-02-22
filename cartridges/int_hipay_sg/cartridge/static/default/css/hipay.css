@@ -1,6 +1,6 @@
 [class^="payment-product-sprite-"] {
     display: block;
-    height: 80;
+    height: 80px;
     width: 75px;
     background-image: url("../images/payment-products/payment_product_sprites_small.png");
     background-repeat: no-repeat;
