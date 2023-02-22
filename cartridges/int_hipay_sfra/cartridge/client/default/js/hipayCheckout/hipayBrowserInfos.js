@@ -1,7 +1,5 @@
-const hipay = HiPay({
-    username: 'public',
-    password: 'password'
-});
+'use strict'
+var hipay = require('./globalVariable').getGlobalVariable();
 
 let browserInfo = hipay.getBrowserInfo();
 

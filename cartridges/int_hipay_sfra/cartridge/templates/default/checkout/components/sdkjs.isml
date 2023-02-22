@@ -1,5 +1,5 @@
-<script language="javascript" src="https://libs.hipay.com/js/sdkjs.js">
-</script>
+<script language="javascript" src="https://libs.hipay.com/js/sdkjs.js"></script>
+<link href="https://libs.hipay.com/themes/material.css" rel="stylesheet" />
 
 <isscript>
     var assets = require('*/cartridge/scripts/assets.js');
