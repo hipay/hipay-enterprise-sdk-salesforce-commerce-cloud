@@ -155,8 +155,8 @@ function initCreditCardList(cart) {
     if (customer.authenticated) {
         /* HiPay custom code - start */
         if (!empty(sitePrefs.hipayEnabled) && sitePrefs.hipayEnabled && !empty(sitePrefs.hipayEnableOneClick) && sitePrefs.hipayEnableOneClick) { /* if hipay and one click payment enabled */
-    		applicableCreditCards = require('*/cartridge/scripts/lib/hipay/modules/hipayCheckoutModule').getApplicableCreditCards(countryCode, paymentAmount.getValue()).ValidPaymentInstruments;
-    	} else {
+            applicableCreditCards = require('*/cartridge/scripts/lib/hipay/modules/hipayCheckoutModule').getApplicableCreditCards(countryCode, paymentAmount.getValue()).ValidPaymentInstruments;
+        } else {
             var profile = app.getModel('Profile').get();
             if (profile) {
                 applicableCreditCards = profile.validateWalletPaymentInstruments(countryCode, paymentAmount.getValue()).ValidPaymentInstruments;

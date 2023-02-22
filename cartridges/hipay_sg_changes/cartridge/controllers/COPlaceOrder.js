@@ -18,14 +18,15 @@ var Transaction = require('dw/system/Transaction');
 /* HiPay custom code - start */
 var sitePrefs = require('dw/system/Site').getCurrent().getPreferences().getCustom();
 var Logger = require('dw/system/Logger');
-/* HiPay custom code – end */
+/* HiPay custom code - end */
 
 /* Script Modules */
 var app = require('*/cartridge/scripts/app');
 var guard = require('*/cartridge/scripts/guard');
 /* HiPay custom code - start */
-var Helpers = require('*/cartridge/scripts/util/Helpers');
-/* HiPay custom code – end */
+var Constants = require('*/cartridge/scripts/util/hipayConstants');
+var HipayCustomObject = require('*/cartridge/scripts/lib/hipay/hipayCustomObject');
+/* HiPay custom code - end */
 
 var Cart = app.getModel('Cart');
 var Order = app.getModel('Order');
@@ -139,8 +140,8 @@ function start() {
                 attemptDate: new Date()
                 }
         };
-        var result = Helpers.writeToCustomObject(params);
-        if (result === 'ERROR') {
+        var result = HipayCustomObject.writeToCustomObject(params);
+        if (result === Constants.STATUS_ERROR) {
             Logger.error('writeToCustomObject : Fail to add the custom object : ' + params.objName);
         } else {
             Logger.info('writeToCustomObject : Record added for custom object : ' + params.objName);

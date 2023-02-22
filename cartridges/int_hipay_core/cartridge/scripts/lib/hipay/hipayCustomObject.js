@@ -5,6 +5,8 @@ var UUIDUtils = require('dw/util/UUIDUtils');
 var CustomObjectMgr = require('dw/object/CustomObjectMgr');
 var Transaction = require('dw/system/Transaction');
 
+var Constants = require('*/cartridge/scripts/util/hipayConstants');
+
 /**
  * write To Custom Object
  * @returns ERROR or OK
@@ -19,10 +21,12 @@ function writeToCustomObject(params) {
         });
     } catch (e) {
         Logger.error('writeToCustomObject ERROR :' + e);
-        return 'ERROR';
+        return Constants.STATUS_ERROR;
     }
-    return 'OK';
+
+    return Constants.STATUS_OK;
 }
 
-/* Exports of the modules */
- exports.writeToCustomObject = writeToCustomObject;
+module.exports = {
+    writeToCustomObject: writeToCustomObject;
+};

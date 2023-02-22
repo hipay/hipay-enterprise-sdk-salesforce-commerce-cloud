@@ -6,8 +6,8 @@ var Site = require('dw/system/Site');
 
 var COHelpers = require('*/cartridge/scripts/checkout/checkoutHelpers');
 
-// Import Constants
 var Constants = require('*/cartridge/scripts/util/hipayConstants');
+var HipayCustomObject = require('*/cartridge/scripts/lib/hipay/hipayCustomObject');
 
 server.extend(page);
 
@@ -229,7 +229,7 @@ server.replace('PlaceOrder', server.middleware.https, function (req, res, next) 
                     attemptDate: new Date()
                 }
             };
-            var result = COHelpers.writeToCustomObject(params);
+            var result = HipayCustomObject.writeToCustomObject(params);
             if (result === Constants.STATUS_ERROR) {
                 Logger.error('writeToCustomObject : Fail to add the custom object : ' + params.objName);
             } else {
