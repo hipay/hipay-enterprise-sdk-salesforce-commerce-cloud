@@ -8,16 +8,13 @@
     margin: 0 5px;
 }
 
+i.payment-product-sprite-visa,
 i.payment-product-sprite-hosted {
     background-position: -404px -185px;
 }
 
 i.payment-product-sprite-mastercard {
     background-position: 0 15px;
-}
-
-i.payment-product-sprite-visa {
-    background-position: -98px 15px;
 }
 
 i.payment-product-sprite-maestro {
