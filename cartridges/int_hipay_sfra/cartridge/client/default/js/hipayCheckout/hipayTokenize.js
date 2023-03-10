@@ -7,12 +7,8 @@ $('button[value="submit-payment"]').on('click', function () {
   /* Tokenize your card information when the submit button is clicked */
   cardInstance.getPaymentData().then(
     function(response) {
-      $('input[name=dwfrm_billing_hipaytokenize]').val(JSON.stringify({
-        payment_product: response.payment_product,
-        token: response.token,
-        browser_info: response.browser_info,
-        device_fingerprint: response.device_fingerprint
-      }));
+      console.log(response);
+      $('input[name=dwfrm_billing_hipaytokenize]').val(JSON.stringify(response));
     },
     function(errors) {
       /* Display first error */

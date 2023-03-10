@@ -196,9 +196,9 @@ function Handle(currentBasket, paymentInformation, paymentUUID, req) {
         }
 
         //////////HIPAY HOSTED FIELDS///////////
-        if (currentBasket.getCustom().hipayTokenize) {
-            return { success: true };
-        }
+        // if (session.forms.billing.hipaytokenize.value && !empty(JSON.parse(session.forms.billing.hipaytokenize.value).token)) {
+        //     return { success: true };
+        // };
         //////////<<<HIPAY HOSTED FIELDS>>>///////////
 
         hiPayCheckoutModule.hiPayUpdatePaymentInstrument(paymentInstrument, paymentInformation);

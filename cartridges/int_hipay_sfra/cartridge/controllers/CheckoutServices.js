@@ -26,15 +26,6 @@ server.append(
         var creditCardErrors = {};
         var hiPayErrors = {};
 
-        //////////HIPAY HOSTED FIELDS///////////
-        var currentBasket = BasketMgr.getCurrentBasket();
-        Transaction.wrap(function() {
-            if (paymentForm.hipaytokenize.htmlValue) {
-                currentBasket.getCustom().hipayTokenize = paymentForm.hipaytokenize.htmlValue;
-            }
-        })
-        //////////<<<HIPAY HOSTED FIELDS>>>///////////
-
         if (!req.form.storedPaymentUUID) {
             if (paymentMethodID === 'CREDIT_CARD' || paymentMethodID === 'HIPAY_CREDIT_CARD') {
                 // verify credit card form data
