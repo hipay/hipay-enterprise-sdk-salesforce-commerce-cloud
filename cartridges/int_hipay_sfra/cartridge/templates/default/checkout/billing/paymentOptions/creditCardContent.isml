@@ -2,13 +2,11 @@
 <div class="tab-pane active credit-card-content" id="credit-card-content" role="tabpanel">
     <fieldset class="payment-form-fields">
 
-        <iscomment>HiPay custom code - start</iscomment>
         <!--- payment method is credit card --->
         <input type="hidden" class="form-control"
-            name="${pdict.forms.billingForm.paymentMethod.htmlName}"
-            value="${paymentOption.ID}"
+               name="${pdict.forms.billingForm.paymentMethod.htmlName}"
+               value="HIPAY_CREDIT_CARD"
         >
-        <iscomment>HiPay custom code - end</iscomment>
 
         <!--- register/authenticated user --->
         <isif condition="${pdict.customer.registeredUser}">

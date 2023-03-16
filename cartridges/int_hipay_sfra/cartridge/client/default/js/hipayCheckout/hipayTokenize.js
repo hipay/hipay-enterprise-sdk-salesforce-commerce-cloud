@@ -1,16 +1,18 @@
 'use strict'
 
-/* Get the form */
-let cardForm = $('#hipay-form');
+var cardInstance = require('./hipayCreate').cardInstance;
 
 /* Add event listener on the submit button when clicked */
-cardForm.on('submit', function(event) {
-  event.preventDefault();
+$('button[value="submit-payment"]').on('click', function () {
   /* Tokenize your card information when the submit button is clicked */
   cardInstance.getPaymentData().then(
     function(response) {
-      /* Send token to your server to process payment */
-      handlePayment(response.token);
+      $('input[name=dwfrm_billing_hipaytokenize]').val(JSON.stringify({
+        payment_product: response.payment_product,
+        token: response.token,
+        browser_info: response.browser_info,
+        device_fingerprint: response.device_fingerprint
+      }));
     },
     function(errors) {
       /* Display first error */

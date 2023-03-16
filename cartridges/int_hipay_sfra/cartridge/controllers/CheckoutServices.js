@@ -5,6 +5,8 @@ var server = require('server');
 var Site = require('dw/system/Site');
 
 var COHelpers = require('*/cartridge/scripts/checkout/checkoutHelpers');
+var BasketMgr = require('dw/order/BasketMgr');
+var Transaction = require('dw/system/Transaction');
 
 var Constants = require('*/cartridge/scripts/util/hipayConstants');
 var HipayCustomObject = require('*/cartridge/scripts/lib/hipay/hipayCustomObject');
@@ -23,6 +25,15 @@ server.append(
         var paymentMethodID = paymentForm.paymentMethod.value;
         var creditCardErrors = {};
         var hiPayErrors = {};
+
+        //////////HIPAY HOSTED FIELDS///////////
+        var currentBasket = BasketMgr.getCurrentBasket();
+        Transaction.wrap(function() {
+            if (paymentForm.hipaytokenize.htmlValue) {
+                currentBasket.getCustom().hipayTokenize = paymentForm.hipaytokenize.htmlValue;
+            }
+        })
+        //////////<<<HIPAY HOSTED FIELDS>>>///////////
 
         if (!req.form.storedPaymentUUID) {
             if (paymentMethodID === 'CREDIT_CARD' || paymentMethodID === 'HIPAY_CREDIT_CARD') {
@@ -60,7 +71,6 @@ server.append(
         this.on('route:BeforeComplete', function (req, res) { // eslint-disable-line no-shadow
             var BasketMgr = require('dw/order/BasketMgr');
             var Transaction = require('dw/system/Transaction');
-
             var currentBasket = BasketMgr.getCurrentBasket();
 
             var billingData = res.getViewData();

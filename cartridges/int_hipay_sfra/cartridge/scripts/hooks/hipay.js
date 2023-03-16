@@ -195,6 +195,12 @@ function Handle(currentBasket, paymentInformation, paymentUUID, req) {
             return { error: true };
         }
 
+        //////////HIPAY HOSTED FIELDS///////////
+        if (currentBasket.getCustom().hipayTokenize) {
+            return { success: true };
+        }
+        //////////<<<HIPAY HOSTED FIELDS>>>///////////
+
         hiPayCheckoutModule.hiPayUpdatePaymentInstrument(paymentInstrument, paymentInformation);
 
         if (paymentMethod === 'HIPAY_CREDIT_CARD') {

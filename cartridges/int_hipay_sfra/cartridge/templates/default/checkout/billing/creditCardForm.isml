@@ -1,23 +1,11 @@
-<form id="hipay-form">
-    <label>Fullname</label>
-    <iscomment> Cardholder field will be inserted here </iscomment>
-    <div class="hostedfield" id="hipay-card-holder"></div>
+<iscomment>The whole form will be inserted in this div </iscomment>
+<div id="hipay-hostedfields-form"></div>
 
-    <label>Card number</label>
-    <iscomment> Card number field will be inserted here </iscomment>
-    <div class="hostedfield" id="hipay-card-number"></div>
+<div class="multiuse-container">
+  <input type="checkbox" id="save-card" name="save-card">
+  <label for="save-card">Save card</label>
+</div>
 
-    <label>Expiry date</label>
-    <iscomment> Expiry date field will be inserted here </iscomment>
-    <div class="hostedfield" id="hipay-expiry-date"></div>
+<div id="hipay-error-message"></div>
 
-    <label>CVC</label>
-    <iscomment> CVC field will be inserted here </iscomment>
-    <div class="hostedfield" id="hipay-cvc"></div>
-
-    <button type="submit" id="hipay-submit-button" disabled="true">
-        PAY
-    </button>
-
-    <div id="hipay-error-message"></div>
-</form>
+<input type="hidden" name="${pdict.CurrentForms.billing.hipaytokenize.htmlName}" id="hipaytokenize">

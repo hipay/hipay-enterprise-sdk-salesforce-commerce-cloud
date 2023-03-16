@@ -20,4 +20,6 @@
 
     <field formid="subscribe" type="boolean" checked="false" default-value="false" mandatory="false" />
 
+    <field formid="hipaytokenize" type="string"/>
+
 </form>

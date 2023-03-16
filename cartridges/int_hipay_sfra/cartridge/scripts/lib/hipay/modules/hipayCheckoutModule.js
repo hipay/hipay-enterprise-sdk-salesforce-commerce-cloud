@@ -306,6 +306,12 @@ HiPayCheckoutModule.hiPayOrderRequest = function (paymentInstrument, order, devi
         helper.fillHeaderData(HiPayConfig, order, params, pi); // fill in the common params
         helper.fillOrderData(order, params, pi); // add order details
 
+        //////////HIPAY HOSTED FIELDS///////////
+        var hipayTokenize = JSON.parse(order.getCustom().hipayTokenize);
+        params.cardtoken = hipayTokenize.token;
+        params.payment_product = hipayTokenize.payment_product;
+        //////////<<<HIPAY HOSTED FIELDS>>>///////////
+
         log.info('HiPay Order Request  ::: ' + JSON.stringify(params, undefined, 2));
         hipayResponse = hiPayOrderService.loadOrderPayment(params);
 

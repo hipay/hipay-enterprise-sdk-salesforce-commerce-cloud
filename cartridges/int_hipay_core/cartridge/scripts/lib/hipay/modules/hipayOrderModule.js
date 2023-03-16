@@ -132,7 +132,6 @@ function hiPayVerifyRequest() {
             return false;
         }
     } catch (e) {
-        var test = e;
         log.error(e);
 
         return false;
