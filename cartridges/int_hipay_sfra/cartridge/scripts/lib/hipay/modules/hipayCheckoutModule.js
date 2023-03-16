@@ -63,7 +63,7 @@ HiPayCheckoutModule.hiPayUpdatePaymentInstrument = function (paymentInstrument, 
 
     if (pi.paymentMethod.equals('HIPAY_CREDIT_CARD')) {
         var parseHipayTokenize = JSON.parse(session.forms.billing.hipaytokenize.value);
-        ccType = parseHipayTokenize.card_type;
+        ccType = parseHipayTokenize.payment_product.charAt(0).toUpperCase() + parseHipayTokenize.payment_product.slice(1);
         card = PaymentMgr.getPaymentCard(ccType);
 
         Transaction.wrap(function () {
@@ -304,15 +304,9 @@ HiPayCheckoutModule.hiPayOrderRequest = function (paymentInstrument, order, devi
         params.eci = recurring ? '9' : '7';
         params.device_fingerprint = fingeprint;
         params.cdata1 = order.getOrderToken();
+        // params.cardholder = pi.creditCardHolder;
         helper.fillHeaderData(HiPayConfig, order, params, pi); // fill in the common params
         helper.fillOrderData(order, params, pi); // add order details
-
-        //////////HIPAY HOSTED FIELDS///////////
-        var test1 = session.forms.billing.paymentMethod;
-        var hipayTokenize = JSON.parse(order.getCustom().hipayTokenize);
-        params.cardtoken = hipayTokenize.token;
-        params.payment_product = hipayTokenize.payment_product;
-        //////////<<<HIPAY HOSTED FIELDS>>>///////////
 
         log.info('HiPay Order Request  ::: ' + JSON.stringify(params, undefined, 2));
         hipayResponse = hiPayOrderService.loadOrderPayment(params);

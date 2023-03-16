@@ -44,67 +44,6 @@ function creditCardHandle(paymentInstrument, paymentInformation, paymentUUID, re
 
     paymentUUID = req.form && req.form.storedPaymentUUID ? req.form.storedPaymentUUID : null;
 
-    if (empty(paymentUUID) && !empty(paymentInformation.cardNumber.value)) {
-        cardNumber = creditCard.cardNumber.value;
-
-        if (!empty(creditCard.securityCode)) {
-            cardSecurityCode = creditCard.securityCode.value;
-        }
-
-        cardType = creditCard.cardType.value;
-        expirationMonth = creditCard.expirationMonth.value;
-        expirationYear = creditCard.expirationYear.value;
-
-        paymentCard = PaymentMgr.getPaymentCard(cardType);
-
-        if (!empty(cardSecurityCode)) {
-            creditCardStatus = paymentCard.verify(expirationMonth, expirationYear, cardNumber, cardSecurityCode);
-        } else {
-            creditCardStatus = paymentCard.verify(expirationMonth, expirationYear, cardNumber);
-        }
-
-        if (creditCardStatus.error) {
-            hiPayCheckoutModule.invalidatePaymentCardFormElements(creditCardStatus, creditCard);
-
-            collections.forEach(creditCardStatus.items, function (item) {
-                switch (item.code) {
-                    case PaymentStatusCodes.CREDITCARD_INVALID_CARD_NUMBER:
-                        cardErrors[paymentInformation.cardNumber.htmlName] =
-                            Resource.msg('error.invalid.card.number', 'creditCard', null);
-                        break;
-
-                    case PaymentStatusCodes.CREDITCARD_INVALID_EXPIRATION_DATE:
-                        cardErrors[paymentInformation.expirationMonth.htmlName] =
-                            Resource.msg('error.expired.credit.card', 'creditCard', null);
-                        cardErrors[paymentInformation.expirationYear.htmlName] =
-                            Resource.msg('error.expired.credit.card', 'creditCard', null);
-                        break;
-
-                    case PaymentStatusCodes.CREDITCARD_INVALID_SECURITY_CODE:
-                        cardErrors[paymentInformation.securityCode.htmlName] =
-                            Resource.msg('error.invalid.security.code', 'creditCard', null);
-                        break;
-                    default:
-                        serverErrors.push(
-                            Resource.msg('error.card.information.error', 'creditCard', null)
-                        );
-                }
-            });
-
-            return { fieldErrors: [cardErrors], serverErrors: serverErrors, error: true };
-        }
-    }
-
-    if (!empty(creditCard.cardOwner.value)) {
-        if (creditCard.cardType.value === 'Amex') {
-            var fullName = creditCard.cardOwner.value;
-
-            creditCardHolder = fullName.split(' ').join('.');
-        } else {
-            creditCardHolder = creditCard.cardOwner.value;
-        }
-    }
-
     if (
         !empty(paymentUUID)
         && hipayEnableOneClick
@@ -137,39 +76,16 @@ function creditCardHandle(paymentInstrument, paymentInformation, paymentUUID, re
         hiPayMultiUseToken = session.forms.billing.creditCardFields.saveCard.value;
         hiPayToken = selectedCreditCard.creditCardToken;
         hiPayCardType = selectedCreditCard.creditCardType;
-    } else {
-        hiPayCardBrand = paymentInstrument.custom.hipayProductName;
-        hiPayCardNumber = creditCard.cardNumber.value;
-        hiPayCardExpiryMonth = creditCard.expirationMonth.value;
-        hiPayCardExpiryYear = creditCard.expirationYear.value;
-        hiPayCardHolder = creditCardHolder;
-
-        if (!empty(creditCard.securityCode)) {
-            hiPayCardCVC = creditCard.securityCode.value;
-        }
-
-        hiPayMultiUseToken = hipayEnableOneClick && session.forms.billing.creditCardFields.saveCard.value;
-        hiPayCardType = creditCard.cardType.value;
-
-        var hiPayTokenResult = hiPayCheckoutModule.hiPayGenerateToken(hiPayCardBrand, hiPayCardNumber, hiPayCardExpiryMonth,
-            hiPayCardExpiryYear, hiPayCardHolder, hiPayCardCVC, hiPayMultiUseToken);
-
-        if (!empty(hiPayTokenResult) && hiPayTokenResult.error === false) {
-            hiPayToken = hiPayTokenResult.HiPayToken;
-            hiPayCardNumber = hiPayTokenResult.HiPayPan;
-        } else {
-            return { error: true };
-        }
     }
 
-    if (hiPayToken != null) {
+    if (creditCard && creditCard.token) {
         Transaction.wrap(function () {
-            paymentInstrument.setCreditCardHolder(hiPayCardHolder);
-            paymentInstrument.setCreditCardNumber(hiPayCardNumber);
-            paymentInstrument.setCreditCardType(hiPayCardType);
-            paymentInstrument.setCreditCardExpirationMonth(hiPayCardExpiryMonth);
-            paymentInstrument.setCreditCardExpirationYear(hiPayCardExpiryYear);
-            paymentInstrument.setCreditCardToken(hiPayToken);
+            paymentInstrument.setCreditCardHolder(creditCard.card_holder);
+            paymentInstrument.setCreditCardNumber(creditCard.pan);
+            paymentInstrument.setCreditCardType(creditCard.payment_product.charAt(0).toUpperCase() + creditCard.payment_product.slice(1));
+            paymentInstrument.setCreditCardExpirationMonth(Number(creditCard.card_expiry_month));
+            paymentInstrument.setCreditCardExpirationYear(Number(creditCard.card_expiry_year));
+            paymentInstrument.setCreditCardToken(creditCard.token);
         });
     } else {
         return { error: true };
@@ -195,16 +111,10 @@ function Handle(currentBasket, paymentInformation, paymentUUID, req) {
             return { error: true };
         }
 
-        //////////HIPAY HOSTED FIELDS///////////
-        // if (session.forms.billing.hipaytokenize.value && !empty(JSON.parse(session.forms.billing.hipaytokenize.value).token)) {
-        //     return { success: true };
-        // };
-        //////////<<<HIPAY HOSTED FIELDS>>>///////////
-
         hiPayCheckoutModule.hiPayUpdatePaymentInstrument(paymentInstrument, paymentInformation);
 
         if (paymentMethod === 'HIPAY_CREDIT_CARD') {
-            var handleResponse = creditCardHandle(paymentInstrument, paymentInformation, paymentUUID, req);
+            var handleResponse = creditCardHandle(paymentInstrument, JSON.parse(session.forms.billing.hipaytokenize.value), paymentUUID, req);
 
             if (handleResponse.success) {
                 return { success: true };
