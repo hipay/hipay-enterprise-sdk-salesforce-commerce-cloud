@@ -4,6 +4,7 @@ var base = require('base/checkout/billing');
 
 
 base.methods.updatePaymentInformation = function (order) {
+    console.log('updatePaymentInformation');
     // update payment details
     var $paymentSummary = $('.payment-details');
     var htmlToAppend = '';
@@ -46,6 +47,24 @@ base.methods.validateAndUpdateBillingPaymentInstrument = function (order) {
     // Force security code and card number clear
     $('input[name$=securityCode]', form).val('');
     $('input[name$=cardNumber]').lengh && $('input[name$=cardNumber]').data('cleave').setRawValue('');
-}
+};
+
+base.addNewPaymentInstrument = function () {
+    $('.btn.add-payment').on('click', function (e) {
+        e.preventDefault();
+        $('.payment-information').data('is-new-payment', true);
+        $('.credit-card-form').removeClass('checkout-hidden');
+        $('.user-payment-instruments').addClass('checkout-hidden');
+    });
+};
+
+base.cancelNewPayment = function () {
+    $('.cancel-new-payment').on('click', function (e) {
+        e.preventDefault();
+        $('.payment-information').data('is-new-payment', false);
+        $('.user-payment-instruments').removeClass('checkout-hidden');
+        $('.credit-card-form').addClass('checkout-hidden');
+    });
+};
 
 module.exports = base;
