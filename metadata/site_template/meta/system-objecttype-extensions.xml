@@ -355,6 +355,7 @@
                 <mandatory-flag>false</mandatory-flag>
                 <externally-managed-flag>false</externally-managed-flag>
                 <min-length>0</min-length>
+                <default-value>#00ADE9</default-value>
             </attribute-definition>
             <attribute-definition attribute-id="hipayHostedFieldsStyleBaseColor">
                 <display-name xml:lang="x-default">hipay HostedFields Style Base Color</display-name>
@@ -362,6 +363,7 @@
                 <mandatory-flag>false</mandatory-flag>
                 <externally-managed-flag>false</externally-managed-flag>
                 <min-length>0</min-length>
+                <default-value>#000000</default-value>
             </attribute-definition>
             <attribute-definition attribute-id="hipayHostedFieldsStyleBaseFrontSize">
                 <display-name xml:lang="x-default">hipay HostedFields Style Base Front-Size</display-name>
@@ -369,6 +371,7 @@
                 <mandatory-flag>false</mandatory-flag>
                 <externally-managed-flag>false</externally-managed-flag>
                 <min-length>0</min-length>
+                <default-value>15px</default-value>
             </attribute-definition>
             <attribute-definition attribute-id="hipayHostedFieldsStyleBaseFrontWeight">
                 <display-name xml:lang="x-default">hipay HostedFields Style Base Front-Weight</display-name>
@@ -376,6 +379,7 @@
                 <mandatory-flag>false</mandatory-flag>
                 <externally-managed-flag>false</externally-managed-flag>
                 <min-length>0</min-length>
+                <default-value>400</default-value>
             </attribute-definition>
             <attribute-definition attribute-id="hipayHostedFieldsStyleBaseIconColor">
                 <display-name xml:lang="x-default">hipay HostedFields Style Base Icon Color</display-name>
@@ -383,6 +387,7 @@
                 <mandatory-flag>false</mandatory-flag>
                 <externally-managed-flag>false</externally-managed-flag>
                 <min-length>0</min-length>
+                <default-value>#00ADE9</default-value>
             </attribute-definition>
             <attribute-definition attribute-id="hipayHostedFieldsStyleBasePlaceHolderColor">
                 <display-name xml:lang="x-default">hipay HostedFields Style Base Place Holder Color</display-name>
@@ -390,6 +395,7 @@
                 <mandatory-flag>false</mandatory-flag>
                 <externally-managed-flag>false</externally-managed-flag>
                 <min-length>0</min-length>
+                <default-value>#999999</default-value>
             </attribute-definition>
             <attribute-definition attribute-id="hipayHostedFieldsStyleInvalidCaretColor">
                 <display-name xml:lang="x-default">hipay HostedFields Style Invalid Caret Color</display-name>
@@ -397,6 +403,7 @@
                 <mandatory-flag>false</mandatory-flag>
                 <externally-managed-flag>false</externally-managed-flag>
                 <min-length>0</min-length>
+                <default-value>#D50000</default-value>
             </attribute-definition>
             <attribute-definition attribute-id="hipayHostedFieldsStyleInvalidColor">
                 <display-name xml:lang="x-default">hipay HostedFields Style Invalid Color</display-name>
@@ -404,6 +411,7 @@
                 <mandatory-flag>false</mandatory-flag>
                 <externally-managed-flag>false</externally-managed-flag>
                 <min-length>0</min-length>
+                <default-value>#D50000</default-value>
             </attribute-definition>
             <attribute-definition attribute-id="hipayHostedFieldsTemplate">
                 <display-name xml:lang="x-default">hipay HostedFields Template</display-name>
