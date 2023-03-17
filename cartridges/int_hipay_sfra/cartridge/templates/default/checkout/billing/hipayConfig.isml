@@ -1,0 +1,11 @@
+
+<isscript>
+  var HiPayHelper = require("*/cartridge/scripts/lib/hipay/hipayHelper");
+  var helper = new HiPayHelper();
+  var config = helper.getPreferences();
+</isscript>
+<script>
+  (function(){
+      window.hipayCustomPreferences = <isprint value="${JSON.stringify(config)}" encoding="off"/>;
+  }());
+</script>

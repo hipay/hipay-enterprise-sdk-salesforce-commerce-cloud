@@ -321,6 +321,111 @@
                 <externally-managed-flag>false</externally-managed-flag>
                 <default-value>false</default-value>
             </attribute-definition>
+            <attribute-definition attribute-id="hipayHostedFieldsEnvironment">
+                <display-name xml:lang="x-default">hipay HostedFields Environment</display-name>
+                <type>string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <min-length>0</min-length>
+            </attribute-definition>
+            <attribute-definition attribute-id="hipayHostedFieldsForm">
+                <display-name xml:lang="x-default">hipay HostedFields Form</display-name>
+                <type>string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <min-length>0</min-length>
+            </attribute-definition>
+            <attribute-definition attribute-id="hipayHostedFieldsLang">
+                <display-name xml:lang="x-default">hipay HostedFields Lang</display-name>
+                <type>string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <min-length>0</min-length>
+            </attribute-definition>
+            <attribute-definition attribute-id="hipayHostedFieldsPassword">
+                <display-name xml:lang="x-default">hipay HostedFields Password</display-name>
+                <type>string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <min-length>0</min-length>
+            </attribute-definition>
+            <attribute-definition attribute-id="hipayHostedFieldsStyleBaseCaretColor">
+                <display-name xml:lang="x-default">hipay HostedFields Style Base Caret Color</display-name>
+                <type>string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <min-length>0</min-length>
+            </attribute-definition>
+            <attribute-definition attribute-id="hipayHostedFieldsStyleBaseColor">
+                <display-name xml:lang="x-default">hipay HostedFields Style Base Color</display-name>
+                <type>string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <min-length>0</min-length>
+            </attribute-definition>
+            <attribute-definition attribute-id="hipayHostedFieldsStyleBaseFrontSize">
+                <display-name xml:lang="x-default">hipay HostedFields Style Base Front-Size</display-name>
+                <type>string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <min-length>0</min-length>
+            </attribute-definition>
+            <attribute-definition attribute-id="hipayHostedFieldsStyleBaseFrontWeight">
+                <display-name xml:lang="x-default">hipay HostedFields Style Base Front-Weight</display-name>
+                <type>string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <min-length>0</min-length>
+            </attribute-definition>
+            <attribute-definition attribute-id="hipayHostedFieldsStyleBaseIconColor">
+                <display-name xml:lang="x-default">hipay HostedFields Style Base Icon Color</display-name>
+                <type>string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <min-length>0</min-length>
+            </attribute-definition>
+            <attribute-definition attribute-id="hipayHostedFieldsStyleBasePlaceHolderColor">
+                <display-name xml:lang="x-default">hipay HostedFields Style Base Place Holder Color</display-name>
+                <type>string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <min-length>0</min-length>
+            </attribute-definition>
+            <attribute-definition attribute-id="hipayHostedFieldsStyleInvalidCaretColor">
+                <display-name xml:lang="x-default">hipay HostedFields Style Invalid Caret Color</display-name>
+                <type>string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <min-length>0</min-length>
+            </attribute-definition>
+            <attribute-definition attribute-id="hipayHostedFieldsStyleInvalidColor">
+                <display-name xml:lang="x-default">hipay HostedFields Style Invalid Color</display-name>
+                <type>string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <min-length>0</min-length>
+            </attribute-definition>
+            <attribute-definition attribute-id="hipayHostedFieldsTemplate">
+                <display-name xml:lang="x-default">hipay HostedFields Template</display-name>
+                <type>string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <min-length>0</min-length>
+            </attribute-definition>
+            <attribute-definition attribute-id="hipayHostedFieldsUserName">
+                <display-name xml:lang="x-default">hipay HostedFields User Name</display-name>
+                <type>string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <min-length>0</min-length>
+            </attribute-definition>
+            <attribute-definition attribute-id="hipayHostedFieldspPassword">
+                <display-name xml:lang="x-default">hipay HostedFields Password</display-name>
+                <type>string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <min-length>0</min-length>
+            </attribute-definition>
             <attribute-definition attribute-id="hipayHungOrderTimeout">
                 <display-name xml:lang="x-default">Hung Order Cleanup Time</display-name>
                 <description xml:lang="x-default">Number of minutes after which all orders hung in status "CREATED" and left unprocessed for payment are cleared.</description>
@@ -409,6 +514,23 @@
                 <attribute attribute-id="hipayDisplayCardSelector"/>
                 <attribute attribute-id="hipayHungOrderTimeout"/>
                 <attribute attribute-id="hipaySiteShippingMethodsList"/>
+            </attribute-group>
+            <attribute-group group-id="HipayHostedFieldsConfig">
+                <display-name xml:lang="x-default">Hipay HostedFields Configuration</display-name>
+                <attribute attribute-id="hipayHostedFieldsTemplate"/>
+                <attribute attribute-id="hipayHostedFieldsForm"/>
+                <attribute attribute-id="hipayHostedFieldsStyleBaseColor"/>
+                <attribute attribute-id="hipayHostedFieldsStyleBaseFrontSize"/>
+                <attribute attribute-id="hipayHostedFieldsStyleBaseFrontWeight"/>
+                <attribute attribute-id="hipayHostedFieldsStyleBasePlaceHolderColor"/>
+                <attribute attribute-id="hipayHostedFieldsStyleBaseIconColor"/>
+                <attribute attribute-id="hipayHostedFieldsStyleBaseCaretColor"/>
+                <attribute attribute-id="hipayHostedFieldsStyleInvalidColor"/>
+                <attribute attribute-id="hipayHostedFieldsStyleInvalidCaretColor"/>
+                <attribute attribute-id="hipayHostedFieldsUserName"/>
+                <attribute attribute-id="hipayHostedFieldsPassword"/>
+                <attribute attribute-id="hipayHostedFieldsEnvironment"/>
+                <attribute attribute-id="hipayHostedFieldsLang"/>
             </attribute-group>
         </group-definitions>
     </type-extension>

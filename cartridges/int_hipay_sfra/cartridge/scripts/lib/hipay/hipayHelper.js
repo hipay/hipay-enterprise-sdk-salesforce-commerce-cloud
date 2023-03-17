@@ -877,4 +877,37 @@ HiPayHelper.prototype.validateOneyAvailability = function (basket) {
     return decision;
 };
 
+HiPayHelper.prototype.getPreferences = function () {
+    var Site = require('dw/system/Site');
+    var currentSite = Site.getCurrent();
+
+    var hipayHostedFields = [{
+        config : {
+            template : currentSite.getCustomPreferenceValue('hipayHostedFieldsTemplate'),
+            selector : currentSite.getCustomPreferenceValue('hipayHostedFieldsForm'),
+            styles: {
+                base: {
+                    color: currentSite.getCustomPreferenceValue('hipayHostedFieldsStyleBaseColor'),
+                    fontSize: currentSite.getCustomPreferenceValue('hipayHostedFieldsStyleBaseFrontSize'),
+                    fontWeight: currentSite.getCustomPreferenceValue('hipayHostedFieldsStyleBaseFrontWeight'),
+                    placeholderColor: currentSite.getCustomPreferenceValue('hipayHostedFieldsStyleBasePlaceHolderColor'),
+                    iconColor: currentSite.getCustomPreferenceValue('hipayHostedFieldsStyleBaseIconColor'),
+                    caretColor: currentSite.getCustomPreferenceValue('hipayHostedFieldsStyleBaseCaretColor')
+                },
+                invalid: {
+                    color: currentSite.getCustomPreferenceValue('hipayHostedFieldsStyleInvalidColor'),
+                    caretColor: currentSite.getCustomPreferenceValue('hipayHostedFieldsStyleInvalidCaretColor')
+                }
+            }
+        },
+        globalVariable: {
+            username: currentSite.getCustomPreferenceValue('hipayHostedFieldsUserName'),
+            password: currentSite.getCustomPreferenceValue('hipayHostedFieldsPassword'),
+            environment: currentSite.getCustomPreferenceValue('hipayHostedFieldsEnvironment'),
+            lang: currentSite.getCustomPreferenceValue('hipayHostedFieldsLang')
+        }
+    }];
+    return hipayHostedFields;
+};
+
 module.exports = HiPayHelper;
