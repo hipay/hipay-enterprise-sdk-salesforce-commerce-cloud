@@ -12,6 +12,7 @@ var PaymentInstrument = require('dw/order/PaymentInstrument');
 var HiPayLogger = require('*/cartridge/scripts/lib/hipay/hipayLogger');
 var HiPayConfig = require('*/cartridge/scripts/lib/hipay/hipayConfig').HiPayConfig;
 var HiPayHelper = require('*/cartridge/scripts/lib/hipay/hipayHelper');
+var creditCardHelpers = require('*/cartridge/scripts/helpers/creditCardHelpers');
 
 var HiPayCheckoutModule = function () {};
 
@@ -55,16 +56,32 @@ HiPayCheckoutModule.createPaymentInstrument = function (basket, paymentType, rem
 * @param {dw.order.PaymentInstrument} paymentInstrument
 *
 */
-HiPayCheckoutModule.hiPayUpdatePaymentInstrument = function (paymentInstrument, paymentInformation) {
+HiPayCheckoutModule.hiPayUpdatePaymentInstrument = function (paymentInstrument, paymentInformation, req) {
     var paymentMethod = null;// the payment method
     var pi = paymentInstrument;
     var ccType; // credit card type
     var card; // payment card
+    var selectedCreditCard
+    var sitePrefs = require('dw/system/Site').getCurrent().getPreferences().getCustom();
 
     if (pi.paymentMethod.equals('HIPAY_CREDIT_CARD')) {
-        var parseHipayTokenize = JSON.parse(session.forms.billing.hipaytokenize.value);
-        ccType = parseHipayTokenize.payment_product.charAt(0).toUpperCase() + parseHipayTokenize.payment_product.slice(1);
-        card = PaymentMgr.getPaymentCard(ccType);
+        var paymentUUID = req.form && req.form.storedPaymentUUID ? req.form.storedPaymentUUID : null;
+
+        if (
+            !empty(paymentUUID)
+            && sitePrefs.hipayEnableOneClick
+            && !empty(customer.getProfile().getWallet())
+            && customer.getProfile().getWallet().getPaymentInstruments('HIPAY_CREDIT_CARD').length > 0
+        ) {
+            var paymentInstruments = customer.getProfile().getWallet().getPaymentInstruments('HIPAY_CREDIT_CARD');
+            selectedCreditCard = creditCardHelpers.selectedCreditCardInWallet(req, paymentUUID, paymentInstruments);
+            ccType = selectedCreditCard.creditCardType;
+            card = PaymentMgr.getPaymentCard(ccType);
+        } else {
+            var parseHipayTokenize = JSON.parse(session.forms.billing.hipaytokenize.value);
+            ccType = parseHipayTokenize.payment_product.charAt(0).toUpperCase() + parseHipayTokenize.payment_product.slice(1);
+            card = PaymentMgr.getPaymentCard(ccType);
+        }
 
         Transaction.wrap(function () {
             pi.custom.hipayProductName = card.custom.hipayProductName;
@@ -89,66 +106,6 @@ HiPayCheckoutModule.hiPayUpdatePaymentInstrument = function (paymentInstrument, 
             });
         }
     }
-};
-
-/**
-* Make a call to HiPay to generate a token for the Credit Card payment using the information provided
-*
-* @param  {String} hiPayCardBrand
-* @param  {String} hiPayCardNumber
-* @param  {Number} hiPayCardExpiryMonth
-* @param  {Number} hiPayCardExpiryYear
-* @param  {String} hiPayCardHolder
-* @param  {String} hiPayCardCVC
-* @param  {Boolean} hiPayMultiUseToken
-*
-* @return {String} the hiPayToken if successful, null otherwise
-*/
-HiPayCheckoutModule.hiPayGenerateToken = function (hiPayCardBrand, hiPayCardNumber, hiPayCardExpiryMonth,
-    hiPayCardExpiryYear, hiPayCardHolder, hiPayCardCVC, hiPayMultiUseToken) {
-    var HiPayTokenService = require('*/cartridge/scripts/lib/hipay/services/hipayTokenService');
-    var log = new HiPayLogger('HiPayGenerateToken');
-    var hiPayTokenService = new HiPayTokenService();
-    var params = {};
-    var month;
-    var multiUse;
-    var hipayResponse;
-    var token;
-    var msg;
-    var pan;
-
-    params.card_number = hiPayCardNumber;
-    month = hiPayCardExpiryMonth;
-    params.card_expiry_month = month < 10 ? '0' + month : month;
-    params.card_expiry_year = hiPayCardExpiryYear;
-    params.card_holder = hiPayCardHolder;
-    params.cvc = hiPayCardCVC;
-    multiUse = hiPayMultiUseToken;
-    params.multi_use = multiUse ? 1 : 0;
-    hipayResponse = hiPayTokenService.generateToken(params);
-
-    if (hipayResponse.ok === true) {
-        try {
-            msg = JSON.parse(hipayResponse.object.text);
-        } catch (e) {
-            log.error('Response text cannot be parsed as JSON ::: ' + JSON.stringify(hipayResponse.object.text, undefined, 2));
-            return { error: true };
-        }
-
-        token = msg.token;
-        pan = msg.pan;
-    } else {
-        log.error(hipayResponse.msg);
-        return { error: true };
-    }
-
-    log.info(JSON.stringify(msg, undefined, 2));
-
-    return {
-        error: false,
-        HiPayToken: token,
-        HiPayPan: pan
-    };
 };
 
 /**
