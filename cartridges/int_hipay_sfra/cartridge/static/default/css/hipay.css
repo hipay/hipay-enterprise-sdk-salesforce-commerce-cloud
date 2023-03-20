@@ -108,3 +108,6 @@ i.payment-product-sprite-bancontact {
 .payment-options .nav-item {
     flex: 1 0 20%;
 }
+.data-checkout-stage[data-checkout-stage=placeOrder]  .submit-payment-hipay {
+    display: none;
+}

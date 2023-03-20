@@ -1,12 +1,9 @@
 'use strict'
 
-if (window.hipayCustomPreferences.length === 0) {
-  return false;
-}
+var hipay = require('./globalVariable').getGlobalVariable();
 
 var customPreferences = window.hipayCustomPreferences[0];
 var config = customPreferences.config;
-var hipay = HiPay(customPreferences.globalVariable);
 
 var cardInstance = hipay.create('card', config);
 
@@ -16,6 +13,12 @@ cardInstance.on('change', function(event){
   $("#hipay-error-message").innerHTML = event.error;
   /* Enable / disable submit button */
   $('button[value=submit-payment]').disabled = !event.valid;
+
+  if(!event.valid) {
+    $('.submit-payment-hipay').addClass('disabled');
+  } else {
+    $('.submit-payment-hipay').removeClass('disabled');
+  }
 });
 
 module.exports = {

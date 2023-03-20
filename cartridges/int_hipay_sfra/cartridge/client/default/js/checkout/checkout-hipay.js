@@ -8,38 +8,6 @@ var summaryHelpers = require('base/checkout/summary');
 var customerHelpers = require('base/checkout/customer');
 var cleave = require('base/components/cleave');
 
-var hipaytokenize = $('#hipaytokenize').val();
-var time = 0;
-function __delay__(timer) {
-    return new Promise(resolve => {
-        setTimeout(function () {
-            hipaytokenize = $('#hipaytokenize').val();
-            resolve();
-        }, timer);
-    });
-};
-
-async function waitTokenize(timer) {
-    while (hipaytokenize === '') {
-        if (time > 2000) {
-            return false;
-        } else {
-            time += timer;
-            await __delay__(timer);
-        }
-    }
-
-    if ($('#hipaytokenize').val() !== '') {
-        hipaytokenize = $('#hipaytokenize').val();
-        await __delay__(timer);
-        $('button[value="submit-payment"]').trigger('click');
-    }
-};
-
-$('body').on('checkout:serializeBilling', async function(){
-    waitTokenize(500);
-});
-
 base.updateCheckoutView = function() {
     $('body').on('checkout:updateCheckoutView', function (e, data) {
         customerHelpers.methods.updateCustomerInformation(data.customer, data.order);
@@ -82,6 +50,23 @@ base.handleCreditCardNumber = function () {
     if ($('.cardNumber').length) {
         cleave.handleCreditCardNumber('.cardNumber', '#cardType');
     }
+};
+
+
+base.addTokenization = function () {
+    var btnSubmitSFRA = $('.next-step-button .submit-payment');
+    var hipayCTA = $('<div/>')
+        .addClass('btn btn-primary btn-block submit-payment-hipay disabled d-none')
+        .attr('id', 'hipayCTA')
+        .html(btnSubmitSFRA.text())
+        .appendTo(btnSubmitSFRA.parent());
+
+    $('body').on('checkout:updateCheckoutView', function (e, data) {
+        if ($('.shipping-section').length > 0 || $('.shipping-summary').length > 0) {
+            $('.next-step-button .submit-payment').hide();
+            hipayCTA.removeClass('d-none');
+        }
+    });
 };
 
 module.exports = base;
