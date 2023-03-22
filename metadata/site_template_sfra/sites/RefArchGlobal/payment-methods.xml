@@ -17,7 +17,11 @@
         <description xml:lang="x-default">HiPay Giropay Payment Method</description>
         <enabled-flag>true</enabled-flag>
         <processor-id>HIPAY_HOSTED</processor-id>
+        <countries>
+            <country country-code="DE"/>
+        </countries>
         <custom-attributes>
+            <custom-attribute attribute-id="hipayOnlyCompleteCapture">false</custom-attribute>
             <custom-attribute attribute-id="hipayPaymentCategoryList">realtime-banking</custom-attribute>
             <custom-attribute attribute-id="hipayPaymentProductList">giropay</custom-attribute>
             <custom-attribute attribute-id="hipayProductName">giropay</custom-attribute>
@@ -29,7 +33,11 @@
         <description xml:lang="x-default">HiPay iDEAL Payment Method</description>
         <enabled-flag>true</enabled-flag>
         <processor-id>HIPAY_HOSTED</processor-id>
+        <countries>
+            <country country-code="NL"/>
+        </countries>
         <custom-attributes>
+            <custom-attribute attribute-id="hipayOnlyCompleteCapture">false</custom-attribute>
             <custom-attribute attribute-id="hipayPaymentCategoryList">realtime-banking</custom-attribute>
             <custom-attribute attribute-id="hipayPaymentProductList">ideal</custom-attribute>
             <custom-attribute attribute-id="hipayProductName">ideal</custom-attribute>
@@ -80,7 +88,11 @@
         <description xml:lang="x-default">HiPay Giropay Payment Method</description>
         <enabled-flag>true</enabled-flag>
         <processor-id>HIPAY</processor-id>
+        <countries>
+            <country country-code="DE"/>
+        </countries>
         <custom-attributes>
+            <custom-attribute attribute-id="hipayOnlyCompleteCapture">false</custom-attribute>
             <custom-attribute attribute-id="hipayProductName">giropay</custom-attribute>
         </custom-attributes>
     </payment-method>
@@ -90,7 +102,11 @@
         <description xml:lang="x-default">HiPay iDEAL Payment Method</description>
         <enabled-flag>true</enabled-flag>
         <processor-id>HIPAY</processor-id>
+        <countries>
+            <country country-code="NL"/>
+        </countries>
         <custom-attributes>
+            <custom-attribute attribute-id="hipayOnlyCompleteCapture">false</custom-attribute>
             <custom-attribute attribute-id="hipayPaymentProductList">ideal</custom-attribute>
             <custom-attribute attribute-id="hipayProductName">ideal</custom-attribute>
         </custom-attributes>
