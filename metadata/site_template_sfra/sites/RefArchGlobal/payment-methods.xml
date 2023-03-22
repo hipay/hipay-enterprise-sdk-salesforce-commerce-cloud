@@ -84,6 +84,24 @@
         </custom-attributes>
     </payment-method>
 
+    <payment-method method-id="HIPAY_HOSTED_BANCONTACT">
+        <name xml:lang="x-default">Hosted Bancontact</name>
+        <description xml:lang="x-default">HiPay Hosted Bancontact Payment Method</description>
+        <enabled-flag>true</enabled-flag>
+        <processor-id>HIPAY_HOSTED</processor-id>
+        <countries>
+            <country country-code="BE"/>
+        </countries>
+        <currencies>
+            <currency>EUR</currency>
+        </currencies>
+        <custom-attributes>
+            <custom-attribute attribute-id="hipayPaymentCategoryList">realtime-banking</custom-attribute>
+            <custom-attribute attribute-id="hipayPaymentProductList">bancontact</custom-attribute>
+            <custom-attribute attribute-id="hipayProductName">bancontact</custom-attribute>
+        </custom-attributes>
+    </payment-method>
+
     <payment-method method-id="HIPAY_HOSTED_GIROPAY">
         <name xml:lang="x-default">Hosted Giropay</name>
         <description xml:lang="x-default">HiPay Giropay Payment Method</description>
@@ -179,6 +197,24 @@
         <custom-attributes>
             <custom-attribute attribute-id="hipayPaymentProductList">cb, visa,american-express,maestro,mastercard,bcmc</custom-attribute>
             <custom-attribute attribute-id="hipayProductName">credit-card</custom-attribute>
+        </custom-attributes>
+    </payment-method>
+
+    <payment-method method-id="HIPAY_BANCONTACT">
+        <name xml:lang="x-default">Bancontact</name>
+        <description xml:lang="x-default">HiPay Bancontact Payment Method</description>
+        <enabled-flag>true</enabled-flag>
+        <processor-id>HIPAY</processor-id>
+        <countries>
+            <country country-code="BE"/>
+        </countries>
+        <currencies>
+            <currency>EUR</currency>
+        </currencies>
+        <custom-attributes>
+            <custom-attribute attribute-id="hipayPaymentCategoryList">realtime-banking</custom-attribute>
+            <custom-attribute attribute-id="hipayPaymentProductList">bancontact</custom-attribute>
+            <custom-attribute attribute-id="hipayProductName">bancontact</custom-attribute>
         </custom-attributes>
     </payment-method>
 
