@@ -15,9 +15,6 @@
                     <div id="hipay-error-message"></div>
                 </isif>
 
-                <iscomment>Hosted Pages</iscomment>
-                <isif condition="${!empty(paymentOption.ID) && paymentOption.ID == 'HIPAY_HOSTED'}"></isif>
-
                 <iscomment>iDEAL</iscomment>
                 <isif condition="${!empty(paymentOption.ID) && paymentOption.ID == 'HIPAY_IDEAL'}">
                     <div id="hipay-hostedfields-form-ideal"></div>
@@ -35,6 +32,11 @@
 
                 <iscomment>Mooney</iscomment>
                 <isif condition="${!empty(paymentOption.ID) && paymentOption.ID == 'HIPAY_MOONEY'}"></isif>
+
+                <iscomment>Hosted Pages</iscomment>
+                <isif condition="${!empty(paymentOption.ID) && (paymentOption.ID.indexOf('HIPAY_HOSTED') > -1 || ['HIPAY_MYBANK'].indexOf(paymentOption.ID) > -1)}">
+                    ${Resource.msg('hipay.redirect.message', 'hipay', null)}
+                </isif>
 
             </fieldset>
 

@@ -122,6 +122,24 @@
         </custom-attributes>
     </payment-method>
 
+    <payment-method method-id="HIPAY_HOSTED_MYBANK">
+        <name xml:lang="x-default">Hosted MyBank</name>
+        <description xml:lang="x-default">HiPay MyBank Payment Method</description>
+        <enabled-flag>true</enabled-flag>
+        <processor-id>HIPAY_HOSTED</processor-id>
+        <countries>
+            <country country-code="IT"/>
+        </countries>
+        <currencies>
+            <currency>EUR</currency>
+        </currencies>
+        <custom-attributes>
+            <custom-attribute attribute-id="hipayPaymentCategoryList">realtime-banking</custom-attribute>
+            <custom-attribute attribute-id="hipayPaymentProductList">mybank</custom-attribute>
+            <custom-attribute attribute-id="hipayProductName">mybank</custom-attribute>
+        </custom-attributes>
+    </payment-method>
+
     <payment-method method-id="HIPAY_HOSTED_PRZELEWY24">
         <name xml:lang="x-default">Hosted Przelewy24</name>
         <description xml:lang="x-default">HiPay Przelewy24 Payment Method</description>
@@ -196,6 +214,24 @@
             <custom-attribute attribute-id="hipayOnlyCompleteCapture">false</custom-attribute>
             <custom-attribute attribute-id="hipayPaymentProductList">ideal</custom-attribute>
             <custom-attribute attribute-id="hipayProductName">ideal</custom-attribute>
+        </custom-attributes>
+    </payment-method>
+
+    <payment-method method-id="HIPAY_MYBANK">
+        <name xml:lang="x-default">MyBank</name>
+        <description xml:lang="x-default">HiPay MyBank Payment Method</description>
+        <enabled-flag>true</enabled-flag>
+        <processor-id>HIPAY</processor-id>
+        <countries>
+            <country country-code="IT"/>
+        </countries>
+        <currencies>
+            <currency>EUR</currency>
+        </currencies>
+        <custom-attributes>
+            <custom-attribute attribute-id="hipayPaymentCategoryList">realtime-banking</custom-attribute>
+            <custom-attribute attribute-id="hipayPaymentProductList">mybank</custom-attribute>
+            <custom-attribute attribute-id="hipayProductName">mybank</custom-attribute>
         </custom-attributes>
     </payment-method>
 
