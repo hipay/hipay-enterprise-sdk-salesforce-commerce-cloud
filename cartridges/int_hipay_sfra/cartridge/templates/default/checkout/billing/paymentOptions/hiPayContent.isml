@@ -9,33 +9,37 @@
 
                 <input type="hidden" class="form-control paymentMethod" name="${pdict.forms.billingForm.paymentMethod.htmlName}" value="${paymentOption.ID}" />
 
-                <iscomment>Giropay</iscomment>
-                <isif condition="${!empty(paymentOption.ID) && paymentOption.ID == 'HIPAY_GIROPAY'}">
-                    <div id="hipay-hostedfields-form-giropay"></div>
-                    <div id="hipay-error-message"></div>
-                </isif>
+                <isif condition="${!empty(paymentOption.ID)}">
+                    <iscomment>Giropay</iscomment>
+                    <isif condition="${paymentOption.ID == 'HIPAY_GIROPAY'}">
+                        <div id="hipay-hostedfields-form-giropay"></div>
+                        <div id="hipay-error-message"></div>
 
-                <iscomment>iDEAL</iscomment>
-                <isif condition="${!empty(paymentOption.ID) && paymentOption.ID == 'HIPAY_IDEAL'}">
-                    <div id="hipay-hostedfields-form-ideal"></div>
-                    <div id="hipay-error-message"></div>
-                </isif>
+                    <iscomment>iDEAL</iscomment>
+                    <iselseif condition="${paymentOption.ID == 'HIPAY_IDEAL'}">
+                        <div id="hipay-hostedfields-form-ideal"></div>
+                        <div id="hipay-error-message"></div>
 
-                <iscomment>HIPAY_MBWAY</iscomment>
-                <isif condition="${!empty(paymentOption.ID) && paymentOption.ID == 'HIPAY_MBWAY'}">
-                    <div id="hipay-hostedfields-form-mbway"></div>
-                    <div id="hipay-error-message"></div>
-                </isif>
+                    <iscomment>HIPAY_MBWAY</iscomment>
+                    <iselseif condition="${paymentOption.ID == 'HIPAY_MBWAY'}">
+                        <div id="hipay-hostedfields-form-mbway"></div>
+                        <div id="hipay-error-message"></div>
 
-                <iscomment>Przelewy24</iscomment>
-                <isif condition="${!empty(paymentOption.ID) && paymentOption.ID == 'HIPAY_PRZELEWY24'}"></isif>
+                    <iscomment>Przelewy24</iscomment>
+                    <iselseif condition="${paymentOption.ID == 'HIPAY_PRZELEWY24'}">
 
-                <iscomment>Mooney</iscomment>
-                <isif condition="${!empty(paymentOption.ID) && paymentOption.ID == 'HIPAY_MOONEY'}"></isif>
+                    <iscomment>Mooney</iscomment>
+                    <iselseif condition="${paymentOption.ID == 'HIPAY_MOONEY'}">
 
-                <iscomment>Hosted Pages</iscomment>
-                <isif condition="${!empty(paymentOption.ID) && (paymentOption.ID.indexOf('HIPAY_HOSTED') > -1 || ['HIPAY_MYBANK'].indexOf(paymentOption.ID) > -1)}">
-                    ${Resource.msg('hipay.redirect.message', 'hipay', null)}
+                    <iscomment>Hosted Pages</iscomment>
+                    <iselseif condition="${paymentOption.ID.indexOf('HIPAY_HOSTED') > -1}">
+                        ${Resource.msg('hipay.redirect.message', 'hipay', null)}
+
+                    <iscomment>Methods that perform redirection</iscomment>
+                    <iselseif condition="${['HIPAY_MYBANK', 'HIPAY_BANCONTACT'].indexOf(paymentOption.ID) > -1}">
+                        ${Resource.msg('hipay.redirect.message', 'hipay', null)}
+
+                    </isif>
                 </isif>
 
             </fieldset>
