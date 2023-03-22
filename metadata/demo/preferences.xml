@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<preferences xmlns="http://www.demandware.com/xml/impex/preferences/2007-03-31">
+    <standard-preferences>
+        <all-instances>
+            <preference preference-id="ActiveLocales">de:it_IT:fr_CA:pl_PL:en:it:fr:fr_FR:fr_BE:ja_JP:es:zh:de_DE:default:en_GB:en_CA:en_US:ja:zh_CN:nl:nl_NL:pt_PT</preference>
+            <preference preference-id="CustomCartridges">bm_hipay:int_hipay_core</preference>
+        </all-instances>
+        <development/>
+        <staging/>
+        <production/>
+    </standard-preferences>
+    <custom-preferences>
+        <all-instances/>
+        <development/>
+        <staging/>
+        <production/>
+    </custom-preferences>
+</preferences>
+
