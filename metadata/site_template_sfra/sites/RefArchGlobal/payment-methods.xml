@@ -1,5 +1,53 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <payment-settings xmlns="http://www.demandware.com/xml/impex/paymentsettings/2009-09-15">
+
+        <payment-method method-id="HIPAY_MULTIBANCO">
+        <name xml:lang="x-default">Multibanco</name>
+        <description xml:lang="x-default">HiPay Multibanco Payment Method</description>
+        <enabled-flag>true</enabled-flag>
+        <processor-id>HIPAY</processor-id>
+        <custom-attributes>
+            <custom-attribute attribute-id="hipayOnlyCompleteCapture">false</custom-attribute>
+            <custom-attribute attribute-id="hipayProductName">multibanco</custom-attribute>
+        </custom-attributes>
+    </payment-method>
+
+    <payment-method method-id="HIPAY_HOSTED_MULTIBANCO">
+        <name xml:lang="x-default">Hosted Multibanco</name>
+        <description xml:lang="x-default">HiPay Multibanco Payment Method</description>
+        <enabled-flag>true</enabled-flag>
+        <processor-id>HIPAY_HOSTED</processor-id>
+        <custom-attributes>
+            <custom-attribute attribute-id="hipayOnlyCompleteCapture">false</custom-attribute>
+            <custom-attribute attribute-id="hipayPaymentProductList">multibanco</custom-attribute>
+            <custom-attribute attribute-id="hipayProductName">multibanco</custom-attribute>
+        </custom-attributes>
+    </payment-method>
+
+    <payment-method method-id="HIPAY_MBWAY">
+        <name xml:lang="x-default">Mbway</name>
+        <description xml:lang="x-default">HiPay Mbway Payment Method</description>
+        <enabled-flag>true</enabled-flag>
+        <processor-id>HIPAY</processor-id>
+        <custom-attributes>
+            <custom-attribute attribute-id="hipayOnlyCompleteCapture">false</custom-attribute>
+            <custom-attribute attribute-id="hipayProductName">mbway</custom-attribute>
+        </custom-attributes>
+    </payment-method>
+
+    <payment-method method-id="HIPAY_HOSTED_MBWAY">
+        <name xml:lang="x-default">Hosted Mbway</name>
+        <description xml:lang="x-default">HiPay Mbway Payment Method</description>
+        <enabled-flag>true</enabled-flag>
+        <processor-id>HIPAY_HOSTED</processor-id>
+        <custom-attributes>
+            <custom-attribute attribute-id="hipayExpiryLimit">30</custom-attribute>
+            <custom-attribute attribute-id="hipayOnlyCompleteCapture">false</custom-attribute>
+            <custom-attribute attribute-id="hipayPaymentProductList">mbway</custom-attribute>
+            <custom-attribute attribute-id="hipayProductName">mbway</custom-attribute>
+        </custom-attributes>
+    </payment-method>
+
     <payment-method method-id="HIPAY_HOSTED_CREDIT_CARD">
         <name xml:lang="x-default">Hosted Credit Cards</name>
         <description xml:lang="x-default">HiPay Hosted Cards Payment Method</description>
