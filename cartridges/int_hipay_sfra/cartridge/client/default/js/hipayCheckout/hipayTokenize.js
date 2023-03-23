@@ -1,6 +1,6 @@
 'use strict'
 
-var cardInstance = require('./hipayCreate').cardInstance;
+var cardInstance = require('./hipayCreateCard').cardInstance;
 
 /* Add event listener on the submit button when clicked */
 $('.submit-payment-hipay').on('click', function () {
