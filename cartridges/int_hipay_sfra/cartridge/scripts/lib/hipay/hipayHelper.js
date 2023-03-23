@@ -128,7 +128,7 @@ HiPayHelper.prototype.fillOrderData = function (order, params, pi) {
         source: 'CMS',
         brand: 'SFCC SFRA',
         brand_version: Resource.msg('global.version.number', 'version', null),
-        integration_version: '1.0.0'
+        integration_version: Resource.msg('hipay.version.number', 'hipay', null)
     });
 
     params.long_description = productNames.join(','); // eslint-disable-line
