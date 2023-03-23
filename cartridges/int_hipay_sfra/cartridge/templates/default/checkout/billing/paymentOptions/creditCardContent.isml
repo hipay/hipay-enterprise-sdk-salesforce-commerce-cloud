@@ -25,7 +25,7 @@
 
         <fieldset class="credit-card-form ${pdict.customer.registeredUser && pdict.customer.customerPaymentInstruments.length ? 'checkout-hidden' : ''}">
             <isinclude template="checkout/billing/hipayConfig"/>
-            <isinclude template="checkout/billing/creditCardForm"/>
+            <isinclude template="checkout/billing/hostedFieldsForm"/>
             <isif condition="${pdict.customer.registeredUser}">
                 <button class="btn btn-block cancel-new-payment btn-outline-primary ${pdict.customer.registeredUser && pdict.customer.customerPaymentInstruments.length ? '' : 'checkout-hidden'}" type="button">${Resource.msg('button.back.to.stored.payments', 'checkout', null)}</button>
             </isif>

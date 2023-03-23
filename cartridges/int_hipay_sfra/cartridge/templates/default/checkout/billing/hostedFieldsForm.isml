@@ -1,0 +1,19 @@
+<iscomment>The whole form will be inserted in this div </iscomment>
+<isset name="creditFields" value="${pdict.forms.billingForm.creditCardFields}" scope="page"/>
+<div id="hipay-hostedfields-form"></div>
+
+<isif condition="${pdict.customer.registeredUser}">
+<isif condition="${require('dw/system/Site').getCurrent().getCustomPreferenceValue('hipayEnableOneClick')}">
+    <div class="save-credit-card custom-control custom-checkbox ">
+        <input type="checkbox" class="custom-control-input" id="saveCreditCard" name="${pdict.forms.billingForm.creditCardFields.saveCard.htmlName}" value="true" checked>
+        <label class="custom-control-label" for="saveCreditCard">
+            ${creditFields.saveCard.label}
+        </label>
+    </div>
+</isif>
+</isif>
+
+<div id="hipay-error-message"></div>
+
+
+<input type="hidden" name="${pdict.CurrentForms.billing.hipaytokenize.htmlName}" id="hipaytokenize">

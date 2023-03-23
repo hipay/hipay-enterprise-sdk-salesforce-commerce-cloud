@@ -64,30 +64,7 @@ HiPayCheckoutModule.hiPayUpdatePaymentInstrument = function (paymentInstrument, 
     var selectedCreditCard
     var sitePrefs = require('dw/system/Site').getCurrent().getPreferences().getCustom();
 
-    if (pi.paymentMethod.equals('HIPAY_CREDIT_CARD')) {
-        var paymentUUID = req.form && req.form.storedPaymentUUID ? req.form.storedPaymentUUID : null;
-
-        if (
-            !empty(paymentUUID)
-            && sitePrefs.hipayEnableOneClick
-            && !empty(customer.getProfile().getWallet())
-            && customer.getProfile().getWallet().getPaymentInstruments('HIPAY_CREDIT_CARD').length > 0
-        ) {
-            var paymentInstruments = customer.getProfile().getWallet().getPaymentInstruments('HIPAY_CREDIT_CARD');
-            selectedCreditCard = creditCardHelpers.selectedCreditCardInWallet(req, paymentUUID, paymentInstruments);
-            ccType = selectedCreditCard.creditCardType;
-            card = PaymentMgr.getPaymentCard(ccType);
-        } else {
-            var parseHipayTokenize = JSON.parse(session.forms.billing.hipaytokenize.value);
-            ccType = parseHipayTokenize.payment_product.charAt(0).toUpperCase() + parseHipayTokenize.payment_product.slice(1);
-            card = PaymentMgr.getPaymentCard(ccType);
-        }
-
-        Transaction.wrap(function () {
-            pi.custom.hipayProductName = card.custom.hipayProductName;
-            pi.custom.hipayOneClickDisabled = card.custom.hipayOneClickDisabled;
-        });
-    } else {
+    if (!pi.paymentMethod.equals('HIPAY_CREDIT_CARD')) {
         paymentMethod = PaymentMgr.getPaymentMethod(pi.paymentMethod);
 
         Transaction.wrap(function () {
@@ -257,11 +234,11 @@ HiPayCheckoutModule.hiPayOrderRequest = function (paymentInstrument, order, devi
             params.issuer_bank_id = pi.custom.hipayBic;
         }
 
-        params.payment_product = pi.custom.hipayProductName;
+        params.payment_product = pi.creditCardType || pi.custom.hipayProductName;
         params.eci = recurring ? '9' : '7';
         params.device_fingerprint = fingeprint;
         params.cdata1 = order.getOrderToken();
-        // params.cardholder = pi.creditCardHolder;
+        params.cardholder = pi.creditCardHolder;
         helper.fillHeaderData(HiPayConfig, order, params, pi); // fill in the common params
         helper.fillOrderData(order, params, pi); // add order details
 

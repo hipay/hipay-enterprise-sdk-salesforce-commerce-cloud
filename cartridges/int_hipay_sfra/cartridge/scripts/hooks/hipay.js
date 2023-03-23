@@ -84,7 +84,7 @@ function creditCardHandle(paymentInstrument, paymentInformation, paymentUUID, re
             hiPayCardHolder = creditCard.card_holder;
             hiPayMultiUseToken = session.forms.billing.creditCardFields.saveCard.value;
             hiPayToken = creditCard.token;
-            hiPayCardType = creditCard.payment_product.charAt(0).toUpperCase() + creditCard.payment_product.slice(1);
+            hiPayCardType = creditCard.payment_product;
         }
     }
 
