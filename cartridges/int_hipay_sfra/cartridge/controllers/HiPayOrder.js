@@ -12,13 +12,14 @@ function acceptPayment(req, res, next, mode) {
     var isHashValid = HiPayProcess.verifyHash();
     var isStatusValid = HiPayOrderModule.hiPayVerifyStatus(mode);
     var hiPayState = req.querystring.state;
+    var isStateValid = ['completed', 'pending_reference'].indexOf(hiPayState) > -1;
     var params = {};
     var processOrder;
     var order;
     var error;
     var redirectURL;
 
-    if (isHashValid && hiPayState == "completed" && isStatusValid) {
+    if (isHashValid && isStateValid && isStatusValid) {
         processOrder = HiPayOrderModule.hiPayProcessOrderCall();
         order = processOrder.order;
         error = processOrder.error;
@@ -92,7 +93,7 @@ server.get(
     'Pending',
     server.middleware.https,
     function (req, res, next) {
-        acceptPayment(res, next, statuses.PENDING.value);
+        acceptPayment(req, res, next, statuses.PENDING.value);
     }
 );
 
