@@ -92,6 +92,9 @@
         <countries>
             <country country-code="DE"/>
         </countries>
+        <currencies>
+            <currency>EUR</currency>
+        </currencies>
         <custom-attributes>
             <custom-attribute attribute-id="hipayOnlyCompleteCapture">false</custom-attribute>
             <custom-attribute attribute-id="hipayPaymentCategoryList">realtime-banking</custom-attribute>
@@ -108,6 +111,9 @@
         <countries>
             <country country-code="NL"/>
         </countries>
+        <currencies>
+            <currency>EUR</currency>
+        </currencies>
         <custom-attributes>
             <custom-attribute attribute-id="hipayOnlyCompleteCapture">false</custom-attribute>
             <custom-attribute attribute-id="hipayPaymentCategoryList">realtime-banking</custom-attribute>
@@ -166,6 +172,9 @@
         <countries>
             <country country-code="DE"/>
         </countries>
+        <currencies>
+            <currency>EUR</currency>
+        </currencies>
         <custom-attributes>
             <custom-attribute attribute-id="hipayOnlyCompleteCapture">false</custom-attribute>
             <custom-attribute attribute-id="hipayProductName">giropay</custom-attribute>
@@ -180,6 +189,9 @@
         <countries>
             <country country-code="NL"/>
         </countries>
+        <currencies>
+            <currency>EUR</currency>
+        </currencies>
         <custom-attributes>
             <custom-attribute attribute-id="hipayOnlyCompleteCapture">false</custom-attribute>
             <custom-attribute attribute-id="hipayPaymentProductList">ideal</custom-attribute>
