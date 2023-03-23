@@ -29,4 +29,7 @@
     "id": "de_DE",
     "currencyCode": "EUR",
     "countryCode": "DE"
+}, {
+    "id": "fr_BE",
+    "currencyCode": "EUR"
 }]
