@@ -11,6 +11,7 @@ var Logger = require('dw/system/Logger');
 var PaymentMgr = require('dw/order/PaymentMgr');
 var PaymentInstrument = require('dw/order/PaymentInstrument');
 var Transaction = require('dw/system/Transaction');
+var Resource = require('dw/web/Resource');
 var statuses = require('*/cartridge/scripts/lib/hipay/hipayStatus').HiPayStatus;
 var hipayUtils = require('*/cartridge/scripts/lib/hipay/hipayUtils');
 
@@ -128,7 +129,13 @@ HiPayHelper.prototype.fillOrderData = function (order, params, pi) {
     params.shipping = order.getAdjustedShippingTotalPrice().value; // eslint-disable-line
     params.tax = order.getTotalTax().value; // eslint-disable-line
     params.payment_product_category_list = categoryList.join(','); // eslint-disable-line
-    params.source = JSON.stringify({ 'source': 'CMS', 'brand': 'Demandware', 'brand_version': '1.0.0', 'integration_version': '1.0.0' }); // eslint-disable-line
+
+    params.source = JSON.stringify({
+        source: 'CMS',
+        brand: 'SFCC Site Genesis',
+        brand_version: Resource.msg('revisioninfo.revisionnumber', 'revisioninfo', null),
+        integration_version: '1.0.0'
+    });
 
     params.long_description = productNames.join(','); // eslint-disable-line
     customer = order.customer;
