@@ -6,6 +6,12 @@
         <description xml:lang="x-default">HiPay Multibanco Payment Method</description>
         <enabled-flag>true</enabled-flag>
         <processor-id>HIPAY</processor-id>
+        <countries>
+            <country country-code="PT"/>
+        </countries>
+        <currencies>
+            <currency>EUR</currency>
+        </currencies>
         <custom-attributes>
             <custom-attribute attribute-id="hipayOnlyCompleteCapture">false</custom-attribute>
             <custom-attribute attribute-id="hipayProductName">multibanco</custom-attribute>
@@ -17,6 +23,12 @@
         <description xml:lang="x-default">HiPay Multibanco Payment Method</description>
         <enabled-flag>true</enabled-flag>
         <processor-id>HIPAY_HOSTED</processor-id>
+        <countries>
+            <country country-code="PT"/>
+        </countries>
+        <currencies>
+            <currency>EUR</currency>
+        </currencies>
         <custom-attributes>
             <custom-attribute attribute-id="hipayOnlyCompleteCapture">false</custom-attribute>
             <custom-attribute attribute-id="hipayPaymentProductList">multibanco</custom-attribute>
@@ -29,6 +41,12 @@
         <description xml:lang="x-default">HiPay Mbway Payment Method</description>
         <enabled-flag>true</enabled-flag>
         <processor-id>HIPAY</processor-id>
+        <countries>
+            <country country-code="PT"/>
+        </countries>
+        <currencies>
+            <currency>EUR</currency>
+        </currencies>
         <custom-attributes>
             <custom-attribute attribute-id="hipayOnlyCompleteCapture">false</custom-attribute>
             <custom-attribute attribute-id="hipayProductName">mbway</custom-attribute>
@@ -40,6 +58,12 @@
         <description xml:lang="x-default">HiPay Mbway Payment Method</description>
         <enabled-flag>true</enabled-flag>
         <processor-id>HIPAY_HOSTED</processor-id>
+        <countries>
+            <country country-code="PT"/>
+        </countries>
+        <currencies>
+            <currency>EUR</currency>
+        </currencies>
         <custom-attributes>
             <custom-attribute attribute-id="hipayExpiryLimit">30</custom-attribute>
             <custom-attribute attribute-id="hipayOnlyCompleteCapture">false</custom-attribute>
@@ -97,6 +121,9 @@
         <description xml:lang="x-default">HiPay Przelewy24 Payment Method</description>
         <enabled-flag>true</enabled-flag>
         <processor-id>HIPAY_HOSTED</processor-id>
+        <countries>
+            <country country-code="PL"/>
+        </countries>
         <currencies>
             <currency>PLN</currency>
         </currencies>
@@ -165,6 +192,9 @@
         <description xml:lang="x-default">HiPay Przelewy24 Payment Method</description>
         <enabled-flag>true</enabled-flag>
         <processor-id>HIPAY</processor-id>
+        <countries>
+            <country country-code="PL"/>
+        </countries>
         <currencies>
             <currency>PLN</currency>
         </currencies>
