@@ -58,6 +58,13 @@
                 <externally-managed-flag>false</externally-managed-flag>
                 <min-length>0</min-length>
             </attribute-definition>
+            <attribute-definition attribute-id="hipayMbwayPhone">
+                <display-name xml:lang="x-default">Hipay mbway phone</display-name>
+                <type>string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <min-length>0</min-length>
+            </attribute-definition>
             <attribute-definition attribute-id="hipayBic">
                 <display-name xml:lang="x-default">HiPay BIC</display-name>
                 <type>string</type>
@@ -159,6 +166,7 @@
                 <attribute attribute-id="hipayIdealBankID"/>
                 <attribute attribute-id="hipayBic"/>
                 <attribute attribute-id="hipayOneClickDisabled"/>
+                <attribute attribute-id="hipayMbwayPhone"/>
             </attribute-group>
         </group-definitions>
     </type-extension>

@@ -24,6 +24,12 @@
                     <div id="hipay-error-message"></div>
                 </isif>
 
+                <iscomment>iDEAL</iscomment>
+                <isif condition="${!empty(paymentOption.ID) && paymentOption.ID == 'HIPAY_MBWAY'}">
+                    <div id="hipay-hostedfields-form-mbway"></div>
+                    <div id="hipay-error-message"></div>
+                </isif>
+
                 <iscomment>Przelewy24</iscomment>
                 <isif condition="${!empty(paymentOption.ID) && paymentOption.ID == 'HIPAY_PRZELEWY24'}"></isif>
 
