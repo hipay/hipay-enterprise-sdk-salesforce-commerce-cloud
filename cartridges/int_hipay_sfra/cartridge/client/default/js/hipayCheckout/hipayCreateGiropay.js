@@ -1,11 +1,6 @@
 var hipay = require('./globalVariable').getGlobalVariable();
 
-var config = {
-    template: 'auto',
-    selector: 'hipay-hostedfields-form-giropay' // form container div id
-};
-
-var giropayInstance = hipay.create('giropay', config);
+var giropayInstance = hipay.create('giropay', window.hipayCustomPreferences.giropayConfig.config);
 
 module.exports = {
     giropayInstance: giropayInstance

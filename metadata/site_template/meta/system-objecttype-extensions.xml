@@ -335,13 +335,39 @@
                 <mandatory-flag>false</mandatory-flag>
                 <externally-managed-flag>false</externally-managed-flag>
                 <min-length>0</min-length>
+                <default-value>stage</default-value>
             </attribute-definition>
-            <attribute-definition attribute-id="hipayHostedFieldsForm">
-                <display-name xml:lang="x-default">hipay HostedFields Form</display-name>
+            <attribute-definition attribute-id="HipayCardFormId">
+                <display-name xml:lang="x-default">Card form ID</display-name>
                 <type>string</type>
                 <mandatory-flag>false</mandatory-flag>
                 <externally-managed-flag>false</externally-managed-flag>
                 <min-length>0</min-length>
+                <default-value>hipay-hostedfields-form</default-value>
+            </attribute-definition>
+            <attribute-definition attribute-id="HipayGiropayFormId">
+                <display-name xml:lang="x-default">Giropay form ID</display-name>
+                <type>string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <min-length>0</min-length>
+                <default-value>hipay-hostedfields-form-giropay</default-value>
+            </attribute-definition>
+            <attribute-definition attribute-id="HipayIdealFormId">
+                <display-name xml:lang="x-default">Ideal form ID</display-name>
+                <type>string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <min-length>0</min-length>
+                <default-value>hipay-hostedfields-form-ideal</default-value>
+            </attribute-definition>
+            <attribute-definition attribute-id="HipayMbwayFormId">
+                <display-name xml:lang="x-default">Mbway form ID</display-name>
+                <type>string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <min-length>0</min-length>
+                <default-value>hipay-hostedfields-form-mbway</default-value>
             </attribute-definition>
             <attribute-definition attribute-id="hipayHostedFieldsLang">
                 <display-name xml:lang="x-default">hipay HostedFields Lang</display-name>
@@ -349,13 +375,13 @@
                 <mandatory-flag>false</mandatory-flag>
                 <externally-managed-flag>false</externally-managed-flag>
                 <min-length>0</min-length>
+                <default-value>fr</default-value>
             </attribute-definition>
             <attribute-definition attribute-id="hipayHostedFieldsPassword">
                 <display-name xml:lang="x-default">hipay HostedFields Password</display-name>
-                <type>string</type>
+                <type>password</type>
                 <mandatory-flag>false</mandatory-flag>
                 <externally-managed-flag>false</externally-managed-flag>
-                <min-length>0</min-length>
             </attribute-definition>
             <attribute-definition attribute-id="hipayHostedFieldsStyleBaseCaretColor">
                 <display-name xml:lang="x-default">hipay HostedFields Style Base Caret Color</display-name>
@@ -427,6 +453,7 @@
                 <mandatory-flag>false</mandatory-flag>
                 <externally-managed-flag>false</externally-managed-flag>
                 <min-length>0</min-length>
+                <default-value>auto</default-value>
             </attribute-definition>
             <attribute-definition attribute-id="hipayHostedFieldsUserName">
                 <display-name xml:lang="x-default">hipay HostedFields User Name</display-name>
@@ -534,7 +561,10 @@
             <attribute-group group-id="HipayHostedFieldsConfig">
                 <display-name xml:lang="x-default">Hipay HostedFields Configuration</display-name>
                 <attribute attribute-id="hipayHostedFieldsTemplate"/>
-                <attribute attribute-id="hipayHostedFieldsForm"/>
+                <attribute attribute-id="HipayCardFormId"/>
+                <attribute attribute-id="HipayIdealFormId"/>
+                <attribute attribute-id="HipayGiropayFormId"/>
+                <attribute attribute-id="HipayMbwayFormId"/>
                 <attribute attribute-id="hipayHostedFieldsStyleBaseColor"/>
                 <attribute attribute-id="hipayHostedFieldsStyleBaseFrontSize"/>
                 <attribute attribute-id="hipayHostedFieldsStyleBaseFrontWeight"/>

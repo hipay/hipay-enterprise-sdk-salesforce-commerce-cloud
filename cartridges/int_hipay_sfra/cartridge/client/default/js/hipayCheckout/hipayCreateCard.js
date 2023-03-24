@@ -2,10 +2,7 @@
 
 var hipay = require('./globalVariable').getGlobalVariable();
 
-var customPreferences = window.hipayCustomPreferences[0];
-var config = customPreferences.config;
-
-var cardInstance = hipay.create('card', config);
+var cardInstance = hipay.create('card', window.hipayCustomPreferences.cardConfig.config);
 
 /* Listen to change event on card instance */
 cardInstance.on('change', function(event){

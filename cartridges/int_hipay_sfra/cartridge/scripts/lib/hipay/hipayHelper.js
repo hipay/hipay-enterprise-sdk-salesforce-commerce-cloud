@@ -877,27 +877,47 @@ HiPayHelper.prototype.validateOneyAvailability = function (basket) {
     return decision;
 };
 
-HiPayHelper.prototype.getPreferences = function () {
+HiPayHelper.prototype.getHostedFieldsPreferences = function () {
     var Site = require('dw/system/Site');
     var currentSite = Site.getCurrent();
 
-    var hipayHostedFields = [{
-        config : {
-            template : currentSite.getCustomPreferenceValue('hipayHostedFieldsTemplate'),
-            selector : currentSite.getCustomPreferenceValue('hipayHostedFieldsForm'),
-            styles: {
-                base: {
-                    color: currentSite.getCustomPreferenceValue('hipayHostedFieldsStyleBaseColor'),
-                    fontSize: currentSite.getCustomPreferenceValue('hipayHostedFieldsStyleBaseFrontSize'),
-                    fontWeight: currentSite.getCustomPreferenceValue('hipayHostedFieldsStyleBaseFrontWeight'),
-                    placeholderColor: currentSite.getCustomPreferenceValue('hipayHostedFieldsStyleBasePlaceHolderColor'),
-                    iconColor: currentSite.getCustomPreferenceValue('hipayHostedFieldsStyleBaseIconColor'),
-                    caretColor: currentSite.getCustomPreferenceValue('hipayHostedFieldsStyleBaseCaretColor')
-                },
-                invalid: {
-                    color: currentSite.getCustomPreferenceValue('hipayHostedFieldsStyleInvalidColor'),
-                    caretColor: currentSite.getCustomPreferenceValue('hipayHostedFieldsStyleInvalidCaretColor')
+    var hipayHostedFields = {
+        cardConfig: {
+            config: {
+                template: currentSite.getCustomPreferenceValue('hipayHostedFieldsTemplate'),
+                selector: currentSite.getCustomPreferenceValue('HipayCardFormId'),
+                styles: {
+                    base: {
+                        color: currentSite.getCustomPreferenceValue('hipayHostedFieldsStyleBaseColor'),
+                        fontSize: currentSite.getCustomPreferenceValue('hipayHostedFieldsStyleBaseFrontSize'),
+                        fontWeight: currentSite.getCustomPreferenceValue('hipayHostedFieldsStyleBaseFrontWeight'),
+                        placeholderColor: currentSite.getCustomPreferenceValue('hipayHostedFieldsStyleBasePlaceHolderColor'),
+                        iconColor: currentSite.getCustomPreferenceValue('hipayHostedFieldsStyleBaseIconColor'),
+                        caretColor: currentSite.getCustomPreferenceValue('hipayHostedFieldsStyleBaseCaretColor')
+                    },
+                    invalid: {
+                        color: currentSite.getCustomPreferenceValue('hipayHostedFieldsStyleInvalidColor'),
+                        caretColor: currentSite.getCustomPreferenceValue('hipayHostedFieldsStyleInvalidCaretColor')
+                    }
                 }
+            }
+        },
+        idealConfig: {
+            config: {
+                template: currentSite.getCustomPreferenceValue('hipayHostedFieldsTemplate'),
+                selector: currentSite.getCustomPreferenceValue('HipayIdealFormId') // form container div id
+            }
+        },
+        giropayConfig: {
+            config: {
+                template: currentSite.getCustomPreferenceValue('hipayHostedFieldsTemplate'),
+                selector: currentSite.getCustomPreferenceValue('HipayGiropayFormId') // form container div id
+            }
+        },
+        mbwayConfig: {
+            config: {
+                template: currentSite.getCustomPreferenceValue('hipayHostedFieldsTemplate'),
+                selector: currentSite.getCustomPreferenceValue('HipayMbwayFormId') // form container div id
             }
         },
         globalVariable: {
@@ -906,7 +926,9 @@ HiPayHelper.prototype.getPreferences = function () {
             environment: currentSite.getCustomPreferenceValue('hipayHostedFieldsEnvironment'),
             lang: currentSite.getCustomPreferenceValue('hipayHostedFieldsLang')
         }
-    }];
+    };
+
+
     return hipayHostedFields;
 };
 
