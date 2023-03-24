@@ -4,7 +4,6 @@ var base = require('base/checkout/billing');
 
 
 base.methods.updatePaymentInformation = function (order) {
-    console.log('updatePaymentInformation');
     // update payment details
     var $paymentSummary = $('.payment-details');
     var htmlToAppend = '';

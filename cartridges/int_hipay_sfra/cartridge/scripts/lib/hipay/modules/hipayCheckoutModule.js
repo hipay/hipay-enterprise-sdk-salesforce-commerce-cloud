@@ -55,7 +55,7 @@ HiPayCheckoutModule.createPaymentInstrument = function (basket, paymentType, rem
 * @param {dw.order.PaymentInstrument} paymentInstrument
 *
 */
-HiPayCheckoutModule.hiPayUpdatePaymentInstrument = function (paymentInstrument, paymentInformation, req) {
+HiPayCheckoutModule.hiPayUpdatePaymentInstrument = function (paymentInstrument, paymentInformation, req, hipayTokenize) {
     var paymentMethod = null;// the payment method
     var pi = paymentInstrument;
     var ccType; // credit card type
@@ -73,15 +73,25 @@ HiPayCheckoutModule.hiPayUpdatePaymentInstrument = function (paymentInstrument, 
         });
 
         if (pi.paymentMethod.equals('HIPAY_IDEAL')) {
+            if (!hipayTokenize && !hipayTokenize.issuer_bank_id) {
+                return false
+            }
+
             Transaction.wrap(function () {
-                pi.custom.hipayIdealBankID = session.forms.billing.hipayMethodsFields.ideal.issuer_bank_id.value;
+                pi.custom.hipayIdealBankID = hipayTokenize.issuer_bank_id;
             });
         } else if (pi.paymentMethod.equals('HIPAY_GIROPAY')) {
+            if (!hipayTokenize && !hipayTokenize.issuer_bank_id) {
+                return false
+            }
+            
             Transaction.wrap(function () {
-                pi.custom.hipayBic = session.forms.billing.hipayMethodsFields.giropay.bic.value;
+                pi.custom.hipayBic = hipayTokenize.issuer_bank_id;
             });
         }
     }
+
+    return true;
 };
 
 /**

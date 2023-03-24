@@ -14,6 +14,3 @@
 </isif>
 
 <div id="hipay-error-message"></div>
-
-
-<input type="hidden" name="${pdict.CurrentForms.billing.hipaytokenize.htmlName}" id="hipaytokenize">

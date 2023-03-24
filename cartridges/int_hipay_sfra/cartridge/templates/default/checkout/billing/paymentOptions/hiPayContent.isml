@@ -11,13 +11,8 @@
 
                 <iscomment>Giropay</iscomment>
                 <isif condition="${!empty(paymentOption.ID) && paymentOption.ID == 'HIPAY_GIROPAY'}">
-                    <div class="form-group
-                        ${pdict.CurrentForms.billing.hipayMethodsFields.giropay.bic.mandatory === true ? 'required' : ''}
-                        ${pdict.CurrentForms.billing.hipayMethodsFields.giropay.bic.htmlName}">
-                        <label class="form-control-label" for="${pdict.CurrentForms.billing.hipayMethodsFields.giropay.bic.htmlName}">${Resource.msg('hipay.label.bic','forms',null)}</label>
-                        <input name="${pdict.CurrentForms.billing.hipayMethodsFields.giropay.bic.htmlName}" class="form-control" />
-                        <div class="invalid-feedback"></div>
-                    </div>
+                    <div id="hipay-hostedfields-form-giropay"></div>
+                    <div id="hipay-error-message"></div>
                 </isif>
 
                 <iscomment>Hosted Pages</iscomment>
@@ -26,6 +21,7 @@
                 <iscomment>iDEAL</iscomment>
                 <isif condition="${!empty(paymentOption.ID) && paymentOption.ID == 'HIPAY_IDEAL'}">
                     <div id="hipay-hostedfields-form-ideal"></div>
+                    <div id="hipay-error-message"></div>
                 </isif>
 
                 <iscomment>Przelewy24</iscomment>

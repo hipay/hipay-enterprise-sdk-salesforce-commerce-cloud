@@ -2,6 +2,7 @@
 
 var cardInstance = require('./hipayCreateCard').cardInstance;
 var idealInstance = require('./hipayCreateIdeal').idealInstance;
+var giropayInstance = require('./hipayCreateGiropay').giropayInstance;
 
 /* Add event listener on the submit button when clicked */
 $('.submit-payment-hipay').on('click', function () {
@@ -9,9 +10,12 @@ $('.submit-payment-hipay').on('click', function () {
 
     if (selectedPaymentMethod === 'HIPAY_CREDIT_CARD') {
         getPaymentData(cardInstance);
-        
+
     } else if (selectedPaymentMethod === 'HIPAY_IDEAL') {
         getPaymentData(idealInstance);
+
+    } else if (selectedPaymentMethod === 'HIPAY_GIROPAY') {
+        getPaymentData(giropayInstance);
     }
 });
 

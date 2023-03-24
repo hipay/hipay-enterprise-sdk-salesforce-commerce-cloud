@@ -113,6 +113,7 @@ function Handle(currentBasket, paymentInformation, paymentUUID, req) {
     var basket = currentBasket;
     var paymentMethod = session.forms.billing.paymentMethod.value;
     var paymentInstrument;
+    var hipayTokenize = JSON.parse(session.forms.billing.hipaytokenize.value);
 
     if (!empty(paymentMethod)) {
         paymentInstrument = hiPayCheckoutModule.createPaymentInstrument(basket, paymentMethod, true);
@@ -121,10 +122,14 @@ function Handle(currentBasket, paymentInformation, paymentUUID, req) {
             return { error: true };
         }
 
-        hiPayCheckoutModule.hiPayUpdatePaymentInstrument(paymentInstrument, paymentInformation, req);
+        var isUpdate = hiPayCheckoutModule.hiPayUpdatePaymentInstrument(paymentInstrument, paymentInformation, req, hipayTokenize);
+
+        if (!isUpdate) {
+            return { error: true };
+        }
 
         if (paymentMethod === 'HIPAY_CREDIT_CARD') {
-            var handleResponse = creditCardHandle(paymentInstrument, JSON.parse(session.forms.billing.hipaytokenize.value), paymentUUID, req);
+            var handleResponse = creditCardHandle(paymentInstrument, hipayTokenize, paymentUUID, req);
 
             if (handleResponse.success) {
                 return { success: true };

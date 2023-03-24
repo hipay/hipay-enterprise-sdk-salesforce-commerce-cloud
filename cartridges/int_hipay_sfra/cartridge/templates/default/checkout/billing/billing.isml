@@ -75,6 +75,7 @@
                 <iscomment>HiPay custom code - start</iscomment>
                 <isinclude template="checkout/components/sdkjs"/>
                 <isinclude template="checkout/components/deviceFingerprint"/>
+                <input type="hidden" name="${pdict.CurrentForms.billing.hipaytokenize.htmlName}" id="hipaytokenize">
                 <iscomment>HiPay custom code - end</iscomment>
             </fieldset>
 

@@ -7,4 +7,5 @@ $(document).ready(function () {
     processInclude(require('./hipayCheckout/hipayCreateCard'));
     processInclude(require('./hipayCheckout/hipayTokenize'));
     processInclude(require('./hipayCheckout/hipayCreateIdeal'));
+    processInclude(require('./hipayCheckout/hipayCreateGiropay'));
 });
