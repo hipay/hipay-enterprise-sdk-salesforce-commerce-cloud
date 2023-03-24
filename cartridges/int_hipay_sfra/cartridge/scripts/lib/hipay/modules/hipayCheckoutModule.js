@@ -12,7 +12,6 @@ var PaymentInstrument = require('dw/order/PaymentInstrument');
 var HiPayLogger = require('*/cartridge/scripts/lib/hipay/hipayLogger');
 var HiPayConfig = require('*/cartridge/scripts/lib/hipay/hipayConfig').HiPayConfig;
 var HiPayHelper = require('*/cartridge/scripts/lib/hipay/hipayHelper');
-var creditCardHelpers = require('*/cartridge/scripts/helpers/creditCardHelpers');
 
 var HiPayCheckoutModule = function () {};
 

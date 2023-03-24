@@ -25,17 +25,7 @@
 
                 <iscomment>iDEAL</iscomment>
                 <isif condition="${!empty(paymentOption.ID) && paymentOption.ID == 'HIPAY_IDEAL'}">
-                    <div class="form-group
-                        ${pdict.CurrentForms.billing.hipayMethodsFields.ideal.issuer_bank_id.mandatory === true ? 'required' : ''}
-                        ${pdict.CurrentForms.billing.hipayMethodsFields.ideal.issuer_bank_id.htmlName}">
-                        <label class="form-control-label" for="${pdict.CurrentForms.billing.hipayMethodsFields.ideal.issuer_bank_id.htmlName}">${Resource.msg('hipay.label.issuerbankid','forms',null)}</label>
-                        <select class="custom-select" name="${pdict.CurrentForms.billing.hipayMethodsFields.ideal.issuer_bank_id.htmlName}">
-                            <isloop items=${pdict.CurrentForms.billing.hipayMethodsFields.ideal.issuer_bank_id.options} var="option">
-                                <option value="${option.htmlValue}">${Resource.msg(option.label, 'forms', null)}</option>
-                            </isloop>
-                        </select>
-                        <div class="invalid-feedback"></div>
-                    </div>
+                    <div id="hipay-hostedfields-form-ideal"></div>
                 </isif>
 
                 <iscomment>Przelewy24</iscomment>
