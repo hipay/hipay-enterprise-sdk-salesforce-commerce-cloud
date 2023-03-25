@@ -882,6 +882,8 @@ HiPayHelper.prototype.getHostedFieldsPreferences = function () {
     var currentSite = Site.getCurrent();
 
     var hipayHostedFields = {
+        hipayEnabled: currentSite.getCustomPreferenceValue('hipayEnabled'),
+        hipayOperationMode : currentSite.getCustomPreferenceValue('hipayOperationMode').value,
         cardConfig: {
             config: {
                 template: currentSite.getCustomPreferenceValue('hipayHostedFieldsTemplate'),
@@ -925,7 +927,8 @@ HiPayHelper.prototype.getHostedFieldsPreferences = function () {
             password: currentSite.getCustomPreferenceValue('hipayHostedFieldsPassword'),
             environment: currentSite.getCustomPreferenceValue('hipayHostedFieldsEnvironment'),
             lang: currentSite.getCustomPreferenceValue('hipayHostedFieldsLang')
-        }
+        },
+
     };
 
 

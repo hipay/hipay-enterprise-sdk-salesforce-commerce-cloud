@@ -52,21 +52,4 @@ base.handleCreditCardNumber = function () {
     }
 };
 
-
-base.addTokenization = function () {
-    var btnSubmitSFRA = $('.next-step-button .submit-payment');
-    var hipayCTA = $('<div/>')
-        .addClass('btn btn-primary btn-block submit-payment-hipay disabled d-none')
-        .attr('id', 'hipayCTA')
-        .html(btnSubmitSFRA.text())
-        .appendTo(btnSubmitSFRA.parent());
-
-    $('body').on('checkout:updateCheckoutView', function (e, data) {
-        if ($('.shipping-section').length > 0 || $('.shipping-summary').length > 0) {
-            $('.next-step-button .submit-payment').hide();
-            hipayCTA.removeClass('d-none');
-        }
-    });
-};
-
 module.exports = base;
