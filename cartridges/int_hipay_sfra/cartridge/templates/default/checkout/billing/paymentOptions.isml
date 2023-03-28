@@ -14,6 +14,8 @@
     }
 </isscript>
 
+<isinclude template="checkout/billing/hipayConfig"/>
+
 <div class="form-nav billing-nav payment-information"
     data-payment-method-id="CREDIT_CARD"
     data-is-new-payment="${pdict.customer.registeredUser && pdict.customer.customerPaymentInstruments.length ? false : true}"

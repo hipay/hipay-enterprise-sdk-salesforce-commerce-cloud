@@ -85,6 +85,7 @@ function hpayment() {
             svc.addHeader('Content-Type', 'application/json');
             svc.addHeader('Cache-Control', 'no-cache');
             svc.addHeader('Accept', 'application/json');
+            svc.addHeader('x-origin-referer', 'sfcc');
 
             var serviceConfig = svc.getConfiguration();
 
