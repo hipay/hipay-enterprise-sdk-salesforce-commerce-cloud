@@ -509,8 +509,8 @@
                         <value>iframe</value>
                     </value-definition>
                     <value-definition>
-                        <display xml:lang="x-default">API</display>
-                        <value>api</value>
+                        <display xml:lang="x-default">Hosted fields</display>
+                        <value>hostedFields</value>
                     </value-definition>
                 </value-definitions>
             </attribute-definition>
