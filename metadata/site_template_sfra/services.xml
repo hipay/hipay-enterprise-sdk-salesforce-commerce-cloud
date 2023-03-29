@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <services xmlns="http://www.demandware.com/xml/impex/services/2014-09-26">
+    <service-credential service-credential-id="hipay.data.cred">
+        <url>https://stage-data.hipay.com/checkout-data</url>
+    </service-credential>
+
     <service-credential service-credential-id="hipay.hosted.cred">
         <url>https://stage-api.hipay.com/v1/hpayment</url>
     </service-credential>
@@ -64,6 +68,17 @@
         <mock-mode-enabled>false</mock-mode-enabled>
         <profile-id>hipay.prof</profile-id>
         <credential-id>hipay.order.cred</credential-id>
+    </service>
+
+    <service service-id="hipay.rest.data.RefArchGlobal">
+        <service-type>HTTP</service-type>
+        <enabled>true</enabled>
+        <log-prefix/>
+        <comm-log-enabled>false</comm-log-enabled>
+        <force-prd-enabled>true</force-prd-enabled>
+        <mock-mode-enabled>false</mock-mode-enabled>
+        <profile-id>hipay.prof</profile-id>
+        <credential-id>hipay.data.cred</credential-id>
     </service>
 
 </services>

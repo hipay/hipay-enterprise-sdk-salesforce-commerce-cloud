@@ -220,9 +220,12 @@ HiPayCheckoutModule.calculateNonGiftCertificateAmount = function (basket) {
  */
 HiPayCheckoutModule.hiPayOrderRequest = function (paymentInstrument, order, deviceFingerprint, recurring) {
     var HiPayOrderService = require('*/cartridge/scripts/lib/hipay/services/hipayOrderService');
+    var HiPayDataService = require('*/cartridge/scripts/lib/hipay/services/hipayDataService');
+    var Calendar = require('dw/util/Calendar');
     var status = require('*/cartridge/scripts/lib/hipay/hipayStatus').HiPayStatus;
     var log = new HiPayLogger('HiPayOrderRequest');
     var hiPayOrderService = new HiPayOrderService();
+    var hiPayDataService = new HiPayDataService();
     var helper = new HiPayHelper();
     var pi = paymentInstrument;
     var fingeprint = deviceFingerprint;
@@ -236,6 +239,7 @@ HiPayCheckoutModule.hiPayOrderRequest = function (paymentInstrument, order, devi
     var responseMsg;
     var paymentState;
     var paymentTransaction;
+    var hipayDataResponse;
 
     try {
         params.operation = HiPayConfig.hipayPaymentAction;
@@ -263,8 +267,25 @@ HiPayCheckoutModule.hiPayOrderRequest = function (paymentInstrument, order, devi
             params.phone = pi.custom.hipayMbwayPhone;
         }
 
+        var dateRequest = new Calendar().getTime().toISOString();
+
         log.info('HiPay Order Request  ::: ' + JSON.stringify(params, undefined, 2));
         hipayResponse = hiPayOrderService.loadOrderPayment(params);
+
+        var dateResponse = new Calendar().getTime().toISOString();
+
+        // Data Api.
+        // Only for payment by credit card
+        if (pi.paymentMethod.equals('HIPAY_CREDIT_CARD')) {
+            try {
+                hipayDataResponse = hiPayDataService.dataService(params, JSON.parse(hipayResponse.object.text), dateRequest, dateResponse);
+                if (hipayDataResponse.ok) {
+                    Logger.info('Hipay Api Data status message ::: {0}', hipayDataResponse.object.statusMessage);
+                }
+            } catch (error) {
+                log.error(error);
+            }
+        }
 
         if (hipayResponse.ok === true) {
             responseMsg = JSON.parse(hipayResponse.object.text);
@@ -362,10 +383,14 @@ HiPayCheckoutModule.hiPayHostedPageRequest = function (order, paymentInstrument)
         var Site = require('dw/system/Site');
         var URLUtils = require('dw/web/URLUtils');
         var HiPayHostedService = require('*/cartridge/scripts/lib/hipay/services/hipayHostedService');
+        var HiPayDataService = require('*/cartridge/scripts/lib/hipay/services/hipayDataService');
+        var Calendar = require('dw/util/Calendar');
         var log = new HiPayLogger('HiPayHostedPageRequest');
         var hiPayHostedService = new HiPayHostedService();
+        var hiPayDataService = new HiPayDataService();
         var helper = new HiPayHelper();
         var pi = paymentInstrument;
+        var hipayDataResponse;
         var response = {
             hiPayRedirectURL: null,
             hiPayIFrameEnabled: null,
@@ -396,9 +421,28 @@ HiPayCheckoutModule.hiPayHostedPageRequest = function (order, paymentInstrument)
 
             log.info('HiPay Hosted Page Request ::: ' + JSON.stringify(params, undefined, 2));
 
+            var dateRequest = new Calendar().getTime().toISOString();
+
             var hipayResponse = hiPayHostedService.loadHostedPayment(params);
+
+            var dateResponse = new Calendar().getTime().toISOString();
+
             var hipayRedirectURL = null;
             var msg = null;
+
+            // Data Api.
+            // Only for payment by credit card
+            if (pi.paymentMethod.equals('HIPAY_HOSTED_CREDIT_CARD')) {
+                try {
+                    hipayDataResponse = hiPayDataService.dataService(params, JSON.parse(hipayResponse.object.text), dateRequest, dateResponse);
+                    if (hipayDataResponse.ok) {
+                        Logger.info('Hipay Api Data status message ::: {0}', hipayDataResponse.object.statusMessage);
+                    }
+                } catch (error) {
+                    var test = error;
+                    log.error(error);
+                }
+            }
 
             if (hipayResponse.ok === true) {
                 msg = JSON.parse(hipayResponse.object.text);
