@@ -44,6 +44,10 @@ base.paymentTabs = function () {
             }
         }
     });
+    // Init payment-information with currently selected payment method.
+    // This is to avoid having CREDIT_CARD by default instead of HIPAY_CREDIT_CARD.
+    var currentMethodID = $('.payment-options .nav-item .nav-link.active').parent('.nav-item').data('method-id');
+    $('.payment-information').data('payment-method-id', currentMethodID);
 };
 
 base.handleCreditCardNumber = function () {
