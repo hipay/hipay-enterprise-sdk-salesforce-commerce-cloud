@@ -376,12 +376,12 @@ HiPayCheckoutModule.hiPayHostedPageRequest = function (order, paymentInstrument)
             var params = {};
             params.operation = HiPayConfig.hipayPaymentAction;
             params.eci = '7';
-            params.css = URLUtils.https('HiPayResource-Style').toString();
             params.template = HiPayConfig.getTemplateType();
             params.merchant_display_name = Site.current.getName();
             params.display_selector = HiPayConfig.hipayDisplayCardSelector ? 1 : 0;
             params.multi_use = 1;
             params.cdata1 = order.orderToken;
+            params.theme_code = HiPayConfig.hipayThemeCode;
 
             if (!empty(pi.custom.hipayPaymentProductList)) {
                 params.payment_product_list = pi.custom.hipayPaymentProductList;

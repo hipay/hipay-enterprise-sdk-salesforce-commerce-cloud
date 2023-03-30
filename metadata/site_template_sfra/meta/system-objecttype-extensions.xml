@@ -259,13 +259,6 @@
                 <externally-managed-flag>false</externally-managed-flag>
                 <field-length>0</field-length>
             </attribute-definition>
-            <attribute-definition attribute-id="hipayCSSContent">
-                <display-name xml:lang="x-default">HiPay CSS content</display-name>
-                <description xml:lang="x-default">CSS applied to either Hosted or iFrame page, not enclosed in style tags</description>
-                <type>text</type>
-                <mandatory-flag>false</mandatory-flag>
-                <externally-managed-flag>false</externally-managed-flag>
-            </attribute-definition>
             <attribute-definition attribute-id="hipayDisplayCardSelector">
                 <display-name xml:lang="x-default">Display card selector</display-name>
                 <description xml:lang="x-default">Enables/disables the payment method selector on iFrame and Hosted page</description>
@@ -402,6 +395,14 @@
                 <externally-managed-flag>false</externally-managed-flag>
                 <min-length>0</min-length>
             </attribute-definition>
+            <attribute-definition attribute-id="hipayThemeCode">
+                <display-name xml:lang="x-default">Theme code</display-name>
+                <description xml:lang="x-default">Hosted page integration theme code</description>
+                <type>string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <min-length>0</min-length>
+            </attribute-definition>
         </custom-attribute-definitions>
         <group-definitions>
             <attribute-group group-id="HiPay">
@@ -416,11 +417,11 @@
                 <attribute attribute-id="hipayPaymentAction"/>
                 <attribute attribute-id="hipayIframeHeight"/>
                 <attribute attribute-id="hipayIframeWidth"/>
-                <attribute attribute-id="hipayCSSContent"/>
                 <attribute attribute-id="hipayDisplayCardSelector"/>
                 <attribute attribute-id="hipayHungOrderTimeout"/>
                 <attribute attribute-id="hipaySiteShippingMethodsList"/>
                 <attribute attribute-id="hipaySFRAVersion"/>
+                <attribute attribute-id="hipayThemeCode"/>
             </attribute-group>
         </group-definitions>
     </type-extension>

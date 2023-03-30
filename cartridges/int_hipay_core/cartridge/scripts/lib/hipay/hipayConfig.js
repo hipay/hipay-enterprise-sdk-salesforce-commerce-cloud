@@ -46,6 +46,7 @@ function HiPayConfig() {
     this.hipayIframeHeight = this.getSitePeference('hipayIframeHeight');
     this.hipayIframeWidth = this.getSitePeference('hipayIframeWidth');
     this.hipayDisplayCardSelector = this.getSitePeference('hipayDisplayCardSelector');
+    this.hipayThemeCode = this.getSitePeference('hipayThemeCode');
 
     this.getTemplateType = function () {
         switch (this.hipayOperationMode) {
