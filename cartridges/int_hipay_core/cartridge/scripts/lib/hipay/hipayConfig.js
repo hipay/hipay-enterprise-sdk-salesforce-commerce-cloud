@@ -47,6 +47,14 @@ function HiPayConfig() {
     this.hipayIframeWidth = this.getSitePeference('hipayIframeWidth');
     this.hipayDisplayCardSelector = this.getSitePeference('hipayDisplayCardSelector');
     this.hipayThemeCode = this.getSitePeference('hipayThemeCode');
+    this.hipayPublicLiveUsername = this.getSitePeference('hipayPublicLiveUsername');
+    this.hipayPublicLivePassword = this.getSitePeference('hipayPublicLivePassword');
+    this.hipayPublicTestUsername = this.getSitePeference('hipayPublicTestUsername');
+    this.hipayPublicTestPassword = this.getSitePeference('hipayPublicTestPassword');
+    this.hipayPrivateLiveUsername = this.getSitePeference('hipayPrivateLiveUsername');
+    this.hipayPrivateLivePassword = this.getSitePeference('hipayPrivateLivePassword');
+    this.hipayPrivateTestUsername = this.getSitePeference('hipayPrivateTestUsername');
+    this.hipayPrivateTestPassword = this.getSitePeference('hipayPrivateTestPassword');
 
     this.getTemplateType = function () {
         switch (this.hipayOperationMode) {

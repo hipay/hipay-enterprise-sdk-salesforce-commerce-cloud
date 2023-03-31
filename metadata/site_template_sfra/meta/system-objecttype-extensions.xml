@@ -381,6 +381,74 @@
                     </value-definition>
                 </value-definitions>
             </attribute-definition>
+            <attribute-definition attribute-id="hipayPrivateLivePassword">
+                <display-name xml:lang="x-default">Private Live Password</display-name>
+                <description xml:lang="x-default">(Credentials private)&#13;
+Password for the environment live</description>
+                <type>password</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+            </attribute-definition>
+            <attribute-definition attribute-id="hipayPrivateLiveUsername">
+                <display-name xml:lang="x-default">Private Live Username</display-name>
+                <description xml:lang="x-default">(Credentials private)&#13;
+Username for the environment live</description>
+                <type>string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <min-length>0</min-length>
+            </attribute-definition>
+            <attribute-definition attribute-id="hipayPrivateTestPassword">
+                <display-name xml:lang="x-default">Private Test Password</display-name>
+                <description xml:lang="x-default">(Credentials private)&#13;
+Password for the environment test</description>
+                <type>password</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+            </attribute-definition>
+            <attribute-definition attribute-id="hipayPrivateTestUsername">
+                <display-name xml:lang="x-default">Private Test Username</display-name>
+                <description xml:lang="x-default">(Credentials private)&#13;
+Username for the environment test</description>
+                <type>string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <min-length>0</min-length>
+            </attribute-definition>
+            <attribute-definition attribute-id="hipayPublicLivePassword">
+                <display-name xml:lang="x-default">Public Live Password</display-name>
+                <description xml:lang="x-default">(Credentials public)&#13;
+Password for the environment live</description>
+                <type>password</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+            </attribute-definition>
+            <attribute-definition attribute-id="hipayPublicLiveUsername">
+                <display-name xml:lang="x-default">Public Live Username</display-name>
+                <description xml:lang="x-default">(Credentials public )&#13;
+Username for the environment live</description>
+                <type>string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <min-length>0</min-length>
+            </attribute-definition>
+            <attribute-definition attribute-id="hipayPublicTestPassword">
+                <display-name xml:lang="x-default">Public Test Password</display-name>
+                <description xml:lang="x-default">(Credentials public)&#13;
+Password for the environment test</description>
+                <type>password</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+            </attribute-definition>
+            <attribute-definition attribute-id="hipayPublicTestUsername">
+                <display-name xml:lang="x-default">Public Test Username</display-name>
+                <description xml:lang="x-default">(Credentials public)&#13;
+Username for the environment test</description>
+                <type>string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <min-length>0</min-length>
+            </attribute-definition>
             <attribute-definition attribute-id="hipaySFRAVersion">
                 <display-name xml:lang="x-default">Use SFRA &gt;= 6</display-name>
                 <type>boolean</type>
@@ -422,6 +490,14 @@
                 <attribute attribute-id="hipaySiteShippingMethodsList"/>
                 <attribute attribute-id="hipaySFRAVersion"/>
                 <attribute attribute-id="hipayThemeCode"/>
+                <attribute attribute-id="hipayPublicLivePassword"/>
+                <attribute attribute-id="hipayPublicTestPassword"/>
+                <attribute attribute-id="hipayPublicLiveUsername"/>
+                <attribute attribute-id="hipayPublicTestUsername"/>
+                <attribute attribute-id="hipayPrivateLivePassword"/>
+                <attribute attribute-id="hipayPrivateLiveUsername"/>
+                <attribute attribute-id="hipayPrivateTestPassword"/>
+                <attribute attribute-id="hipayPrivateTestUsername"/>
             </attribute-group>
         </group-definitions>
     </type-extension>

@@ -3,9 +3,25 @@
  */
 
 var LocalServiceRegistry = require('dw/svc/LocalServiceRegistry');
+var HiPayConfig = require('*/cartridge/scripts/lib/hipay/hipayConfig').HiPayConfig;
 var Encoding = require('dw/crypto/Encoding');
 var Bytes = require('dw/util/Bytes');
 var Site = require('dw/system/Site');
+
+/**
+ * Return public or private credentials.
+ * @param {Boolean} isPublic
+ * @returns {String}
+ */
+function getCredentials(isPublic) {
+    if (isPublic) {
+        return HiPayConfig['hipayPublic' + HiPayConfig.hipayEnableTestMode + 'Username'] +
+        ':' + HiPayConfig['hipayPublic' + HiPayConfig.hipayEnableTestMode + 'Password'];
+    } else {
+        return HiPayConfig['hipayPrivate' + HiPayConfig.hipayEnableTestMode + 'Username'] +
+        ':' + HiPayConfig['hipayPrivate' + HiPayConfig.hipayEnableTestMode + 'Password'];
+    }
+}
 
 // HiPay Generate Token Service
 function createToken() {
@@ -19,13 +35,9 @@ function createToken() {
             svc.addHeader('Cache-Control', 'no-cache');
             svc.addHeader('Accept', 'application/json');
 
-            var serviceConfig = svc.getConfiguration();
-
-            // Get HiPay credentials
-            var credentials = serviceConfig.getCredential();
-            var credString = credentials.getUser() + ':' + credentials.getPassword();
-            var base64Credentials = Encoding.toBase64(new Bytes(credString));
-            svc.addHeader('Authentication', 'Basic ' + base64Credentials);
+            var sitePrefCredentials = getCredentials(true);
+            var base64Credentials = Encoding.toBase64(new Bytes(sitePrefCredentials));
+            svc.addHeader('Authorization', 'Basic ' + base64Credentials);
 
             return JSON.stringify(args);
         },
@@ -46,20 +58,16 @@ function order() {
     var service = LocalServiceRegistry.createService('hipay.rest.order.' + siteId, {
         createRequest: function (svc, args) {
             svc.setRequestMethod('POST');
-
             // Set headers
             svc.addHeader('Content-Type', 'application/json');
             svc.addHeader('Cache-Control', 'no-cache');
             svc.addHeader('Accept', 'application/json');
 
-            var serviceConfig = svc.getConfiguration();
-
-            // Get HiPay credentials
-            var credentials = serviceConfig.getCredential();
-            var credString = credentials.getUser() + ':' + credentials.getPassword();
+            // Get HiPay credentials.
+            var credString = getCredentials(false);
             var base64Credentials = Encoding.toBase64(new Bytes(credString));
 
-            svc.addHeader('Authentication', 'Basic ' + base64Credentials);
+            svc.addHeader('Authorization', 'Basic ' + base64Credentials);
 
             return JSON.stringify(args);
         },
@@ -87,13 +95,10 @@ function hpayment() {
             svc.addHeader('Accept', 'application/json');
             svc.addHeader('x-origin-referer', 'sfcc');
 
-            var serviceConfig = svc.getConfiguration();
-
-            // Get HiPay credentials
-            var credentials = serviceConfig.getCredential();
-            var credString = credentials.getUser() + ':' + credentials.getPassword();
+            // Get HiPay credentials.
+            var credString = getCredentials(false);
             var base64Credentials = Encoding.toBase64(new Bytes(credString));
-            svc.addHeader('Authentication', 'Basic ' + base64Credentials);
+            svc.addHeader('Authorization', 'Basic ' + base64Credentials);
 
             return JSON.stringify(args);
         },
@@ -120,13 +125,10 @@ function maintenance() {
             svc.addHeader('Cache-Control', 'no-cache');
             svc.addHeader('Accept', 'application/json');
 
-            var serviceConfig = svc.getConfiguration();
-
-           // Get HiPay credentials
-            var credentials = serviceConfig.getCredential();
-            var credString = credentials.getUser() + ':' + credentials.getPassword();
+           // Get HiPay credentials.
+           var credString = getCredentials(false);
             var base64Credentials = Encoding.toBase64(new Bytes(credString));
-            svc.addHeader('Authentication', 'Basic ' + base64Credentials);
+            svc.addHeader('Authorization', 'Basic ' + base64Credentials);
 
             return JSON.stringify(args);
         },
