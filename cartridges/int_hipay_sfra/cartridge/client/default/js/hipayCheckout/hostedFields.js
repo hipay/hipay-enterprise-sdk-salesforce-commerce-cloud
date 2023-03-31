@@ -38,7 +38,14 @@
     }
 
     function createInstance(type) {
+        enableHipayCTA();
+
+        if (type === 'card' && !$('.user-payment-instruments').hasClass('checkout-hidden')) {
+            disableHipayCTA();
+        }
+
         removeAllHostedfieldsForms();
+        
         $cache.instance = hipay.create(type, window.hipayCustomPreferences[type + 'Config'].config);
         $cache.instance.on('change', function(event){
             /* Display error(s), if any */
@@ -79,7 +86,7 @@
             // Trigger directly original submit if using non Hosted fields method,
             // or when using saved payment method.
             // @TODO Use $cache.paymentMethod
-            if (['HIPAY_CREDIT_CARD', 'HIPAY_IDEAL', 'HIPAY_GIROPAY'].indexOf(methodID) === -1 || !$('.user-payment-instruments').hasClass('checkout-hidden')) {
+            if (['HIPAY_CREDIT_CARD', 'HIPAY_IDEAL', 'HIPAY_GIROPAY', 'HIPAY_MBWAY'].indexOf(methodID) === -1 || !$('.user-payment-instruments').hasClass('checkout-hidden')) {
                 $('button[value="submit-payment"]').trigger('click');
                 return;
             }
@@ -120,6 +127,8 @@
                 createInstance('mbway');
             } else if (methodID === $cache.paymentMethod.iDeal) {
                 createInstance('ideal');
+            } else {
+                disableHipayCTA();
             }
         });
 
