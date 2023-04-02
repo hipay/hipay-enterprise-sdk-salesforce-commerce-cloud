@@ -378,7 +378,6 @@ HiPayCheckoutModule.hiPayHostedPageRequest = function (order, paymentInstrument)
             params.eci = '7';
             params.template = HiPayConfig.getTemplateType();
             params.merchant_display_name = Site.current.getName();
-            params.display_selector = HiPayConfig.hipayDisplayCardSelector ? 1 : 0;
             params.multi_use = 1;
             params.cdata1 = order.orderToken;
             params.theme_code = HiPayConfig.hipayThemeCode;

@@ -269,14 +269,6 @@
                 <mandatory-flag>false</mandatory-flag>
                 <externally-managed-flag>false</externally-managed-flag>
             </attribute-definition>
-            <attribute-definition attribute-id="hipayDisplayCardSelector">
-                <display-name xml:lang="x-default">Display card selector</display-name>
-                <description xml:lang="x-default">Enables/disables the payment method selector on iFrame and Hosted page</description>
-                <type>boolean</type>
-                <mandatory-flag>false</mandatory-flag>
-                <externally-managed-flag>false</externally-managed-flag>
-                <default-value>false</default-value>
-            </attribute-definition>
             <attribute-definition attribute-id="hipayEnable3dSecure">
                 <display-name xml:lang="x-default">3-D Secure</display-name>
                 <description xml:lang="x-default">Allows the activation of 3-D Secure if available on the card being used</description>
@@ -563,7 +555,6 @@
                 <attribute attribute-id="hipayIframeHeight"/>
                 <attribute attribute-id="hipayIframeWidth"/>
                 <attribute attribute-id="hipayCSSContent"/>
-                <attribute attribute-id="hipayDisplayCardSelector"/>
                 <attribute attribute-id="hipayHungOrderTimeout"/>
                 <attribute attribute-id="hipaySiteShippingMethodsList"/>
             </attribute-group>
