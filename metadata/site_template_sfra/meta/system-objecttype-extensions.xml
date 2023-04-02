@@ -492,25 +492,25 @@ Username for the environment test</description>
                 <attribute attribute-id="hipayEnableOneClick"/>
                 <attribute attribute-id="hipayOperationMode"/>
                 <attribute attribute-id="hipayEnableTestMode"/>
+                <attribute attribute-id="hipayPublicLiveUsername"/>
+                <attribute attribute-id="hipayPublicLivePassword"/>
+                <attribute attribute-id="hipayPrivateLiveUsername"/>
+                <attribute attribute-id="hipayPrivateLivePassword"/>
+                <attribute attribute-id="hipayPublicTestUsername"/>
+                <attribute attribute-id="hipayPublicTestPassword"/>
+                <attribute attribute-id="hipayPrivateTestUsername"/>
+                <attribute attribute-id="hipayPrivateTestPassword"/>
+                <attribute attribute-id="hipayHashAlgorithm"/>
                 <attribute attribute-id="hipayEnable3dSecure"/>
                 <attribute attribute-id="hipayEnable3dSecureThresholdRule"/>
                 <attribute attribute-id="hipayApiPassphrase"/>
                 <attribute attribute-id="hipayPaymentAction"/>
                 <attribute attribute-id="hipayIframeHeight"/>
                 <attribute attribute-id="hipayIframeWidth"/>
+                <attribute attribute-id="hipayThemeCode"/>
                 <attribute attribute-id="hipayHungOrderTimeout"/>
                 <attribute attribute-id="hipaySiteShippingMethodsList"/>
                 <attribute attribute-id="hipaySFRAVersion"/>
-                <attribute attribute-id="hipayThemeCode"/>
-                <attribute attribute-id="hipayPublicLivePassword"/>
-                <attribute attribute-id="hipayPublicTestPassword"/>
-                <attribute attribute-id="hipayPublicLiveUsername"/>
-                <attribute attribute-id="hipayPublicTestUsername"/>
-                <attribute attribute-id="hipayPrivateLivePassword"/>
-                <attribute attribute-id="hipayPrivateLiveUsername"/>
-                <attribute attribute-id="hipayPrivateTestPassword"/>
-                <attribute attribute-id="hipayPrivateTestUsername"/>
-                <attribute attribute-id="hipayHashAlgorithm"/>
             </attribute-group>
         </group-definitions>
     </type-extension>
