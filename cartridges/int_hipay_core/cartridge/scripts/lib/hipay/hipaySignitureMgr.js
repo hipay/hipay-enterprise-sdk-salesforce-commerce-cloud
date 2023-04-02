@@ -3,6 +3,7 @@
 var MessageDigest = require('dw/crypto/MessageDigest');
 var Encoding = require('dw/crypto/Encoding');
 var Bytes = require('dw/util/Bytes');
+var Site = require('dw/system/Site');
 
 /**
  * HiPaySignitureMgr object is responsible for calculating and verifying SHA hash string in HiPay requests.
@@ -79,7 +80,9 @@ HiPaySignitureMgr.calculateNotificationSigniture = function (paramsMap, passPhra
     var paramsString = paramsList.join('&');
     var stringToHash = paramsString + passPhrase;
     // SHA Hash the final string
-    var digest = new MessageDigest(MessageDigest.DIGEST_SHA_256);
+    var hashAlgo = Site.getCurrent().getCustomPreferenceValue('hipayHashAlgorithm').value;
+
+    var digest = new MessageDigest(MessageDigest['DIGEST_SHA_' + hashAlgo]);
     var hash = Encoding.toHex(digest.digestBytes(new Bytes(stringToHash, 'UTF-8')));
 
     return hash;
