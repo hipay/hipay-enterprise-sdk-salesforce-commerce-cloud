@@ -42,12 +42,11 @@ base.paymentTabs = function () {
             if (!$('.credit-card-content').hasClass('active')) {
                 $('.credit-card-content').addClass('active');
             }
+
+            // Oneclick payment, we must have CREDIT_CARD in payment method instead of HIPAY_CREDIT_CARD
+            $('.payment-information').data('payment-method-id', 'CREDIT_CARD');
         }
     });
-    // Init payment-information with currently selected payment method.
-    // This is to avoid having CREDIT_CARD by default instead of HIPAY_CREDIT_CARD.
-    var currentMethodID = $('.payment-options .nav-item .nav-link.active').parent('.nav-item').data('method-id');
-    $('.payment-information').data('payment-method-id', currentMethodID);
 };
 
 base.handleCreditCardNumber = function () {

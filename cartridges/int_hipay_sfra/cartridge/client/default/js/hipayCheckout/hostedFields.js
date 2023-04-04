@@ -87,7 +87,7 @@
             // Trigger directly original submit if using non Hosted fields method,
             // or when using saved payment method.
             // @TODO Use $cache.paymentMethod
-            if (['HIPAY_CREDIT_CARD', 'HIPAY_IDEAL', 'HIPAY_GIROPAY', 'HIPAY_MBWAY'].indexOf(methodID) === -1 || !$('.user-payment-instruments').hasClass('checkout-hidden')) {
+            if (['CREDIT_CARD', 'HIPAY_IDEAL', 'HIPAY_GIROPAY', 'HIPAY_MBWAY'].indexOf(methodID) === -1 || !$('.user-payment-instruments').hasClass('checkout-hidden')) {
                 $('button[value="submit-payment"]').trigger('click');
                 return;
             }
