@@ -9,21 +9,6 @@ var Bytes = require('dw/util/Bytes');
 var Site = require('dw/system/Site');
 
 /**
- * Return public or private credentials.
- * @param {Boolean} isPublic
- * @returns {String}
- */
-function getCredentials(isPublic) {
-    if (isPublic) {
-        return HiPayConfig['hipayPublic' + HiPayConfig.hipayEnvironment + 'Username'] +
-        ':' + HiPayConfig['hipayPublic' + HiPayConfig.hipayEnvironment + 'Password'];
-    } else {
-        return HiPayConfig['hipayPrivate' + HiPayConfig.hipayEnvironment + 'Username'] +
-        ':' + HiPayConfig['hipayPrivate' + HiPayConfig.hipayEnvironment + 'Password'];
-    }
-}
-
-/**
  * Return public credentials.
  * @returns {String}
  */
