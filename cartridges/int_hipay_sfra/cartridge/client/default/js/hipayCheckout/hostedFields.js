@@ -4,6 +4,8 @@
 
     var hipay = require('./globalVariable').getGlobalVariable();
 
+    const MODE_OPERATION = 'hostedFields';
+
     var $cache = {
         body: $('body'),
         document: $(document),
@@ -16,7 +18,6 @@
         stage: {
             payment: 'payment'
         },
-        hipayOperationMode: 'api',
         instance: null
     };
 
@@ -45,7 +46,7 @@
         }
 
         removeAllHostedfieldsForms();
-        
+
         $cache.instance = hipay.create(type, window.hipayCustomPreferences[type + 'Config'].config);
         $cache.instance.on('change', function(event){
             /* Display error(s), if any */
@@ -68,7 +69,7 @@
 
     function initialize() {
         if (!window.hipayCustomPreferences.hipayEnabled ||
-            window.hipayCustomPreferences.hipayOperationMode !== $cache.hipayOperationMode) {
+            window.hipayCustomPreferences.hipayOperationMode !== MODE_OPERATION) {
             return;
         }
 
