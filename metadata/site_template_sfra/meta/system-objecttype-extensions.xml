@@ -298,7 +298,7 @@
             </attribute-definition>
             <attribute-definition attribute-id="hipayEnvironment">
                 <display-name xml:lang="x-default">Environnement used</display-name>
-                <description xml:lang="x-default">Test Mode: If enabled, the module will use the Hipay Console</description>
+                <description xml:lang="x-default">Set to live for Production or test for test mode</description>
                 <type>enum-of-string</type>
                 <mandatory-flag>false</mandatory-flag>
                 <externally-managed-flag>false</externally-managed-flag>
