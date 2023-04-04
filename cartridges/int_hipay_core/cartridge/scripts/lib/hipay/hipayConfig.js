@@ -38,7 +38,7 @@ function HiPayConfig() {
     this.notifyURL = URLUtils.https('HiPayNotification-Notify').toString();
 
     this.hipayOperationMode = this.getSitePeference('hipayOperationMode').value;
-    this.hipayEnableTestMode = this.getSitePeference('hipayEnableTestMode').value;
+    this.hipayEnvironment = this.getSitePeference('hipayEnvironment').value;
     this.hipayEnable3dSecure = this.getSitePeference('hipayEnable3dSecure').value;
     this.hipayEnable3dSecureThresholdRule = this.getSitePeference('hipayEnable3dSecureThresholdRule').value;
     this.hipayApiPassphrase = this.getSitePeference('hipayApiPassphrase');

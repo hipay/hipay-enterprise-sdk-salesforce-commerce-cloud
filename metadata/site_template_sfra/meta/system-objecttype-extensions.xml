@@ -296,13 +296,22 @@
                 <externally-managed-flag>false</externally-managed-flag>
                 <default-value>false</default-value>
             </attribute-definition>
-            <attribute-definition attribute-id="hipayEnableTestMode">
-                <display-name xml:lang="x-default">Enable Tokenization Test Mode</display-name>
-                <description xml:lang="x-default">Test Mode: If enabled, the module will use the HiPay TPP test platform</description>
-                <type>boolean</type>
+            <attribute-definition attribute-id="hipayEnvironment">
+                <display-name xml:lang="x-default">Environnement used</display-name>
+                <description xml:lang="x-default">Test Mode: If enabled, the module will use the Hipay Console</description>
+                <type>enum-of-string</type>
                 <mandatory-flag>false</mandatory-flag>
                 <externally-managed-flag>false</externally-managed-flag>
-                <default-value>false</default-value>
+                <value-definitions>
+                    <value-definition default="true">
+                        <display xml:lang="x-default">Test</display>
+                        <value>Test</value>
+                    </value-definition>
+                    <value-definition>
+                        <display xml:lang="x-default">Live</display>
+                        <value>Live</value>
+                    </value-definition>
+                </value-definitions>
             </attribute-definition>
             <attribute-definition attribute-id="hipayEnabled">
                 <display-name xml:lang="x-default">Hipay Enabled</display-name>
@@ -491,7 +500,7 @@ Username for the environment test</description>
                 <attribute attribute-id="hipayEnabled"/>
                 <attribute attribute-id="hipayEnableOneClick"/>
                 <attribute attribute-id="hipayOperationMode"/>
-                <attribute attribute-id="hipayEnableTestMode"/>
+                <attribute attribute-id="hipayEnvironment"/>
                 <attribute attribute-id="hipayPublicLiveUsername"/>
                 <attribute attribute-id="hipayPublicLivePassword"/>
                 <attribute attribute-id="hipayPrivateLiveUsername"/>

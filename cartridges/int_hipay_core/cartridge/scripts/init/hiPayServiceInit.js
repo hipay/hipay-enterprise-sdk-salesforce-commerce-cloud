@@ -15,12 +15,30 @@ var Site = require('dw/system/Site');
  */
 function getCredentials(isPublic) {
     if (isPublic) {
-        return HiPayConfig['hipayPublic' + HiPayConfig.hipayEnableTestMode + 'Username'] +
-        ':' + HiPayConfig['hipayPublic' + HiPayConfig.hipayEnableTestMode + 'Password'];
+        return HiPayConfig['hipayPublic' + HiPayConfig.hipayEnvironment + 'Username'] +
+        ':' + HiPayConfig['hipayPublic' + HiPayConfig.hipayEnvironment + 'Password'];
     } else {
-        return HiPayConfig['hipayPrivate' + HiPayConfig.hipayEnableTestMode + 'Username'] +
-        ':' + HiPayConfig['hipayPrivate' + HiPayConfig.hipayEnableTestMode + 'Password'];
+        return HiPayConfig['hipayPrivate' + HiPayConfig.hipayEnvironment + 'Username'] +
+        ':' + HiPayConfig['hipayPrivate' + HiPayConfig.hipayEnvironment + 'Password'];
     }
+}
+
+/**
+ * Return public credentials.
+ * @returns {String}
+ */
+function getCredentialsPublic() {
+    return HiPayConfig['hipayPublic' + HiPayConfig.hipayEnvironment + 'Username'] +
+        ':' + HiPayConfig['hipayPublic' + HiPayConfig.hipayEnvironment + 'Password'];
+}
+
+/**
+ * Return private credentials.
+ * @returns {String}
+ */
+function getCredentialsPrivate() {
+    return HiPayConfig['hipayPrivate' + HiPayConfig.hipayEnvironment + 'Username'] +
+        ':' + HiPayConfig['hipayPrivate' + HiPayConfig.hipayEnvironment + 'Password'];
 }
 
 // HiPay Generate Token Service
@@ -35,7 +53,7 @@ function createToken() {
             svc.addHeader('Cache-Control', 'no-cache');
             svc.addHeader('Accept', 'application/json');
 
-            var sitePrefCredentials = getCredentials(true);
+            var sitePrefCredentials = getCredentialsPublic();
             var base64Credentials = Encoding.toBase64(new Bytes(sitePrefCredentials));
             svc.addHeader('Authorization', 'Basic ' + base64Credentials);
 
@@ -64,7 +82,7 @@ function order() {
             svc.addHeader('Accept', 'application/json');
 
             // Get HiPay credentials.
-            var credString = getCredentials(false);
+            var credString = getCredentialsPrivate();
             var base64Credentials = Encoding.toBase64(new Bytes(credString));
 
             svc.addHeader('Authorization', 'Basic ' + base64Credentials);
@@ -96,7 +114,7 @@ function hpayment() {
             svc.addHeader('x-origin-referer', 'sfcc');
 
             // Get HiPay credentials.
-            var credString = getCredentials(false);
+            var credString = getCredentialsPrivate();
             var base64Credentials = Encoding.toBase64(new Bytes(credString));
             svc.addHeader('Authorization', 'Basic ' + base64Credentials);
 
@@ -126,7 +144,7 @@ function maintenance() {
             svc.addHeader('Accept', 'application/json');
 
            // Get HiPay credentials.
-           var credString = getCredentials(false);
+           var credString = getCredentialsPrivate();
             var base64Credentials = Encoding.toBase64(new Bytes(credString));
             svc.addHeader('Authorization', 'Basic ' + base64Credentials);
 
