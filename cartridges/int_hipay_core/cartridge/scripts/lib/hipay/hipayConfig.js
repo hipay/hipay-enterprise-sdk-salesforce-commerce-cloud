@@ -18,7 +18,7 @@ function HiPayConfig() {
     this.OPERATION = {
         HOSTED: 'hosted',
         IFRAME: 'iframe',
-        HOSTEDFIELDS: 'hostedFields'
+        HOSTED_FIELDS: 'hostedFields'
     };
 
     this.THREEDSECURE_AUTH = {
