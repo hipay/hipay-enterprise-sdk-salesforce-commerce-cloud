@@ -80,7 +80,7 @@
         <custom-attributes>
             <custom-attribute attribute-id="hipayPaymentCategoryList">credit-card,debit-card</custom-attribute>
             <custom-attribute attribute-id="hipayPaymentProductList">cb,visa,mastercard,american-express,maestro,bcmc</custom-attribute>
-            <custom-attribute attribute-id="hipayProductName">hosted</custom-attribute>
+            <custom-attribute attribute-id="hipayProductName">credit-card</custom-attribute>
         </custom-attributes>
     </payment-method>
 
