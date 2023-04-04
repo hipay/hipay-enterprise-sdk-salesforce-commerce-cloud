@@ -329,15 +329,15 @@
                 <value-definitions>
                     <value-definition>
                         <display xml:lang="x-default">SHA1</display>
-                        <value>1</value>
+                        <value>DIGEST_SHA_1</value>
                     </value-definition>
                     <value-definition default="true">
                         <display xml:lang="x-default">SHA256</display>
-                        <value>256</value>
+                        <value>DIGEST_SHA_256</value>
                     </value-definition>
                     <value-definition>
                         <display xml:lang="x-default">SHA512</display>
-                        <value>512</value>
+                        <value>DIGEST_SHA_512</value>
                     </value-definition>
                 </value-definitions>
             </attribute-definition>

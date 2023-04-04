@@ -82,7 +82,7 @@ HiPaySignitureMgr.calculateNotificationSigniture = function (paramsMap, passPhra
     // SHA Hash the final string
     var hashAlgo = Site.getCurrent().getCustomPreferenceValue('hipayHashAlgorithm').value;
 
-    var digest = new MessageDigest(MessageDigest['DIGEST_SHA_' + hashAlgo]);
+    var digest = new MessageDigest(MessageDigest[hashAlgo]);
     var hash = Encoding.toHex(digest.digestBytes(new Bytes(stringToHash, 'UTF-8')));
 
     return hash;
