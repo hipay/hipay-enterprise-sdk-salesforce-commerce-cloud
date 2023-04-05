@@ -73,16 +73,6 @@ HiPayHelper.prototype.fillHeaderData = function (HiPayConfig, order, params) {
     params.exception_url = HiPayConfig.errorURL;  // eslint-disable-line
     params.cancel_url = HiPayConfig.cancelURL;  // eslint-disable-line
     params.notify_url = HiPayConfig.notifyURL;  // eslint-disable-line
-
-    if (!empty(hipayForm.klarna.houseNumber.value)) {
-        params.house_number = hipayForm.klarna.houseNumber.value;  // eslint-disable-line
-    }
-
-    if (!empty(hipayForm.klarna.birthdate.value)) {
-        var birthdate = hipayForm.klarna.birthdate.value.replace(/-/g, '');
-
-        params.birthdate = birthdate;  // eslint-disable-line
-    }
 };
 
 /* Fills HiPay request data based on DW Order information */

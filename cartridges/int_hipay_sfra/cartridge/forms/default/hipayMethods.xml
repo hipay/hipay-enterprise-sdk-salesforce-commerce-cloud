@@ -4,19 +4,6 @@
         <field formid="bic" label="hipay.label.bic" type="string" mandatory="true"  missing-error="error.message.required"/>
     </group>
 
-    <group formid="klarna">
-       <field formid="birthdate" label="hipay.label.birthdate" type="string" mandatory="true"
-           missing-error="error.message.required"/>
-       <field formid="houseNumber" label="hipay.label.gender" type="integer" binding="houseNumber" mandatory="true"
-           missing-error="error.message.required"/>
-        <field formid="gender" label="profile.gender" type="string" default-value="1" binding="gender" mandatory="true" >
-            <options>
-                <option label="hipay.gender.female" value="F" />
-                <option label="hipay.gender.male" value="M" />
-            </options>
-        </field>
-    </group>
-
     <group formid="ideal">
         <field formid="issuer_bank_id" label="hipay.label.issuerbankid" default="ABNANL2A" type="string" mandatory="true"  missing-error="error.message.required">
             <options>

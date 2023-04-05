@@ -324,13 +324,6 @@
                <isinputfield formfield="${pdict.CurrentForms.billing.paymentMethods.hipaymethods.issuer_bank_id}" type="select" />
             </div>
 
-            <iscomment>Klarna</iscomment>
-            <div class="payment-method <isif condition="${!empty(pdict.selectedPaymentID) && pdict.selectedPaymentID=='HIPAY_KLARNA'}">payment-method-expanded</isif>" data-method="HIPAY_KLARNA">
-               <isinputfield formfield="${pdict.CurrentForms.billing.paymentMethods.hipaymethods.klarna.birthdate}" type="date" />
-               <isinputfield formfield="${pdict.CurrentForms.billing.paymentMethods.hipaymethods.klarna.houseNumber}" type="input" />
-               <isinputfield formfield="${pdict.CurrentForms.billing.paymentMethods.hipaymethods.klarna.gender}" type="select"/>
-            </div>
-
             <iscomment>Przelewy24</iscomment>
             <div class="payment-method <isif condition="${!empty(pdict.selectedPaymentID) && pdict.selectedPaymentID=='HIPAY_PRZELEWY24'}">payment-method-expanded</isif>" data-method="HIPAY_PRZELEWY24">
                <!--- No form is applied --->
