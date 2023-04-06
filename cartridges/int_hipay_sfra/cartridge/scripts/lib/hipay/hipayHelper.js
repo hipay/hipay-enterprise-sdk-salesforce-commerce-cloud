@@ -884,7 +884,7 @@ HiPayHelper.prototype.getHostedFieldsPreferences = function () {
         hipayOperationMode : currentSite.getCustomPreferenceValue('hipayOperationMode').value,
         cardConfig: {
             config: {
-                template: currentSite.getCustomPreferenceValue('hipayHostedFieldsTemplate'),
+                template: 'auto',
                 selector: currentSite.getCustomPreferenceValue('HipayCardFormId'),
                 styles: {
                     base: {
@@ -904,19 +904,19 @@ HiPayHelper.prototype.getHostedFieldsPreferences = function () {
         },
         idealConfig: {
             config: {
-                template: currentSite.getCustomPreferenceValue('hipayHostedFieldsTemplate'),
+                template: 'auto',
                 selector: currentSite.getCustomPreferenceValue('HipayIdealFormId') // form container div id
             }
         },
         giropayConfig: {
             config: {
-                template: currentSite.getCustomPreferenceValue('hipayHostedFieldsTemplate'),
+                template: 'auto',
                 selector: currentSite.getCustomPreferenceValue('HipayGiropayFormId') // form container div id
             }
         },
         mbwayConfig: {
             config: {
-                template: currentSite.getCustomPreferenceValue('hipayHostedFieldsTemplate'),
+                template: 'auto',
                 selector: currentSite.getCustomPreferenceValue('HipayMbwayFormId') // form container div id
             }
         },

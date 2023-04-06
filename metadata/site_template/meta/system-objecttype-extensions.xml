@@ -448,14 +448,6 @@
                 <min-length>0</min-length>
                 <default-value>#D50000</default-value>
             </attribute-definition>
-            <attribute-definition attribute-id="hipayHostedFieldsTemplate">
-                <display-name xml:lang="x-default">hipay HostedFields Template</display-name>
-                <type>string</type>
-                <mandatory-flag>false</mandatory-flag>
-                <externally-managed-flag>false</externally-managed-flag>
-                <min-length>0</min-length>
-                <default-value>auto</default-value>
-            </attribute-definition>
             <attribute-definition attribute-id="hipayHostedFieldsUserName">
                 <display-name xml:lang="x-default">hipay HostedFields User Name</display-name>
                 <type>string</type>
@@ -560,7 +552,6 @@
             </attribute-group>
             <attribute-group group-id="HipayHostedFieldsConfig">
                 <display-name xml:lang="x-default">Hipay HostedFields Configuration</display-name>
-                <attribute attribute-id="hipayHostedFieldsTemplate"/>
                 <attribute attribute-id="HipayCardFormId"/>
                 <attribute attribute-id="HipayIdealFormId"/>
                 <attribute attribute-id="HipayGiropayFormId"/>
