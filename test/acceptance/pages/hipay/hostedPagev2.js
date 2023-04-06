@@ -111,5 +111,17 @@ module.exports = {
         I.waitForVisible('#submit-button');
         I.click('#submit-button');
         I.waitForNavigation();
+    },
+
+    validateHostedSofortPayment() {
+        I.click('.cookie-modal-accept-all');
+        I.fillField('#SenderBank', config.sofort.bank);
+        I.click('.button-right');
+        I.fillField('#BackendFormLOGINNAMEUSERID', config.sofort.id);
+        I.fillField('#BackendFormUSERPIN', config.sofort.password);
+        I.click('.button-right');
+        I.click('.button-right');
+        I.fillField('#BackendFormTAN', config.sofort.confirmCode);
+        I.click('.button-right');
     }
 }

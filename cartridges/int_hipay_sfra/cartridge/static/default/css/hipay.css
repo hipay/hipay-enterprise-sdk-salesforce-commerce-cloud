@@ -27,9 +27,12 @@ i.payment-product-sprite-american-express {
 i.payment-product-sprite-multibanco {
     background-position: -400px 15px;
 }
-
 i.payment-product-sprite-mbway {
     background-position: -504px 15px;
+}
+
+i.payment-product-sprite-sofort-uberweisung {
+    background-position: -605px 14px;
 }
 
 i.payment-product-sprite-ideal {

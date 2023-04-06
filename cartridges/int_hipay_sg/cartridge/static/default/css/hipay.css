@@ -33,6 +33,11 @@ i.payment-product-sprite-multibanco {
 i.payment-product-sprite-mbway {
     background-position: -504px 15px;
 }
+
+i.payment-product-sprite-sofort-uberweisung {
+    background-position: -605px 14px;
+}
+
 i.payment-product-sprite-ideal {
     background-position: 5px -52px;
 }

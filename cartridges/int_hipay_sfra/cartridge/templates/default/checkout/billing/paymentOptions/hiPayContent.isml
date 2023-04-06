@@ -42,6 +42,8 @@
                     </isif>
                 </isif>
 
+                <iscomment>Sofort Uberweisung</iscomment>
+                <isif condition="${!empty(paymentOption.ID) && paymentOption.ID == 'HIPAY_SOFORT_UBERWEISUNG'}"></isif>
             </fieldset>
 
         </div>

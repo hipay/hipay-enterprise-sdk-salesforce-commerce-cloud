@@ -334,6 +334,11 @@
                <!--- No form is applied --->
             </div>
 
+            <iscomment>Sofort Uberweisung</iscomment>
+            <div class="payment-method <isif condition="${!empty(pdict.selectedPaymentID) && pdict.selectedPaymentID=='HIPAY_SOFORT_UBERWEISUNG'}">payment-method-expanded</isif>" data-method="HIPAY_SOFORT_UBERWEISUNG">
+               <!--- No form is applied --->
+            </div>
+
             <iscomment>WebMoney Transfer</iscomment>
             <div class="payment-method <isif condition="${!empty(pdict.selectedPaymentID) && pdict.selectedPaymentID=='HIPAY_WEBMONEY_TRANSFER'}">payment-method-expanded</isif>" data-method="HIPAY_WEBMONEY_TRANSFER">
                <!--- No form is applied --->

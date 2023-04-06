@@ -85,6 +85,18 @@
         </custom-attributes>
     </payment-method>
 
+    <payment-method method-id="HIPAY_HOSTED_SOFORT_UBERWEISUNG">
+        <name xml:lang="x-default">Hosted Sofort Überweisung</name>
+        <description xml:lang="x-default">HiPay Sofort Überweisung Payment Method</description>
+        <enabled-flag>true</enabled-flag>
+        <processor-id>HIPAY_HOSTED</processor-id>
+        <custom-attributes>
+            <custom-attribute attribute-id="hipayPaymentCategoryList">realtime-banking</custom-attribute>
+            <custom-attribute attribute-id="hipayPaymentProductList">sofort-uberweisung</custom-attribute>
+            <custom-attribute attribute-id="hipayProductName">sofort-uberweisung</custom-attribute>
+        </custom-attributes>
+    </payment-method>
+
     <payment-method method-id="HIPAY_CREDIT_CARD">
         <name xml:lang="x-default">Credit Card</name>
         <description xml:lang="x-default">HiPay Credit Card</description>
@@ -220,6 +232,18 @@
         <custom-attributes>
             <custom-attribute attribute-id="hipayPaymentProductList">sisal</custom-attribute>
             <custom-attribute attribute-id="hipayProductName">sisal</custom-attribute>
+        </custom-attributes>
+    </payment-method>
+
+    <payment-method method-id="HIPAY_SOFORT_UBERWEISUNG">
+        <name xml:lang="x-default">Sofort Überweisung</name>
+        <description xml:lang="x-default">HiPay Sofort Überweisung Payment Method</description>
+        <enabled-flag>true</enabled-flag>
+        <processor-id>HIPAY</processor-id>
+        <custom-attributes>
+            <custom-attribute attribute-id="hipayPaymentCategoryList">realtime-banking</custom-attribute>
+            <custom-attribute attribute-id="hipayPaymentProductList">sofort-uberweisung</custom-attribute>
+            <custom-attribute attribute-id="hipayProductName">sofort-uberweisung</custom-attribute>
         </custom-attributes>
     </payment-method>
 
