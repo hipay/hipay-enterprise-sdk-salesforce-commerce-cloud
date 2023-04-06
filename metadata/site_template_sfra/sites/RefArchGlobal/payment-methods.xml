@@ -65,7 +65,6 @@
             <currency>EUR</currency>
         </currencies>
         <custom-attributes>
-            <custom-attribute attribute-id="hipayExpiryLimit">30</custom-attribute>
             <custom-attribute attribute-id="hipayOnlyCompleteCapture">false</custom-attribute>
             <custom-attribute attribute-id="hipayPaymentProductList">mbway</custom-attribute>
             <custom-attribute attribute-id="hipayProductName">mbway</custom-attribute>
