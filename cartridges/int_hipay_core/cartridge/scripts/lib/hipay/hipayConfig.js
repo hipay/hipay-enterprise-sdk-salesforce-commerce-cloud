@@ -45,7 +45,6 @@ function HiPayConfig() {
     this.hipayPaymentAction = this.getSitePeference('hipayPaymentAction').value;
     this.hipayIframeHeight = this.getSitePeference('hipayIframeHeight');
     this.hipayIframeWidth = this.getSitePeference('hipayIframeWidth');
-    this.hipayThemeCode = this.getSitePeference('hipayThemeCode');
     this.hipayPublicLiveUsername = this.getSitePeference('hipayPublicLiveUsername');
     this.hipayPublicLivePassword = this.getSitePeference('hipayPublicLivePassword');
     this.hipayPublicTestUsername = this.getSitePeference('hipayPublicTestUsername');

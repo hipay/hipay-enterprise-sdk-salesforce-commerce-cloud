@@ -405,7 +405,6 @@ HiPayCheckoutModule.hiPayHostedPageRequest = function (order, paymentInstrument)
             params.merchant_display_name = Site.current.getName();
             params.multi_use = 1;
             params.cdata1 = order.orderToken;
-            params.theme_code = HiPayConfig.hipayThemeCode;
 
             if (!empty(pi.custom.hipayPaymentProductList)) {
                 params.payment_product_list = pi.custom.hipayPaymentProductList;
