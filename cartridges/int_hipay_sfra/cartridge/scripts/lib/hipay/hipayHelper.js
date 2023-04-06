@@ -885,7 +885,7 @@ HiPayHelper.prototype.getHostedFieldsPreferences = function () {
         cardConfig: {
             config: {
                 template: 'auto',
-                selector: currentSite.getCustomPreferenceValue('HipayCardFormId'),
+                selector: 'hipay-hostedfields-form',
                 styles: {
                     base: {
                         color: currentSite.getCustomPreferenceValue('hipayHostedFieldsStyleBaseColor'),

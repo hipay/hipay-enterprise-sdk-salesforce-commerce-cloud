@@ -338,14 +338,6 @@
                 <min-length>0</min-length>
                 <default-value>stage</default-value>
             </attribute-definition>
-            <attribute-definition attribute-id="HipayCardFormId">
-                <display-name xml:lang="x-default">Card form ID</display-name>
-                <type>string</type>
-                <mandatory-flag>false</mandatory-flag>
-                <externally-managed-flag>false</externally-managed-flag>
-                <min-length>0</min-length>
-                <default-value>hipay-hostedfields-form</default-value>
-            </attribute-definition>
             <attribute-definition attribute-id="HipayGiropayFormId">
                 <display-name xml:lang="x-default">Giropay form ID</display-name>
                 <type>string</type>
@@ -552,7 +544,6 @@
             </attribute-group>
             <attribute-group group-id="HipayHostedFieldsConfig">
                 <display-name xml:lang="x-default">Hipay HostedFields Configuration</display-name>
-                <attribute attribute-id="HipayCardFormId"/>
                 <attribute attribute-id="HipayIdealFormId"/>
                 <attribute attribute-id="HipayGiropayFormId"/>
                 <attribute attribute-id="HipayMbwayFormId"/>
