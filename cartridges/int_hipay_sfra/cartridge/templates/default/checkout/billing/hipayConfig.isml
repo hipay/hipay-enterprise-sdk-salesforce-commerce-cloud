@@ -7,5 +7,6 @@
 <script>
   (function(){
       window.hipayCustomPreferences = <isprint value="${JSON.stringify(config)}" encoding="off"/>;
+      window.hipayCustomPreferences.globalVariable.lang = window.navigator.language.slice(0,2);
   }());
 </script>

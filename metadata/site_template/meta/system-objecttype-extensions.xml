@@ -330,28 +330,6 @@
                 <externally-managed-flag>false</externally-managed-flag>
                 <default-value>false</default-value>
             </attribute-definition>
-            <attribute-definition attribute-id="hipayHostedFieldsEnvironment">
-                <display-name xml:lang="x-default">hipay HostedFields Environment</display-name>
-                <type>string</type>
-                <mandatory-flag>false</mandatory-flag>
-                <externally-managed-flag>false</externally-managed-flag>
-                <min-length>0</min-length>
-                <default-value>stage</default-value>
-            </attribute-definition>
-            <attribute-definition attribute-id="hipayHostedFieldsLang">
-                <display-name xml:lang="x-default">hipay HostedFields Lang</display-name>
-                <type>string</type>
-                <mandatory-flag>false</mandatory-flag>
-                <externally-managed-flag>false</externally-managed-flag>
-                <min-length>0</min-length>
-                <default-value>fr</default-value>
-            </attribute-definition>
-            <attribute-definition attribute-id="hipayHostedFieldsPassword">
-                <display-name xml:lang="x-default">hipay HostedFields Password</display-name>
-                <type>password</type>
-                <mandatory-flag>false</mandatory-flag>
-                <externally-managed-flag>false</externally-managed-flag>
-            </attribute-definition>
             <attribute-definition attribute-id="hipayHostedFieldsStyleBaseCaretColor">
                 <display-name xml:lang="x-default">hipay HostedFields Style Base Caret Color</display-name>
                 <type>string</type>
@@ -415,13 +393,6 @@
                 <externally-managed-flag>false</externally-managed-flag>
                 <min-length>0</min-length>
                 <default-value>#D50000</default-value>
-            </attribute-definition>
-            <attribute-definition attribute-id="hipayHostedFieldsUserName">
-                <display-name xml:lang="x-default">hipay HostedFields User Name</display-name>
-                <type>string</type>
-                <mandatory-flag>false</mandatory-flag>
-                <externally-managed-flag>false</externally-managed-flag>
-                <min-length>0</min-length>
             </attribute-definition>
             <attribute-definition attribute-id="hipayHostedFieldspPassword">
                 <display-name xml:lang="x-default">hipay HostedFields Password</display-name>
@@ -528,10 +499,6 @@
                 <attribute attribute-id="hipayHostedFieldsStyleBaseCaretColor"/>
                 <attribute attribute-id="hipayHostedFieldsStyleInvalidColor"/>
                 <attribute attribute-id="hipayHostedFieldsStyleInvalidCaretColor"/>
-                <attribute attribute-id="hipayHostedFieldsUserName"/>
-                <attribute attribute-id="hipayHostedFieldsPassword"/>
-                <attribute attribute-id="hipayHostedFieldsEnvironment"/>
-                <attribute attribute-id="hipayHostedFieldsLang"/>
             </attribute-group>
         </group-definitions>
     </type-extension>

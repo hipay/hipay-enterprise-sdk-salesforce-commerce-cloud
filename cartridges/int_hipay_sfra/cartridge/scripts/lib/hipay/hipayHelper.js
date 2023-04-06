@@ -877,6 +877,7 @@ HiPayHelper.prototype.validateOneyAvailability = function (basket) {
 
 HiPayHelper.prototype.getHostedFieldsPreferences = function () {
     var Site = require('dw/system/Site');
+    var HiPayConfig = require('*/cartridge/scripts/lib/hipay/hipayConfig').HiPayConfig;
     var currentSite = Site.getCurrent();
 
     var hipayHostedFields = {
@@ -921,10 +922,9 @@ HiPayHelper.prototype.getHostedFieldsPreferences = function () {
             }
         },
         globalVariable: {
-            username: currentSite.getCustomPreferenceValue('hipayHostedFieldsUserName'),
-            password: currentSite.getCustomPreferenceValue('hipayHostedFieldsPassword'),
-            environment: currentSite.getCustomPreferenceValue('hipayHostedFieldsEnvironment'),
-            lang: currentSite.getCustomPreferenceValue('hipayHostedFieldsLang')
+            username: HiPayConfig['hipayPublic' + HiPayConfig.hipayEnvironment + 'Username'],
+            password: HiPayConfig['hipayPublic' + HiPayConfig.hipayEnvironment + 'Password'],
+            environment: HiPayConfig.hipayEnvironment === 'Live' ? 'production' : 'stage',
         },
 
     };
