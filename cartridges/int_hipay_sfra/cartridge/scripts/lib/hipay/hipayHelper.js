@@ -917,7 +917,7 @@ HiPayHelper.prototype.getHostedFieldsPreferences = function () {
         mbwayConfig: {
             config: {
                 template: 'auto',
-                selector: currentSite.getCustomPreferenceValue('HipayMbwayFormId') // form container div id
+                selector: 'hipay-hostedfields-form-mbway' // form container div id
             }
         },
         globalVariable: {
