@@ -911,7 +911,7 @@ HiPayHelper.prototype.getHostedFieldsPreferences = function () {
         giropayConfig: {
             config: {
                 template: 'auto',
-                selector: currentSite.getCustomPreferenceValue('HipayGiropayFormId') // form container div id
+                selector: 'hipay-hostedfields-form-giropay' // form container div id
             }
         },
         mbwayConfig: {
