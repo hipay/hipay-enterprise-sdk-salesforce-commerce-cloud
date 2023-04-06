@@ -346,14 +346,6 @@
                 <min-length>0</min-length>
                 <default-value>hipay-hostedfields-form-giropay</default-value>
             </attribute-definition>
-            <attribute-definition attribute-id="HipayIdealFormId">
-                <display-name xml:lang="x-default">Ideal form ID</display-name>
-                <type>string</type>
-                <mandatory-flag>false</mandatory-flag>
-                <externally-managed-flag>false</externally-managed-flag>
-                <min-length>0</min-length>
-                <default-value>hipay-hostedfields-form-ideal</default-value>
-            </attribute-definition>
             <attribute-definition attribute-id="HipayMbwayFormId">
                 <display-name xml:lang="x-default">Mbway form ID</display-name>
                 <type>string</type>
@@ -544,7 +536,6 @@
             </attribute-group>
             <attribute-group group-id="HipayHostedFieldsConfig">
                 <display-name xml:lang="x-default">Hipay HostedFields Configuration</display-name>
-                <attribute attribute-id="HipayIdealFormId"/>
                 <attribute attribute-id="HipayGiropayFormId"/>
                 <attribute attribute-id="HipayMbwayFormId"/>
                 <attribute attribute-id="hipayHostedFieldsStyleBaseColor"/>
