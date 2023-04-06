@@ -10,7 +10,8 @@
         body: $('body'),
         document: $(document),
         paymentMethod: {
-            creditCard: 'HIPAY_CREDIT_CARD',
+            creditCard: 'CREDIT_CARD',
+            hipayCreditCard: 'HIPAY_CREDIT_CARD',
             iDeal: 'HIPAY_IDEAL',
             giropay: 'HIPAY_GIROPAY',
             mbway: 'HIPAY_MBWAY'
@@ -41,7 +42,8 @@
     function createInstance(type) {
         enableHipayCTA();
 
-        if (type === 'card' && !$('.user-payment-instruments').hasClass('checkout-hidden')) {
+        // If the customer uses the oneClick, disable hipayCTA.
+        if (isOneClickPaiement()) {
             disableHipayCTA();
         }
 
@@ -60,11 +62,30 @@
 
     function toggleHipayCTA() {
         // Check that we are at payment stage, and not using a saved payment instrument.
-        if ($('#checkout-main').attr("data-checkout-stage") === $cache.stage.payment && $('.user-payment-instruments').hasClass('checkout-hidden')) {
+        if ($('#checkout-main').attr("data-checkout-stage") === $cache.stage.payment &&
+            (!$('.user-payment-instruments').length || $('.user-payment-instruments').hasClass('checkout-hidden'))) {
             enableHipayCTA();
         } else {
             disableHipayCTA();
         }
+    }
+
+    /**
+     * Hosted fields payment method?
+     * @param {String} methodID
+     * @returns {Boolean}
+     */
+    function isHostedFields(methodID) {
+        return Object.values($cache.paymentMethod).indexOf(methodID) !== -1;
+    }
+
+    /**
+     * Customer using one click payment?
+     * @param {String} methodID
+     * @returns {Boolean}
+     */
+    function isOneClickPaiement() {
+        return $('#checkout-main').attr('data-customer-type') !== 'guest' && !$('.user-payment-instruments').hasClass('checkout-hidden');
     }
 
     function initialize() {
@@ -86,10 +107,8 @@
 
             // Trigger directly original submit if using non Hosted fields method,
             // or when using saved payment method.
-            // @TODO Use $cache.paymentMethod
-            if (['CREDIT_CARD', 'HIPAY_IDEAL', 'HIPAY_GIROPAY', 'HIPAY_MBWAY'].indexOf(methodID) === -1 || !$('.user-payment-instruments').hasClass('checkout-hidden')) {
+            if (!isHostedFields(methodID) || isOneClickPaiement()) {
                 $('button[value="submit-payment"]').trigger('click');
-                return;
             }
 
             // /* Tokenize your card information when the submit button is clicked */
@@ -111,16 +130,16 @@
             attributes: true
         });
 
-        toggleHipayCTA();
-
         // Credit card form initialization first.
         createInstance('card');
 
-        // Displays the form corresponding to the payment method;
+        toggleHipayCTA();
+
+        // Displays form corresponding to the payment method.
         $('.payment-options .nav-item').on('click', function (e) {
             var methodID = $(this).data('method-id');
 
-            if (methodID === $cache.paymentMethod.creditCard) {
+            if (methodID === $cache.paymentMethod.hipayCreditCard) {
                 createInstance('card');
             } else if (methodID === $cache.paymentMethod.giropay) {
                 createInstance('giropay');
