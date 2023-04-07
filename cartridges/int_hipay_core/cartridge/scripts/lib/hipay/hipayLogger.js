@@ -8,7 +8,7 @@ var Logger = require('dw/system/Logger');
  */
 function HiPayLogger(scriptFileName) {
     this.scriptFileName = scriptFileName;
-    this.log = Logger.getLogger('HIPAY');
+    this.log = Logger.getLogger('hipay', 'HIPAY');
 }
 
 /**
