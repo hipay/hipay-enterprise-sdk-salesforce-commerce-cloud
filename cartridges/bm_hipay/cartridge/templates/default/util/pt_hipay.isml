@@ -1,0 +1,49 @@
+<isif condition="${pdict.CurrentHttpParameterMap.format.stringValue === 'ajax'}">
+
+    <isdecorate template="util/pt_empty">
+        <div class="ingenicobm_content ingenicobm_content_ajax">
+            <isreplace/>
+        </div>
+    </isdecorate>
+
+<iselse/>
+
+    <isdecorate template="application/MenuFrame">
+
+        <link rel="stylesheet" href="${URLUtils.staticURL('css/bm.css')}" />
+        <link rel="stylesheet" href="${URLUtils.staticURL('/jscript/ext/resources/css/ext-all.css')}" />
+
+        <script src="${URLUtils.staticURL('/jscript/ext/adapter/ext/ext-base.js')}"></script>
+        <script src="${URLUtils.staticURL('/jscript/ext/ext-all.js')}"></script>
+
+        <script src="${URLUtils.staticURL('js/hipaybm.js')}"></script>
+
+        <script>
+            ingenicoAdmin.init({
+                urls: {
+                    orderTransaction: "${URLUtils.url('IngenicoAdmin-OrderTransaction')}",
+                    action: "${URLUtils.url('IngenicoAdmin-Action')}"
+                },
+                resources: {
+                    detailsDialogTitle: "${Resource.msg('search.grid.detailsdialogtitle', 'hipay_bm', null)}",
+                    submit: "${Resource.msg('forms.submit', 'hipay_bm', null)}",
+                    cancel: "${Resource.msg('forms.cancel', 'hipay_bm', null)}",
+                    errorMsgTitle: "${Resource.msg('msg.error.title', 'hipay_bm', null)}",
+                    serverError: "${Resource.msg('hipayserver.error', 'hipay_bm', null)}",
+                    pleaseWait: "${Resource.msg('msg.pleasewait', 'hipay_bm', null)}",
+                    confirmationMessages: {
+                        cancel: "${Resource.msg('detailsdialog.confirmationmessages.cancel', 'hipay_bm', null)}",
+                        capture: "${Resource.msg('detailsdialog.confirmationmessages.capture', 'hipay_bm', null)}",
+                        refund: "${Resource.msg('detailsdialog.confirmationmessages.refund', 'hipay_bm', null)}",
+                    }
+                }
+            });
+        </script>
+
+        <div class="ingenicobm_content js_ingenicobm_content">
+            <isreplace/>
+        </div>
+
+    </isdecorate>
+
+</isif>

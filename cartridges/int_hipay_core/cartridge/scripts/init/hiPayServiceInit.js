@@ -176,10 +176,44 @@ function apiData() {
     return service;
 }
 
+// HiPay Transaction Service
+function transaction() {
+    var siteId = Site.getCurrent().getID();
+    var service = LocalServiceRegistry.createService('hipay.rest.transaction.' + siteId, {
+        createRequest: function (svc, args) {
+            svc.setRequestMethod('GET');
+
+           // Set headers
+            svc.addHeader('Content-Type', 'application/json');
+            svc.addHeader('Cache-Control', 'no-cache');
+            svc.addHeader('Accept', 'application/json');
+
+            var serviceConfig = svc.getConfiguration();
+
+           // Get HiPay credentials
+            var credentials = serviceConfig.getCredential();
+            var credString = credentials.getUser() + ':' + credentials.getPassword();
+            var base64Credentials = Encoding.toBase64(new Bytes(credString));
+            svc.addHeader('Authentication', 'Basic ' + base64Credentials);
+
+            return JSON.stringify(args);
+        },
+        parseResponse: function (svc, response) {
+            return response;
+        },
+        filterLogMessage: function (msg) {
+            return msg;
+        }
+    });
+
+    return service;
+}
+
 module.exports = {
     createToken: createToken,
     order: order,
     hpayment: hpayment,
     maintenance: maintenance,
-    apiData: apiData
+    apiData: apiData,
+    transaction: transaction
 };

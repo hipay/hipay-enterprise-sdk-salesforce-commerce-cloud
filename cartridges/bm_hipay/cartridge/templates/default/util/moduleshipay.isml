@@ -1,0 +1,5 @@
+<ismodule template = "hipay/component/pagination"
+    name="hipaypagination"
+    attribute="pageurl"
+    attribute="pagingmodel"
+/>

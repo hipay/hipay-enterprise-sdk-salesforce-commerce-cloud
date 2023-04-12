@@ -1,0 +1,55 @@
+<isscript>
+    var pagingModel = pdict.PagingModel;
+    var orders = !empty(pagingModel) ? pagingModel.pageElements : [];
+</isscript>
+
+<isif condition="${!empty(orders)}">
+    <table class="list-orders">
+        <tr>
+            <td class="table_header s">${Resource.msg('search.grid.number', 'hipay_bm', null)}</td>
+            <td class="table_header s" nowrap="nowrap">${Resource.msg('search.grid.date', 'hipay_bm', null)}</td>
+            <td class="table_header s" nowrap="nowrap">${Resource.msg('search.grid.created', 'hipay_bm', null)}</td>
+            <td class="table_header s" nowrap="nowrap">${Resource.msg('search.grid.registration', 'hipay_bm', null)}</td>
+            <td class="table_header s" nowrap="nowrap">${Resource.msg('search.grid.customer', 'hipay_bm', null)}</td>
+            <td class="table_header s" nowrap="nowrap">${Resource.msg('search.grid.email', 'hipay_bm', null)}</td>
+            <td class="table_header s left" nowrap="nowrap">${Resource.msg('search.grid.total', 'hipay_bm', null)}</td>
+            <td class="table_header s left" nowrap="nowrap">${Resource.msg('search.grid.hipayamount', 'hipay_bm', null)}</td>
+            <td class="table_header s left" nowrap="nowrap" colspan="2">${Resource.msg('search.grid.statuscategory', 'hipay_bm', null)}</td>
+        </tr>
+
+        <isloop items="${orders}" var="order">
+            <tr>
+                <td class="table_detail s" nowrap="nowrap">
+                    <a href="${URLUtils.url('ViewOrder_52-FindByNumber', 'OrderNo', order.orderNo)}" target="_blank">${order.orderNo}</a>
+                </td>
+                <td class="table_detail s" nowrap="nowrap">
+                    <isprint value="${order.orderDate}"/>
+                </td>
+                <td class="table_detail s" nowrap="nowrap"><isprint value="${order.createdBy}"/></td>
+                <isif condition="${typeof order.isRegestered === 'boolean'}">
+                    <td class="table_detail s" nowrap="nowrap">
+                        <isprint value="${order.isRegestered ? Resource.msg('search.grid.registration.registered', 'hipay_bm', null) : Resource.msg('search.grid.registration.unregistered', 'hipay_bm', null)}"/>
+                    </td>
+                <iselse/>
+                    <td class="table_detail s" nowrap="nowrap"><isprint value="${order.isRegestered}"/></td>
+                </isif>
+                <td class="table_detail s" nowrap="nowrap"><isprint value="${order.customer}"/> -- <isprint value="${order.hipayTransactionID}"/></td>
+                <td class="table_detail s" nowrap="nowrap"><isprint value="${order.email}"/></td>
+                <td class="table_detail s" nowrap="nowrap"><isprint value="${order.orderTotal}"/></td>
+                <td class="table_detail s" nowrap="nowrap"><isprint value="${order.hipayAmount}"/></td>
+                <td class="table_detail s" nowrap="nowrap"><isprint value="${order.paymentStatus}"/></td>
+                <td class="table_detail s" nowrap="nowrap">
+                    <a class="js_ingenico_ajax_dialog"
+                        href="${URLUtils.url('HiPayTransactions-PaymentDialog', 'hipayPaymentId', order.hipayTransactionID, 'orderNo', order.orderNo, 'capturedAmount', order.captureAmount)}"
+                        data-dialog-id="payments-dialog"
+                    >
+                        ${Resource.msg('search.grid.showdetails', 'hipay_bm', null)}
+                    </a>
+                </td>
+            </tr>
+        </isloop>
+    </table>
+    <ishipaypagination pageurl="${URLUtils.https('HiPayTransactions-Orders')}" pagingmodel="${pagingModel}"/>
+<iselse/>
+    <div class="table_detail w e s">${Resource.msg('transactions.emptysearch', 'hipay_bm', null)}</div>
+</isif>

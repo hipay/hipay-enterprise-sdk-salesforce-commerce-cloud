@@ -15,7 +15,7 @@ var statuses = require('*/cartridge/scripts/lib/hipay/hipayStatus').HiPayStatus;
 var hipayUtils = require('*/cartridge/scripts/lib/hipay/hipayUtils');
 
 // Import Constants
-var Constants = require('*/cartridge/scripts/util/hipayConstants');
+var Constants = require('int_hipay_core/cartridge/scripts/util/hipayConstants');
 
 /**
  * HiPayHelper class manages common HiPay functions.
@@ -24,7 +24,7 @@ var Constants = require('*/cartridge/scripts/util/hipayConstants');
  * var HiPayHelper = require("~/cartridge/scripts/lib/hipay/hipayHelper");
  */
 
-function HiPayHelper() {}
+function HiPayHelper() { }
 
 HiPayHelper.prototype.fillHeaderData = function (HiPayConfig, order, params) {
     var threshold = HiPayConfig.hipayEnable3dSecureThresholdRule;
@@ -428,7 +428,7 @@ HiPayHelper.prototype.fillOrderData = function (order, params, pi) {
             params.merchant_risk_statement.shipping_indicator = 5;
 
             // Compare shipping and billing addresses
-        // If equals, shipping_indicator = 1
+            // If equals, shipping_indicator = 1
         } else if (
             !empty(billingAddress)
             && hipayUtils.compareStrings(shippingAddress.address1, billingAddress.address1)
@@ -749,7 +749,7 @@ HiPayHelper.prototype.updatePaymentStatus = function (order, paymentInstr, param
                 capturedAmount = parseFloat(params.capturedAmount);
             }
 
-            paymentInstr.custom.hipayTransactionCapturedAmount = capturedAmount; // eslint-disable-line
+            paymentInstr.custom.hipayTransactionCapturedAmount = capturedAmount/2; // eslint-disable-line
             order.paymentStatus = Order.PAYMENT_STATUS_PAID; // eslint-disable-line
             break;
         case statuses.PARTIALLY_CAPTURED.code:

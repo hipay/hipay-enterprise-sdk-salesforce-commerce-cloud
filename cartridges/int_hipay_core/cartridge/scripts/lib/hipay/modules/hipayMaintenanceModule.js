@@ -19,13 +19,13 @@ var HiPayMaintenanceModule = function () {};
  *          {String}  response.hiPayMaintenanceResponse
  */
 
-HiPayMaintenanceModule.hiPayMaintenanceRequest = function (order, amount) {
+HiPayMaintenanceModule.hiPayMaintenanceRequest = function (order, amount, operation) {
     var Transaction = require('dw/system/Transaction');
     var Decimal = require('dw/util/Decimal');
     return Transaction.wrap(function () {
         var HiPayMaintenanceService = require('~/cartridge/scripts/lib/hipay/services/hipayMaintenanceService');
         var HiPayLogger = require('~/cartridge/scripts/lib/hipay/hipayLogger');
-        var HiPayHelper = require('*/cartridge/scripts/lib/hipay/hipayHelper');
+        var HiPayHelper = require('int_hipay_sfra/cartridge/scripts/lib/hipay/hipayHelper');
         var log = new HiPayLogger('HiPayMaintenanceRequest');
         var helper = new HiPayHelper();
         var hiPayMaintenanceService = new HiPayMaintenanceService();
@@ -35,6 +35,10 @@ HiPayMaintenanceModule.hiPayMaintenanceRequest = function (order, amount) {
             hiPayMaintenanceResponse: null,
             error: true
         };
+
+        if (empty(operation)) {
+            operation = HiPayMaintenanceService.OPERATION_CAPTURE;
+        }
 
         if (!amountToCapture.match(regEx)) {
             log.error('Calling HiPayMaintenance Capture ::: Wrong Capture amount value!');
@@ -62,7 +66,7 @@ HiPayMaintenanceModule.hiPayMaintenanceRequest = function (order, amount) {
         var captureDiff = orderTotal - captureRequestAmount;
         var roundedDiff = new Decimal(captureDiff).round(2);
 
-        if (roundedDiff < amountToCapture) {
+        if (roundedDiff < Number(amountToCapture)) {
             log.error('Calling HiPayMaintenance Capture ::: The Capture amount is higher than the avilable total amount!');
             response.error = true;
 
@@ -85,7 +89,7 @@ HiPayMaintenanceModule.hiPayMaintenanceRequest = function (order, amount) {
                 serviceAmount = '';
             }
 
-            var hipayResponse = hiPayMaintenanceService.initiateCapture(transactionReference, HiPayMaintenanceService.OPERATION_CAPTURE, serviceAmount);
+            var hipayResponse = hiPayMaintenanceService.initiateCapture(transactionReference, operation, serviceAmount);
             var msg = null;
 
             if (hipayResponse.ok === true) {

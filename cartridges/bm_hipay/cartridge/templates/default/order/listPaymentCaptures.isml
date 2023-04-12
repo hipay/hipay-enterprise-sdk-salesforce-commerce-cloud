@@ -1,0 +1,50 @@
+${JSON.stringify(pdict.paymentCaptures)}
+<isif condition="${pdict.paymentCaptures.length > 0}">
+    <table>
+        <tr>
+            <th>${Resource.msg('detailsdialog.captures.id', 'hipay_bm', null)}</th>
+            <th>${Resource.msg('detailsdialog.captures.amount', 'hipay_bm', null)}</th>
+            <th>${Resource.msg('detailsdialog.captures.currencycode', 'hipay_bm', null)}</th>
+            <th>${Resource.msg('detailsdialog.captures.status', 'hipay_bm', null)}</th>
+            <th>
+                <a class="btn-refresh" href="javascript: void(0);"><span class="fa fa-refresh"></span></a>
+            </th>
+        </tr>
+
+        <isloop items="${pdict.paymentCaptures}" var="paymentCapture">
+            <tr>
+                <td>${paymentCapture.id}</td>
+                <td><isprint value="${paymentCapture.amount / 100}" style="DECIMAL" /></td>
+                <td>${paymentCaptur.currency}</td>
+                <td>${paymentCapture.status} / ${paymentCapture.statusCode}</td>
+                <td></td>
+            </tr>
+        </isloop>
+    </table>
+<iselse />
+    <span class="no-results">
+        <isif condition="${pdict.capturedAmount > 0}">
+            ${Resource.msg('detailsdialog.captures.capturedwhenplaced', 'hipay_bm', null)}
+        <iselse/>
+            ${Resource.msg('detailsdialog.captures.noresults', 'hipay_bm', null)}
+        </isif>
+    </span>
+</isif>
+<div class="payment_dialog_form js_payment_dialog_form">
+    <h3>
+        ${Resource.msg('detailsdialog.captures.addnew', 'hipay_bm', null)}
+    </h3>
+
+    <hr />
+
+    <label for="ing_amount" class="text_label">${Resource.msg('detailsdialog.paymentdetails.inputamount', 'hipay_bm', null)}</label>
+    <input type="number" id="ing_amount" class="ing_amount" value="<isprint value="${pdict.capturableAmount}" style="DECIMAL" />" ${pdict.capturableAmount === 0 ? "disabled" : ""} />
+
+    <isprint value="${pdict.order.getCurrencyCode()}" />
+
+    <button type="button" class="btn_capture js_btn_capture" ${pdict.capturableAmount === 0 ? "disabled" : ""}>
+        ${Resource.msg('detailsdialog.paymentdetails.btncapture', 'hipay_bm', null)}
+    </button>
+
+</div>
+

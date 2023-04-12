@@ -213,6 +213,7 @@ server.replace('PlaceOrder', server.middleware.https, function (req, res, next) 
         var paymentInstrument = array.find(paymentInstruments, function (item) {
             return item.UUID === basketPaymentInstrument.UUID;
         });
+
         if (saveCardChecked && !paymentInstrument) {
             incrementAttempt = true;
         }
@@ -291,9 +292,16 @@ server.replace('PlaceOrder', server.middleware.https, function (req, res, next) 
         });
         return next();
     }
+    
+    var HiPayHelper = require('int_hipay_sfra/cartridge/scripts/lib/hipay/hipayHelper');
+    var helper = new HiPayHelper();
+    var paymentInstr = helper.getOrderPaymentInstrument(order);
 
     COHelpers.sendConfirmationEmail(order, req.locale.id);
-
+    //var parseHipayTokenize = JSON.parse(req.session.forms.billing.hipaytokenize.value);
+    Transaction.wrap(function () {
+        order.custom.hipayTransactionID = paymentInstr.getPaymentTransaction().getTransactionID();
+    });
     // Reset usingMultiShip after successful Order placement
     req.session.privacyCache.set('usingMultiShipping', false);
 

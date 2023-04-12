@@ -81,6 +81,37 @@
   </parameters>
   <icon>icons/hipay_logo.jpg</icon>
 </menuaction>
+<menuaction id="hipay_transactions" menupath="orders" position="999" site="true">
+  <name xml:lang="x-default">Hipay Transations</name>
+  <short_description xml:lang="x-default">
+      Click here to capture already authenticated orders
+  </short_description>
+  <description xml:lang="x-default">
+      Click here to capture already authenticated orders
+  </description>
+  <exec pipeline="HiPayTransactions" node="Orders"/>
+  <sub-pipelines>
+     <pipeline name="HiPayTransactions-Orders" />
+     <pipeline name="HiPayTransactions-PaymentDialog" />
+     <pipeline name="HiPayTransactions-CapturePayment" />
+     <pipeline name="HiPayTransactions-CancelPayment" />
+     <pipeline name="HiPayTransactions-RefundPayment" />
+     <pipeline name="HiPayTransactions-RefreshPaymentDetails" />
+     <pipeline name="HiPayTransactions-ListPaymentCaptures" />
+     <pipeline name="HiPayTransactions-ListPaymentRefunds" />
+  </sub-pipelines>
+  <parameters>
+     <parameter name="menuname" value="Hipay Transactions"/>
+     <parameter name="menupath" value="orders"/>
+     <parameter name="mainmenuname" value="Ordering"/>
+  </parameters>
+  <icon>icons/hipay_logo.jpg</icon>
+</menuaction>
+
+<dialogaction id="hipay_transactions_dialog" extern="true" position="100" xp_ref="xp_orders_payment">
+    <name xml:lang="x-default">View Hipay Transaction</name>
+    <exec pipeline="HiPayTransactions" node="Orders" />
+</dialogaction>
 </extensions>
 <!-- =============================================================== -->
 <!-- ==                        == -->
