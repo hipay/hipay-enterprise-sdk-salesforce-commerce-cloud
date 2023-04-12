@@ -27,8 +27,7 @@
     "currencyCode": "EUR"
 }, {
     "id": "de_DE",
-    "currencyCode": "EUR",
-    "countryCode": "DE"
+    "currencyCode": "EUR"
 }, {
     "id": "fr_BE",
     "currencyCode": "EUR"

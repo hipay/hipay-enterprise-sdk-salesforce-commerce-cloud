@@ -3,7 +3,7 @@
     <standard-preferences>
         <all-instances>
             <preference preference-id="SiteCurrencies">EUR:PLN</preference>
-            <preference preference-id="SiteLocales">en_GB:fr_BE:en_DE:fr_FR:it_IT:nl_NL:pl_PL:pt_PT</preference>
+            <preference preference-id="SiteLocales">en_GB:fr_BE:de_DE:fr_FR:it_IT:nl_NL:pl_PL:pt_PT</preference>
         </all-instances>
     </standard-preferences>
 </preferences>
