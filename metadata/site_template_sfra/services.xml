@@ -20,6 +20,10 @@
         <url>https://stage-secure2-vault.hipay-tpp.com/rest/v2/token</url>
     </service-credential>
 
+    <service-credential service-credential-id="hipay.transaction.cred">
+        <url>https://stage-secure-gateway.hipay-tpp.com/rest/v1/transaction/</url>
+    </service-credential>
+
     <service-profile service-profile-id="hipay.prof">
         <timeout-millis>10000</timeout-millis>
         <rate-limit-enabled>true</rate-limit-enabled>
@@ -81,4 +85,14 @@
         <credential-id>hipay.data.cred</credential-id>
     </service>
 
+    <service service-id="hipay.rest.transaction.RefArchGlobal">
+        <service-type>HTTP</service-type>
+        <enabled>true</enabled>
+        <log-prefix>HIPAY-REST-Payment</log-prefix>
+        <comm-log-enabled>true</comm-log-enabled>
+        <force-prd-enabled>false</force-prd-enabled>
+        <mock-mode-enabled>false</mock-mode-enabled>
+        <profile-id>hipay.prof</profile-id>
+        <credential-id>hipay.transaction.cred</credential-id>
+    </service>
 </services>
