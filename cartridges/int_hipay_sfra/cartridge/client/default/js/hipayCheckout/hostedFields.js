@@ -43,7 +43,7 @@
         enableHipayCTA();
 
         // If the customer uses the oneClick, disable hipayCTA.
-        if (isOneClickPaiement()) {
+        if (isOneClickPayment()) {
             disableHipayCTA();
         }
 
@@ -84,8 +84,10 @@
      * @param {String} methodID
      * @returns {Boolean}
      */
-    function isOneClickPaiement() {
-        return $('#checkout-main').attr('data-customer-type') !== 'guest' && !$('.user-payment-instruments').hasClass('checkout-hidden');
+    function isOneClickPayment() {
+        return $('#checkout-main').attr('data-customer-type') !== 'guest'
+            && $(this).data('method-id') === $cache.paymentMethod.hipayCreditCard
+            && !$('.user-payment-instruments').hasClass('checkout-hidden');
     }
 
     function initialize() {
@@ -107,7 +109,7 @@
 
             // Trigger directly original submit if using non Hosted fields method,
             // or when using saved payment method.
-            if (!isHostedFields(methodID) || isOneClickPaiement()) {
+            if (!isHostedFields(methodID) || isOneClickPayment()) {
                 $('button[value="submit-payment"]').trigger('click');
             }
 
