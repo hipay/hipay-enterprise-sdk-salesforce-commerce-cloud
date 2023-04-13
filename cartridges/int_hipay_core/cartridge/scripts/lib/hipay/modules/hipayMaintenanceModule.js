@@ -29,19 +29,20 @@ HiPayMaintenanceModule.hiPayMaintenanceRequest = function (order, amount, operat
         var log = new HiPayLogger('HiPayMaintenanceRequest');
         var helper = new HiPayHelper();
         var hiPayMaintenanceService = new HiPayMaintenanceService();
-        var amountToCapture = amount;
+        var amountToRegister = amount;
         var regEx = /^[+]?([.]\d+|\d+[.]?\d*)$/; // Validate for positive number
         var response = {
             hiPayMaintenanceResponse: null,
             error: true
         };
+        var errorMsg = '';
 
         if (empty(operation)) {
             operation = HiPayMaintenanceService.OPERATION_CAPTURE;
         }
 
-        if (!amountToCapture.match(regEx)) {
-            log.error('Calling HiPayMaintenance Capture ::: Wrong Capture amount value!');
+        if (!amountToRegister.match(regEx)) {
+            log.error('Calling HiPayMaintenance ' + operation + ' ::: Wrong ' + operation + ' amount value!');
             response.error = true;
 
             return response;
@@ -49,13 +50,11 @@ HiPayMaintenanceModule.hiPayMaintenanceRequest = function (order, amount, operat
 
         var paymentInstr = helper.getOrderPaymentInstrument(order);
         var transactionReference = paymentInstr.getPaymentTransaction().getTransactionID();
-        var captureRequestAmount = 0;
-
-        if ('hipayTransactionCaptureRequestAmount' in paymentInstr.custom) {
-            captureRequestAmount = paymentInstr.custom.hipayTransactionCaptureRequestAmount;
-        }
-
+        var requestAmount = 0;
         var orderTotal = 0;
+        if ('hipayTransactionCaptureRequestAmount' in paymentInstr.custom) {
+            requestAmount = paymentInstr.custom.hipayTransactionCaptureRequestAmount;
+        }
 
         if (order.totalGrossPrice.available) {
             orderTotal = order.totalGrossPrice.decimalValue;
@@ -63,18 +62,33 @@ HiPayMaintenanceModule.hiPayMaintenanceRequest = function (order, amount, operat
             orderTotal = order.getAdjustedMerchandizeTotalPrice(true).add(order.giftCertificateTotalPrice).decimalValue;
         }
 
-        var captureDiff = orderTotal - captureRequestAmount;
-        var roundedDiff = new Decimal(captureDiff).round(2);
+        switch(operation) {
+            case HiPayMaintenanceService.OPERATION_CAPTURE:
 
-        if (roundedDiff < Number(amountToCapture)) {
-            log.error('Calling HiPayMaintenance Capture ::: The Capture amount is higher than the avilable total amount!');
-            response.error = true;
+                var captureDiff = orderTotal - requestAmount;
+                var roundedDiff = new Decimal(captureDiff).round(2);
 
-            return response;
+                if (roundedDiff < Number(amountToRegister)) {
+                    log.error('Calling HiPayMaintenance Capture ::: The Capture amount is higher than the avilable total amount!');
+                    response.error = true;
+
+                    return response;
+                }
+
+                break;
+            case HiPayMaintenanceService.OPERATION_REFUND:
+                if (requestAmount < Number(amountToRegister)) {
+                    log.error('Calling HiPayMaintenance Refund ::: The Refund amount is higher than the captured amount!');
+                    response.error = true;
+
+                    return response;
+                }
+
+                break;
         }
 
         try {
-            log.debug('Calling HiPayMaintenance Capture ::: ' + transactionReference);
+            log.debug('Calling HiPayMaintenance ' + operation + ' ::: ' + transactionReference);
 
             if (empty(transactionReference)) {
                 log.error('HiPay maintenance service ::: Missing transaction Reference');
@@ -83,9 +97,9 @@ HiPayMaintenanceModule.hiPayMaintenanceRequest = function (order, amount, operat
                 return response;
             }
 
-            var serviceAmount = amountToCapture;
+            var serviceAmount = amountToRegister;
 
-            if (amountToCapture === orderTotal) {
+            if (amountToRegister === orderTotal) {
                 serviceAmount = '';
             }
 
@@ -95,7 +109,9 @@ HiPayMaintenanceModule.hiPayMaintenanceRequest = function (order, amount, operat
             if (hipayResponse.ok === true) {
                 msg = JSON.parse(hipayResponse.object.text);
 
-                paymentInstr.custom.hipayTransactionCaptureRequestAmount = +captureRequestAmount + +amountToCapture; // update capture amount
+                if (operation === HiPayMaintenanceService.OPERATION_CAPTURE) {
+                    paymentInstr.custom.hipayTransactionCaptureRequestAmount = +requestAmount + +amountToRegister; // update capture amount
+                }
 
                 log.debug('HiPay Hosted Page Response ::: ' + JSON.stringify(msg, undefined, 2));
             } else {

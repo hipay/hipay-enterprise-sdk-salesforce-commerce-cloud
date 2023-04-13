@@ -33,7 +33,7 @@
                 <iselse/>
                     <td class="table_detail s" nowrap="nowrap"><isprint value="${order.isRegestered}"/></td>
                 </isif>
-                <td class="table_detail s" nowrap="nowrap"><isprint value="${order.customer}"/> -- <isprint value="${order.hipayTransactionID}"/></td>
+                <td class="table_detail s" nowrap="nowrap"><isprint value="${order.customer}"/></td>
                 <td class="table_detail s" nowrap="nowrap"><isprint value="${order.email}"/></td>
                 <td class="table_detail s" nowrap="nowrap"><isprint value="${order.orderTotal}"/></td>
                 <td class="table_detail s" nowrap="nowrap"><isprint value="${order.hipayAmount}"/></td>

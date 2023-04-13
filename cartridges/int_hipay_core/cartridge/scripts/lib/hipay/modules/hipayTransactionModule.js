@@ -18,7 +18,7 @@ var HiPayTransactionModule = function () {};
  *          {String}  response.hiPayTransactionResponse
  */
 
- HiPayTransactionModule.hiPayTransactionRequest = function (transactionId) {
+HiPayTransactionModule.hiPayTransactionRequest = function (transactionId) {
     var Transaction = require('dw/system/Transaction');
     var Decimal = require('dw/util/Decimal');
     return Transaction.wrap(function () {

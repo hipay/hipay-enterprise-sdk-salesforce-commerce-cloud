@@ -201,17 +201,8 @@ function PaymentDialog() {
     var helper = new HiPayHelper();
     var paymentInstr = helper.getOrderPaymentInstrument(order);
 
-/*
-    try {
-        response = require('int_hipay_core/cartridge/scripts/lib/hipay/modules/hipayMaintenanceModule').hiPayMaintenanceRequest(order, paymentInstr.paymentTransaction.amount.value.toString());
-    } catch (e) {
-        var test = e;
-        response = require('int_hipay_core/cartridge/scripts/lib/hipay/modules/hipayMaintenanceModule').hiPayMaintenanceRequest(order, paymentInstr.paymentTransaction.amount.value.toString());
-    }
-*/
-
-
     var transactionOperations = getTransactions(hipayPaymentId);
+
     if (!empty(transactionOperations.hiPayTransactionResponse)) {
         capturedAmount = transactionOperations.hiPayTransactionResponse.transaction.capturedAmount;
         refundedAmount = transactionOperations.hiPayTransactionResponse.transaction.refundedAmount;
@@ -219,7 +210,7 @@ function PaymentDialog() {
     
     return ISML.renderTemplate('order/paymentDialog', {
         order: order,
-        paymentDetailsResponse: paymentInstr,
+        transactionAmount: paymentInstr.paymentTransaction.amount,
         capturedAmount: capturedAmount,
         refundedAmount: refundedAmount,
         hipayPaymentId: hipayPaymentId
@@ -240,33 +231,59 @@ function CapturePayment() {
     var orderNo = request.httpParameterMap.orderNo.value;
     var order = OrderMgr.getOrder(orderNo);
     var amount = request.httpParameterMap.amount.value;
-
+    var HiPayMaintenanceService = require('int_hipay_core/cartridge/scripts/lib/hipay/services/hipayMaintenanceService');
+    var hiPayMaintenanceService = new HiPayMaintenanceService();
     try {
-        response = require('int_hipay_core/cartridge/scripts/lib/hipay/modules/hipayMaintenanceModule').hiPayMaintenanceRequest(order, amount.toString(), OPERATION_CAPTURE);
+        response = require('int_hipay_core/cartridge/scripts/lib/hipay/modules/hipayMaintenanceModule').hiPayMaintenanceRequest(order, amount.toString(), HiPayMaintenanceService.OPERATION_CAPTURE);
     } catch (e) {
-        response = require('int_hipay_core/cartridge/scripts/lib/hipay/modules/hipayMaintenanceModule').hiPayMaintenanceRequest(order, amount.toString(), OPERATION_CAPTURE);
+        response = require('int_hipay_core/cartridge/scripts/lib/hipay/modules/hipayMaintenanceModule').hiPayMaintenanceRequest(order, amount.toString(), HiPayMaintenanceService.OPERATION_CAPTURE);
     }
     
 }
 function CancelPayment(hipayPaymentId) {
     
 }
-function RefundPayment(hipayPaymentId) {
+function RefundPayment() {
     var paymentId = request.httpParameterMap.hipayPaymentId.value;
     var orderNo = request.httpParameterMap.orderNo.value;
     var order = OrderMgr.getOrder(orderNo);
     var amount = request.httpParameterMap.amount.value;
 
+    var HiPayMaintenanceService = require('int_hipay_core//cartridge/scripts/lib/hipay/services/hipayMaintenanceService');
+    var hiPayMaintenanceService = new HiPayMaintenanceService();
     try {
-        response = require('int_hipay_core/cartridge/scripts/lib/hipay/modules/hipayMaintenanceModule').hiPayMaintenanceRequest(order, amount.toString(), HiPayMaintenance.OPERATION_REFUND);
+        response = require('int_hipay_core/cartridge/scripts/lib/hipay/modules/hipayMaintenanceModule').hiPayMaintenanceRequest(order, amount.toString(), HiPayMaintenanceService.OPERATION_REFUND);
     } catch (e) {
-        response = require('int_hipay_core/cartridge/scripts/lib/hipay/modules/hipayMaintenanceModule').hiPayMaintenanceRequest(order, amount.toString(), HiPayMaintenance.OPERATION_REFUND);
-    }   
+        response = require('int_hipay_core/cartridge/scripts/lib/hipay/modules/hipayMaintenanceModule').hiPayMaintenanceRequest(order, amount.toString(), HiPayMaintenanceService.OPERATION_REFUND);
+    }
 
 }
-function RefreshPaymentDetails(hipayPaymentId, orderId) {
-    
+function RefreshPaymentDetails() {
+    var orderNo = request.httpParameterMap.orderNo.value;
+    var order = OrderMgr.getOrder(orderNo);
+    var hipayPaymentId = request.httpParameterMap.hipayPaymentId.value;
+    var capturedAmount = 0;
+    var refundedAmount = 0;
+
+    var helper = new HiPayHelper();
+    var paymentInstr = helper.getOrderPaymentInstrument(order);
+
+    var transactionOperations = getTransactions(hipayPaymentId);
+
+    if (!empty(transactionOperations.hiPayTransactionResponse)) {
+        capturedAmount = transactionOperations.hiPayTransactionResponse.transaction.capturedAmount;
+        refundedAmount = transactionOperations.hiPayTransactionResponse.transaction.refundedAmount;
+    }
+
+    return ISML.renderTemplate('order/paymentDetails', {
+        order: order,
+        transactionAmount: paymentInstr.paymentTransaction.amount,
+        capturedAmount: capturedAmount,
+        refundedAmount: refundedAmount,
+        hipayPaymentId: hipayPaymentId
+    });
 }
+
 function ListPaymentCaptures() {
     var orderNo = request.httpParameterMap.orderNo.value;
     var order = OrderMgr.getOrder(orderNo);
@@ -277,32 +294,28 @@ function ListPaymentCaptures() {
     var capturedAmount = 0;
     var order = OrderMgr.getOrder(orderNo);
 
-    //var hipayPaymentMethod = order.paymentInstrument.paymentMethod;
-    //var paymentMethod = PaymentMgr.getPaymentMethod(hipayPaymentMethod);
-    var captures= {};
-
+    var capture = {};
     var helper = new HiPayHelper();
     var paymentInstr = helper.getOrderPaymentInstrument(order);
 
     var amount = 0;
     var transactionIsCancellable = false;
     var transactionIsCapturable = false;
+    var stt= statuses.CAPTURED.code;
 
     if (!empty(transactionOperations.hiPayTransactionResponse)) {
         capturedAmount = transactionOperations.hiPayTransactionResponse.transaction.capturedAmount;
         capturableAmount =  transactionOperations.hiPayTransactionResponse.transaction.order.amount - capturedAmount;
-        captures = transactionOperations.hiPayTransactionResponse.transaction;
 
-
-        captures = {
-            id: transactionOperations.hiPayTransactionResponse.transaction.transactionReference,
-            amount: transactionOperations.hiPayTransactionResponse.transaction.capturedAmount,
-            currency : transactionOperations.hiPayTransactionResponse.transaction.currency,
-            status: transactionOperations.hiPayTransactionResponse.transaction.state,
-            stateCode: transactionOperations.hiPayTransactionResponse.transaction.status
+        if (transactionOperations.hiPayTransactionResponse.transaction.capturedAmount !== 0) {
+            capture = {
+                id: transactionOperations.hiPayTransactionResponse.transaction.transactionReference,
+                amount: transactionOperations.hiPayTransactionResponse.transaction.capturedAmount,
+                currency : transactionOperations.hiPayTransactionResponse.transaction.currency,
+                status: statuses.CAPTURED.value,
+                stateCode: statuses.CAPTURED.code
+            };
         }
-
-
         transactionIsCancellable = transactionOperations.hiPayTransactionResponse.transaction.state !== statuses.COMPLETED.code && capturableAmount > 0;
         transactionIsCapturable = transactionOperations.hiPayTransactionResponse.transaction.state !== statuses.COMPLETED.code;
     }
@@ -310,10 +323,9 @@ function ListPaymentCaptures() {
     if (capturableAmount < 0) {
         capturableAmount = 0;
     }
-    var  titi = captures;
+
     return ISML.renderTemplate('order/listPaymentCaptures', {
-        paymentCaptures: captures,
-        paymentDetailsResponse: transactionOperations.hiPayTransactionResponse,
+        paymentCaptures: capture,
         capturableAmount: capturableAmount,
         capturedAmount: capturedAmount,
         order: order,
@@ -328,15 +340,46 @@ function ListPaymentRefunds() {
     
     var transactionOperations = getTransactions(hipayPaymentId);
     var capturableAmount = 0;
+
+    var refundedAmount = 0;
+    var refundableAmount = 0;
+    var capturedAmount = 0;
+    var refunds = {};
+    var status = '';
+    var stateCode = '';
+
+    if (!empty(transactionOperations.hiPayTransactionResponse)) {
+        capturedAmount = transactionOperations.hiPayTransactionResponse.transaction.capturedAmount;
+        refundedAmount = transactionOperations.hiPayTransactionResponse.transaction.refundedAmount;      
+        refundableAmount = capturedAmount - refundedAmount;
+
+        if (refundableAmount > 0) {
+            status = statuses.PARTIALLY_REFUNDED.value;
+            stateCode = statuses.PARTIALLY_REFUNDED.code;
+        } else {
+            status = statuses.REFUNDED.value;
+            stateCode = statuses.REFUNDED.code;
+        }
+
+        if (refundedAmount !== 0) {
+            refunds = {
+                id: transactionOperations.hiPayTransactionResponse.transaction.transactionReference,
+                amount: refundedAmount,
+                currency : transactionOperations.hiPayTransactionResponse.transaction.currency,
+                status: status,
+                stateCode: stateCode
+            };
+        }
+    }
+    
+    if (refundableAmount < 0) {
+        refundableAmount = 0;
+    }
     
     return ISML.renderTemplate('order/listPaymentRefunds', {
-        paymentCaptures: 'paymentCaptures.captures',
-        paymentDetailsResponse: 'paymentDetails',
-        capturableAmount: 'capturableAmount',
-        capturedAmount: 'capturedAmount',
+        paymentRefunds: refunds,
+        refundableAmount: refundableAmount,
         order: order,
-        transactionIsCancellable: 'transactionOperations.transactionIsCancellable',
-        transactionIsCapturable: 'transactionOperations.transactionIsCapturable'
     });
 }
 

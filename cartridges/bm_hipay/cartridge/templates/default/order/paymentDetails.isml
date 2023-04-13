@@ -14,7 +14,10 @@
             ${Resource.msg('detailsdialog.paymentdetails.transactionamount', 'hipay_bm', null)}
         </td>
         <td>
-             <isprint value="${pdict.paymentDetailsResponse.paymentTransaction.amount}" style="DECIMAL" />
+            <isprint value="${pdict.transactionAmount}" style="DECIMAL" />
+            <button type="button" class="btn_cancel js_btn_cancel">
+                ${Resource.msg('detailsdialog.paymentdetails.btncancel', 'hipay_bm', null)}
+            </button>
         </td>
     </tr>
     <tr>
@@ -32,26 +35,4 @@
         <td><isprint value="${pdict.refundedAmount}" style="DECIMAL" /> ${pdict.order.getCurrencyCode()}</td>
     </tr>
 
-</table>
-
-<table class="original_transaction">
-    <caption>${Resource.msg('detailsdialog.paymentdetails.original.title', 'hipay_bm', null)}</caption>
-    <tr>
-        <th>${Resource.msg('detailsdialog.paymentdetails.original.id', 'hipay_bm', null)}</th>
-        <th>${Resource.msg('detailsdialog.paymentdetails.original.amount', 'hipay_bm', null)}</th>
-        <th>${Resource.msg('detailsdialog.paymentdetails.original.currencycode', 'hipay_bm', null)}</th>
-        <th>${Resource.msg('detailsdialog.paymentdetails.original.status', 'hipay_bm', null)}</th>
-        <th>&nbsp;</th>
-    </tr>
-    <tr>
-        <td>${pdict.paymentDetailsResponse.getPaymentTransaction().getTransactionID()}</td>
-        <td><isprint value="${pdict.paymentDetailsResponse.paymentTransaction.amount.value}" style="DECIMAL" /></td>
-        <td>${pdict.order.getCurrencyCode()}</td>
-        <td><isprint value="${pdict.paymentDetailsResponse.custom.hipayTransactionStatus}" /></td>
-        <td>
-            <button type="button" class="btn_cancel js_btn_cancel">
-                ${Resource.msg('detailsdialog.paymentdetails.btncancel', 'hipay_bm', null)}
-            </button>
-        </td>
-    </tr>
 </table>

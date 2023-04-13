@@ -115,10 +115,6 @@ var ingenicoAdmin = (function ($) {
                 return;
             }
 
-            if (!confirm(ingenicoAdmin.resources.confirmationMessages.capture.replace('{0}', amount).replace('{1}', currencyCode))) {
-                return;
-            }
-
             $paymentDetailsDiv.addClass("component-loading");
             capturePayment($paymentDetailsDiv.data('capture-payment-url'), amount, function (res) {
                 if (res.success === false) {
@@ -134,10 +130,6 @@ var ingenicoAdmin = (function ($) {
 
         $(".js_btn_cancel").off("click").on("click", function (e) {
             e.preventDefault();
-
-            if (!confirm(ingenicoAdmin.resources.confirmationMessages.cancel)) {
-                return;
-            }
 
             $paymentDetailsDiv.addClass("component-loading");
             cancelPayment($paymentDetailsDiv.data('cancel-payment-url'), function (res) {
@@ -157,10 +149,6 @@ var ingenicoAdmin = (function ($) {
             let amount = parseFloat($inputAmount.val());
             if (isNaN(amount) || !(amount > 0)) {
                 $inputAmount.focus();
-                return;
-            }
-
-            if (!confirm(ingenicoAdmin.resources.confirmationMessages.refund.replace('{0}', amount).replace('{1}', currencyCode))) {
                 return;
             }
 

@@ -1,5 +1,4 @@
-${JSON.stringify(pdict.paymentCaptures)}
-<isif condition="${pdict.paymentCaptures.length > 0}">
+<isif condition="${pdict.paymentCaptures}">
     <table>
         <tr>
             <th>${Resource.msg('detailsdialog.captures.id', 'hipay_bm', null)}</th>
@@ -10,25 +9,14 @@ ${JSON.stringify(pdict.paymentCaptures)}
                 <a class="btn-refresh" href="javascript: void(0);"><span class="fa fa-refresh"></span></a>
             </th>
         </tr>
-
-        <isloop items="${pdict.paymentCaptures}" var="paymentCapture">
-            <tr>
-                <td>${paymentCapture.id}</td>
-                <td><isprint value="${paymentCapture.amount / 100}" style="DECIMAL" /></td>
-                <td>${paymentCaptur.currency}</td>
-                <td>${paymentCapture.status} / ${paymentCapture.statusCode}</td>
-                <td></td>
-            </tr>
-        </isloop>
+        <tr>
+            <td>${pdict.paymentCaptures.id}</td>
+            <td><isprint value="${pdict.paymentCaptures.amount}" style="DECIMAL" /></td>
+            <td>${pdict.paymentCaptures.currency}</td>
+            <td>${pdict.paymentCaptures.status} / ${pdict.paymentCaptures.stateCode}</td>
+            <td></td>
+        </tr>
     </table>
-<iselse />
-    <span class="no-results">
-        <isif condition="${pdict.capturedAmount > 0}">
-            ${Resource.msg('detailsdialog.captures.capturedwhenplaced', 'hipay_bm', null)}
-        <iselse/>
-            ${Resource.msg('detailsdialog.captures.noresults', 'hipay_bm', null)}
-        </isif>
-    </span>
 </isif>
 <div class="payment_dialog_form js_payment_dialog_form">
     <h3>

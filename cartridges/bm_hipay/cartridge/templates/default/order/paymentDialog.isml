@@ -1,8 +1,8 @@
 <div class="js_payment_details"
     data-currency-code="${pdict.order.getCurrencyCode()}"
     data-capture-payment-url="${URLUtils.url('HiPayTransactions-CapturePayment', 'hipayPaymentId', pdict.hipayPaymentId, 'orderNo', pdict.order.orderNo)}"
-    data-cancel-payment-url="${URLUtils.url('HiPayTransactions-CancelPayment', 'hipayPaymentId', pdict.hipayPaymentId)}"
-    data-refund-payment-url="${URLUtils.url('HiPayTransactions-RefundPayment', 'hipayPaymentId', pdict.hipayPaymentId)}"
+    data-cancel-payment-url="${URLUtils.url('HiPayTransactions-CancelPayment', 'hipayPaymentId', pdict.hipayPaymentId, 'orderNo', pdict.order.orderNo)}"
+    data-refund-payment-url="${URLUtils.url('HiPayTransactions-RefundPayment', 'hipayPaymentId', pdict.hipayPaymentId, 'orderNo', pdict.order.orderNo)}"
 
     data-refresh-details-url="${URLUtils.url('HiPayTransactions-RefreshPaymentDetails', 'hipayPaymentId', pdict.hipayPaymentId, 'orderNo', pdict.order.orderNo)}"
     data-refresh-captures-url="${URLUtils.url('HiPayTransactions-ListPaymentCaptures', 'hipayPaymentId', pdict.hipayPaymentId, 'orderNo', pdict.order.orderNo)}"

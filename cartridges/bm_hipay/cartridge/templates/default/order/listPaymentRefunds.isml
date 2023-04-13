@@ -1,4 +1,4 @@
-<iscomment><isif condition="${pdict.paymentRefunds.length > 0}">
+<isif condition="${pdict.paymentRefunds}">
     <table>
         <tr>
             <th>${Resource.msg('detailsdialog.refunds.id', 'hipay_bm', null)}</th>
@@ -9,23 +9,15 @@
                 <a class="btn-refresh" href="javascript: void(0);"><span class="fa fa-refresh"></span></a>
             </th>
         </tr>
-
-        <isloop items="${pdict.paymentRefunds}" var="paymentRefund">
-            <tr>
-                <td>${paymentRefund.id}</td>
-                <td><isprint value="${paymentRefund.refundOutput.amountOfMoney.amount / 100}" style="DECIMAL" /></td>
-                <td>${paymentRefund.refundOutput.amountOfMoney.currencyCode}</td>
-                <td>${paymentRefund.status} / ${paymentRefund.statusOutput.statusCode}</td>
-                <td></td>
-            </tr>
-        </isloop>
+        <tr>
+            <td>${pdict.paymentRefunds.id}</td>
+            <td><isprint value="${pdict.paymentRefunds.amount}" style="DECIMAL" /></td>
+            <td>${pdict.paymentRefunds.currency}</td>
+            <td>${pdict.paymentRefunds.status} / ${pdict.paymentRefunds.stateCode}</td>
+            <td></td>
+        </tr>
     </table>
-<iselse/>
-    <span class="no-results">
-        ${Resource.msg('detailsdialog.refunds.noresults', 'hipay_bm', null)}
-    </span>
 </isif>
-</iscomment>
 <div class="payment_dialog_form js_payment_dialog_form">
     <h3>
         ${Resource.msg('detailsdialog.refunds.addnew', 'hipay_bm', null)}
@@ -34,9 +26,9 @@
     <hr />
 
     <label for="ing_amount" class="text_label">${Resource.msg('detailsdialog.paymentdetails.inputamount', 'hipay_bm', null)}</label>
-    <input type="number" id="ing_amount" class="ing_amount" value="<isprint value="${pdict.refundableAmount / 100}" style="DECIMAL" />" ${pdict.refundableAmount === 0 ? "disabled" : ""} />
+    <input type="number" id="ing_amount" class="ing_amount" value="<isprint value="${pdict.refundableAmount}" style="DECIMAL" />" ${pdict.refundableAmount === 0 ? "disabled" : ""} />
 
-    <isprint value="${pdict.paymentDetailsResponse.paymentOutput.amountOfMoney.currencyCode}" />
+    <isprint value="${pdict.order.getCurrencyCode()}" />
 
     <button type="button" class="btn_refund js_btn_refund" ${pdict.refundableAmount === 0 ? "disabled" : ""} >
         ${Resource.msg('detailsdialog.paymentdetails.btnrefund', 'hipay_bm', null)}
