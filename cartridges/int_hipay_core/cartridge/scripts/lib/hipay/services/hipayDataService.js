@@ -5,7 +5,7 @@ function HiPayDataService() {};
 
 HiPayDataService.prototype.dataService = function (params, hipayResponse, dateRequest, dateResponse) {
     var hipaytokenize = JSON.parse(session.forms.billing.hipaytokenize.value);
-    var hipayServices = require('*/cartridge/scripts/init/hiPayServiceInit.js');
+    var hipayServices = require('*/cartridge/scripts/init/hiPayServiceInit');
     // Init service
     var service = hipayServices.apiData();
     // Call API

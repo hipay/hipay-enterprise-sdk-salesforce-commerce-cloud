@@ -30,7 +30,7 @@ function getService() {
  *  @returns {Object} hipayService Hipay Service Credentials
  */
 function getHipayServiceCredentials() {
-    var hipayServices = require('int_hipay_core/cartridge/scripts/init/hiPayServiceInit.js');
+    var hipayServices = require('*/cartridge/scripts/init/hiPayServiceInit');
     var service = hipayServices.maintenance();
 
     //let service = getService();

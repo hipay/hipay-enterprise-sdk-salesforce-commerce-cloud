@@ -6,7 +6,7 @@ HiPayMaintenanceService.OPERATION_REFUND = 'refund';
 
 /* Initiates HiPay hosted payment request.*/
 HiPayMaintenanceService.prototype.initiateCapture = function (transactionReference, operation, amount) {
-    var hipayServices = require('int_hipay_core/cartridge/scripts/init/hiPayServiceInit.js');
+    var hipayServices = require('*/cartridge/scripts/init/hiPayServiceInit');
     var service = hipayServices.maintenance();
 
     service.URL += transactionReference;

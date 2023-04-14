@@ -3,7 +3,7 @@ function HiPayTransactionService() {}
 
 /* Initiates HiPay hosted payment request.*/
 HiPayTransactionService.prototype.initiateTransaction = function (transactionReference) {
-    var hipayServices = require('int_hipay_core/cartridge/scripts/init/hiPayServiceInit.js');
+    var hipayServices = require('*/cartridge/scripts/init/hiPayServiceInit');
     var service = hipayServices.transaction();
 
     service.URL += transactionReference;

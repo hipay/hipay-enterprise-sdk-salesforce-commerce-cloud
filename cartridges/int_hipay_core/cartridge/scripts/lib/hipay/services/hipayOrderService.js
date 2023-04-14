@@ -4,7 +4,7 @@
 function HiPayOrderService() {}
 
 HiPayOrderService.prototype.loadOrderPayment = function (params) {
-    var hipayServices = require('*/cartridge/scripts/init/hiPayServiceInit.js');
+    var hipayServices = require('*/cartridge/scripts/init/hiPayServiceInit');
 
     // Init service
     var service = hipayServices.order();
