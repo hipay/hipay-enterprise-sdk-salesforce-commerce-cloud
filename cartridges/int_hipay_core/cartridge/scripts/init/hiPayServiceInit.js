@@ -129,7 +129,7 @@ function maintenance() {
             svc.addHeader('Accept', 'application/json');
 
            // Get HiPay credentials.
-           var credString = getCredentialsPrivate();
+            var credString = getCredentialsPrivate();
             var base64Credentials = Encoding.toBase64(new Bytes(credString));
             svc.addHeader('Authorization', 'Basic ' + base64Credentials);
 
@@ -190,11 +190,9 @@ function transaction() {
 
             var serviceConfig = svc.getConfiguration();
 
-           // Get HiPay credentials
-            var credentials = serviceConfig.getCredential();
-            var credString = credentials.getUser() + ':' + credentials.getPassword();
+            var credString = getCredentialsPrivate();
             var base64Credentials = Encoding.toBase64(new Bytes(credString));
-            svc.addHeader('Authentication', 'Basic ' + base64Credentials);
+            svc.addHeader('Authorization', 'Basic ' + base64Credentials);
 
             return JSON.stringify(args);
         },
