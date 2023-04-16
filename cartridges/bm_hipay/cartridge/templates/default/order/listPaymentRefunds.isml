@@ -1,4 +1,4 @@
-<isif condition="${pdict.paymentRefunds}">
+<isif condition="${!!pdict.paymentRefunds && pdict.paymentRefunds.id}">
     <table>
         <tr>
             <th>${Resource.msg('detailsdialog.refunds.id', 'hipay_bm', null)}</th>
@@ -10,10 +10,10 @@
             </th>
         </tr>
         <tr>
-            <td>${pdict.paymentRefunds.id}</td>
+            <td><isprint value="${pdict.paymentRefunds.id}"/></td>
             <td><isprint value="${pdict.paymentRefunds.amount}" style="DECIMAL" /></td>
-            <td>${pdict.paymentRefunds.currency}</td>
-            <td>${pdict.paymentRefunds.status} / ${pdict.paymentRefunds.stateCode}</td>
+            <td><isprint value="${pdict.paymentRefunds.currency}"/></td>
+            <td><isprint value="${pdict.paymentRefunds.status}"/> / <isprint value="${pdict.paymentRefunds.stateCode}"/></td>
             <td></td>
         </tr>
     </table>

@@ -1,4 +1,4 @@
-<isif condition="${pdict.paymentCaptures}">
+<isif condition="${pdict.paymentCaptures && pdict.paymentCaptures.id}">
     <table>
         <tr>
             <th>${Resource.msg('detailsdialog.captures.id', 'hipay_bm', null)}</th>
@@ -10,10 +10,10 @@
             </th>
         </tr>
         <tr>
-            <td>${pdict.paymentCaptures.id}</td>
+            <td><isprint value="${pdict.paymentCaptures.id}"/></td>
             <td><isprint value="${pdict.paymentCaptures.amount}" style="DECIMAL" /></td>
-            <td>${pdict.paymentCaptures.currency}</td>
-            <td>${pdict.paymentCaptures.status} / ${pdict.paymentCaptures.stateCode}</td>
+            <td><isprint value="${pdict.paymentCaptures.currency}" /></td>
+            <td><isprint value="${pdict.paymentCaptures.status}" /> / <isprint value="${pdict.paymentCaptures.stateCode}" /></td>
             <td></td>
         </tr>
     </table>

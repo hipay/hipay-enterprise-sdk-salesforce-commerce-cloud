@@ -3,6 +3,7 @@ function HiPayMaintenanceService() {}
 
 HiPayMaintenanceService.OPERATION_CAPTURE = 'capture';
 HiPayMaintenanceService.OPERATION_REFUND = 'refund';
+HiPayMaintenanceService.OPERATION_CANCEL = 'cancel';
 
 /* Initiates HiPay hosted payment request.*/
 HiPayMaintenanceService.prototype.initiateCapture = function (transactionReference, operation, amount) {

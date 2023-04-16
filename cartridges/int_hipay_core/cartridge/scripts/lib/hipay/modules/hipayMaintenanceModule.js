@@ -64,12 +64,11 @@ HiPayMaintenanceModule.hiPayMaintenanceRequest = function (order, amount, operat
 
         switch(operation) {
             case HiPayMaintenanceService.OPERATION_CAPTURE:
-
                 var captureDiff = orderTotal - requestAmount;
                 var roundedDiff = new Decimal(captureDiff).round(2);
 
                 if (roundedDiff < Number(amountToRegister)) {
-                    log.error('Calling HiPayMaintenance Capture ::: The Capture amount is higher than the avilable total amount!');
+                    log.error('Calling HiPayMaintenance Capture ::: The Capture amount is higher than the available total amount!');
                     response.error = true;
 
                     return response;
@@ -79,6 +78,16 @@ HiPayMaintenanceModule.hiPayMaintenanceRequest = function (order, amount, operat
             case HiPayMaintenanceService.OPERATION_REFUND:
                 if (requestAmount < Number(amountToRegister)) {
                     log.error('Calling HiPayMaintenance Refund ::: The Refund amount is higher than the captured amount!');
+                    response.error = true;
+
+                    return response;
+                }
+
+                break;
+            case HiPayMaintenanceService.OPERATION_CANCEL:
+                requestAmount = paymentInstr.getPaymentTransaction().getAmount().value;
+                if (requestAmount !== Number(amountToRegister)) {
+                    log.error('Calling HiPayMaintenance Cancel ::: The Cancel amount is not the available total amount!');
                     response.error = true;
 
                     return response;
@@ -99,7 +108,7 @@ HiPayMaintenanceModule.hiPayMaintenanceRequest = function (order, amount, operat
 
             var serviceAmount = amountToRegister;
 
-            if (amountToRegister === orderTotal) {
+            if (amountToRegister === orderTotal && operation !== HiPayMaintenanceService.OPERATION_CANCEL) {
                 serviceAmount = '';
             }
 

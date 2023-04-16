@@ -17,7 +17,6 @@ var URLUtils = require('dw/web/URLUtils');
 
 var hipayCommonHelper = require('int_hipay_sfra/cartridge/scripts/lib/hipay/commonHelper');
 const hipayConstants = require('int_hipay_sfra/cartridge/scripts/lib/hipay/constants');
-const hipayApiFacade = require('int_hipay_sfra/cartridge/scripts/lib/hipay/api/facade');
 
 var SystemObjectMgr = require('dw/object/SystemObjectMgr');
 var ArrayList = require('dw/util/ArrayList');
@@ -38,7 +37,6 @@ var HiPayHelper = require('int_hipay_sfra/cartridge/scripts/lib/hipay/hipayHelpe
  * @returns {dw.util.ArrayList} Combined array with all orders
  */
  function getOrders(orderNo, orderUUID) {
-    var stt = hipayConstants.ORDER_STATUS_FAILED;
     var orders = new ArrayList();
     var order;
     var paymentInstrument;
@@ -111,33 +109,6 @@ var HiPayHelper = require('int_hipay_sfra/cartridge/scripts/lib/hipay/hipayHelpe
     return orders;
 }
 
-/**
- * Returns an object that specifies whether a transaction can be captured or cancelled.
- *
- * @param {dw.order.Order} order the referenced order
- * @param {Object} paymentDetailsResponse the response from the get-payment API
- * @returns {Object} an object that specifies whether a transaction can be captured or cancelled
- */
- function getAllowedTransactionOperations(order, paymentDetailsResponse) {
-    let res = {};
-    if (paymentDetailsResponse) {
-        res.transactionIsCancellable = '';
-        //res.transactionIsCancellable = order.custom.ingenicoOgoneStatusCategory.value !== hipayConstants.COMPLETED_PAYMENT_STATUS_CATEGORY && paymentDetailsResponse.paymentOutput.amountOfMoney.amount > 0;
-    }
-
-    res.transactionIsCapturable = '';
-    //res.transactionIsCapturable = order.custom.ingenicoOgoneStatusCategory.value !== hipayConstants.COMPLETED_PAYMENT_STATUS_CATEGORY;
-
-    return res;
-}
-
-function cont(args) {
-    ISML.renderTemplate('order/orderList', {
-        orderUUID: args.orderUUID,
-        PagingModel: args.orderPagingModel
-    });
-}
-
 function orders() {
     var orderNo;
     var orderUUID = !empty(request.httpParameterMap.OrderID.stringValue) ? request.httpParameterMap.OrderID.stringValue : null;
@@ -153,7 +124,6 @@ function orders() {
             orderNo = firstOrder.orderNo;
         }
         systemOrder.close();
-
     }
 
     if (!orderNo) {
@@ -202,18 +172,25 @@ function PaymentDialog() {
     var paymentInstr = helper.getOrderPaymentInstrument(order);
 
     var transactionOperations = getTransactions(hipayPaymentId);
+    var transactionIsCancellable = false;
+    var transactionIsCapturable = false;
 
-    if (!empty(transactionOperations.hiPayTransactionResponse)) {
+    if (!empty(transactionOperations.hiPayTransactionResponse.transaction)) {
         capturedAmount = transactionOperations.hiPayTransactionResponse.transaction.capturedAmount;
         refundedAmount = transactionOperations.hiPayTransactionResponse.transaction.refundedAmount;
+        transactionIsCancellable = transactionOperations.hiPayTransactionResponse.transaction.status === statuses.AUTHORIZED.code;
+        transactionIsCapturable = transactionOperations.hiPayTransactionResponse.transaction.status !== statuses.COMPLETED.code;
     }
-    
+
     return ISML.renderTemplate('order/paymentDialog', {
         order: order,
         transactionAmount: paymentInstr.paymentTransaction.amount,
         capturedAmount: capturedAmount,
         refundedAmount: refundedAmount,
-        hipayPaymentId: hipayPaymentId
+        hipayPaymentId: hipayPaymentId,
+        transactionIsCancellable: transactionIsCancellable,
+        transactionIsCapturable: transactionIsCapturable,
+        paymentStatus: paymentInstr.custom.hipayTransactionStatus
     });
 }
 
@@ -241,7 +218,22 @@ function CapturePayment() {
     
 }
 function CancelPayment(hipayPaymentId) {
-    
+    var paymentId = request.httpParameterMap.hipayPaymentId.value;
+    var orderNo = request.httpParameterMap.orderNo.value;
+    var order = OrderMgr.getOrder(orderNo);
+
+    var helper = new HiPayHelper();
+    var paymentInstr = helper.getOrderPaymentInstrument(order);
+    var amount = paymentInstr.paymentTransaction.amount.value;
+
+    var HiPayMaintenanceService = require('int_hipay_core/cartridge/scripts/lib/hipay/services/hipayMaintenanceService');
+    var hiPayMaintenanceService = new HiPayMaintenanceService();
+    var op = HiPayMaintenanceService.OPERATION_CANCEL;
+    try {
+        response = require('int_hipay_core/cartridge/scripts/lib/hipay/modules/hipayMaintenanceModule').hiPayMaintenanceRequest(order, amount.toString(), HiPayMaintenanceService.OPERATION_CANCEL);
+    } catch (e) {
+        response = require('int_hipay_core/cartridge/scripts/lib/hipay/modules/hipayMaintenanceModule').hiPayMaintenanceRequest(order, amount.toString(), HiPayMaintenanceService.OPERATION_CANCEL);
+    }
 }
 function RefundPayment() {
     var paymentId = request.httpParameterMap.hipayPaymentId.value;
@@ -249,7 +241,7 @@ function RefundPayment() {
     var order = OrderMgr.getOrder(orderNo);
     var amount = request.httpParameterMap.amount.value;
 
-    var HiPayMaintenanceService = require('int_hipay_core//cartridge/scripts/lib/hipay/services/hipayMaintenanceService');
+    var HiPayMaintenanceService = require('int_hipay_core/cartridge/scripts/lib/hipay/services/hipayMaintenanceService');
     var hiPayMaintenanceService = new HiPayMaintenanceService();
     try {
         response = require('int_hipay_core/cartridge/scripts/lib/hipay/modules/hipayMaintenanceModule').hiPayMaintenanceRequest(order, amount.toString(), HiPayMaintenanceService.OPERATION_REFUND);
@@ -269,10 +261,15 @@ function RefreshPaymentDetails() {
     var paymentInstr = helper.getOrderPaymentInstrument(order);
 
     var transactionOperations = getTransactions(hipayPaymentId);
-
-    if (!empty(transactionOperations.hiPayTransactionResponse)) {
+    var transactionIsCancellable = false;
+    var transactionIsCapturable = false;
+    var paymentStatus = paymentInstr.custom.hipayTransactionStatus;
+    if (!empty(transactionOperations.hiPayTransactionResponse.transaction)) {
         capturedAmount = transactionOperations.hiPayTransactionResponse.transaction.capturedAmount;
         refundedAmount = transactionOperations.hiPayTransactionResponse.transaction.refundedAmount;
+        transactionIsCancellable = transactionOperations.hiPayTransactionResponse.transaction.state === statuses.AUTHORIZED.code;
+        transactionIsCapturable = transactionOperations.hiPayTransactionResponse.transaction.state !== statuses.COMPLETED.code;
+        paymentStatus = transactionOperations.hiPayTransactionResponse.transaction.message;
     }
 
     return ISML.renderTemplate('order/paymentDetails', {
@@ -280,7 +277,10 @@ function RefreshPaymentDetails() {
         transactionAmount: paymentInstr.paymentTransaction.amount,
         capturedAmount: capturedAmount,
         refundedAmount: refundedAmount,
-        hipayPaymentId: hipayPaymentId
+        hipayPaymentId: hipayPaymentId,
+        transactionIsCancellable: transactionIsCancellable,
+        transactionIsCapturable: transactionIsCapturable,
+        paymentStatus: paymentStatus
     });
 }
 
@@ -293,21 +293,19 @@ function ListPaymentCaptures() {
     var capturableAmount = 0;
     var capturedAmount = 0;
     var order = OrderMgr.getOrder(orderNo);
-
     var capture = {};
     var helper = new HiPayHelper();
     var paymentInstr = helper.getOrderPaymentInstrument(order);
 
     var amount = 0;
-    var transactionIsCancellable = false;
-    var transactionIsCapturable = false;
-    var stt= statuses.CAPTURED.code;
 
-    if (!empty(transactionOperations.hiPayTransactionResponse)) {
+    if (!empty(transactionOperations.hiPayTransactionResponse.transaction)) {
         capturedAmount = transactionOperations.hiPayTransactionResponse.transaction.capturedAmount;
-        capturableAmount =  transactionOperations.hiPayTransactionResponse.transaction.order.amount - capturedAmount;
+        if (transactionOperations.hiPayTransactionResponse.transaction.status !== statuses.CANCELLED.code) {
+            capturableAmount =  transactionOperations.hiPayTransactionResponse.transaction.order.amount - capturedAmount;
+        }
 
-        if (transactionOperations.hiPayTransactionResponse.transaction.capturedAmount !== 0) {
+        if (transactionOperations.hiPayTransactionResponse.transaction.capturedAmount > 0) {
             capture = {
                 id: transactionOperations.hiPayTransactionResponse.transaction.transactionReference,
                 amount: transactionOperations.hiPayTransactionResponse.transaction.capturedAmount,
@@ -316,8 +314,6 @@ function ListPaymentCaptures() {
                 stateCode: statuses.CAPTURED.code
             };
         }
-        transactionIsCancellable = transactionOperations.hiPayTransactionResponse.transaction.state !== statuses.COMPLETED.code && capturableAmount > 0;
-        transactionIsCapturable = transactionOperations.hiPayTransactionResponse.transaction.state !== statuses.COMPLETED.code;
     }
 
     if (capturableAmount < 0) {
@@ -328,9 +324,7 @@ function ListPaymentCaptures() {
         paymentCaptures: capture,
         capturableAmount: capturableAmount,
         capturedAmount: capturedAmount,
-        order: order,
-        transactionIsCancellable: transactionIsCancellable,
-        transactionIsCapturable: transactionIsCapturable
+        order: order
     });
 }
 function ListPaymentRefunds() {
@@ -348,20 +342,20 @@ function ListPaymentRefunds() {
     var status = '';
     var stateCode = '';
 
-    if (!empty(transactionOperations.hiPayTransactionResponse)) {
+    if (!empty(transactionOperations.hiPayTransactionResponse.transaction)) {
         capturedAmount = transactionOperations.hiPayTransactionResponse.transaction.capturedAmount;
         refundedAmount = transactionOperations.hiPayTransactionResponse.transaction.refundedAmount;      
-        refundableAmount = capturedAmount - refundedAmount;
+        refundableAmount = parseFloat(capturedAmount - refundedAmount);
 
-        if (refundableAmount > 0) {
-            status = statuses.PARTIALLY_REFUNDED.value;
-            stateCode = statuses.PARTIALLY_REFUNDED.code;
-        } else {
-            status = statuses.REFUNDED.value;
-            stateCode = statuses.REFUNDED.code;
-        }
+        if (parseFloat(refundedAmount) > 0) {
 
-        if (refundedAmount !== 0) {
+            if (refundableAmount > 0) {
+                status = statuses.PARTIALLY_REFUNDED.value;
+                stateCode = statuses.PARTIALLY_REFUNDED.code;
+            } else {
+                status = statuses.REFUNDED.value;
+                stateCode = statuses.REFUNDED.code;
+            }
             refunds = {
                 id: transactionOperations.hiPayTransactionResponse.transaction.transactionReference,
                 amount: refundedAmount,
