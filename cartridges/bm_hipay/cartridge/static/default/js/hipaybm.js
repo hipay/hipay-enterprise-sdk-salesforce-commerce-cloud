@@ -140,6 +140,7 @@ var ingenicoAdmin = (function ($) {
                 refreshAJAXComponent($paymentDetailsDiv, $paymentDetailsDiv.data('refresh-details-url'), function() {
                     initPaymentsDialogEvents();
                 });
+                $(".js_payment_transactions_tab_headings a").first().click();
             });
         });
 
