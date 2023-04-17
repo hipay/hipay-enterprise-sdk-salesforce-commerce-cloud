@@ -15,9 +15,6 @@ var OrderMgr = require('dw/order/OrderMgr');
 var Resource = require('dw/web/Resource');
 var URLUtils = require('dw/web/URLUtils');
 
-var hipayCommonHelper = require('int_hipay_sfra/cartridge/scripts/lib/hipay/commonHelper');
-const hipayConstants = require('int_hipay_sfra/cartridge/scripts/lib/hipay/constants');
-
 var SystemObjectMgr = require('dw/object/SystemObjectMgr');
 var ArrayList = require('dw/util/ArrayList');
 var Calendar = require('dw/util/Calendar');
@@ -50,7 +47,7 @@ var HiPayHelper = require('int_hipay_sfra/cartridge/scripts/lib/hipay/hipayHelpe
     if (hipayOrdersCount < maxingenicoOrdersCount) {
         maxSystemOrdersCount = 18000 - hipayOrdersCount;
     }
-    
+
     var queryString = '';
     var sortString = 'creationDate desc';
     var args = [];
@@ -78,8 +75,9 @@ var HiPayHelper = require('int_hipay_sfra/cartridge/scripts/lib/hipay/hipayHelpe
         var order = searchOrders.next();
 
         orderDate = new Date(order.creationDate);
+        var helper = new HiPayHelper();
+        paymentInstrument = helper.getOrderPaymentInstrument(order);
 
-        paymentInstrument = hipayCommonHelper.getHipayPaymentInstrument(order);
         if (paymentInstrument === null) {
             continue; // eslint-disable-line no-continue
         }
@@ -161,7 +159,7 @@ function orders() {
     });
 }
 
-function PaymentDialog() {    
+function PaymentDialog() {
     var orderNo = request.httpParameterMap.orderNo.value;
     var order = OrderMgr.getOrder(orderNo);
     var hipayPaymentId = request.httpParameterMap.hipayPaymentId.value;
@@ -215,7 +213,7 @@ function CapturePayment() {
     } catch (e) {
         response = require('int_hipay_core/cartridge/scripts/lib/hipay/modules/hipayMaintenanceModule').hiPayMaintenanceRequest(order, amount.toString(), HiPayMaintenanceService.OPERATION_CAPTURE);
     }
-    
+
 }
 function CancelPayment(hipayPaymentId) {
     var paymentId = request.httpParameterMap.hipayPaymentId.value;
@@ -288,7 +286,7 @@ function ListPaymentCaptures() {
     var orderNo = request.httpParameterMap.orderNo.value;
     var order = OrderMgr.getOrder(orderNo);
     var hipayPaymentId = request.httpParameterMap.hipayPaymentId.value;
-    
+
     var transactionOperations = getTransactions(hipayPaymentId);
     var capturableAmount = 0;
     var capturedAmount = 0;
@@ -331,7 +329,7 @@ function ListPaymentRefunds() {
     var orderNo = request.httpParameterMap.orderNo.value;
     var order = OrderMgr.getOrder(orderNo);
     var hipayPaymentId = request.httpParameterMap.hipayPaymentId.value;
-    
+
     var transactionOperations = getTransactions(hipayPaymentId);
     var capturableAmount = 0;
 
@@ -344,7 +342,7 @@ function ListPaymentRefunds() {
 
     if (!empty(transactionOperations.hiPayTransactionResponse.transaction)) {
         capturedAmount = transactionOperations.hiPayTransactionResponse.transaction.capturedAmount;
-        refundedAmount = transactionOperations.hiPayTransactionResponse.transaction.refundedAmount;      
+        refundedAmount = transactionOperations.hiPayTransactionResponse.transaction.refundedAmount;
         refundableAmount = parseFloat(capturedAmount - refundedAmount);
 
         if (parseFloat(refundedAmount) > 0) {
@@ -365,11 +363,11 @@ function ListPaymentRefunds() {
             };
         }
     }
-    
+
     if (refundableAmount < 0) {
         refundableAmount = 0;
     }
-    
+
     return ISML.renderTemplate('order/listPaymentRefunds', {
         paymentRefunds: refunds,
         refundableAmount: refundableAmount,
