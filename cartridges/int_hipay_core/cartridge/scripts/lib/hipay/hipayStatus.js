@@ -35,7 +35,7 @@ var HiPayStatus = {
     },
     'REJECTED': {
         code: 'rejected',
-        paymentStatus: ['101', '113', '114', '115', '173'],
+        paymentStatus: ['113', '114', '115', '173'],
         value: 'REJECTED'
     },
     ERROR: {
