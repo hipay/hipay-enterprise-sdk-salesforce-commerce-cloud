@@ -24,7 +24,7 @@ var Order = require('dw/order/Order');
 var PropertyComparator = require('dw/util/PropertyComparator');
 
 var statuses = require('*/cartridge/scripts/lib/hipay/hipayStatus').HiPayStatus;
-var HiPayHelper = require('int_hipay_sfra/cartridge/scripts/lib/hipay/hipayHelper');
+var HiPayHelper = require('*/cartridge/scripts/lib/hipay/hipayHelper');
 
 var MaintenanceModule = require('*/cartridge/scripts/lib/hipay/modules/hipayMaintenanceModule');
 var TransactionModule = require('*/cartridge/scripts/lib/hipay/modules/hipayTransactionModule');

@@ -25,7 +25,7 @@ HiPayMaintenanceModule.hiPayMaintenanceRequest = function (order, amount, operat
     return Transaction.wrap(function () {
         var HiPayMaintenanceService = require('*/cartridge/scripts/lib/hipay/services/hipayMaintenanceService');
         var HiPayLogger = require('~/cartridge/scripts/lib/hipay/hipayLogger');
-        var HiPayHelper = require('int_hipay_sfra/cartridge/scripts/lib/hipay/hipayHelper');
+        var HiPayHelper = require('*/cartridge/scripts/lib/hipay/hipayHelper');
         var log = new HiPayLogger('HiPayMaintenanceRequest');
         var amountToRegister = amount;
         var regEx = /^[+]?([.]\d+|\d+[.]?\d*)$/; // Validate for positive number
