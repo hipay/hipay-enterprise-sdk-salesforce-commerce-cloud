@@ -212,6 +212,7 @@ function CapturePayment() {
 }
 
 function CancelPayment(hipayPaymentId) {
+    var Transaction = require('dw/system/Transaction');
     var paymentId = request.httpParameterMap.hipayPaymentId.value;
     var orderNo = request.httpParameterMap.orderNo.value;
     var order = OrderMgr.getOrder(orderNo);
@@ -224,6 +225,10 @@ function CancelPayment(hipayPaymentId) {
         return ISML.renderTemplate('order/error', {
             errorMessage: response.errorMessage,
             error: response.error
+        });
+    } else {
+        Transaction.wrap(function () {
+            OrderMgr.cancelOrder(order);
         });
     }
 }
