@@ -22,8 +22,8 @@ HiPayTransactionModule.hiPayTransactionRequest = function (transactionId) {
     var Transaction = require('dw/system/Transaction');
     var Decimal = require('dw/util/Decimal');
     return Transaction.wrap(function () {
-        var HipayTransactionService = require('~/cartridge/scripts/lib/hipay/services/hipayTransactionService');
-        var HiPayLogger = require('~/cartridge/scripts/lib/hipay/hipayLogger');
+        var HipayTransactionService = require('*/cartridge/scripts/lib/hipay/services/hipayTransactionService');
+        var HiPayLogger = require('*/cartridge/scripts/lib/hipay/hipayLogger');
         var log = new HiPayLogger('HiPayTransactionRequest');
         var hipayTransactionService = new HipayTransactionService();
         var response = {
@@ -37,6 +37,7 @@ HiPayTransactionModule.hiPayTransactionRequest = function (transactionId) {
             if (empty(transactionId)) {
                 log.error('HiPay transaction service ::: Missing transaction Reference');
                 response.error = true;
+                response.errorMessage = 'Missing transaction reference';
 
                 return response;
             }
@@ -50,6 +51,7 @@ HiPayTransactionModule.hiPayTransactionRequest = function (transactionId) {
             } else {
                 log.error(hipayResponse.msg);
                 response.error = true;
+                response.errorMessage = 'Hipay Error: ' + hipayResponse.msg;
 
                 return response;
             }
@@ -58,6 +60,7 @@ HiPayTransactionModule.hiPayTransactionRequest = function (transactionId) {
         } catch (e) {
             log.error(e);
             response.error = true;
+            response.errorMessage = 'Error: ' + e.message;
 
             return response;
         }

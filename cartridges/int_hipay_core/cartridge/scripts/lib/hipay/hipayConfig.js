@@ -8,9 +8,6 @@ var HiPayLogger = require('*/cartridge/scripts/lib/hipay/hipayLogger');
  * HiPayConfig object contains all configuration data,
  * which are necessary to call the HiPay service.
  * This data is retrieved from custom site preferences.
- *
- * To include this script use:
- * var config = require('~/cartridge/scripts/lib/hipay/hipayConfig.ds').HiPayConfig;
  */
 function HiPayConfig() {
     this.hiPayLogger = new HiPayLogger('HiPayConfig.js');

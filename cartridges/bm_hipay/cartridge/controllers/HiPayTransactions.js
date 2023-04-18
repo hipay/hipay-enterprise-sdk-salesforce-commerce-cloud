@@ -172,6 +172,15 @@ function PaymentDialog() {
     var paymentInstr = HiPayHelper.getOrderPaymentInstrument(order);
 
     var transactionOperations = getTransactions(hipayPaymentId);
+
+    // Show error message if we failed to get transacations.
+    if (transactionOperations.error) {
+        return ISML.renderTemplate('order/error', {
+            errorMessage: transactionOperations.errorMessage,
+            error: true
+        });
+    }
+
     var transactionIsCancellable = false;
 
     if (!empty(transactionOperations.hiPayTransactionResponse.transaction)) {

@@ -7,9 +7,6 @@ var Site = require('dw/system/Site');
 
 /**
  * HiPaySignitureMgr object is responsible for calculating and verifying SHA hash string in HiPay requests.
- *
- * To include this script use:
- * var HiPaySignitureMgr = require('~/cartridge/scripts/lib/hipay/hipaySignitureMgr.ds').HiPaySignitureMgr;
  */
 function HiPaySignitureMgr() {}
 
