@@ -1,9 +1,9 @@
 /* global Ext jQuery */
 
-var ingenicoAdmin = (function ($) {
+var hipayAdmin = (function ($) {
     var ajaxDialog;
 
-    function initEvents() {       
+    function initEvents() {
         $('.js_hipaybm_switch_order_search_forms').on('click', function(e) {
             e.preventDefault();
             var $clickedLink = $(e.target);
@@ -17,13 +17,13 @@ var ingenicoAdmin = (function ($) {
 
             var $button = $(this);
             ajaxDialog = new Ext.Window({
-                title: ingenicoAdmin.resources.detailsDialogTitle,
+                title: hipayAdmin.resources.detailsDialogTitle,
                 width: 800,
                 height: 200,
                 modal: true,
                 autoScroll: true,
                 cls: 'hipaybm_window_content payments-dialog'
-            });    
+            });
             ajaxDialog.show();
             ajaxDialog.maskOver = createMaskOver(ajaxDialog);
 
@@ -218,7 +218,7 @@ var ingenicoAdmin = (function ($) {
 
                 ajaxDialog.setHeight('auto');
                 ajaxDialog.center();
-                
+
                 if (callback) {
                     callback();
                 }

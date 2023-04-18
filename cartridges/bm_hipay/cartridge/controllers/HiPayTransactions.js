@@ -31,7 +31,7 @@ var TransactionModule = require('*/cartridge/scripts/lib/hipay/modules/hipayTran
 var HiPayMaintenanceService = require('*/cartridge/scripts/lib/hipay/services/hipayMaintenanceService');
 
 /**
- * Combine orders and ingenicoNewTransactions Custom Objects into one array for pagination
+ * Get orders
  *
  * @param {string} orderNo - Order number used in "Search by order number" feature
  * @param {string} orderUUID - Optional, in case a specific order needs to be returned
@@ -43,14 +43,6 @@ function getOrders(orderNo, orderUUID) {
     var paymentInstrument;
     var orderDate;
     var obj;
-
-    var orderIndex = 0;
-    var maxSystemOrdersCount = 9000;
-    var maxingenicoOrdersCount = 9000;
-    var hipayOrdersCount = 0;
-    if (hipayOrdersCount < maxingenicoOrdersCount) {
-        maxSystemOrdersCount = 18000 - hipayOrdersCount;
-    }
 
     var queryString = '';
     var sortString = 'creationDate desc';

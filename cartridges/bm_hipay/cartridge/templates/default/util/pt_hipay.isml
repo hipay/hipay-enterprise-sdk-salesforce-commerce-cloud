@@ -19,11 +19,7 @@
         <script src="${URLUtils.staticURL('js/hipaybm.js')}"></script>
 
         <script>
-            ingenicoAdmin.init({
-                urls: {
-                    orderTransaction: "${URLUtils.url('IngenicoAdmin-OrderTransaction')}",
-                    action: "${URLUtils.url('IngenicoAdmin-Action')}"
-                },
+            hipayAdmin.init({
                 resources: {
                     detailsDialogTitle: "${Resource.msg('search.grid.detailsdialogtitle', 'hipay_bm', null)}",
                     submit: "${Resource.msg('forms.submit', 'hipay_bm', null)}",
