@@ -12,11 +12,11 @@ var ingenicoAdmin = (function ($) {
     }
 
     function initEvents() {       
-        $('.js_ingenicobm_switch_order_search_forms').on('click', function(e) {
+        $('.js_hipaybm_switch_order_search_forms').on('click', function(e) {
             e.preventDefault();
             var $clickedLink = $(e.target);
 
-            $('.js_ingenicobm_order_search_form').addClass('hidden');
+            $('.js_hipaybm_order_search_form').addClass('hidden');
             $('#' + $clickedLink.data('targetid')).removeClass('hidden');
         })
 
@@ -30,7 +30,7 @@ var ingenicoAdmin = (function ($) {
                 height: 200,
                 modal: true,
                 autoScroll: true,
-                cls: 'ingenicobm_window_content payments-dialog'
+                cls: 'hipaybm_window_content payments-dialog'
             });    
             ajaxDialog.show();
             ajaxDialog.maskOver = createMaskOver(ajaxDialog);
@@ -59,7 +59,7 @@ var ingenicoAdmin = (function ($) {
                         ajaxDialog.setHeight('auto');
                         ajaxDialog.center();
                     } else {
-                        $('.js_ingenicobm_content').html(data);
+                        $('.js_hipaybm_content').html(data);
                     }
 
 

@@ -1,5 +1,5 @@
 
-<form class="ingenicobm_pagination" method="post" action="${pageURL}">
+<form class="hipaybm_pagination" method="post" action="${pageURL}">
     <table class="pagecursor" cellspacing="1" cellpadding="1">
         <tr>
             <td nowrap="nowrap" width="40%" align="left" class="pagecursortxt top">

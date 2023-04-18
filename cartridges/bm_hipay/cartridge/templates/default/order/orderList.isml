@@ -24,13 +24,13 @@ if (!isSearchByOrderNo && !isSearchByTransaction) {
         />
 </div>
 
-<div id="ingenicobm_search_order_by_id" class="js_ingenicobm_order_search_form ${isSearchByOrderNo ? '' : 'hidden'}">
+<div id="hipaybm_search_order_by_id" class="js_hipaybm_order_search_form ${isSearchByOrderNo ? '' : 'hidden'}">
     <table class="infobox w e s n">
         <tr>
             <td class="infobox_title_search">${Resource.msg('search.order.title', 'hipay_bm', null)}</td>
             <td align="right" nowrap="nowrap" class="infobox_item_search">
                 <span class="switch_link">${Resource.msg('search.orderbynumber', 'hipay_bm', null)}</span>
-                <a href="javascript: void(0);" class="switch_link js_ingenicobm_switch_order_search_forms" data-targetid="ingenicobm_search_transaction_by_id">${Resource.msg('search.transactionbyid', 'hipay_bm', null)}</a>
+                <a href="javascript: void(0);" class="switch_link js_hipaybm_switch_order_search_forms" data-targetid="hipaybm_search_transaction_by_id">${Resource.msg('search.transactionbyid', 'hipay_bm', null)}</a>
             </td>
         </tr>
         <tr>
@@ -58,12 +58,12 @@ if (!isSearchByOrderNo && !isSearchByTransaction) {
     </table>
 </div>
 
-<div id="ingenicobm_search_transaction_by_id" class="js_ingenicobm_order_search_form ${isSearchByTransaction ? '' : 'hidden'}">
+<div id="hipaybm_search_transaction_by_id" class="js_hipaybm_order_search_form ${isSearchByTransaction ? '' : 'hidden'}">
     <table class="infobox w e s n">
         <tr>
             <td class="infobox_title_search">${Resource.msg('search.order.title', 'hipay_bm', null)}</td>
             <td align="right" nowrap="nowrap" class="infobox_item_search">
-                <a href="javascript: void(0);" class="switch_link js_ingenicobm_switch_order_search_forms" data-targetid="ingenicobm_search_order_by_id">${Resource.msg('search.orderbynumber', 'hipay_bm', null)}</a>
+                <a href="javascript: void(0);" class="switch_link js_hipaybm_switch_order_search_forms" data-targetid="hipaybm_search_order_by_id">${Resource.msg('search.orderbynumber', 'hipay_bm', null)}</a>
                 <span class="switch_link">${Resource.msg('search.transactionbyid', 'hipay_bm', null)}</span>
             </td>
         </tr>

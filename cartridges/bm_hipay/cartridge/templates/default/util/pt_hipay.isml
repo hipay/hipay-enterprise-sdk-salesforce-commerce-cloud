@@ -1,7 +1,7 @@
 <isif condition="${pdict.CurrentHttpParameterMap.format.stringValue === 'ajax'}">
 
     <isdecorate template="util/pt_empty">
-        <div class="ingenicobm_content ingenicobm_content_ajax">
+        <div class="hipaybm_content hipaybm_content_ajax">
             <isreplace/>
         </div>
     </isdecorate>
@@ -40,7 +40,7 @@
             });
         </script>
 
-        <div class="ingenicobm_content js_ingenicobm_content">
+        <div class="hipaybm_content js_hipaybm_content">
             <isreplace/>
         </div>
 
