@@ -44,7 +44,7 @@ HiPayMaintenanceModule.hiPayMaintenanceRequest = function (order, amount, operat
         if (!amountToRegister.match(regEx)) {
             log.error('Calling HiPayMaintenance ' + operation + ' ::: Wrong ' + operation + ' amount value!');
             response.error = true;
-
+            response.errorMessage = 'Wrong ' + operation + ' amount value!';
             return response;
         }
 
@@ -70,7 +70,7 @@ HiPayMaintenanceModule.hiPayMaintenanceRequest = function (order, amount, operat
                 if (roundedDiff < Number(amountToRegister)) {
                     log.error('Calling HiPayMaintenance Capture ::: The Capture amount is higher than the available total amount!');
                     response.error = true;
-
+                    response.errorMessage = 'The Capture amount is higher than the available total amount!';
                     return response;
                 }
 
@@ -79,7 +79,7 @@ HiPayMaintenanceModule.hiPayMaintenanceRequest = function (order, amount, operat
                 if (requestAmount < Number(amountToRegister)) {
                     log.error('Calling HiPayMaintenance Refund ::: The Refund amount is higher than the captured amount!');
                     response.error = true;
-
+                    response.errorMessage = 'The Refund amount is higher than the captured amount!';
                     return response;
                 }
 
@@ -89,7 +89,7 @@ HiPayMaintenanceModule.hiPayMaintenanceRequest = function (order, amount, operat
                 if (requestAmount !== Number(amountToRegister)) {
                     log.error('Calling HiPayMaintenance Cancel ::: The Cancel amount is not the available total amount!');
                     response.error = true;
-
+                    response.errorMessage = 'The Cancel amount is not the available total amount!';
                     return response;
                 }
 
@@ -102,7 +102,7 @@ HiPayMaintenanceModule.hiPayMaintenanceRequest = function (order, amount, operat
             if (empty(transactionReference)) {
                 log.error('HiPay maintenance service ::: Missing transaction Reference');
                 response.error = true;
-
+                response.errorMessage = 'Missing transaction Reference';
                 return response;
             }
 
@@ -126,6 +126,7 @@ HiPayMaintenanceModule.hiPayMaintenanceRequest = function (order, amount, operat
             } else {
                 log.error(hipayResponse.msg);
                 response.error = true;
+                response.errorMessage = hipayResponse.msg;
 
                 return response;
             }
@@ -134,7 +135,7 @@ HiPayMaintenanceModule.hiPayMaintenanceRequest = function (order, amount, operat
         } catch (e) {
             log.error(e);
             response.error = true;
-
+            response.errorMessage = e;
             return response;
         }
 

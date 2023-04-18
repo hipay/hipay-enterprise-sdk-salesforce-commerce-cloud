@@ -39,7 +39,7 @@
                 <td class="table_detail s" nowrap="nowrap"><isprint value="${order.hipayAmount}"/></td>
                 <td class="table_detail s" nowrap="nowrap"><isprint value="${order.paymentStatus}"/></td>
                 <td class="table_detail s" nowrap="nowrap">
-                    <a class="js_ingenico_ajax_dialog"
+                    <a class="js_hipay_ajax_dialog"
                         href="${URLUtils.url('HiPayTransactions-PaymentDialog', 'hipayPaymentId', order.hipayTransactionID, 'orderNo', order.orderNo, 'capturedAmount', order.captureAmount)}"
                         data-dialog-id="payments-dialog"
                     >

@@ -11,6 +11,8 @@
     <isinclude template="order/paymentDetails" />
 </div>
 
+<div class="hipaybm_error disabled"></div>
+
 <div>
     <ul class="js_payment_transactions_tab_headings tab_headings">
         <li>

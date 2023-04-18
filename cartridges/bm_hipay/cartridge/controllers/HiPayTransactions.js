@@ -208,29 +208,34 @@ function CapturePayment() {
     var amount = request.httpParameterMap.amount.value;
     var HiPayMaintenanceService = require('int_hipay_core/cartridge/scripts/lib/hipay/services/hipayMaintenanceService');
     var hiPayMaintenanceService = new HiPayMaintenanceService();
-    try {
-        response = require('int_hipay_core/cartridge/scripts/lib/hipay/modules/hipayMaintenanceModule').hiPayMaintenanceRequest(order, amount.toString(), HiPayMaintenanceService.OPERATION_CAPTURE);
-    } catch (e) {
-        response = require('int_hipay_core/cartridge/scripts/lib/hipay/modules/hipayMaintenanceModule').hiPayMaintenanceRequest(order, amount.toString(), HiPayMaintenanceService.OPERATION_CAPTURE);
-    }
 
+    var response = require('int_hipay_core/cartridge/scripts/lib/hipay/modules/hipayMaintenanceModule').hiPayMaintenanceRequest(order, amount.toString(), HiPayMaintenanceService.OPERATION_CAPTURE);
+
+    if (response.error) {
+        return ISML.renderTemplate('order/error', {
+            errorMessage: response.errorMessage,
+            error: response.error
+        });
+    }
 }
 function CancelPayment(hipayPaymentId) {
     var paymentId = request.httpParameterMap.hipayPaymentId.value;
     var orderNo = request.httpParameterMap.orderNo.value;
     var order = OrderMgr.getOrder(orderNo);
-
     var helper = new HiPayHelper();
     var paymentInstr = helper.getOrderPaymentInstrument(order);
     var amount = paymentInstr.paymentTransaction.amount.value;
 
     var HiPayMaintenanceService = require('int_hipay_core/cartridge/scripts/lib/hipay/services/hipayMaintenanceService');
     var hiPayMaintenanceService = new HiPayMaintenanceService();
-    var op = HiPayMaintenanceService.OPERATION_CANCEL;
-    try {
-        response = require('int_hipay_core/cartridge/scripts/lib/hipay/modules/hipayMaintenanceModule').hiPayMaintenanceRequest(order, amount.toString(), HiPayMaintenanceService.OPERATION_CANCEL);
-    } catch (e) {
-        response = require('int_hipay_core/cartridge/scripts/lib/hipay/modules/hipayMaintenanceModule').hiPayMaintenanceRequest(order, amount.toString(), HiPayMaintenanceService.OPERATION_CANCEL);
+
+    var response = require('int_hipay_core/cartridge/scripts/lib/hipay/modules/hipayMaintenanceModule').hiPayMaintenanceRequest(order, amount.toString(), HiPayMaintenanceService.OPERATION_CANCEL);
+
+    if (response.error) {
+        return ISML.renderTemplate('order/error', {
+            errorMessage: response.errorMessage,
+            error: response.error
+        });
     }
 }
 function RefundPayment() {
@@ -238,15 +243,17 @@ function RefundPayment() {
     var orderNo = request.httpParameterMap.orderNo.value;
     var order = OrderMgr.getOrder(orderNo);
     var amount = request.httpParameterMap.amount.value;
-
     var HiPayMaintenanceService = require('int_hipay_core/cartridge/scripts/lib/hipay/services/hipayMaintenanceService');
     var hiPayMaintenanceService = new HiPayMaintenanceService();
-    try {
-        response = require('int_hipay_core/cartridge/scripts/lib/hipay/modules/hipayMaintenanceModule').hiPayMaintenanceRequest(order, amount.toString(), HiPayMaintenanceService.OPERATION_REFUND);
-    } catch (e) {
-        response = require('int_hipay_core/cartridge/scripts/lib/hipay/modules/hipayMaintenanceModule').hiPayMaintenanceRequest(order, amount.toString(), HiPayMaintenanceService.OPERATION_REFUND);
-    }
 
+    var response = require('int_hipay_core/cartridge/scripts/lib/hipay/modules/hipayMaintenanceModule').hiPayMaintenanceRequest(order, amount.toString(), HiPayMaintenanceService.OPERATION_REFUND);
+
+    if (response.error) {
+        return ISML.renderTemplate('order/error', {
+            errorMessage: response.errorMessage,
+            error: response.error
+        });
+    }
 }
 function RefreshPaymentDetails() {
     var orderNo = request.httpParameterMap.orderNo.value;

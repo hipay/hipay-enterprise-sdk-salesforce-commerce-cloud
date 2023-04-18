@@ -1,0 +1,3 @@
+<isif condition="${pdict.error}">
+    <span class="error">${pdict.errorMessage}</span>
+</isif>

@@ -3,14 +3,6 @@
 var ingenicoAdmin = (function ($) {
     var ajaxDialog;
 
-    function showAPIErrorMessage(apiResponse) {
-        if (apiResponse) {
-            alert(ingenicoAdmin.resources.apiRequestFailedWith + "\n\n" + JSON.stringify(apiResponse, null, 4))
-        } else {
-            alert(ingenicoAdmin.resources.apiRequestFailed);
-        }
-    }
-
     function initEvents() {       
         $('.js_hipaybm_switch_order_search_forms').on('click', function(e) {
             e.preventDefault();
@@ -20,7 +12,7 @@ var ingenicoAdmin = (function ($) {
             $('#' + $clickedLink.data('targetid')).removeClass('hidden');
         })
 
-        $('.js_ingenico_ajax_dialog').on('click', function (e) {
+        $('.js_hipay_ajax_dialog').on('click', function (e) {
             e.preventDefault();
 
             var $button = $(this);
@@ -49,8 +41,6 @@ var ingenicoAdmin = (function ($) {
 
                     if (typeof data === "object" && data.success === false) {
                         ajaxDialog.close();
-
-                        showAPIErrorMessage(data.errorMessage);
                         return;
                     }
 
@@ -114,11 +104,13 @@ var ingenicoAdmin = (function ($) {
                 $inputAmount.focus();
                 return;
             }
-
+            $('.hipaybm_error').html('');
+            $('.hipaybm_error').addClass('disabled');
             $paymentDetailsDiv.addClass("component-loading");
             capturePayment($paymentDetailsDiv.data('capture-payment-url'), amount, function (res) {
-                if (res.success === false) {
-                    showAPIErrorMessage(res.errorMessage);
+                if (res) {
+                    $('.hipaybm_error').html(res);
+                    $('.hipaybm_error').removeClass('disabled');
                 }
 
                 refreshAJAXComponent($paymentDetailsDiv, $paymentDetailsDiv.data('refresh-details-url'), function() {
@@ -130,10 +122,11 @@ var ingenicoAdmin = (function ($) {
 
         $(".js_btn_cancel").off("click").on("click", function (e) {
             e.preventDefault();
-
+            $('.hipaybm_error').html('');
+            $('.hipaybm_error').addClass('disabled');
             $paymentDetailsDiv.addClass("component-loading");
             cancelPayment($paymentDetailsDiv.data('cancel-payment-url'), function (res) {
-                if (res.success === false) {
+                if (res.error === true) {
                     showAPIErrorMessage(res.errorMessage);
                 }
 
@@ -152,11 +145,13 @@ var ingenicoAdmin = (function ($) {
                 $inputAmount.focus();
                 return;
             }
-
+            $('.hipaybm_error').html('');
+            $('.hipaybm_error').addClass('disabled');
             $paymentDetailsDiv.addClass("component-loading");
             refundPayment($paymentDetailsDiv.data('refund-payment-url'), amount, currencyCode, function (res) {
-                if (res.success === false) {
-                    showAPIErrorMessage(res.errorMessage);
+                if (res) {
+                    $('.hipaybm_error').html(res);
+                    $('.hipaybm_error').removeClass('disabled');
                 }
 
                 refreshAJAXComponent($paymentDetailsDiv, $paymentDetailsDiv.data('refresh-details-url'), function() {
@@ -174,11 +169,6 @@ var ingenicoAdmin = (function ($) {
             data: {
                 amount: amount
             },
-            error: function () {
-                callback({
-                    errors: [{ message: ingenicoAdmin.resources.serverError }]
-                });
-            },
             success: function (data) {
                 callback(data);
             }
@@ -189,11 +179,6 @@ var ingenicoAdmin = (function ($) {
         $.ajax({
             url: url,
             method: "POST",
-            error: function () {
-                callback({
-                    errors: [{ message: ingenicoAdmin.resources.serverError }]
-                });
-            },
             success: function (data) {
                 callback(data);
             }
@@ -208,11 +193,6 @@ var ingenicoAdmin = (function ($) {
                 amount: amount,
                 currencyCode: currencyCode
             },
-            error: function () {
-                callback({
-                    errors: [{ message: ingenicoAdmin.resources.serverError }]
-                });
-            },
             success: function (data) {
                 callback(data);
             }
@@ -224,11 +204,6 @@ var ingenicoAdmin = (function ($) {
 
         $.ajax({
             url: refreshURL,
-            error: function () {
-                callback({
-                    errors: [{ message: ingenicoAdmin.resources.serverError }]
-                });
-            },
             success: function (data) {
                 $targetDiv.html(data);
                 $targetDiv.removeClass('component-loading');
