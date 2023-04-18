@@ -18,12 +18,7 @@ var hipayUtils = require('*/cartridge/scripts/lib/hipay/hipayUtils');
 // Import Constants
 var Constants = require('*/cartridge/scripts/util/hipayConstants');
 
-/**
- * HiPayHelper class manages common HiPay functions.
- */
-function HiPayHelper() {}
-
-HiPayHelper.prototype.fillHeaderData = function (HiPayConfig, order, params, pi) {
+function fillHeaderData(HiPayConfig, order, params, pi) {
     var threshold = HiPayConfig.hipayEnable3dSecureThresholdRule;
     var enforceThresholdRule = false;
     var language = request.locale;
@@ -80,7 +75,7 @@ HiPayHelper.prototype.fillHeaderData = function (HiPayConfig, order, params, pi)
 };
 
 /* Fills HiPay request data based on DW Order information */
-HiPayHelper.prototype.fillOrderData = function (order, params, pi) {
+function fillOrderData(order, params, pi) {
     var totalAmount = null;
     var items = null;
     var categoryList = [];
@@ -696,7 +691,7 @@ HiPayHelper.prototype.fillOrderData = function (order, params, pi) {
 };
 
 /* Creates a formatted text message from the request parameters */
-HiPayHelper.prototype.formatRequestData = function (params) {
+function formatRequestData(params) {
     var requestLog = [];
     var entrysSet = params.entrySet();
 
@@ -731,7 +726,7 @@ HiPayHelper.prototype.formatRequestData = function (params) {
 };
 
 /* Updated the payment status of in the Order and manages the state of the transaction */
-HiPayHelper.prototype.updatePaymentStatus = function (order, paymentInstr, params) {
+function updatePaymentStatus(order, paymentInstr, params) {
     var paymentStatus = null;
     var statusType = null;
 
@@ -775,12 +770,12 @@ HiPayHelper.prototype.updatePaymentStatus = function (order, paymentInstr, param
 };
 
 /* Create an order note based on the status message */
-HiPayHelper.prototype.addOrderNote = function (order, noteSubject) {
+function addOrderNote(order, noteSubject) {
     order.addNote(noteSubject, this.formatRequestData(request.getHttpParameters()));
 };
 
 /* Retrieves the PaymentInstrument for the Order */
-HiPayHelper.prototype.getOrderPaymentInstrument = function (order) {
+function getOrderPaymentInstrument(order) {
     var paymentInstr = null;
     var paymentInstrColl = order.getPaymentInstruments();
 
@@ -808,7 +803,7 @@ HiPayHelper.prototype.getOrderPaymentInstrument = function (order) {
  * we start matching the category id with the mapping by going up the levels until we find the parent category that is mapped or we hit root;
  * if we hit root, the oney payment method is not displayed
  * */
-HiPayHelper.prototype.validateOneyAvailability = function (basket) {
+function validateOneyAvailability(basket) {
     var decision = false;
     var shippingDecision = false;
     var productDecision = false;
@@ -889,7 +884,7 @@ HiPayHelper.prototype.validateOneyAvailability = function (basket) {
     return decision;
 };
 
-HiPayHelper.prototype.getApplicablePaymentCards = function () {
+function getApplicablePaymentCards() {
     var applicablePaymentCards = null;
 
     try {
@@ -902,4 +897,13 @@ HiPayHelper.prototype.getApplicablePaymentCards = function () {
 };
 
 
-module.exports = HiPayHelper;
+module.exports = {
+    addOrderNote: addOrderNote,
+    fillHeaderData: fillHeaderData,
+    fillOrderData: fillOrderData,
+    formatRequestData: formatRequestData,
+    getApplicablePaymentCards: getApplicablePaymentCards
+    getOrderPaymentInstrument: getOrderPaymentInstrument,
+    updatePaymentStatus: updatePaymentStatus,
+    validateOneyAvailability: validateOneyAvailability,
+};

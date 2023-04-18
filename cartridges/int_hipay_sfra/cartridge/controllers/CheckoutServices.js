@@ -292,10 +292,9 @@ server.replace('PlaceOrder', server.middleware.https, function (req, res, next) 
         });
         return next();
     }
-    
-    var HiPayHelper = require('int_hipay_sfra/cartridge/scripts/lib/hipay/hipayHelper');
-    var helper = new HiPayHelper();
-    var paymentInstr = helper.getOrderPaymentInstrument(order);
+
+    var HiPayHelper = require('*/cartridge/scripts/lib/hipay/hipayHelper');
+    var paymentInstr = HiPayHelper.getOrderPaymentInstrument(order);
 
     COHelpers.sendConfirmationEmail(order, req.locale.id);
     //var parseHipayTokenize = JSON.parse(req.session.forms.billing.hipaytokenize.value);

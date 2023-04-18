@@ -226,7 +226,6 @@ HiPayCheckoutModule.hiPayOrderRequest = function (paymentInstrument, order, devi
     var log = new HiPayLogger('HiPayOrderRequest');
     var hiPayOrderService = new HiPayOrderService();
     var hiPayDataService = new HiPayDataService();
-    var helper = new HiPayHelper();
     var pi = paymentInstrument;
     var fingeprint = deviceFingerprint;
     var params = {};
@@ -260,8 +259,8 @@ HiPayCheckoutModule.hiPayOrderRequest = function (paymentInstrument, order, devi
         params.device_fingerprint = fingeprint;
         params.cdata1 = order.getOrderToken();
         params.cardholder = pi.creditCardHolder;
-        helper.fillHeaderData(HiPayConfig, order, params, pi); // fill in the common params
-        helper.fillOrderData(order, params, pi); // add order details
+        HiPayHelper.fillHeaderData(HiPayConfig, order, params, pi); // fill in the common params
+        HiPayHelper.fillOrderData(order, params, pi); // add order details
 
         if (pi.paymentMethod.equals('HIPAY_MBWAY')) {
             params.phone = pi.custom.hipayMbwayPhone;
@@ -299,7 +298,7 @@ HiPayCheckoutModule.hiPayOrderRequest = function (paymentInstrument, order, devi
                 pi.custom.hipayTransactionType = responseMsg.paymentProduct; // set transaction type = ideal,visa;
             });
             Transaction.wrap(function () {
-                // helper.updatePaymentStatus(order, pi, responseMsg); // update the payment status
+                // HiPayHelper.updatePaymentStatus(order, pi, responseMsg); // update the payment status
             });
             Transaction.wrap(function () {
                 pi.custom.hipayTransactionState = paymentState;
@@ -388,7 +387,6 @@ HiPayCheckoutModule.hiPayHostedPageRequest = function (order, paymentInstrument)
         var log = new HiPayLogger('HiPayHostedPageRequest');
         var hiPayHostedService = new HiPayHostedService();
         var hiPayDataService = new HiPayDataService();
-        var helper = new HiPayHelper();
         var pi = paymentInstrument;
         var hipayDataResponse;
         var response = {
@@ -414,9 +412,8 @@ HiPayCheckoutModule.hiPayHostedPageRequest = function (order, paymentInstrument)
                 params.payment_product_category_list = pi.custom.hipayPaymentCategoryList;
             }
 
-            helper.fillHeaderData(HiPayConfig, order, params, pi); // fill in the common params
-
-            helper.fillOrderData(order, params, pi); // add order details
+            HiPayHelper.fillHeaderData(HiPayConfig, order, params, pi); // fill in the common params
+            HiPayHelper.fillOrderData(order, params, pi); // add order details
 
             log.info('HiPay Hosted Page Request ::: ' + JSON.stringify(params, undefined, 2));
 

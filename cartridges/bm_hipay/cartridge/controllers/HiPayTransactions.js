@@ -79,8 +79,7 @@ function getOrders(orderNo, orderUUID) {
         var order = searchOrders.next();
 
         orderDate = new Date(order.creationDate);
-        var helper = new HiPayHelper();
-        paymentInstrument = helper.getOrderPaymentInstrument(order);
+        paymentInstrument = HiPayHelper.getOrderPaymentInstrument(order);
 
         if (paymentInstrument === null) {
             continue; // eslint-disable-line no-continue
@@ -170,8 +169,7 @@ function PaymentDialog() {
     var capturedAmount = 0;
     var refundedAmount = 0;
 
-    var helper = new HiPayHelper();
-    var paymentInstr = helper.getOrderPaymentInstrument(order);
+    var paymentInstr = HiPayHelper.getOrderPaymentInstrument(order);
 
     var transactionOperations = getTransactions(hipayPaymentId);
     var transactionIsCancellable = false;
@@ -220,8 +218,7 @@ function CancelPayment(hipayPaymentId) {
     var paymentId = request.httpParameterMap.hipayPaymentId.value;
     var orderNo = request.httpParameterMap.orderNo.value;
     var order = OrderMgr.getOrder(orderNo);
-    var helper = new HiPayHelper();
-    var paymentInstr = helper.getOrderPaymentInstrument(order);
+    var paymentInstr = HiPayHelper.getOrderPaymentInstrument(order);
     var amount = paymentInstr.paymentTransaction.amount.value;
 
     var response = MaintenanceModule.hiPayMaintenanceRequest(order, amount.toString(), HiPayMaintenanceService.OPERATION_CANCEL);
@@ -257,8 +254,7 @@ function RefreshPaymentDetails() {
     var capturedAmount = 0;
     var refundedAmount = 0;
 
-    var helper = new HiPayHelper();
-    var paymentInstr = helper.getOrderPaymentInstrument(order);
+    var paymentInstr = HiPayHelper.getOrderPaymentInstrument(order);
 
     var transactionOperations = getTransactions(hipayPaymentId);
     var transactionIsCancellable = false;
@@ -294,8 +290,7 @@ function ListPaymentCaptures() {
     var capturedAmount = 0;
     var order = OrderMgr.getOrder(orderNo);
     var capture = {};
-    var helper = new HiPayHelper();
-    var paymentInstr = helper.getOrderPaymentInstrument(order);
+    var paymentInstr = HiPayHelper.getOrderPaymentInstrument(order);
 
     var amount = 0;
 

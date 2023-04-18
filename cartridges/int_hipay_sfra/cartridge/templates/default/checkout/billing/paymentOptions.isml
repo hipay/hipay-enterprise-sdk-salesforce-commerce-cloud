@@ -2,10 +2,9 @@
     var BasketMgr = require('dw/order/BasketMgr'),
         currentBasket = BasketMgr.getCurrentBasket();
 
-    var HiPayHelper = require('*/cartridge/scripts/lib/hipay/hipayHelper'),
-        helper = new HiPayHelper();
+    var HiPayHelper = require('*/cartridge/scripts/lib/hipay/hipayHelper');
 
-    var renderOney = helper.validateOneyAvailability(currentBasket),
+    var renderOney = HiPayHelper.validateOneyAvailability(currentBasket),
         HiPayConfig = require('*/cartridge/scripts/lib/hipay/hipayConfig').HiPayConfig,
         isHiPayHostedMode = false;
 

@@ -16,7 +16,6 @@ function hiPayProcessOrderCall() {
     var HiPayHelper = require('*/cartridge/scripts/lib/hipay/hipayHelper');
     var hipayUtils = require('*/cartridge/scripts/lib/hipay/hipayUtils');
     var log = new HiPayLogger('HiPayProcessOrderCall');
-    var helper = new HiPayHelper();
     var params = request.httpParameterMap;
     var response = {};
     var orderid;
@@ -59,7 +58,7 @@ function hiPayProcessOrderCall() {
 
         Transaction.wrap(function () {
             response.hiPayPaymentStatus = state; // completed, declined, pending
-            paymentInstr = helper.getOrderPaymentInstrument(order);
+            paymentInstr = HiPayHelper.getOrderPaymentInstrument(order);
             reference = params.reference.stringValue; // set the reference from hipay = 200628176332
             if (!empty(reference)) {
                 paymentTransaction = paymentInstr.getPaymentTransaction();
@@ -67,7 +66,7 @@ function hiPayProcessOrderCall() {
             }
             pp = params.pp.stringValue; // set transaction type = ideal,visa
             paymentInstr.custom.hipayTransactionType = pp;
-            helper.updatePaymentStatus(order, paymentInstr, params); // update the payment status
+            HiPayHelper.updatePaymentStatus(order, paymentInstr, params); // update the payment status
             paymentInstr.custom.hipayTransactionState = state; // payment state
 
             if (state === 'declined') {

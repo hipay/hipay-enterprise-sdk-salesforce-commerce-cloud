@@ -22,7 +22,6 @@ HiPayNotificationModule.hiPayProcessNotificationCall = function (httpParams) {
     var HiPaySignitureMgr = require('*/cartridge/scripts/lib/hipay/hipaySignitureMgr').HiPaySignitureMgr;
     var hipayUtils = require('*/cartridge/scripts/lib/hipay/hipayUtils');
     var log = new HiPayLogger('HiPayProcessNotificationCall');
-    var helper = new HiPayHelper();
     var shaSignature = request.getHttpHeaders().get('x-allopass-signature');
     var isRequestValid = HiPaySignitureMgr.checkIsValidNotification(request.getHttpParameters(), HiPayConfig.hipayApiPassphrase, shaSignature);
 
@@ -59,15 +58,15 @@ HiPayNotificationModule.hiPayProcessNotificationCall = function (httpParams) {
     }
 
     Transaction.wrap(function () {
-        var paymentInstr = helper.getOrderPaymentInstrument(order);
+        var paymentInstr = HiPayHelper.getOrderPaymentInstrument(order);
 
-        helper.updatePaymentStatus(order, paymentInstr, params); // update the payment status
+        HiPayHelper.updatePaymentStatus(order, paymentInstr, params); // update the payment status
     });
 
     Transaction.wrap(function () {
         var message = params.message.stringValue;
 
-        helper.addOrderNote(order, 'HiPay Notification - ' + message);
+        HiPayHelper.addOrderNote(order, 'HiPay Notification - ' + message);
     });
 
     return true;

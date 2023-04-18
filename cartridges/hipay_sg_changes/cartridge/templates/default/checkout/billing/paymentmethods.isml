@@ -19,10 +19,9 @@
             <isinclude template="checkout/components/devicefingerprint"/>
             <isinclude template="checkout/components/sdkjs"/>
             <isscript>
-                var HiPayHelper = require('*/cartridge/scripts/lib/hipay/hipayHelper'),
-                    helper      = new HiPayHelper();
-                var renderOney   = helper.validateOneyAvailability(pdict.Basket);
-                var applicablePaymentCards = helper.getApplicablePaymentCards(pdict.Basket);
+                var HiPayHelper = require('*/cartridge/scripts/lib/hipay/hipayHelper');
+                var renderOney   = HiPayHelper.validateOneyAvailability(pdict.Basket);
+                var applicablePaymentCards = HiPayHelper.getApplicablePaymentCards(pdict.Basket);
                 var HiPayConfig = require('*/cartridge/scripts/lib/hipay/hipayConfig').HiPayConfig,
                     isHiPayHostedMode = false;
                     if (HiPayConfig.hipayOperationMode == HiPayConfig.OPERATION.HOSTED || HiPayConfig.hipayOperationMode == HiPayConfig.OPERATION.IFRAME) {

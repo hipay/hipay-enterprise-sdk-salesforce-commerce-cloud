@@ -23,12 +23,10 @@ HiPayMaintenanceModule.hiPayMaintenanceRequest = function (order, amount, operat
     var Transaction = require('dw/system/Transaction');
     var Decimal = require('dw/util/Decimal');
     return Transaction.wrap(function () {
-        var HiPayMaintenanceService = require('~/cartridge/scripts/lib/hipay/services/hipayMaintenanceService');
+        var HiPayMaintenanceService = require('*/cartridge/scripts/lib/hipay/services/hipayMaintenanceService');
         var HiPayLogger = require('~/cartridge/scripts/lib/hipay/hipayLogger');
         var HiPayHelper = require('int_hipay_sfra/cartridge/scripts/lib/hipay/hipayHelper');
         var log = new HiPayLogger('HiPayMaintenanceRequest');
-        var helper = new HiPayHelper();
-        var hiPayMaintenanceService = new HiPayMaintenanceService();
         var amountToRegister = amount;
         var regEx = /^[+]?([.]\d+|\d+[.]?\d*)$/; // Validate for positive number
         var response = {
@@ -48,7 +46,7 @@ HiPayMaintenanceModule.hiPayMaintenanceRequest = function (order, amount, operat
             return response;
         }
 
-        var paymentInstr = helper.getOrderPaymentInstrument(order);
+        var paymentInstr = HiPayHelper.getOrderPaymentInstrument(order);
         var transactionReference = paymentInstr.getPaymentTransaction().getTransactionID();
         var requestAmount = 0;
         var orderTotal = 0;
@@ -78,7 +76,7 @@ HiPayMaintenanceModule.hiPayMaintenanceRequest = function (order, amount, operat
                 serviceAmount = '';
             }
 
-            var hipayResponse = hiPayMaintenanceService.initiateCapture(transactionReference, operation, serviceAmount);
+            var hipayResponse = HiPayMaintenanceService.initiateCapture(transactionReference, operation, serviceAmount);
             var msg = null;
 
             if (hipayResponse.ok === true) {

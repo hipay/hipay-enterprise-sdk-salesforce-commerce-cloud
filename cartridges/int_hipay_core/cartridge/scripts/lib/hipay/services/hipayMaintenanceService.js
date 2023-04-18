@@ -1,12 +1,7 @@
-/* HiPayMaintenanceService.ds object initiates HiPay maintenance request.*/
-function HiPayMaintenanceService() {}
-
-HiPayMaintenanceService.OPERATION_CAPTURE = 'capture';
-HiPayMaintenanceService.OPERATION_REFUND = 'refund';
-HiPayMaintenanceService.OPERATION_CANCEL = 'cancel';
+'use strict';
 
 /* Initiates HiPay hosted payment request.*/
-HiPayMaintenanceService.prototype.initiateCapture = function (transactionReference, operation, amount) {
+function initiateCapture(transactionReference, operation, amount) {
     var hipayServices = require('*/cartridge/scripts/init/hiPayServiceInit');
     var service = hipayServices.maintenance();
 
@@ -24,4 +19,9 @@ HiPayMaintenanceService.prototype.initiateCapture = function (transactionReferen
     return response;
 };
 
-module.exports = HiPayMaintenanceService;
+module.exports = {
+    OPERATION_CAPTURE: 'capture',
+    OPERATION_REFUND: 'refund',
+    OPERATION_CANCEL: 'cancel',
+    initiateCapture: initiateCapture
+};

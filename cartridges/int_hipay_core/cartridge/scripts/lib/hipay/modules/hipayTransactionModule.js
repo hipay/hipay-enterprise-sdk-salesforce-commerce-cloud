@@ -26,8 +26,6 @@ HiPayTransactionModule.hiPayTransactionRequest = function (transactionId) {
         var HiPayLogger = require('~/cartridge/scripts/lib/hipay/hipayLogger');
         var log = new HiPayLogger('HiPayTransactionRequest');
         var hipayTransactionService = new HipayTransactionService();
-        var HiPayHelper = require('int_hipay_sfra/cartridge/scripts/lib/hipay/hipayHelper');
-        var helper = new HiPayHelper();
         var response = {
             hiPayTransactionResponse: null,
             error: true
