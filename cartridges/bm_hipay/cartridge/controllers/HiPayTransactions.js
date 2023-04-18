@@ -173,13 +173,11 @@ function PaymentDialog() {
 
     var transactionOperations = getTransactions(hipayPaymentId);
     var transactionIsCancellable = false;
-    var transactionIsCapturable = false;
 
     if (!empty(transactionOperations.hiPayTransactionResponse.transaction)) {
         capturedAmount = transactionOperations.hiPayTransactionResponse.transaction.capturedAmount;
         refundedAmount = transactionOperations.hiPayTransactionResponse.transaction.refundedAmount;
         transactionIsCancellable = transactionOperations.hiPayTransactionResponse.transaction.status === statuses.AUTHORIZED.code;
-        transactionIsCapturable = transactionOperations.hiPayTransactionResponse.transaction.status !== statuses.COMPLETED.code;
     }
 
     return ISML.renderTemplate('order/paymentDialog', {
@@ -189,7 +187,6 @@ function PaymentDialog() {
         refundedAmount: refundedAmount,
         hipayPaymentId: hipayPaymentId,
         transactionIsCancellable: transactionIsCancellable,
-        transactionIsCapturable: transactionIsCapturable,
         paymentStatus: paymentInstr.custom.hipayTransactionStatus
     });
 }
@@ -258,13 +255,11 @@ function RefreshPaymentDetails() {
 
     var transactionOperations = getTransactions(hipayPaymentId);
     var transactionIsCancellable = false;
-    var transactionIsCapturable = false;
     var paymentStatus = paymentInstr.custom.hipayTransactionStatus;
     if (!empty(transactionOperations.hiPayTransactionResponse.transaction)) {
         capturedAmount = transactionOperations.hiPayTransactionResponse.transaction.capturedAmount;
         refundedAmount = transactionOperations.hiPayTransactionResponse.transaction.refundedAmount;
         transactionIsCancellable = transactionOperations.hiPayTransactionResponse.transaction.state === statuses.AUTHORIZED.code;
-        transactionIsCapturable = transactionOperations.hiPayTransactionResponse.transaction.state !== statuses.COMPLETED.code;
         paymentStatus = transactionOperations.hiPayTransactionResponse.transaction.message;
     }
 
@@ -275,7 +270,6 @@ function RefreshPaymentDetails() {
         refundedAmount: refundedAmount,
         hipayPaymentId: hipayPaymentId,
         transactionIsCancellable: transactionIsCancellable,
-        transactionIsCapturable: transactionIsCapturable,
         paymentStatus: paymentStatus
     });
 }
@@ -296,7 +290,8 @@ function ListPaymentCaptures() {
 
     if (!empty(transactionOperations.hiPayTransactionResponse.transaction)) {
         capturedAmount = transactionOperations.hiPayTransactionResponse.transaction.capturedAmount;
-        if (transactionOperations.hiPayTransactionResponse.transaction.status !== statuses.CANCELLED.code) {
+
+        if (statuses.REJECTED.paymentStatus.indexOf(transactionOperations.hiPayTransactionResponse.transaction.status) === -1) {
             capturableAmount =  transactionOperations.hiPayTransactionResponse.transaction.order.amount - capturedAmount;
         }
 
