@@ -33,7 +33,7 @@ var HiPayHelper = require('int_hipay_sfra/cartridge/scripts/lib/hipay/hipayHelpe
  * @param {string} orderUUID - Optional, in case a specific order needs to be returned
  * @returns {dw.util.ArrayList} Combined array with all orders
  */
- function getOrders(orderNo, orderUUID) {
+function getOrders(orderNo, orderUUID) {
     var orders = new ArrayList();
     var order;
     var paymentInstrument;
@@ -218,6 +218,7 @@ function CapturePayment() {
         });
     }
 }
+
 function CancelPayment(hipayPaymentId) {
     var paymentId = request.httpParameterMap.hipayPaymentId.value;
     var orderNo = request.httpParameterMap.orderNo.value;
@@ -238,6 +239,7 @@ function CancelPayment(hipayPaymentId) {
         });
     }
 }
+
 function RefundPayment() {
     var paymentId = request.httpParameterMap.hipayPaymentId.value;
     var orderNo = request.httpParameterMap.orderNo.value;
@@ -255,6 +257,7 @@ function RefundPayment() {
         });
     }
 }
+
 function RefreshPaymentDetails() {
     var orderNo = request.httpParameterMap.orderNo.value;
     var order = OrderMgr.getOrder(orderNo);
@@ -332,6 +335,7 @@ function ListPaymentCaptures() {
         order: order
     });
 }
+
 function ListPaymentRefunds() {
     var orderNo = request.httpParameterMap.orderNo.value;
     var order = OrderMgr.getOrder(orderNo);

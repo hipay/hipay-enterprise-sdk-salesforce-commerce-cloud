@@ -62,40 +62,6 @@ HiPayMaintenanceModule.hiPayMaintenanceRequest = function (order, amount, operat
             orderTotal = order.getAdjustedMerchandizeTotalPrice(true).add(order.giftCertificateTotalPrice).decimalValue;
         }
 
-        switch(operation) {
-            case HiPayMaintenanceService.OPERATION_CAPTURE:
-                var captureDiff = orderTotal - requestAmount;
-                var roundedDiff = new Decimal(captureDiff).round(2);
-
-                if (roundedDiff < Number(amountToRegister)) {
-                    log.error('Calling HiPayMaintenance Capture ::: The Capture amount is higher than the available total amount!');
-                    response.error = true;
-                    response.errorMessage = 'The Capture amount is higher than the available total amount!';
-                    return response;
-                }
-
-                break;
-            case HiPayMaintenanceService.OPERATION_REFUND:
-                if (requestAmount < Number(amountToRegister)) {
-                    log.error('Calling HiPayMaintenance Refund ::: The Refund amount is higher than the captured amount!');
-                    response.error = true;
-                    response.errorMessage = 'The Refund amount is higher than the captured amount!';
-                    return response;
-                }
-
-                break;
-            case HiPayMaintenanceService.OPERATION_CANCEL:
-                requestAmount = paymentInstr.getPaymentTransaction().getAmount().value;
-                if (requestAmount !== Number(amountToRegister)) {
-                    log.error('Calling HiPayMaintenance Cancel ::: The Cancel amount is not the available total amount!');
-                    response.error = true;
-                    response.errorMessage = 'The Cancel amount is not the available total amount!';
-                    return response;
-                }
-
-                break;
-        }
-
         try {
             log.debug('Calling HiPayMaintenance ' + operation + ' ::: ' + transactionReference);
 
