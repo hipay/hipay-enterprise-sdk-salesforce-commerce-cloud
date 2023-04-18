@@ -17,6 +17,8 @@
             <td></td>
         </tr>
     </table>
+<iselse>
+    <p class="hipaybm_empty">${Resource.msg('detailsdialog.refunds.empty', 'hipay_bm', null)}</p>
 </isif>
 <div class="payment_dialog_form js_payment_dialog_form">
     <h3>

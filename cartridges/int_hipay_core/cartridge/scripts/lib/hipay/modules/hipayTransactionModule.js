@@ -71,5 +71,4 @@ HiPayTransactionModule.hiPayTransactionRequest = function (transactionId) {
     });
 };
 
-
 module.exports = HiPayTransactionModule;

@@ -253,3 +253,9 @@ button.btn_test_connection:disabled {
     margin-top: 20px;
     padding-left: 6px
 }
+
+.hipaybm_empty {
+    padding-top: 10px;
+    padding-left: 15px;
+    font-size: 14px;
+}
