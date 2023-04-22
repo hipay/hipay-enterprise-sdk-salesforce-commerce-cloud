@@ -1,9 +1,8 @@
-
 <isloop items="${pdict.order.billing.payment.applicablePaymentMethods}" var="paymentOption">
     <iscomment>HIPAY Credit card</iscomment>
     <isif condition="${!empty(paymentOption.ID) && paymentOption.ID == 'HIPAY_CREDIT_CARD' && isHiPayHostedMode == false}">
         <isinclude template="checkout/billing/paymentOptions/creditCardContent" />
-    <iselse>
+    <iselse/>
         <div class="tab-pane ${paymentOption.ID}-content" id="${paymentOption.ID}-content" role="tabpanel">
             <fieldset class="payment-form-fields">
 
@@ -16,19 +15,20 @@
                         <div id="hipay-error-message"></div>
 
                     <iscomment>iDEAL</iscomment>
-                    <iselseif condition="${paymentOption.ID == 'HIPAY_IDEAL'}">
+                    <iselseif condition="${paymentOption.ID == 'HIPAY_IDEAL'}"/>
                         <div id="hipay-hostedfields-form-ideal"></div>
                         <div id="hipay-error-message"></div>
 
                     <iscomment>HIPAY_MBWAY</iscomment>
-                    <iselseif condition="${paymentOption.ID == 'HIPAY_MBWAY'}">
+                    <iselseif condition="${paymentOption.ID == 'HIPAY_MBWAY'}"/>
                         <div id="hipay-hostedfields-form-mbway"></div>
                         <div id="hipay-error-message"></div>
-
                     <iscomment>Methods that perform redirection</iscomment>
                     <iselse>
                         ${Resource.msg('hipay.redirect.message', 'hipay', null)}
 
+                    <iselseif condition="${paymentOption.ID == 'HIPAY_APPLEPAY'}"/>
+                        <div id="apple-pay-button"></div>
                     </isif>
                 </isif>
 
