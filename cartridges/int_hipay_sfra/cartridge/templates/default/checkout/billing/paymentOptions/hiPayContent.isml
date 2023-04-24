@@ -29,6 +29,7 @@
 
                     <iselseif condition="${paymentOption.ID == 'HIPAY_APPLEPAY'}"/>
                         <div id="apple-pay-button"></div>
+                        <div id="hipay-apple-error-message"></div>
                     </isif>
                 </isif>
 
