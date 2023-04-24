@@ -13,7 +13,6 @@ var Status = require('dw/system/Status');
 var Resource = require('dw/web/Resource');
 var Site = require('dw/system/Site');
 var Transaction = require('dw/system/Transaction');
-var CustomObjectMgr = require('dw/object/CustomObjectMgr');
 
 var AddressModel = require('*/cartridge/models/address');
 var formErrors = require('*/cartridge/scripts/formErrors');
@@ -21,9 +20,6 @@ var renderTemplateHelper = require('*/cartridge/scripts/renderTemplateHelper');
 var ShippingHelper = require('*/cartridge/scripts/checkout/shippingHelpers');
 var collections = require('*/cartridge/scripts/util/collections');
 var basketCalculationHelpers = require('*/cartridge/scripts/helpers/basketCalculationHelpers');
-
-// Import Constants
-var Constants = require('*/cartridge/scripts/util/hipayConstants');
 
 // static functions needed for Checkout Controller logic
 

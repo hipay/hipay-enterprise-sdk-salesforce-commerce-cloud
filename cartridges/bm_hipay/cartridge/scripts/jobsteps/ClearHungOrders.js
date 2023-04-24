@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 var Transaction = require('dw/system/Transaction');
 var Calendar = require('dw/util/Calendar');
@@ -37,7 +37,6 @@ function failHungOrder(order) {
 */
 function ClearHungOrders() {
     var minutesBack = Site.getCurrent().getCustomPreferenceValue('hipayHungOrderTimeout');
-    var minutesBack = 1;
     log.info('Starting to process hung orders older than {0} minutes.', minutesBack);
 
     var startDate = new Calendar();

@@ -61,5 +61,33 @@
             </attribute-group>
         </group-definitions>
     </custom-type>
-	
+
+	<custom-type type-id="hipayNotification">
+        <display-name xml:lang="x-default">Hipay Notifications to process</display-name>
+        <description xml:lang="x-default">Hipay Notifications to process</description>
+        <staging-mode>no-staging</staging-mode>
+        <storage-scope>site</storage-scope>
+        <key-definition attribute-id="id">
+            <type>string</type>
+            <min-length>0</min-length>
+        </key-definition>
+        <attribute-definitions>
+            <attribute-definition attribute-id="notification">
+                <display-name xml:lang="x-default">Notification</display-name>
+                <description xml:lang="x-default">Notification</description>
+                <type>text</type>
+                <localizable-flag>false</localizable-flag>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>true</externally-managed-flag>
+            </attribute-definition>
+        </attribute-definitions>
+        <group-definitions>
+            <attribute-group group-id="HipayNotification">
+                <display-name xml:lang="x-default">Hipay Notification Attributes</display-name>
+                <attribute attribute-id="id"/>
+                <attribute attribute-id="notification"/>
+            </attribute-group>
+        </group-definitions>
+	</custom-type>
+
 </metadata>

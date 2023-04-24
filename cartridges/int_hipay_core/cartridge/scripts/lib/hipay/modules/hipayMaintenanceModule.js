@@ -21,7 +21,7 @@ var HiPayMaintenanceModule = function () {};
 
 HiPayMaintenanceModule.hiPayMaintenanceRequest = function (order, amount, operation) {
     var Transaction = require('dw/system/Transaction');
-    var Decimal = require('dw/util/Decimal');
+
     return Transaction.wrap(function () {
         var HiPayMaintenanceService = require('*/cartridge/scripts/lib/hipay/services/hipayMaintenanceService');
         var HiPayLogger = require('*/cartridge/scripts/lib/hipay/hipayLogger');
@@ -33,7 +33,6 @@ HiPayMaintenanceModule.hiPayMaintenanceRequest = function (order, amount, operat
             hiPayMaintenanceResponse: null,
             error: true
         };
-        var errorMsg = '';
 
         if (empty(operation)) {
             operation = HiPayMaintenanceService.OPERATION_CAPTURE;

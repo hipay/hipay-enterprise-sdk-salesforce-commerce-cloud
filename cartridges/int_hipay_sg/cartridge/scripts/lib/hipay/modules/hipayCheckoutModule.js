@@ -311,13 +311,10 @@ HiPayCheckoutModule.hiPayOrderRequest = function (paymentInstrument, order, devi
 
             Transaction.wrap(function () {
                 paymentTransaction.setTransactionID(responseMsg.transactionReference); // set the reference from hipay
-            });
-            Transaction.wrap(function () {
                 pi.custom.hipayTransactionType = responseMsg.paymentProduct; // set transaction type = ideal,visa;
+                // HiPayHelper.updatePaymentStatus(order, pi, responseMsg); //update the payment status
             });
-            // Transaction.wrap(function () {
-            //    HiPayHelper.updatePaymentStatus(order, pi, responseMsg); //update the payment status
-            // });
+
             paymentState = responseMsg.state;
             Transaction.wrap(function () {
                 pi.custom.hipayTransactionState = paymentState;

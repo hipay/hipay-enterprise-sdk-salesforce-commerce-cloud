@@ -591,12 +591,12 @@ function billing() {
 * Otherwise, renders a JSON object with information about the gift certificate code and the success and status of the redemption.
 */
 function redeemGiftCertificateJson() {
-    var giftCertCode, giftCertStatus;
+    var responseUtils = require('*/cartridge/scripts/util/Response');
+    var giftCertCode;
+    var giftCertStatus;
 
     giftCertCode = request.httpParameterMap.giftCertCode.stringValue;
     giftCertStatus = redeemGiftCertificate(giftCertCode);
-
-    let responseUtils = require('*/cartridge/scripts/util/Response');
 
     if (request.httpParameterMap.format.stringValue !== 'ajax') {
         // @FIXME we could also build an ajax guard?

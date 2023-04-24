@@ -1,7 +1,7 @@
 /**
  * Initiates HiPay Token Generation request.
  */
-function HiPayDataService() {};
+function HiPayDataService() {}
 
 HiPayDataService.prototype.dataService = function (params, hipayResponse, dateRequest, dateResponse) {
     var hipaytokenize = JSON.parse(session.forms.billing.hipaytokenize.value);
@@ -14,7 +14,7 @@ HiPayDataService.prototype.dataService = function (params, hipayResponse, dateRe
     return response;
 };
 
- /**
+/**
  * Generats the SHA256 encrypted String starting from the given String
  * @param {string} unicode - the string to be encrypted SHA256
  * @return {string} SHA256 encrypted string
@@ -25,10 +25,10 @@ function getDataId(deviceFingerprint, domain) {
 
     if (deviceFingerprint) {
         return encriptorSha256.digest(deviceFingerprint + (domain ? ':' + domain : ''));
-    } else {
-        return encriptorSha256.digest(domain);
     }
-};
+
+    return encriptorSha256.digest(domain);
+}
 
 function payload(params, hipayResponse, hipaytokenize, dateRequest, dateResponse) {
     var Site = require('dw/system/Site');
@@ -65,7 +65,7 @@ function payload(params, hipayResponse, hipaytokenize, dateRequest, dateResponse
             sdk_server: 'nodejs',
             // sdk_server_engine_version: TODO
         }
-    }
-};
+    };
+}
 
  module.exports = HiPayDataService;

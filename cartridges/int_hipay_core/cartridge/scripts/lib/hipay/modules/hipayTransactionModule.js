@@ -20,7 +20,7 @@ var HiPayTransactionModule = function () {};
 
 HiPayTransactionModule.hiPayTransactionRequest = function (transactionId) {
     var Transaction = require('dw/system/Transaction');
-    var Decimal = require('dw/util/Decimal');
+
     return Transaction.wrap(function () {
         var HipayTransactionService = require('*/cartridge/scripts/lib/hipay/services/hipayTransactionService');
         var HiPayLogger = require('*/cartridge/scripts/lib/hipay/hipayLogger');

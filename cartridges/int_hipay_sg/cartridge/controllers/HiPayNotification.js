@@ -12,8 +12,12 @@ var guard = require('*/cartridge/scripts/guard');
 
 /* Handles HiPay server notifications */
 function notify() {
-    var httpParams = request.httpParameterMap;
-    require('*/cartridge/scripts/lib/hipay/modules/hipayNotificationModule').hiPayProcessNotificationCall(httpParams);
+    var hipayNotificationModule = require('*/cartridge/scripts/lib/hipay/modules/hipayNotificationModule');
+
+    if (hipayNotificationModule.checkSignature(request)) {
+        hipayNotificationModule.saveNotification(request);
+    }
+
     ISML.renderTemplate('hipay/notifications/hipaynotification');
 }
 

@@ -440,24 +440,22 @@ function fillOrderData(order, params, pi) {
         // If all products dematerialized, shipping_indicator = 5
         if (allDematerializedProducts) {
             params.merchant_risk_statement.shipping_indicator = 5;
+        // Compare shipping and billing addresses
+        // If equals, shipping_indicator = 1
+        } else if (
+            !empty(billingAddress)
+            && hipayUtils.compareStrings(shippingAddress.address1, billingAddress.address1)
+            && hipayUtils.compareStrings(shippingAddress.address2, billingAddress.address2)
+            && hipayUtils.compareStrings(shippingAddress.postalCode, billingAddress.postalCode)
+            && hipayUtils.compareStrings(shippingAddress.city, billingAddress.city)
+            && hipayUtils.compareStrings(shippingAddress.countryCode.value, billingAddress.countryCode.value)
+        ) {
+            params.merchant_risk_statement.shipping_indicator = 1;
         } else {
-            // Compare shipping and billing addresses
-            // If equals, shipping_indicator = 1
-            if (
-                !empty(billingAddress)
-                && hipayUtils.compareStrings(shippingAddress.address1, billingAddress.address1)
-                && hipayUtils.compareStrings(shippingAddress.address2, billingAddress.address2)
-                && hipayUtils.compareStrings(shippingAddress.postalCode, billingAddress.postalCode)
-                && hipayUtils.compareStrings(shippingAddress.city, billingAddress.city)
-                && hipayUtils.compareStrings(shippingAddress.countryCode.value, billingAddress.countryCode.value)
-            ) {
-                params.merchant_risk_statement.shipping_indicator = 1;
-            } else {
-                // Else, check if shipping address known for auth user (shipping_indicator = 2)
-                // We check it later with other params
-                // Else, shipping_indicator = 3
-                params.merchant_risk_statement.shipping_indicator = 3;
-            }
+            // Else, check if shipping address known for auth user (shipping_indicator = 2)
+            // We check it later with other params
+            // Else, shipping_indicator = 3
+            params.merchant_risk_statement.shipping_indicator = 3;
         }
 
         // Add DSP2 account info
@@ -690,7 +688,7 @@ function fillOrderData(order, params, pi) {
                 ) ? 1 : 2;
         }
     }
-};
+}
 
 function getApplicablePaymentCards() {
     var applicablePaymentCards = null;
@@ -702,14 +700,11 @@ function getApplicablePaymentCards() {
     }
 
     return applicablePaymentCards;
-};
-
+}
 
 module.exports = {
-    addOrderNote: base.addOrderNote,
     fillHeaderData: fillHeaderData,
     fillOrderData: fillOrderData,
-    formatRequestData: base.formatRequestData,
     getApplicablePaymentCards: getApplicablePaymentCards,
     getOrderPaymentInstrument: base.getOrderPaymentInstrument,
     updatePaymentStatus: base.updatePaymentStatus,

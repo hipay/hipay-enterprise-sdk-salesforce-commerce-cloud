@@ -4,12 +4,14 @@ var page = module.superModule;
 var server = require('server');
 var Site = require('dw/system/Site');
 
-var COHelpers = require('*/cartridge/scripts/checkout/checkoutHelpers');
+
 var BasketMgr = require('dw/order/BasketMgr');
 var Transaction = require('dw/system/Transaction');
 
-var Constants = require('*/cartridge/scripts/util/hipayConstants');
+var COHelpers = require('*/cartridge/scripts/checkout/checkoutHelpers');
+var HiPayLogger = require('*/cartridge/scripts/lib/hipay/hipayLogger');
 var HipayCustomObject = require('*/cartridge/scripts/lib/hipay/hipayCustomObject');
+var Constants = require('*/cartridge/scripts/util/hipayConstants');
 
 server.extend(page);
 
@@ -60,8 +62,6 @@ server.append(
         }
 
         this.on('route:BeforeComplete', function (req, res) { // eslint-disable-line no-shadow
-            var BasketMgr = require('dw/order/BasketMgr');
-            var Transaction = require('dw/system/Transaction');
             var currentBasket = BasketMgr.getCurrentBasket();
 
             var billingData = res.getViewData();
@@ -86,10 +86,8 @@ server.append(
 
 
 server.replace('PlaceOrder', server.middleware.https, function (req, res, next) {
-    var BasketMgr = require('dw/order/BasketMgr');
     var OrderMgr = require('dw/order/OrderMgr');
     var Resource = require('dw/web/Resource');
-    var Transaction = require('dw/system/Transaction');
     var URLUtils = require('dw/web/URLUtils');
     var basketCalculationHelpers = require('*/cartridge/scripts/helpers/basketCalculationHelpers');
     var hooksHelper = require('*/cartridge/scripts/helpers/hooks');
@@ -238,6 +236,8 @@ server.replace('PlaceOrder', server.middleware.https, function (req, res, next) 
     }
 
     // Handles payment authorization
+    var log = new HiPayLogger('debug');
+    log.debug('Hipay Checkout-PlaceOrder');
     var handlePaymentResult = COHelpers.handlePayments(order, order.orderNo, !empty(req.querystring.uuid) ? req.querystring.uuid : null);
 
     if (handlePaymentResult.error) {
@@ -297,7 +297,7 @@ server.replace('PlaceOrder', server.middleware.https, function (req, res, next) 
     var paymentInstr = HiPayHelper.getOrderPaymentInstrument(order);
 
     COHelpers.sendConfirmationEmail(order, req.locale.id);
-    //var parseHipayTokenize = JSON.parse(req.session.forms.billing.hipaytokenize.value);
+
     Transaction.wrap(function () {
         order.custom.hipayTransactionID = paymentInstr.getPaymentTransaction().getTransactionID();
     });

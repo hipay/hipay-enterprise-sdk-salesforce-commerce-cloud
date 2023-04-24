@@ -54,7 +54,7 @@ function getCustomerPaymentInstruments(userPaymentInstruments) {
 function account(currentCustomer, addressModel, orderModel) {
     base.call(this, currentCustomer, addressModel, orderModel);
 
-    this.customerPaymentInstruments = currentCustomer.hasOwnProperty('wallet') && currentCustomer.wallet
+    this.customerPaymentInstruments = Object.hasOwnProperty.call(currentCustomer, 'wallet') && currentCustomer.wallet
         && currentCustomer.wallet.paymentInstruments
         ? getCustomerPaymentInstruments(currentCustomer.wallet.paymentInstruments)
         : null;

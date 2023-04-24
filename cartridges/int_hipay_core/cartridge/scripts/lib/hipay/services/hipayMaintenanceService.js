@@ -17,7 +17,7 @@ function initiateCapture(transactionReference, operation, amount) {
     var response = service.call(params);
 
     return response;
-};
+}
 
 module.exports = {
     OPERATION_CAPTURE: 'capture',

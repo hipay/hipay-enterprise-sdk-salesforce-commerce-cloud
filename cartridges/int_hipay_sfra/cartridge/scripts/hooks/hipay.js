@@ -1,14 +1,11 @@
 'use strict';
 
 var OrderMgr = require('dw/order/OrderMgr');
-var Resource = require('dw/web/Resource');
-var PaymentStatusCodes = require('dw/order/PaymentStatusCodes');
 var Transaction = require('dw/system/Transaction');
 var PaymentMgr = require('dw/order/PaymentMgr');
 
 /* Script Modules */
 var hiPayCheckoutModule = require('*/cartridge/scripts/lib/hipay/modules/hipayCheckoutModule');
-var collections = require('*/cartridge/scripts/util/collections');
 var sitePrefs = require('dw/system/Site').getCurrent().getPreferences().getCustom();
 
 /**
@@ -22,24 +19,12 @@ var sitePrefs = require('dw/system/Site').getCurrent().getPreferences().getCusto
 function creditCardHandle(paymentInstrument, paymentInformation, paymentUUID, req) {
     var creditCard = paymentInformation;
     var hipayEnableOneClick = sitePrefs.hipayEnableOneClick;
-    var hiPayMultiUseToken = false;
+    var hiPayMultiUseToken;
     var hiPayToken = null;
-    var cardErrors = {};
-    var serverErrors = [];
-    var creditCardHolder;
-    var creditCardStatus;
-    var cardNumber;
-    var cardSecurityCode;
-    var cardType;
-    var expirationMonth;
-    var expirationYear;
-    var paymentCard;
-    var hiPayCardBrand;
     var hiPayCardNumber;
     var hiPayCardExpiryMonth;
     var hiPayCardExpiryYear;
     var hiPayCardHolder;
-    var hiPayCardCVC;
     var hiPayCardType;
 
     paymentUUID = req.form && req.form.storedPaymentUUID ? req.form.storedPaymentUUID : null;
@@ -76,16 +61,14 @@ function creditCardHandle(paymentInstrument, paymentInformation, paymentUUID, re
         hiPayMultiUseToken = session.forms.billing.creditCardFields.saveCard.value;
         hiPayToken = selectedCreditCard.creditCardToken;
         hiPayCardType = selectedCreditCard.creditCardType;
-    } else {
-        if (!empty(creditCard)) {
-            hiPayCardNumber = creditCard.pan;
-            hiPayCardExpiryMonth = Number(creditCard.card_expiry_month);
-            hiPayCardExpiryYear = Number(creditCard.card_expiry_year);
-            hiPayCardHolder = creditCard.card_holder;
-            hiPayMultiUseToken = session.forms.billing.creditCardFields.saveCard.value;
-            hiPayToken = creditCard.token;
-            hiPayCardType = creditCard.payment_product;
-        }
+    } else if (!empty(creditCard)) {
+        hiPayCardNumber = creditCard.pan;
+        hiPayCardExpiryMonth = Number(creditCard.card_expiry_month);
+        hiPayCardExpiryYear = Number(creditCard.card_expiry_year);
+        hiPayCardHolder = creditCard.card_holder;
+        hiPayMultiUseToken = session.forms.billing.creditCardFields.saveCard.value;
+        hiPayToken = creditCard.token;
+        hiPayCardType = creditCard.payment_product;
     }
 
     if (hiPayToken) {

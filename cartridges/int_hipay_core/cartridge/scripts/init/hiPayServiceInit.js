@@ -188,8 +188,6 @@ function transaction() {
             svc.addHeader('Cache-Control', 'no-cache');
             svc.addHeader('Accept', 'application/json');
 
-            var serviceConfig = svc.getConfiguration();
-
             var credString = getCredentialsPrivate();
             var base64Credentials = Encoding.toBase64(new Bytes(credString));
             svc.addHeader('Authorization', 'Basic ' + base64Credentials);

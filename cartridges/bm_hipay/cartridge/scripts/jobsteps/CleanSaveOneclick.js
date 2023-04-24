@@ -26,26 +26,25 @@ function cleanSaveOneclick(options, jobStepExecution) {
         listAttempts = CustomObjectMgr.queryCustomObjects(Constants.OBJ_SAVE_ONE_CLICK, 'custom.attemptDate < {0}', 'custom.attemptDate desc', lastDay);
 
         if (listAttempts && listAttempts.getCount() > 0) {
-            Logger.info('\n[The number of attempts that are more than 24 hours old : {0} ]', listAttempts.getCount());
+            Logger.info('[The number of attempts that are more than 24 hours old : {0} ]', listAttempts.getCount());
             while (listAttempts.hasNext()) {
                 var currentAttemptObj = listAttempts.next();
                 if (currentAttemptObj) {
-                    //CustomObjectMgr.remove(currentAttemptObj);
-                    logger.info('DEBUG - REMOVE');
+                    CustomObjectMgr.remove(currentAttemptObj);
                     deletedNumber++;
                 }
             }
 
             if (deletedNumber > 0) {
-                Logger.info('\n[The number of attempts that have been deleted : {0} ]', deletedNumber);
+                Logger.info('[The number of attempts that have been deleted : {0} ]', deletedNumber);
             }
 
             failedNumber = listAttempts.getCount() - deletedNumber;
             if (failedNumber > 0) {
-                Logger.warn('\n### The number of attempts that have failed to remove : {0} ###', failedNumber);
+                Logger.warn('### The number of attempts that have failed to remove : {0} ###', failedNumber);
             }
         } else {
-            Logger.info('\n###### NO attempts found that have more than 24 hours ######');
+            Logger.info('###### NO attempts found that have more than 24 hours ######');
         }
     } catch (e) {
         Logger.error('[stepCleanSaveOneclick.js] crashed on line: ' + e.lineNumber + ' with error: ' + e);

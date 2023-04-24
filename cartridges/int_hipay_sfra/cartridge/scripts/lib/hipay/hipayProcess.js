@@ -52,5 +52,5 @@ function failOrder(args) {
 module.exports = {
     failOrder: failOrder,
     proceedWithOrder: proceedWithOrder,
-    verifyHash: verifyHash,
-}
+    verifyHash: verifyHash
+};

@@ -453,13 +453,13 @@ server.post(
                 delete formInfo.confirmEmail;
 
                 if (customerLogin) {
-                	var emailType = emailHelpers.emailTypes.accountEdited;
-                	if (profile.getFirstName() + profile.getLastName() != formInfo.firstName + formInfo.lastName) {
-                		emailType = emailHelpers.emailTypes.accountNameChanged;
-                	}
-                	if (profile.getEmail() != formInfo.email) {
-                		emailType = emailHelpers.emailTypes.accountEmailChanged;
-                	}
+                    var emailType = emailHelpers.emailTypes.accountEdited;
+                    if (profile.getFirstName() + profile.getLastName() !== formInfo.firstName + formInfo.lastName) {
+                        emailType = emailHelpers.emailTypes.accountNameChanged;
+                    }
+                    if (profile.getEmail() !== formInfo.email) {
+                        emailType = emailHelpers.emailTypes.accountEmailChanged;
+                    }
 
                     Transaction.wrap(function () {
                         profile.setFirstName(formInfo.firstName);

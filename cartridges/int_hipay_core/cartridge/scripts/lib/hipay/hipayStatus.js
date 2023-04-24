@@ -31,9 +31,9 @@ var HiPayStatus = {
     CANCEL: {
         code: 'cancel',
         paymentStatus: [115],
-        value: 'CANCEL',
+        value: 'CANCEL'
     },
-    'REJECTED': {
+    REJECTED: {
         code: 'rejected',
         paymentStatus: ['113', '114', '115', '173'],
         value: 'REJECTED'

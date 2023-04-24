@@ -50,7 +50,7 @@ function compareNames(firstname1, lastname1, firstname2, lastname2) {
  * @param string str: orderId with time
  * @returns only orderId
  */
-function removeFromOrderId(str) {
+function extractOrderId(str) {
     var orderidTab = str.split('_');
     orderidTab.pop();
 
@@ -62,5 +62,5 @@ module.exports = {
     normalizeString: normalizeString,
     compareStrings: compareStrings,
     compareNames: compareNames,
-    removeFromOrderId: removeFromOrderId
+    extractOrderId: extractOrderId
 };

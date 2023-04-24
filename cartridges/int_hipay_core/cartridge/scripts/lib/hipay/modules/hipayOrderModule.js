@@ -24,7 +24,7 @@ function hiPayProcessOrderCall() {
     log.info('HiPay Order Call :: ' + params);
 
     if (params.isParameterSubmitted('orderid')) {
-        orderid = hipayUtils.removeFromOrderId(params.orderid.stringValue);
+        orderid = hipayUtils.extractOrderId(params.orderid.stringValue);
 
         if (empty(orderid)) {
             log.error('The call from HiPay does not have a valid OrderNo!');
@@ -66,7 +66,7 @@ function hiPayProcessOrderCall() {
             }
             pp = params.pp.stringValue; // set transaction type = ideal,visa
             paymentInstr.custom.hipayTransactionType = pp;
-            HiPayHelper.updatePaymentStatus(order, paymentInstr, params); // update the payment status
+            HiPayHelper.updatePaymentStatus(order, paymentInstr, params.status.stringValue, params.captured_amount.doubleValue);
             paymentInstr.custom.hipayTransactionState = state; // payment state
 
             if (state === 'declined') {

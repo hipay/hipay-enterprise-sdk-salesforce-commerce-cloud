@@ -1,19 +1,14 @@
 var base = module.superModule;
 
-var ArrayList = require('dw/util/ArrayList');
-var Order = require('dw/order/Order');
-var HttpParameterMap = require('dw/web/HttpParameterMap');
 var CustomObjectMgr = require('dw/object/CustomObjectMgr');
 var OrderMgr = require('dw/order/OrderMgr');
 var Calendar = require('dw/util/Calendar');
 var StringUtils = require('dw/util/StringUtils');
 var Decimal = require('dw/util/Decimal');
 var TaxMgr = require('dw/order/TaxMgr');
-var Logger = require('dw/system/Logger');
 var Transaction = require('dw/system/Transaction');
 var Resource = require('dw/web/Resource');
 
-var statuses = require('*/cartridge/scripts/lib/hipay/hipayStatus').HiPayStatus;
 var hipayUtils = require('*/cartridge/scripts/lib/hipay/hipayUtils');
 
 // Import Constants
@@ -23,7 +18,6 @@ function fillHeaderData(HiPayConfig, order, params) {
     var threshold = HiPayConfig.hipayEnable3dSecureThresholdRule;
     var enforceThresholdRule = false;
     var language = request.locale;
-    var hipayForm = session.forms.billing.hipayMethodsFields;
 
     if (threshold !== 0) {
         var totalAmount;
@@ -66,7 +60,7 @@ function fillHeaderData(HiPayConfig, order, params) {
     params.exception_url = HiPayConfig.errorURL;  // eslint-disable-line
     params.cancel_url = HiPayConfig.cancelURL;  // eslint-disable-line
     params.notify_url = HiPayConfig.notifyURL;  // eslint-disable-line
-};
+}
 
 /* Fills HiPay request data based on DW Order information */
 function fillOrderData(order, params, pi) {
@@ -672,7 +666,7 @@ function fillOrderData(order, params, pi) {
                 ) ? 1 : 2;
         }
     }
-};
+}
 
 function getHostedFieldsPreferences() {
     var Site = require('dw/system/Site');
@@ -681,7 +675,7 @@ function getHostedFieldsPreferences() {
 
     var hipayHostedFields = {
         hipayEnabled: currentSite.getCustomPreferenceValue('hipayEnabled'),
-        hipayOperationMode : currentSite.getCustomPreferenceValue('hipayOperationMode').value,
+        hipayOperationMode: currentSite.getCustomPreferenceValue('hipayOperationMode').value,
         cardConfig: {
             config: {
                 template: 'auto',
@@ -723,19 +717,16 @@ function getHostedFieldsPreferences() {
         globalVariable: {
             username: HiPayConfig['hipayPublic' + HiPayConfig.hipayEnvironment + 'Username'],
             password: HiPayConfig['hipayPublic' + HiPayConfig.hipayEnvironment + 'Password'],
-            environment: HiPayConfig.hipayEnvironment === 'Live' ? 'production' : 'stage',
-        },
-
+            environment: HiPayConfig.hipayEnvironment === 'Live' ? 'production' : 'stage'
+        }
     };
 
     return hipayHostedFields;
-};
+}
 
 module.exports = {
-    addOrderNote: base.addOrderNote,
     fillHeaderData: fillHeaderData,
     fillOrderData: fillOrderData,
-    formatRequestData: base.formatRequestData,
     getHostedFieldsPreferences: getHostedFieldsPreferences,
     getOrderPaymentInstrument: base.getOrderPaymentInstrument,
     updatePaymentStatus: base.updatePaymentStatus,

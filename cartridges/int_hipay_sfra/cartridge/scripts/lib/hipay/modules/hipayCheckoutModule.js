@@ -58,10 +58,6 @@ HiPayCheckoutModule.createPaymentInstrument = function (basket, paymentType, rem
 HiPayCheckoutModule.hiPayUpdatePaymentInstrument = function (paymentInstrument, paymentInformation, req, hipayTokenize) {
     var paymentMethod = null;// the payment method
     var pi = paymentInstrument;
-    var ccType; // credit card type
-    var card; // payment card
-    var selectedCreditCard
-    var sitePrefs = require('dw/system/Site').getCurrent().getPreferences().getCustom();
 
     if (!pi.paymentMethod.equals('HIPAY_CREDIT_CARD')) {
         paymentMethod = PaymentMgr.getPaymentMethod(pi.paymentMethod);
@@ -74,7 +70,7 @@ HiPayCheckoutModule.hiPayUpdatePaymentInstrument = function (paymentInstrument, 
 
         if (pi.paymentMethod.equals('HIPAY_IDEAL')) {
             if (!hipayTokenize) {
-                return false
+                return false;
             }
 
             Transaction.wrap(function () {
@@ -82,7 +78,7 @@ HiPayCheckoutModule.hiPayUpdatePaymentInstrument = function (paymentInstrument, 
             });
         } else if (pi.paymentMethod.equals('HIPAY_GIROPAY')) {
             if (!hipayTokenize) {
-                return false
+                return false;
             }
 
             Transaction.wrap(function () {
@@ -90,7 +86,7 @@ HiPayCheckoutModule.hiPayUpdatePaymentInstrument = function (paymentInstrument, 
             });
         } else if (pi.paymentMethod.equals('HIPAY_MBWAY')) {
             if (!hipayTokenize) {
-                return false
+                return false;
             }
 
             Transaction.wrap(function () {
@@ -293,14 +289,8 @@ HiPayCheckoutModule.hiPayOrderRequest = function (paymentInstrument, order, devi
 
             Transaction.wrap(function () {
                 paymentTransaction.setTransactionID(responseMsg.transactionReference); // set the reference from hipay
-            });
-            Transaction.wrap(function () {
                 pi.custom.hipayTransactionType = responseMsg.paymentProduct; // set transaction type = ideal,visa;
-            });
-            Transaction.wrap(function () {
-                // HiPayHelper.updatePaymentStatus(order, pi, responseMsg); // update the payment status
-            });
-            Transaction.wrap(function () {
+                HiPayHelper.updatePaymentStatus(order, pi, responseMsg.status, responseMsg.capturedAmount);
                 pi.custom.hipayTransactionState = paymentState;
             });
 
@@ -380,7 +370,6 @@ HiPayCheckoutModule.hiPayOrderRequest = function (paymentInstrument, order, devi
 HiPayCheckoutModule.hiPayHostedPageRequest = function (order, paymentInstrument) {
     return Transaction.wrap(function () {
         var Site = require('dw/system/Site');
-        var URLUtils = require('dw/web/URLUtils');
         var HiPayHostedService = require('*/cartridge/scripts/lib/hipay/services/hipayHostedService');
         var HiPayDataService = require('*/cartridge/scripts/lib/hipay/services/hipayDataService');
         var Calendar = require('dw/util/Calendar');
@@ -435,7 +424,6 @@ HiPayCheckoutModule.hiPayHostedPageRequest = function (order, paymentInstrument)
                         Logger.info('Hipay Api Data status message ::: {0}', hipayDataResponse.object.statusMessage);
                     }
                 } catch (error) {
-                    var test = error;
                     log.error(error);
                 }
             }

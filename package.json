@@ -1,7 +1,7 @@
 {
   "name": "int_hipay_sfra",
   "version": "23.1.0",
-  "description": "New overlay cartridge",
+  "description": "Hipay cartridge",
   "main": "index.js",
   "engines": {
     "node": "16.x"

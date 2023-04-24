@@ -46,6 +46,29 @@
             }
           ]
         }
+      },
+      {
+        "@supports-organization-context": "false",
+        "@supports-site-context": "true",
+        "@type-id": "custom.Hipay.ProcessNotifications",
+        "description": "Step-job to process Hipay notifications",
+        "module": "bm_hipay/cartridge/scripts/jobsteps/ProcessNotifications.js",
+        "function": "execute",
+        "parameters": {
+
+        },
+        "status-codes": {
+          "status": [
+            {
+              "@code": "ERROR",
+              "description": "Used when an error occurred."
+            },
+            {
+              "@code": "OK",
+              "description": "Used when everything went well."
+            }
+          ]
+        }
       }
     ]
   }
