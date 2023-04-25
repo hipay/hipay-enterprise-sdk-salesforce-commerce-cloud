@@ -523,7 +523,7 @@
     <type-extension type-id="Profile">
 		<custom-attribute-definitions>
             <attribute-definition attribute-id="datePasswordLastChange">
-                <display-name xml:lang="x-default">date password last change</display-name>
+                <display-name xml:lang="x-default">Last password change date</display-name>
                 <type>string</type>
                 <mandatory-flag>false</mandatory-flag>
                 <externally-managed-flag>false</externally-managed-flag>
