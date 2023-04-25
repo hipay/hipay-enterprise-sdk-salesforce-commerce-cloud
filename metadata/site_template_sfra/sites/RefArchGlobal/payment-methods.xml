@@ -282,6 +282,17 @@
         </custom-attributes>
     </payment-method>
 
+    <payment-method method-id="HIPAY_PAYPAL">
+        <name xml:lang="x-default">PayPal</name>
+        <description xml:lang="x-default">HiPay PayPal</description>
+        <enabled-flag>true</enabled-flag>
+        <processor-id>HIPAY</processor-id>
+        <custom-attributes>
+            <custom-attribute attribute-id="hipayPaymentProductList">paypal</custom-attribute>
+            <custom-attribute attribute-id="hipayProductName">paypal</custom-attribute>
+        </custom-attributes>
+    </payment-method>
+
     <payment-method method-id="HIPAY_PRZELEWY24">
         <name xml:lang="x-default">Przelewy24</name>
         <description xml:lang="x-default">HiPay Przelewy24 Payment Method</description>
