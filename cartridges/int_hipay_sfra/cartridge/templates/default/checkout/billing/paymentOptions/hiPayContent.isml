@@ -25,18 +25,8 @@
                         <div id="hipay-hostedfields-form-mbway"></div>
                         <div id="hipay-error-message"></div>
 
-                    <iscomment>Przelewy24</iscomment>
-                    <iselseif condition="${paymentOption.ID == 'HIPAY_PRZELEWY24'}">
-
-                    <iscomment>Mooney</iscomment>
-                    <iselseif condition="${paymentOption.ID == 'HIPAY_MOONEY'}">
-
-                    <iscomment>Hosted Pages</iscomment>
-                    <iselseif condition="${paymentOption.ID.indexOf('HIPAY_HOSTED') > -1}">
-                        ${Resource.msg('hipay.redirect.message', 'hipay', null)}
-
                     <iscomment>Methods that perform redirection</iscomment>
-                    <iselseif condition="${['HIPAY_MYBANK', 'HIPAY_BANCONTACT'].indexOf(paymentOption.ID) > -1}">
+                    <iselse>
                         ${Resource.msg('hipay.redirect.message', 'hipay', null)}
 
                     </isif>
