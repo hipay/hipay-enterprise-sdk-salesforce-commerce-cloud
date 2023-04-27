@@ -121,8 +121,6 @@ if (intanceApplePayButton) {
                         url: $('.place-order').data('action'),
                         method: 'POST',
                         success: function (data) {
-                            console.log('PLACE-ORDER');
-                            console.log(data);
                             // enable the placeOrder button here
                             $('body').trigger('checkout:enableButton', '.next-step-button button');
                             if (data.error) {
@@ -182,3 +180,9 @@ if (intanceApplePayButton) {
         }
     });
 }
+
+// Remove next-step-button if HIPAY_APPLEPAY method id.
+$('.nav-item').on('click', function() {
+    $( this ).data('method-id') === 'HIPAY_APPLEPAY' ?
+        $('.next-step-button').addClass('d-none') : $('.next-step-button').removeClass('d-none');
+});
