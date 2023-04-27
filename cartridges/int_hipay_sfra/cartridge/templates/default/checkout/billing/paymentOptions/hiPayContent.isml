@@ -6,7 +6,7 @@
         <div class="tab-pane ${paymentOption.ID}-content" id="${paymentOption.ID}-content" role="tabpanel">
             <fieldset class="payment-form-fields">
 
-                <input type="hidden" class="form-control paymentMethod" name="${pdict.forms.billingForm.paymentMethod.htmlName}" value="${paymentOption.ID}" />
+                <input type="hidden" class="form-control paymentMethod" name="${pdict.forms.billingForm.paymentMethod.htmlName}" value="${paymentOption.ID}" data-currency-code="${pdict.order.currencyCode}"/>
 
                 <isif condition="${!empty(paymentOption.ID)}">
                     <iscomment>Giropay</iscomment>
@@ -24,12 +24,14 @@
                         <div id="hipay-hostedfields-form-mbway"></div>
                         <div id="hipay-error-message"></div>
                     <iscomment>Methods that perform redirection</iscomment>
-                    <iselse>
-                        ${Resource.msg('hipay.redirect.message', 'hipay', null)}
 
                     <iselseif condition="${paymentOption.ID == 'HIPAY_APPLEPAY'}"/>
                         <div id="apple-pay-button"></div>
                         <div id="hipay-apple-error-message"></div>
+
+                    <iselse/>
+
+                        ${Resource.msg('hipay.redirect.message', 'hipay', null)}
                     </isif>
                 </isif>
 

@@ -8,33 +8,33 @@ var scrollAnimate = require('base/components/scrollAnimate');
 
 // Configuration
 const total = {
-    label: 'Total',
+    label: window.hipayCustomPreferences.applePayConfig.total.label,
     amount: $('.grand-total .grand-total-sum').text().replace(/[^0-9.,]/g, '').replace(',', '.')
-  };
+};
 
-  const request = {
-    countryCode: 'FR',
-    currencyCode: 'EUR',
+const request = {
+    countryCode: window.hipayCustomPreferences.applePayConfig.request.countryCode,
+    currencyCode: $('.form-control.paymentMethod').data('currency-code'),
     total: total,
-    supportedNetworks: ['visa', 'masterCard']
-  };
+    supportedNetworks: window.hipayCustomPreferences.applePayConfig.request.supportedNetworks
+};
 
-  const applePayStyle = {
-    type: 'plain',
-    color: 'black'
-  };
+const applePayStyle = {
+    type: window.hipayCustomPreferences.applePayConfig.style.type,
+    color: window.hipayCustomPreferences.applePayConfig.style.color
+};
 
-  const options = {
-    displayName: 'OGONE CLEVERAGE',
+const options = {
+    displayName: window.hipayCustomPreferences.applePayConfig.options.displayName,
     request: request,
     applePayStyle: applePayStyle,
     selector: 'apple-pay-button'
-  };
+};
 
-  var intanceApplePayButton = hipay.create(
+var intanceApplePayButton = hipay.create(
     'paymentRequestButton',
     options
-  );
+);
 
 if (intanceApplePayButton) {
     var defer = $.Deferred();

@@ -718,6 +718,22 @@ function getHostedFieldsPreferences() {
             username: HiPayConfig['hipayPublic' + HiPayConfig.hipayEnvironment + 'Username'],
             password: HiPayConfig['hipayPublic' + HiPayConfig.hipayEnvironment + 'Password'],
             environment: HiPayConfig.hipayEnvironment === 'Live' ? 'production' : 'stage'
+        },
+        applePayConfig: {
+            total: {
+                label: currentSite.getCustomPreferenceValue('HipayAppleLabel')
+            },
+            request: {
+                countryCode: currentSite.getCustomPreferenceValue('hipayAppleCountryCode'),
+                supportedNetworks: currentSite.getCustomPreferenceValue('HipayAppleSupportedNetworks')
+            },
+            style: {
+                type: currentSite.getCustomPreferenceValue('HipayAppleTypeStyle'),
+                color: currentSite.getCustomPreferenceValue('HipayAppleColorStyle')
+            },
+            options: {
+                displayName: currentSite.getCustomPreferenceValue('HipayAppleDisplayName')
+            }
         }
     };
 
