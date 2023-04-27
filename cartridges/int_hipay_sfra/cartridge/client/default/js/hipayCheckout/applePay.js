@@ -174,4 +174,11 @@ if (intanceApplePayButton) {
             }
         });
     });
+} else {
+    // Removed Apple Pay nav-item if intanceApplePayButton don't exists.
+    $('.nav-item').each(function() {
+        if ($( this ).data('method-id') === 'HIPAY_APPLEPAY') {
+            $( this ).addClass('d-none');
+        }
+    });
 }
