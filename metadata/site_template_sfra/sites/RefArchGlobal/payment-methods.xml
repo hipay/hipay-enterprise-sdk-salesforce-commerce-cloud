@@ -53,6 +53,17 @@
         </custom-attributes>
     </payment-method>
 
+    <payment-method method-id="HIPAY_APPLEPAY">
+        <name xml:lang="x-default">Apple Pay</name>
+        <description xml:lang="x-default">Apple pay</description>
+        <enabled-flag>true</enabled-flag>
+        <processor-id>HIPAY</processor-id>
+        <custom-attributes>
+            <custom-attribute attribute-id="hipayOnlyCompleteCapture">false</custom-attribute>
+            <custom-attribute attribute-id="hipayProductName">applepay</custom-attribute>
+        </custom-attributes>
+    </payment-method>
+
     <payment-method method-id="HIPAY_HOSTED_MBWAY">
         <name xml:lang="x-default">Hosted Mbway</name>
         <description xml:lang="x-default">HiPay Mbway Payment Method</description>
