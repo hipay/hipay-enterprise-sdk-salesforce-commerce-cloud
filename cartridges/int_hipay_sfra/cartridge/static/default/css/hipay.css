@@ -114,3 +114,7 @@ i.payment-product-sprite-bancontact {
 .data-checkout-stage[data-checkout-stage=placeOrder]  .submit-payment-hipay {
     display: none;
 }
+
+#apple-pay-button {
+    height: 36px;
+}

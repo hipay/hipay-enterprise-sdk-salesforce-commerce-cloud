@@ -29,7 +29,11 @@
 
         <li class="nav-item" data-method-id="${paymentOption.ID}">
             <a class="nav-link <isif condition="${paymentOption.ID === 'HIPAY_CREDIT_CARD'}">active</isif>" data-toggle="tab" href="${'#'+paymentOption.ID+'-content'}" role="tab">
-                <i class="payment-product-sprite-${hipayProductName}"></i>
+                <isif condition="${paymentOption.ID === 'HIPAY_APPLEPAY'}">
+                    <img src="${URLUtils.staticURL('/images/payment-products/apple-pay-2.svg')}" alt="">
+                <iselse/>
+                    <i class="payment-product-sprite-${hipayProductName}"></i>
+                </isif>
             </a>
         </li>
     </isif>
