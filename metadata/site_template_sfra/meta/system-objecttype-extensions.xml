@@ -502,6 +502,63 @@ Username for the environment test</description>
                 <externally-managed-flag>false</externally-managed-flag>
                 <min-length>0</min-length>
             </attribute-definition>
+            <attribute-definition attribute-id="hipayAppleCountryCode">
+                <display-name xml:lang="x-default">Country Code</display-name>
+                <description xml:lang="x-default">The merchant’s two-letter ISO 3166 country code.</description>
+                <type>string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <min-length>0</min-length>
+                <default-value>FR</default-value>
+            </attribute-definition>
+            <attribute-definition attribute-id="hipayAppleMerchantID">
+                <display-name xml:lang="x-default">Hipay Merchant ID</display-name>
+                <description xml:lang="x-default">Domain Validation</description>
+                <type>text</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+            </attribute-definition>
+            <attribute-definition attribute-id="HipayAppleColorStyle">
+                <display-name xml:lang="x-default">Color Style</display-name>
+                <description xml:lang="x-default">A type that indicates the available appearances for an Apple Pay Button (black, white, white-outline)</description>
+                <type>string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <min-length>0</min-length>
+                <default-value>black</default-value>
+            </attribute-definition>
+            <attribute-definition attribute-id="HipayAppleDisplayName">
+                <display-name xml:lang="x-default">Display Name</display-name>
+                <description xml:lang="x-default">A string of 64 or fewer UTF-8 characters containing the canonical name for your store, suitable for display</description>
+                <type>string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <min-length>0</min-length>
+            </attribute-definition>
+            <attribute-definition attribute-id="HipayAppleLabel">
+                <display-name xml:lang="x-default">Label</display-name>
+                <description xml:lang="x-default">Provide a business name (must be non-empty)</description>
+                <type>string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <min-length>0</min-length>
+            </attribute-definition>
+            <attribute-definition attribute-id="HipayAppleSupportedNetworks">
+                <display-name xml:lang="x-default">Supported Networks</display-name>
+                <description xml:lang="x-default">This property must be set to one more of the payment network values : visa, masterCard</description>
+                <type>set-of-string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+            </attribute-definition>
+            <attribute-definition attribute-id="HipayAppleTypeStyle">
+                <display-name xml:lang="x-default">Type Style</display-name>
+                <description xml:lang="x-default">The kind of Apple Pay button, such as a button for purchasing a subscription. (buy, donate, subscribe, tip and more)</description>
+                <type>string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <min-length>0</min-length>
+                <default-value>plain</default-value>
+            </attribute-definition>
         </custom-attribute-definitions>
         <group-definitions>
             <attribute-group group-id="HiPay">
@@ -528,6 +585,16 @@ Username for the environment test</description>
                 <attribute attribute-id="hipayHungOrderTimeout"/>
                 <attribute attribute-id="hipaySiteShippingMethodsList"/>
                 <attribute attribute-id="hipaySFRAVersion"/>
+            </attribute-group>
+            <attribute-group group-id="Hipay Apple Pay">
+                <display-name xml:lang="x-default">Hipay Apple Pay</display-name>
+                <attribute attribute-id="hipayAppleMerchantID"/>
+                <attribute attribute-id="HipayAppleLabel"/>
+                <attribute attribute-id="hipayAppleCountryCode"/>
+                <attribute attribute-id="HipayAppleSupportedNetworks"/>
+                <attribute attribute-id="HipayAppleTypeStyle"/>
+                <attribute attribute-id="HipayAppleColorStyle"/>
+                <attribute attribute-id="HipayAppleDisplayName"/>
             </attribute-group>
         </group-definitions>
     </type-extension>
