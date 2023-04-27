@@ -68,7 +68,8 @@ function creditCardHandle(paymentInstrument, paymentInformation, paymentUUID, re
         hiPayCardHolder = creditCard.card_holder;
         hiPayMultiUseToken = session.forms.billing.creditCardFields.saveCard.value;
         hiPayToken = creditCard.token;
-        hiPayCardType = creditCard.payment_product;
+        hiPayCardType = paymentInstrument.paymentMethod === 'HIPAY_APPLEPAY' ?
+            creditCard.brand.toLowerCase() : creditCard.payment_product;
     }
 
     if (hiPayToken) {
@@ -111,7 +112,7 @@ function Handle(currentBasket, paymentInformation, paymentUUID, req) {
             return { error: true };
         }
 
-        if (paymentMethod === 'HIPAY_CREDIT_CARD') {
+        if (paymentMethod === 'HIPAY_CREDIT_CARD' || paymentMethod === 'HIPAY_APPLEPAY') {
             var handleResponse = creditCardHandle(paymentInstrument, hipayTokenize, paymentUUID, req);
 
             if (handleResponse.success) {

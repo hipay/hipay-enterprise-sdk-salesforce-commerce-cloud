@@ -3,6 +3,7 @@
 var ArrayList = require('dw/util/ArrayList');
 var CustomObjectMgr = require('dw/object/CustomObjectMgr');
 var Logger = require('dw/system/Logger');
+var Order = require('dw/order/Order');
 
 /* Validates if the Oney payment instrument must be rendered for the selected shipping method
  * Oney payment method should not be displayed if mapped shipping method is not chosen.

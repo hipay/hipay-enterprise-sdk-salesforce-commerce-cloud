@@ -239,7 +239,7 @@ HiPayCheckoutModule.hiPayOrderRequest = function (paymentInstrument, order, devi
     try {
         params.operation = HiPayConfig.hipayPaymentAction;
 
-        if (pi.paymentMethod.equals('HIPAY_CREDIT_CARD')) {
+        if (pi.paymentMethod.equals('HIPAY_CREDIT_CARD') || pi.paymentMethod.equals('HIPAY_APPLEPAY')) {
             // credit card payment only
             params.cardtoken = pi.creditCardToken;
         }

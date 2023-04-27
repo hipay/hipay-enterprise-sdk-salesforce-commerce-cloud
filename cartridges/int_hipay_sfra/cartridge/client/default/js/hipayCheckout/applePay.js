@@ -41,6 +41,8 @@ if (intanceApplePayButton) {
     intanceApplePayButton.on('paymentAuthorized', function(hipayToken) {
         formHelpers.clearPreviousErrors('.payment-form');
 
+        $('input[name=dwfrm_billing_hipaytokenize]').val(JSON.stringify(hipayToken));
+
         var billingAddressForm = $('#dwfrm_billing .billing-address-block :input').serialize();
 
         $('body').trigger('checkout:serializeBilling', {
@@ -64,8 +66,6 @@ if (intanceApplePayButton) {
                 }
             }
         });
-
-        $('input[name=dwfrm_billing_hipaytokenize]').val(JSON.stringify(hipayToken));
 
         var activeTabId = $('.tab-pane.active').attr('id');
         var paymentInfoSelector = '#dwfrm_billing .' + activeTabId + ' .payment-form-fields :input';
@@ -174,15 +174,11 @@ if (intanceApplePayButton) {
     });
 } else {
     // Removed Apple Pay nav-item if intanceApplePayButton don't exists.
-    $('.nav-item').each(function() {
-        if ($( this ).data('method-id') === 'HIPAY_APPLEPAY') {
-            $( this ).addClass('d-none');
-        }
-    });
+    $("li[data-method-id='HIPAY_APPLEPAY']").toggleClass("d-none");
 }
 
 // Remove next-step-button if HIPAY_APPLEPAY method id.
+// Use ToggleClass
 $('.nav-item').on('click', function() {
-    $( this ).data('method-id') === 'HIPAY_APPLEPAY' ?
-        $('.next-step-button').addClass('d-none') : $('.next-step-button').removeClass('d-none');
+    $('.next-step-button').toggleClass('d-none',  $(this).data('method-id') === 'HIPAY_APPLEPAY');
 });
