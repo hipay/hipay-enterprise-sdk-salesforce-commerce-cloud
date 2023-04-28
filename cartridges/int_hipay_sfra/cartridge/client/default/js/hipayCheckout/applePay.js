@@ -195,7 +195,7 @@ if (intanceApplePayButton) {
     $("li[data-method-id='HIPAY_APPLEPAY']").toggleClass("d-none");
 }
 
-// Remove next-step-button if HIPAY_APPLEPAY method id.
+// Remove next-step-button if HIPAY_APPLEPAY is clicked.
 $('.nav-item').on('click', function() {
     $('.next-step-button').toggleClass('d-none',  $(this).data('method-id') === 'HIPAY_APPLEPAY');
 });

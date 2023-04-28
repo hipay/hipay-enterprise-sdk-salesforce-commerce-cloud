@@ -8,8 +8,8 @@
         <iscontinue/>
     </isif>
     <isif condition="${(paymentOption.ID.indexOf('HIPAY') > -1)}">
-        <iscomment>Skip HIPAY_ payment methods if is in HOSTED operation mode.</iscomment>
-        <isif condition="${isHiPayHostedMode && paymentOption.ID.indexOf('HIPAY_HOSTED') == -1}">
+        <iscomment>Skip HIPAY_ payment methods if is in HOSTED operation mode. Never skip APPLEPAY</iscomment>
+        <isif condition="${isHiPayHostedMode && paymentOption.ID.indexOf('HIPAY_HOSTED') == -1 && paymentOption.ID.indexOf('HIPAY_APPLEPAY') == -1}">
             <iscontinue/>
         </isif>
         <iscomment>Skip hosted page payment method if is in API operation mode.</iscomment>
