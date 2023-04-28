@@ -39,6 +39,8 @@ var intanceApplePayButton = hipay.create(
 if (intanceApplePayButton) {
     var defer = $.Deferred();
     intanceApplePayButton.on('paymentAuthorized', function(hipayToken) {
+        $('#hipay-apple-error-message').empty();
+
         formHelpers.clearPreviousErrors('.payment-form');
 
         $('input[name=dwfrm_billing_hipaytokenize]').val(JSON.stringify(hipayToken));
@@ -136,28 +138,44 @@ if (intanceApplePayButton) {
                             } else {
                                 intanceApplePayButton.completePaymentWithSuccess();
 
-                                var redirect = $('<form>')
+                                if (window.hipayCustomPreferences.isSFRA6) {
+                                    var redirect = $('<form>')
                                     .appendTo(document.body)
                                     .attr({
                                         method: 'POST',
                                         action: data.continueUrl
                                     });
 
-                                $('<input>')
-                                    .appendTo(redirect)
-                                    .attr({
-                                        name: 'orderID',
-                                        value: data.orderID
-                                    });
+                                    $('<input>')
+                                        .appendTo(redirect)
+                                        .attr({
+                                            name: 'orderID',
+                                            value: data.orderID
+                                        });
 
-                                $('<input>')
-                                    .appendTo(redirect)
-                                    .attr({
-                                        name: 'orderToken',
-                                        value: data.orderToken
-                                    });
+                                    $('<input>')
+                                        .appendTo(redirect)
+                                        .attr({
+                                            name: 'orderToken',
+                                            value: data.orderToken
+                                        });
 
-                                redirect.submit();
+                                    redirect.submit();
+                                } else {
+                                    var continueUrl = data.continueUrl;
+                                    var urlParams = {
+                                        ID: data.orderID,
+                                        token: data.orderToken
+                                    };
+
+                                    continueUrl += (continueUrl.indexOf('?') !== -1 ? '&' : '?') +
+                                        Object.keys(urlParams).map(function (key) {
+                                            return key + '=' + encodeURIComponent(urlParams[key]);
+                                        }).join('&');
+
+                                    window.location.href = continueUrl;
+                                }
+
                                 defer.resolve(data);
                             }
                         },
@@ -178,7 +196,6 @@ if (intanceApplePayButton) {
 }
 
 // Remove next-step-button if HIPAY_APPLEPAY method id.
-// Use ToggleClass
 $('.nav-item').on('click', function() {
     $('.next-step-button').toggleClass('d-none',  $(this).data('method-id') === 'HIPAY_APPLEPAY');
 });

@@ -118,3 +118,8 @@ i.payment-product-sprite-bancontact {
 #apple-pay-button {
     height: 36px;
 }
+
+#hipay-apple-error-message {
+    color: red;
+    padding-top: 1rem;
+}

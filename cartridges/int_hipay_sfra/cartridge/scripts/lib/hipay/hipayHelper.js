@@ -676,6 +676,7 @@ function getHostedFieldsPreferences() {
     var hipayHostedFields = {
         hipayEnabled: currentSite.getCustomPreferenceValue('hipayEnabled'),
         hipayOperationMode: currentSite.getCustomPreferenceValue('hipayOperationMode').value,
+        isSFRA6: currentSite.getCustomPreferenceValue('hipaySFRAVersion'),
         cardConfig: {
             config: {
                 template: 'auto',
