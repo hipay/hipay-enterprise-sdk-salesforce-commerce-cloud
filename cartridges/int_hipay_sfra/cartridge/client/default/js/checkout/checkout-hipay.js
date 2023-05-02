@@ -37,7 +37,12 @@ base.paymentTabs = function () {
         var methodID = $(this).data('method-id');
         $('.payment-information').data('payment-method-id', methodID);
         $('.paymentMethod').val(methodID);
-        $('.credit-card-selection-new .tab-content > div[role="tabpanel"]').removeClass('active');
+
+        // Don't removed active class if the user selected the same tab.
+        if (!$('.' + methodID + '-content').hasClass('active')) {
+            $('.credit-card-selection-new .tab-content > div[role="tabpanel"]').removeClass('active');
+        }
+
         if (methodID === 'HIPAY_CREDIT_CARD') {
             if (!$('.credit-card-content').hasClass('active')) {
                 $('.credit-card-content').addClass('active');
