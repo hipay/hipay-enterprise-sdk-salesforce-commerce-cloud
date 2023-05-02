@@ -49,6 +49,11 @@
 
         removeAllHostedfieldsForms();
 
+        // If payment type is card, set full name to credit card form.
+        if (type === 'card') {
+            setFullnameToCreditCardForm();
+        }
+
         $cache.instance = hipay.create(type, window.hipayCustomPreferences[type + 'Config'].config);
         $cache.instance.on('change', function(event){
             /* Display error(s), if any */
@@ -64,6 +69,9 @@
         // Check that we are at payment stage, and not using a saved payment instrument.
         if ($('#checkout-main').attr("data-checkout-stage") === $cache.stage.payment &&
             (!$('.user-payment-instruments').length || $('.user-payment-instruments').hasClass('checkout-hidden'))) {
+            // Credit card form initialization first.
+            createInstance('card');
+
             enableHipayCTA();
         } else {
             disableHipayCTA();
@@ -88,6 +96,21 @@
         return $('#checkout-main').attr('data-customer-type') !== 'guest'
             && $(this).data('method-id') === $cache.paymentMethod.hipayCreditCard
             && !$('.user-payment-instruments').hasClass('checkout-hidden');
+    }
+
+    /**
+     * Set full name to credit card form.
+     */
+    function setFullnameToCreditCardForm() {
+
+        var firstname = $('input[id="billingFirstName"]').val();
+        var lastname = $('input[id="billingLastName"]').val();
+        if (firstname && lastname) {
+            window.hipayCustomPreferences.cardConfig.config.fields.cardHolder.uppercase = true;
+            window.hipayCustomPreferences.cardConfig.config.fields.cardHolder.defaultFirstname = firstname;
+            window.hipayCustomPreferences.cardConfig.config.fields.cardHolder.defaultLastname = lastname;
+        }
+
     }
 
     function initialize() {
@@ -132,9 +155,6 @@
             attributes: true
         });
 
-        // Credit card form initialization first.
-        createInstance('card');
-
         toggleHipayCTA();
 
         // Displays form corresponding to the payment method.
@@ -156,12 +176,12 @@
 
         // enabled HipayCTA.
         $('button.add-payment').on('click', function() {
-            enableHipayCTA();
+            toggleHipayCTA();
         });
 
         // Disabled HipayCTA.
         $('button.cancel-new-payment').on('click', function() {
-            disableHipayCTA();
+            toggleHipayCTA();
         });
     };
 
