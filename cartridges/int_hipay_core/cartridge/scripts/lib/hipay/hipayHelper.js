@@ -140,8 +140,10 @@ function updatePaymentStatus(order, paymentInstr, paymentStatus, capturedAmount)
     // if status is 109 to 120 or 124 or 125 or 126 or 129 or 142
     switch (paymentStatus) {
         case statuses.CAPTURED.code:
-            paymentInstr.custom.hipayTransactionCapturedAmount = parseFloat(capturedAmount); // eslint-disable-line
-            order.paymentStatus = Order.PAYMENT_STATUS_PAID; // eslint-disable-line
+            if (capturedAmount) {
+                paymentInstr.custom.hipayTransactionCapturedAmount = parseFloat(capturedAmount); // eslint-disable-line
+                order.paymentStatus = Order.PAYMENT_STATUS_PAID; // eslint-disable-line
+            }
             break;
         case statuses.PARTIALLY_CAPTURED.code:
             order.paymentStatus = Order.PAYMENT_STATUS_PARTPAID; // eslint-disable-line

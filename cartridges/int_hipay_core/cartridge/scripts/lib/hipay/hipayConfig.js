@@ -50,6 +50,7 @@ function HiPayConfig() {
     this.hipayPrivateLivePassword = this.getSitePeference('hipayPrivateLivePassword');
     this.hipayPrivateTestUsername = this.getSitePeference('hipayPrivateTestUsername');
     this.hipayPrivateTestPassword = this.getSitePeference('hipayPrivateTestPassword');
+    this.hipayCancelButton = this.getSitePeference('hipayCancelButton');
 
     this.getTemplateType = function () {
         switch (this.hipayOperationMode) {

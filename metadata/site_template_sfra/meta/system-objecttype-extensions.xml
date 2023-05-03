@@ -305,6 +305,13 @@
                 <externally-managed-flag>false</externally-managed-flag>
                 <default-value>0</default-value>
             </attribute-definition>
+            <attribute-definition attribute-id="hipayCancelButton">
+                <display-name xml:lang="x-default">Cancel Button</display-name>
+                <type>boolean</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <default-value>false</default-value>
+            </attribute-definition>
             <attribute-definition attribute-id="hipayEnableOneClick">
                 <display-name xml:lang="x-default">Enable One-Click payments</display-name>
                 <description xml:lang="x-default">Enable/disable One-Click payments</description>
@@ -585,6 +592,7 @@ Username for the environment test</description>
                 <attribute attribute-id="hipayHungOrderTimeout"/>
                 <attribute attribute-id="hipaySiteShippingMethodsList"/>
                 <attribute attribute-id="hipaySFRAVersion"/>
+                <attribute attribute-id="hipayCancelButton"/>
             </attribute-group>
             <attribute-group group-id="Hipay Apple Pay">
                 <display-name xml:lang="x-default">Hipay Apple Pay</display-name>

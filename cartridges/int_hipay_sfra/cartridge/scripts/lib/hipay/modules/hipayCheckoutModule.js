@@ -392,6 +392,7 @@ HiPayCheckoutModule.hiPayHostedPageRequest = function (order, paymentInstrument)
             params.merchant_display_name = Site.current.getName();
             params.multi_use = 1;
             params.cdata1 = order.orderToken;
+            params.display_cancel_button = HiPayConfig.hipayCancelButton;
 
             if (!empty(pi.custom.hipayPaymentProductList)) {
                 params.payment_product_list = pi.custom.hipayPaymentProductList;
