@@ -57,7 +57,7 @@ function declinePayment(req, res, next, mode) {
         hiPayState = 'decline';
     }
 
-    if (!isHashValid || isStatusValid) {
+    if (!isHashValid || !isStatusValid) {
         res.redirect(URLUtils.url('Home-Show'));
     } else {
         var processOrder = HiPayOrderModule.hiPayProcessOrderCall();
