@@ -95,6 +95,9 @@ i.payment-product-sprite-pe {
 i.payment-product-sprite-bancontact {
     background-position: -603px -115px;
 }
+i.payment-product-sprite-apple-pay {
+    background-position: -505px -182px;
+}
 .payment-method-options .form-row {
     clear: none;
     float: left;
