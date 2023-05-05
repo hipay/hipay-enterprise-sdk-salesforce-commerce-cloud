@@ -39,7 +39,7 @@ gulp.task('enable-watch-mode', function () {watching = true;});
 gulp.task('js', function (done) {
 	function createBundler (path) {
 		var opts = {
-			entries: './' + path.src + 'app.js', // browserify requires relative path
+			entries: './' + path.src + 'hipayCheckout.js', // browserify requires relative path
 			debug: gutil.env.sourcemaps
 		};
 		if (watching) {
@@ -66,7 +66,7 @@ gulp.task('js', function (done) {
 			.on('error', function (e) {
 				gutil.log('Browserify Error', gutil.colors.red(e));
 			})
-			.pipe(source('app.js'))
+			.pipe(source('hipayCheckout.js'))
 			// sourcemaps
 				.pipe(buffer())
 				.pipe(sourcemaps.init({loadMaps: true}))

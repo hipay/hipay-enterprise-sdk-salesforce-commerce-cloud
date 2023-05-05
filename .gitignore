@@ -1,7 +1,7 @@
 node_modules/
 
 cartridges/int_hipay_sfra/cartridge/static/default/js/*
-
+cartridges/int_hipay_sg/cartridge/static/default/js/*
 coverage/
 npm-debug.log
 .idea/

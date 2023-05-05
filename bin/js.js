@@ -55,8 +55,8 @@ function createBundler (options) {
                 filename = 'main.js';
             } catch (e) {
                 try {
-                    fs.statSync(options.paths.src + '/app.js');
-                    filename = 'app.js';
+                    fs.statSync(options.paths.src + '/hipayCheckout.js');
+                    filename = 'hipayCheckout.js';
                 } catch (e) {
                     console.error('Unable to find a JS file to bundle.');
                     return;
