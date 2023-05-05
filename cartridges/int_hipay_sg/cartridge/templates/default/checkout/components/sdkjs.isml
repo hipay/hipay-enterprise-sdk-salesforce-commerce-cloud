@@ -3,6 +3,8 @@
 <script language="javascript" src="https://libs.hipay.com/js/sdkjs.js">
 </script>
 
+<iscomment> <script src="${URLUtils.staticURL('/js/app.js')}"></script> </iscomment>
+
 <script>
     document.addEventListener("DOMContentLoaded", function(event) {
         const hipay = HiPay({

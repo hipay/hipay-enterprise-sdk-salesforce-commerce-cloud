@@ -11,6 +11,7 @@
     "upload": "sgmf-scripts --upload -- ",
     "uploadCartridge": "sgmf-scripts --uploadCartridge int_hipay_sfra && sgmf-scripts --uploadCartridge int_hipay_core && sgmf-scripts --uploadCartridge bm_hipay",
     "compile:js": "sgmf-scripts --compile js",
+    "compile:sg:js": "node bin/js.js",
     "test": "sgmf-scripts --test './test/unit/**/*.js'",
     "test:sfra": "codeceptjs run tests/GlobalHipay_test.js --steps --config test/acceptance/codecept.conf.sfra.js",
     "test:sfra:api": "codeceptjs run tests/GlobalHipay_test.js --steps --config test/acceptance/codecept.conf.sfra.js --grep '@api'",
@@ -23,17 +24,31 @@
   "repository": {},
   "license": "ISC",
   "dependencies": {
+    "browserify": "^17.0.0",
     "cleave.js": "~1.4.2",
     "codeceptjs": "^3.3.6",
     "puppeteer": "^19.3.0",
     "testcafe": "^2.0.1"
   },
   "devDependencies": {
+    "babel-core": "^6.26.3",
+    "babel-preset-es2015": "^6.24.1",
     "chai": "^3.5.0",
     "css-loader": "^0.28.11",
     "eslint": "^3.2.2",
     "eslint-config-airbnb-base": "^5.0.1",
     "eslint-plugin-import": "^1.12.0",
+    "event-stream": "^4.0.1",
+    "exorcist": "^2.0.0",
+    "gulp": "^4.0.2",
+    "gulp-autoprefixer": "^8.0.0",
+    "gulp-eslint": "^6.0.0",
+    "gulp-if": "^3.0.0",
+    "gulp-mocha": "^8.0.0",
+    "gulp-sass": "^5.1.0",
+    "gulp-sourcemaps": "^3.0.0",
+    "gulp-util": "^3.0.8",
+    "gulp-webdriver": "^4.0.0",
     "istanbul": "^0.4.4",
     "mocha": "^5.2.0",
     "node-sass": "^4.9.0",
@@ -44,9 +59,18 @@
     "sinon": "^1.17.4",
     "stylelint": "^7.1.0",
     "stylelint-config-standard": "^12.0.0",
-    "stylelint-scss": "^1.3.4"
+    "stylelint-scss": "^1.3.4",
+    "vinyl-buffer": "^1.0.1",
+    "vinyl-source-stream": "^2.0.0",
+    "watchify": "^4.0.0"
   },
   "paths": {
-    "base": "../storefront-reference-architecture/cartridges/app_storefront_base/"
+    "base": "../storefront-reference-architecture/cartridges/app_storefront_base/",
+    "js": [
+      {
+        "src": "cartridges/int_hipay_sg/cartridge/js/",
+        "dest": "cartridges/int_hipay_sg/cartridge/static/default/js/"
+      }
+    ]
   }
 }
