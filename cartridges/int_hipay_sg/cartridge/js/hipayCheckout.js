@@ -1,5 +1,5 @@
 'use strict';
 
 $(document).ready(function () {
-    require('./test/test');
+    require('./hipayCheckout/globalVariable');
 });
