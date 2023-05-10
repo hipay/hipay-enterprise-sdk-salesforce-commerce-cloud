@@ -38,15 +38,13 @@ base.paymentTabs = function () {
         $('.payment-information').data('payment-method-id', methodID);
         $('.paymentMethod').val(methodID);
 
-        // Don't removed active class if the user selected the same tab.
-        if (!$('.' + methodID + '-content').hasClass('active')) {
-            $('.credit-card-selection-new .tab-content > div[role="tabpanel"]').removeClass('active');
-        }
+        // Update active tab based on selected payment method.
+        var $tabContent = $('.credit-card-selection-new .tab-content .tab-pane');
+        $tabContent.removeClass('active');
+        $tabContent.filter('.' + methodID + '-content').addClass('active');
 
         if (methodID === 'HIPAY_CREDIT_CARD') {
-            if (!$('.credit-card-content').hasClass('active')) {
-                $('.credit-card-content').addClass('active');
-            }
+            $('.credit-card-content').addClass('active');
 
             // Oneclick payment, we must have CREDIT_CARD in payment method instead of HIPAY_CREDIT_CARD
             $('.payment-information').data('payment-method-id', 'CREDIT_CARD');
