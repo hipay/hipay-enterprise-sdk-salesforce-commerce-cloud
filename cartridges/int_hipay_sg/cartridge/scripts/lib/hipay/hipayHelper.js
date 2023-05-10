@@ -120,7 +120,7 @@ function fillOrderData(order, params, pi) {
     params.source = JSON.stringify({
         source: 'CMS',
         brand: 'SFCC Site Genesis',
-        brand_version: Resource.msg('revisioninfo.revisionnumber', 'revisioninfo', null),
+        brand_version: '105.2.1', //TODO Resource.msg('revisioninfo.revisionnumber', 'revisioninfo', null)
         integration_version: Resource.msg('hipay.version.number', 'hipay', null)
     });
 

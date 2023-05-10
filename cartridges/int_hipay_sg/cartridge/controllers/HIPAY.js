@@ -44,27 +44,7 @@ function creditCardHandle(paymentInstrument) {
     var hiPayCardCVC;
     var hiPayCardType;
 
-    if (empty(creditCard.uuid.value)) {
-        cardNumber = creditCard.number.value;
-        cardSecurityCode = creditCard.cvn.value;
-        cardType = creditCard.type.value;
-        expirationMonth = creditCard.expiration.month.value;
-        expirationYear = creditCard.expiration.year.value;
-
-        paymentCard = PaymentMgr.getPaymentCard(cardType);
-        creditCardStatus = paymentCard.verify(expirationMonth, expirationYear, cardNumber, cardSecurityCode);
-
-        if (creditCardStatus.error) {
-            hiPayModule.invalidatePaymentCardFormElements(creditCardStatus, creditCard);
-            return { error: true };
-        }
-    }
-
-    if (creditCard.type.value === 'Amex') {
-        creditCardHolder = creditCard.ownerfirst.value + ' ' + creditCard.ownerlast.value;
-    } else {
-        creditCardHolder = creditCard.owner.value;
-    }
+    var hipayTokenize = JSON.parse(session.forms.billing.paymentMethods.hipayTokenize.value);
 
     if (!empty(creditCard.uuid.value) && hipayEnableOneClick) { // If one-click payment
         var paymentInstruments = customer.getProfile().getWallet().getPaymentInstruments('HIPAY_CREDIT_CARD');
@@ -95,19 +75,14 @@ function creditCardHandle(paymentInstrument) {
         hiPayToken = selectedCreditCard.creditCardToken;
         hiPayCardType = selectedCreditCard.creditCardType;
     } else {
-        hiPayCardNumber = creditCard.number.value;
-        hiPayCardExpiryMonth = creditCard.expiration.month.value;
-        hiPayCardExpiryYear = creditCard.expiration.year.value;
-        hiPayCardHolder = creditCardHolder;
-        hiPayCardCVC = creditCard.cvn.value;
-        hiPayMultiUseToken = hipayEnableOneClick && session.forms.billing.paymentMethods.creditCard.saveCard.value;
-        hiPayCardType = creditCard.type.value;
-        hiPayTokenResult = hiPayModule.hiPayGenerateToken(hiPayCardNumber, hiPayCardExpiryMonth,
-            hiPayCardExpiryYear, hiPayCardHolder, hiPayCardCVC, hiPayMultiUseToken);
-
-        if (!empty(hiPayTokenResult) && hiPayTokenResult.error === false) {
-            hiPayToken = hiPayTokenResult.HiPayToken;
-            hiPayCardNumber = hiPayTokenResult.HiPayPan;
+        hiPayCardNumber = hipayTokenize.pan;
+        hiPayCardExpiryMonth = Number(hipayTokenize.card_expiry_month);
+        hiPayCardExpiryYear = Number(hipayTokenize.card_expiry_year);
+        hiPayCardHolder = hipayTokenize.card_holder;
+        hiPayCardType = hipayTokenize.brand;
+        
+        if (hipayTokenize.token) {
+            hiPayToken = hipayTokenize.token;
         } else {
             return { error: true };
         }
@@ -120,7 +95,7 @@ function creditCardHandle(paymentInstrument) {
         session.custom.saveCardChecked = false;
     }
 
-    if (hiPayToken != null) {
+    try {
         Transaction.wrap(function () {
             paymentInstrument.setCreditCardHolder(hiPayCardHolder);
             paymentInstrument.setCreditCardNumber(hiPayCardNumber);
@@ -129,7 +104,7 @@ function creditCardHandle(paymentInstrument) {
             paymentInstrument.setCreditCardExpirationYear(hiPayCardExpiryYear);
             paymentInstrument.setCreditCardToken(hiPayToken);
         });
-    } else {
+    } catch (e) {
         return { error: true };
     }
 
