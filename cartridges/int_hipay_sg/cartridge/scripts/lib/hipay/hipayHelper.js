@@ -702,11 +702,68 @@ function getApplicablePaymentCards() {
     return applicablePaymentCards;
 }
 
+function getHostedFieldsPreferences() {
+    var Site = require('dw/system/Site');
+    var HiPayConfig = require('*/cartridge/scripts/lib/hipay/hipayConfig').HiPayConfig;
+    var currentSite = Site.getCurrent();
+
+    var hipayHostedFields = {
+        hipayEnabled: currentSite.getCustomPreferenceValue('hipayEnabled'),
+        hipayOperationMode: currentSite.getCustomPreferenceValue('hipayOperationMode').value,
+        cardConfig: {
+            config: {
+                template: 'auto',
+                selector: 'hipay-hostedfields-form',
+                styles: {
+                    base: {
+                        color: currentSite.getCustomPreferenceValue('hipayHostedFieldsStyleBaseColor'),
+                        fontSize: currentSite.getCustomPreferenceValue('hipayHostedFieldsStyleBaseFrontSize'),
+                        fontWeight: currentSite.getCustomPreferenceValue('hipayHostedFieldsStyleBaseFrontWeight'),
+                        placeholderColor: currentSite.getCustomPreferenceValue('hipayHostedFieldsStyleBasePlaceHolderColor'),
+                        iconColor: currentSite.getCustomPreferenceValue('hipayHostedFieldsStyleBaseIconColor'),
+                        caretColor: currentSite.getCustomPreferenceValue('hipayHostedFieldsStyleBaseCaretColor')
+                    },
+                    invalid: {
+                        color: currentSite.getCustomPreferenceValue('hipayHostedFieldsStyleInvalidColor'),
+                        caretColor: currentSite.getCustomPreferenceValue('hipayHostedFieldsStyleInvalidCaretColor')
+                    }
+                }
+            }
+        },
+        idealConfig: {
+            config: {
+                template: 'auto',
+                selector: 'hipay-hostedfields-form-ideal' // form container div id
+            }
+        },
+        giropayConfig: {
+            config: {
+                template: 'auto',
+                selector: 'hipay-hostedfields-form-giropay' // form container div id
+            }
+        },
+        mbwayConfig: {
+            config: {
+                template: 'auto',
+                selector: 'hipay-hostedfields-form-mbway' // form container div id
+            }
+        },
+        globalVariable: {
+            username: HiPayConfig['hipayPublic' + HiPayConfig.hipayEnvironment + 'Username'],
+            password: HiPayConfig['hipayPublic' + HiPayConfig.hipayEnvironment + 'Password'],
+            environment: HiPayConfig.hipayEnvironment === 'Live' ? 'production' : 'stage'
+        }
+    };
+
+    return hipayHostedFields;
+}
+
 module.exports = {
     fillHeaderData: fillHeaderData,
     fillOrderData: fillOrderData,
     getApplicablePaymentCards: getApplicablePaymentCards,
     getOrderPaymentInstrument: base.getOrderPaymentInstrument,
     updatePaymentStatus: base.updatePaymentStatus,
-    validateOneyAvailability: base.validateOneyAvailability
+    validateOneyAvailability: base.validateOneyAvailability,
+    getHostedFieldsPreferences: getHostedFieldsPreferences
 };

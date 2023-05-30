@@ -22,12 +22,15 @@
                 var HiPayHelper = require('*/cartridge/scripts/lib/hipay/hipayHelper');
                 var renderOney   = HiPayHelper.validateOneyAvailability(pdict.Basket);
                 var applicablePaymentCards = HiPayHelper.getApplicablePaymentCards(pdict.Basket);
+                var hipayPreferences = HiPayHelper.getHostedFieldsPreferences();
                 var HiPayConfig = require('*/cartridge/scripts/lib/hipay/hipayConfig').HiPayConfig,
                     isHiPayHostedMode = false;
                     if (HiPayConfig.hipayOperationMode == HiPayConfig.OPERATION.HOSTED || HiPayConfig.hipayOperationMode == HiPayConfig.OPERATION.IFRAME) {
                         isHiPayHostedMode = true;
                     }
            </isscript>
+
+        <input type="hidden" name="hipayPreferences" value="<isprint value="${JSON.stringify(hipayPreferences)}" encoding="off"/>">
 
         <div class="payment-method-options form-indent">
            <isloop items="${pdict.CurrentForms.billing.paymentMethods.selectedPaymentMethodID.options}" var="paymentMethodType">
