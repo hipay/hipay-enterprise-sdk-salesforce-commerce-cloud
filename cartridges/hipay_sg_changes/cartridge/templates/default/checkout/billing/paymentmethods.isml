@@ -28,9 +28,9 @@
                     if (HiPayConfig.hipayOperationMode == HiPayConfig.OPERATION.HOSTED || HiPayConfig.hipayOperationMode == HiPayConfig.OPERATION.IFRAME) {
                         isHiPayHostedMode = true;
                     }
-           </isscript>
+            </isscript>
 
-        <input type="hidden" name="hipayPreferences" value="<isprint value="${JSON.stringify(hipayPreferences)}" encoding="off"/>">
+            <input type="hidden" name="hipayPreferences" value=<isprint value="${JSON.stringify(hipayPreferences)}" encoding="off"/>>
 
         <div class="payment-method-options form-indent">
            <isloop items="${pdict.CurrentForms.billing.paymentMethods.selectedPaymentMethodID.options}" var="paymentMethodType">
@@ -268,7 +268,8 @@
 
             <iscomment>Giropay</iscomment>
             <div class="payment-method <isif condition="${!empty(pdict.selectedPaymentID) && pdict.selectedPaymentID=='HIPAY_GIROPAY'}">payment-method-expanded</isif>" data-method="HIPAY_GIROPAY">
-               <isinputfield formfield="${pdict.CurrentForms.billing.paymentMethods.hipaymethods.giropay.bic}" type="input" />
+               <div id="hipay-hostedfields-form-giropay"></div>
+               <div id="hipay-error-message"></div>
             </div>
 
             <iscomment>Hosted Pages</iscomment>
@@ -278,7 +279,8 @@
 
             <iscomment>iDEAL</iscomment>
             <div class="payment-method <isif condition="${!empty(pdict.selectedPaymentID) && pdict.selectedPaymentID=='HIPAY_IDEAL'}">payment-method-expanded</isif>" data-method="HIPAY_IDEAL">
-               <isinputfield formfield="${pdict.CurrentForms.billing.paymentMethods.hipaymethods.issuer_bank_id}" type="select" />
+               <div id="hipay-hostedfields-form-ideal"></div>
+               <div id="hipay-error-message"></div>
             </div>
 
             <iscomment>Przelewy24</iscomment>
@@ -289,6 +291,12 @@
             <iscomment>Sisal</iscomment>
             <div class="payment-method <isif condition="${!empty(pdict.selectedPaymentID) && pdict.selectedPaymentID=='HIPAY_MOONEY'}">payment-method-expanded</isif>" data-method="HIPAY_MOONEY">
                <!--- No form is applied --->
+            </div>
+
+            <iscomment>Mbway</iscomment>
+            <div class="payment-method <isif condition="${!empty(pdict.selectedPaymentID) && pdict.selectedPaymentID=='HIPAY_MBWAY'}">payment-method-expanded</isif>" data-method="HIPAY_MBWAY">
+               <div id="hipay-hostedfields-form-mbway"></div>
+               <div id="hipay-error-message"></div>
             </div>
 
             <iscomment>Sofort Uberweisung</iscomment>

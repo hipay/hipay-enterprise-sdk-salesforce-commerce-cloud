@@ -1,54 +1,96 @@
 'use strict';
 
 (function () {
+    const MODE_OPERATION = 'hostedFields';
 
-    var hipay = HiPay({
-        username: '94693232.stage-secure-gateway.hipay-tpp.com',
-        password: 'Test_qFjxCqVtSIugffvfWwSRHITA',
-        environment: 'stage',
-        lang: 'fr'
-    });
+    var $cache = {
+        paymentMethod: {
+            creditCard: 'CREDIT_CARD',
+            hipayCreditCard: 'HIPAY_CREDIT_CARD',
+            iDeal: 'HIPAY_IDEAL',
+            giropay: 'HIPAY_GIROPAY',
+            mbway: 'HIPAY_MBWAY'
+        },
+        instance: null
+    };
+
+    function getPreferences() {
+        return JSON.parse($('input[name="hipayPreferences"]').val());
+    }
+
+    var hipay = HiPay(getPreferences().globalVariable);
 
     var browserInfo = hipay.getBrowserInfo();
     $("#browserInfo").val(JSON.stringify(browserInfo));
 
+    function removeAllHostedfieldsForms() {
+        $('#hipay-hostedfields-form').empty();
+        $('#hipay-hostedfields-form-giropay').empty();
+        $('#hipay-hostedfields-form-mbway').empty();
+        $('#hipay-hostedfields-form-ideal').empty();
+    }
 
-    var config = {
-        template: 'auto',
-        selector: 'hipay-hostedfields-form',
-        styles: {
-          base: {
-            // default field styling
-            color: '#000000',
-            fontSize: '15px',
-            fontWeight: 400,
-            placeholderColor: '#999999',
-            iconColor: '#00ADE9',
-            caretColor: '#00ADE9'
-          },
-          invalid: {
-            // invalid field styling
-            color: '#D50000',
-            caretColor: '#D50000'
-          }
+    function createInstance(type) {
+        enabledHipayCTA();
+        $cache.instance = hipay.create(type, getPreferences()[type + 'Config'].config);
+
+        $cache.instance.on('change', function(event){
+            /* Display error(s), if any */
+            $("#hipay-error-message").innerHTML = event.error;
+            /* Enable / disable submit button */
+            $('button[value=hipay-submit-payment]').disabled = !event.valid;
+
+            $('.submit-payment-hipay').toggleClass('disabled', !event.valid);
+        });
+    }
+
+    function enabledHipayCTA() {
+        $('.button-fancy-large').addClass('d-none');
+        $('.hipay-submit-payment').removeClass('d-none');
+    }
+
+    function disabledHipayCTA() {
+        $('.button-fancy-large').removeClass('d-none');
+        $('.hipay-submit-payment').addClass('d-none');
+
+    }
+
+    $('.payment-method-options .form-row.label-inline').click(function () {
+        removeAllHostedfieldsForms();
+
+        var paymentMethodID = $("input[name='dwfrm_billing_paymentMethods_selectedPaymentMethodID']:checked").val();
+
+        if (paymentMethodID === $cache.paymentMethod.hipayCreditCard) {
+            createInstance('card');
+        } else if (paymentMethodID === $cache.paymentMethod.giropay) {
+            createInstance('giropay');
+        } else if (paymentMethodID === $cache.paymentMethod.mbway) {
+            createInstance('mbway');
+        } else if (paymentMethodID === $cache.paymentMethod.iDeal) {
+            createInstance('ideal');
+        } else {
+            disabledHipayCTA();
         }
-    };
-    var cardInstance = hipay.create('card', config);
 
-    cardInstance.on('change', function (event) {
-        // Display error(s)
-        document.getElementById("hipay-error-message").innerHTML = event.error;
     });
 
-
     function initialize() {
+        if (!getPreferences().hipayEnabled ||
+            getPreferences().hipayOperationMode !== MODE_OPERATION) {
+            return;
+        }
 
+        createInstance('card');
+
+        // Create custom hipayCTA.
         $('.button-fancy-large').addClass('d-none');
-        var newButton = $('<div>').addClass('button-fancy-large hipay-submit-payment').text('VALIDER LA COMMANDE');
-        $('.button-fancy-large').after(newButton);
+        var hipayCTA = $('<div>').addClass('button-fancy-large hipay-submit-payment').text('VALIDER LA COMMANDE');
+        $('.button-fancy-large').after(hipayCTA);
 
+        // Fetch token.
         $('.hipay-submit-payment').on('click', function() {
-            cardInstance.getPaymentData().then(function (response) {
+            $cache.instance.getPaymentData().then(function (response) {
+                console.log(response);
                 /* Send token to your server to process payment */
                 $('input[name=dwfrm_billing_paymentMethods_hipayTokenize]').val(JSON.stringify(response));
                 $('button[name=dwfrm_billing_save]').trigger('click');
