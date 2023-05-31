@@ -239,7 +239,7 @@ HiPayCheckoutModule.hiPayOrderRequest = function (paymentInstrument, order, devi
         params.device_fingerprint = fingeprint;
         params.cdata1 = order.getOrderToken();
         params.cardholder = pi.creditCardHolder;
-        
+
         HiPayHelper.fillHeaderData(HiPayConfig, order, params, pi); // fill in the common params
         HiPayHelper.fillOrderData(order, params, pi); // add order details
 

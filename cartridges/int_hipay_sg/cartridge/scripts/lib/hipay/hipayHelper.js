@@ -709,6 +709,7 @@ function getHostedFieldsPreferences() {
 
     var hipayHostedFields = {
         hipayEnabled: currentSite.getCustomPreferenceValue('hipayEnabled'),
+        hipayEnableOneClick: currentSite.getCustomPreferenceValue('hipayEnableOneClick'),
         hipayOperationMode: currentSite.getCustomPreferenceValue('hipayOperationMode').value,
         cardConfig: {
             config: {

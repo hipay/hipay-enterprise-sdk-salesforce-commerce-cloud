@@ -74,6 +74,23 @@
 
     });
 
+    // select credit card from list
+    $('#creditCardList').on('change', function () {
+        var cardUUID = $(this).val();
+
+        if (!cardUUID) {
+            $('#hipay-hostedfields-form').removeClass('d-none');
+            $('.credit-card-cvn').addClass('d-none');
+            $('.credit-card-save-card').removeClass('d-none');
+            enabledHipayCTA();
+        } else {
+            $('#hipay-hostedfields-form').addClass('d-none');
+            $('.credit-card-cvn').removeClass('d-none');
+            $('.credit-card-save-card').addClass('d-none');
+            disabledHipayCTA();
+        }
+    });
+
     function initialize() {
         if (!getPreferences().hipayEnabled ||
             getPreferences().hipayOperationMode !== MODE_OPERATION) {
@@ -90,7 +107,6 @@
         // Fetch token.
         $('.hipay-submit-payment').on('click', function() {
             $cache.instance.getPaymentData().then(function (response) {
-                console.log(response);
                 /* Send token to your server to process payment */
                 $('input[name=dwfrm_billing_paymentMethods_hipayTokenize]').val(JSON.stringify(response));
                 $('button[name=dwfrm_billing_save]').trigger('click');

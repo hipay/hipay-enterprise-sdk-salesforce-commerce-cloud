@@ -79,8 +79,9 @@ function creditCardHandle(paymentInstrument) {
         hiPayCardExpiryMonth = Number(hipayTokenize.card_expiry_month);
         hiPayCardExpiryYear = Number(hipayTokenize.card_expiry_year);
         hiPayCardHolder = hipayTokenize.card_holder;
-        hiPayCardType = hipayTokenize.brand;
-        
+        // Exemple : 'VISA' to 'Visa'.
+        hiPayCardType = hipayTokenize.brand.charAt(0).toUpperCase() + hipayTokenize.brand.slice(1).toLowerCase();
+
         if (hipayTokenize.token) {
             hiPayToken = hipayTokenize.token;
         } else {
