@@ -39,7 +39,7 @@ function list() {
         var paymentInstruments = wallet.getPaymentInstruments(dw.order.PaymentInstrument.METHOD_CREDIT_CARD);
     }
     /* HiPay custom code - end */
-    var pageMeta = require('~/cartridge/scripts/meta');
+    var pageMeta = require('*/cartridge/scripts/meta');
     var paymentForm = app.getForm('paymentinstruments');
 
     paymentForm.clear();
