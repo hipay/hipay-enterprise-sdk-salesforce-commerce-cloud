@@ -11,18 +11,33 @@
             giropay: 'HIPAY_GIROPAY',
             mbway: 'HIPAY_MBWAY'
         },
-        instance: null
+        instance: null,
+        preferences: JSON.parse($('input[name="hipayPreferences"]').val())
     };
 
-    function getPreferences() {
-        return JSON.parse($('input[name="hipayPreferences"]').val());
-    }
-
-    var hipay = HiPay(getPreferences().globalVariable);
+    var hipay = HiPay($cache.preferences.globalVariable);
 
     var browserInfo = hipay.getBrowserInfo();
     $("#browserInfo").val(JSON.stringify(browserInfo));
 
+    /**
+     * Set full name to credit card form.
+     */
+    function setFullnameToCreditCardForm() {
+        var firstname = $('input[id="dwfrm_billing_billingAddress_addressFields_firstName"]').val();
+        var lastname = $('input[id="dwfrm_billing_billingAddress_addressFields_lastName"]').val();
+        console.log(firstname, lastname);
+        if (firstname && lastname) {
+            $cache.preferences.cardConfig.config.fields.cardHolder.uppercase = true;
+            $cache.preferences.cardConfig.config.fields.cardHolder.defaultFirstname = firstname;
+            $cache.preferences.cardConfig.config.fields.cardHolder.defaultLastname = lastname;
+        }
+
+    }
+
+    /**
+     * Remove all hosted fields form.
+     */
     function removeAllHostedfieldsForms() {
         $('#hipay-hostedfields-form').empty();
         $('#hipay-hostedfields-form-giropay').empty();
@@ -30,10 +45,19 @@
         $('#hipay-hostedfields-form-ideal').empty();
     }
 
+    /**
+     * Create instance.
+     * @param {string} type
+     */
     function createInstance(type) {
         removeAllHostedfieldsForms();
         enabledHipayCTA();
-        $cache.instance = hipay.create(type, getPreferences()[type + 'Config'].config);
+
+        if (type === 'card') {
+            setFullnameToCreditCardForm();
+        }
+
+        $cache.instance = hipay.create(type, $cache.preferences[type + 'Config'].config);
 
         $cache.instance.on('change', function(event){
             /* Display error(s), if any */
@@ -45,17 +69,26 @@
         });
     }
 
+    /**
+     * Enabled Hipay CTA.
+     */
     function enabledHipayCTA() {
         $('.button-fancy-large').addClass('d-none');
         $('.hipay-submit-payment').removeClass('d-none');
     }
 
+    /**
+     * Disabled Hipay CTA.
+     */
     function disabledHipayCTA() {
         $('.button-fancy-large').removeClass('d-none');
         $('.hipay-submit-payment').addClass('d-none');
 
     }
 
+    /**
+     * Fetch payment method ID and call createInstance function.
+     */
     $('.payment-method-options .form-row.label-inline').click(function () {
         removeAllHostedfieldsForms();
 
@@ -88,15 +121,14 @@
             $('#hipay-hostedfields-form').addClass('d-none');
             $('.credit-card-cvn').removeClass('d-none');
             $('.credit-card-save-card').addClass('d-none');
-            $('input[name$=_saveCard]').prop('checked', false);
-            $('input[name$=_saveCard]').prop('value', false);
+            $('input[name$=_saveCard]').prop({checked: false, value: false});
             disabledHipayCTA();
         }
     });
 
     function initialize() {
-        if (!getPreferences().hipayEnabled ||
-            getPreferences().hipayOperationMode !== MODE_OPERATION) {
+        if (!$cache.preferences.hipayEnabled ||
+            $cache.preferences.hipayOperationMode !== MODE_OPERATION) {
             return;
         }
 

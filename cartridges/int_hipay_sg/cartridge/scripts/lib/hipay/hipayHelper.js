@@ -715,6 +715,13 @@ function getHostedFieldsPreferences() {
             config: {
                 template: 'auto',
                 selector: 'hipay-hostedfields-form',
+                fields: {
+                    cardHolder: {
+                        uppercase: true,
+                        defaultFirstname: null,
+                        defaultLastname: null
+                    }
+                },
                 styles: {
                     base: {
                         color: currentSite.getCustomPreferenceValue('hipayHostedFieldsStyleBaseColor'),
