@@ -6,25 +6,34 @@ var ajax = require('../../ajax'),
     util = require('../../util');
 
 /**
+ * Get preferences.
+ * @returns
+ */
+function getPreferences() {
+    return JSON.parse($('input[name="hipayPreferences"]').val());
+}
+
+/**
  * @function
  * @description Fills the Credit Card form with the passed data-parameter and clears the former cvn input
  * @param {Object} data The Credit Card data (holder, type, masked number, expiration month/year)
  */
 function setCCFields(data) {
     /* HiPay custom code - start */
-    if (SitePreferences.HIPAY_ENABLED) {
+    if (getPreferences().hipayEnabled) {
         var $creditCard = $('[data-method="HIPAY_CREDIT_CARD"]');
-        $creditCard.find('input[name$="uuid"]').val(data.uuid).trigger('change');
+        $creditCard.find('input[name*="uuid"]').val(data.uuid).trigger('change');
     } else {
         var $creditCard = $('[data-method="CREDIT_CARD"]');
+        /* HiPay custom code - end */
+        $creditCard.find('input[name$="creditCard_owner"]').val(data.holder).trigger('change');
+        $creditCard.find('select[name$="_type"]').val(data.type).trigger('change');
+        $creditCard.find('input[name*="_creditCard_number"]').val(data.maskedNumber).trigger('change');
+        $creditCard.find('[name$="_month"]').val(data.expirationMonth).trigger('change');
+        $creditCard.find('[name$="_year"]').val(data.expirationYear).trigger('change');
+        $creditCard.find('input[name$="_cvn"]').val('').trigger('change');
     }
-    /* HiPay custom code - end */
-    $creditCard.find('input[name$="creditCard_owner"]').val(data.holder).trigger('change');
-    $creditCard.find('select[name$="_type"]').val(data.type).trigger('change');
-    $creditCard.find('input[name*="_creditCard_number"]').val(data.maskedNumber).trigger('change');
-    $creditCard.find('[name$="_month"]').val(data.expirationMonth).trigger('change');
-    $creditCard.find('[name$="_year"]').val(data.expirationYear).trigger('change');
-    $creditCard.find('input[name$="_cvn"]').val('').trigger('change');
+
 }
 
 /* HiPay custom code – start */
@@ -62,7 +71,7 @@ function populateCreditCardForm(cardID) {
             setCCFields(data);
 
             /* HiPay custom code – start */
-            if (SitePreferences.HIPAY_ENABLED && SitePreferences.HIPAY_ENABLE_ONECLICK) {
+            if (getPreferences().hipayEnabled && getPreferences().hipayEnableOneClick) {
                 $('[data-method="HIPAY_CREDIT_CARD"]').find('.ccfields-wrap').hide();
                 formPrepare.validateForm();
             }
@@ -112,9 +121,9 @@ exports.init = function () {
     });
 
     /* HiPay custom code - start */
-    if (SitePreferences.HIPAY_ENABLED) {
+    if (getPreferences().hipayEnabled) {
         // select payment method if available
-        if(selectedPaymentMethod){
+        if (selectedPaymentMethod){
             updatePaymentMethod(selectedPaymentMethod);
         }
         $selectPaymentMethod.on('click', 'input[type="radio"]', function () {
@@ -135,13 +144,13 @@ exports.init = function () {
         var cardUUID = $(this).val();
         /* HiPay custom code - start */
         if (!cardUUID) {
-            if (SitePreferences.HIPAY_ENABLED && SitePreferences.HIPAY_ENABLE_ONECLICK) {
+            if (getPreferences().hipayEnabled && getPreferences().hipayEnableOneClick) {
                 clearCCFields();
                 var $creditCard = $('[data-method="HIPAY_CREDIT_CARD"]');
                 $creditCard.find('.ccfields-wrap').show();
                 formPrepare.validateForm();
             }
-        	return;
+            return;
         }
         /* HiPay custom code - end */
         populateCreditCardForm(cardUUID);
@@ -152,7 +161,7 @@ exports.init = function () {
     });
 
     /* HiPay custom code - start */
-    if (SitePreferences.HIPAY_ENABLED) {
+    if (getPreferences().hipayEnabled) {
         var $creditCard = $('[data-method="HIPAY_CREDIT_CARD"]');
     	//on init, set limit for a selected card. After change limits accordingly
         var initCard = $creditCard.find('select[name$="_type"]').find(":selected").text();
