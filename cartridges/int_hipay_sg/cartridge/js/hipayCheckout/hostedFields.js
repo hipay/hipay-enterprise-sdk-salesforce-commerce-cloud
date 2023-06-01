@@ -86,46 +86,6 @@
 
     }
 
-    /**
-     * Fetch payment method ID and call createInstance function.
-     */
-    $('.payment-method-options .form-row.label-inline').click(function () {
-        removeAllHostedfieldsForms();
-
-        var paymentMethodID = $("input[name='dwfrm_billing_paymentMethods_selectedPaymentMethodID']:checked").val();
-
-        if (paymentMethodID === $cache.paymentMethod.hipayCreditCard) {
-            createInstance('card');
-        } else if (paymentMethodID === $cache.paymentMethod.giropay) {
-            createInstance('giropay');
-        } else if (paymentMethodID === $cache.paymentMethod.mbway) {
-            createInstance('mbway');
-        } else if (paymentMethodID === $cache.paymentMethod.iDeal) {
-            createInstance('ideal');
-        } else {
-            disabledHipayCTA();
-        }
-
-    });
-
-    // select credit card from list
-    $('#creditCardList').on('change', function () {
-        var cardUUID = $(this).val();
-
-        if (!cardUUID) {
-            $('#hipay-hostedfields-form').removeClass('d-none');
-            $('.credit-card-cvn').addClass('d-none');
-            $('.credit-card-save-card').removeClass('d-none');
-            enabledHipayCTA();
-        } else {
-            $('#hipay-hostedfields-form').addClass('d-none');
-            $('.credit-card-cvn').removeClass('d-none');
-            $('.credit-card-save-card').addClass('d-none');
-            $('input[name$=_saveCard]').prop({checked: false, value: false});
-            disabledHipayCTA();
-        }
-    });
-
     function initialize() {
         if (!$cache.preferences.hipayEnabled ||
             $cache.preferences.hipayOperationMode !== MODE_OPERATION) {
@@ -138,6 +98,46 @@
         $('.button-fancy-large').addClass('d-none');
         var hipayCTA = $('<div>').addClass('button-fancy-large hipay-submit-payment').text('VALIDER LA COMMANDE');
         $('.button-fancy-large').after(hipayCTA);
+
+        /**
+         * Fetch payment method ID and call createInstance function.
+         */
+        $('.payment-method-options .form-row.label-inline').click(function () {
+            removeAllHostedfieldsForms();
+
+            var paymentMethodID = $("input[name='dwfrm_billing_paymentMethods_selectedPaymentMethodID']:checked").val();
+
+            if (paymentMethodID === $cache.paymentMethod.hipayCreditCard) {
+                createInstance('card');
+            } else if (paymentMethodID === $cache.paymentMethod.giropay) {
+                createInstance('giropay');
+            } else if (paymentMethodID === $cache.paymentMethod.mbway) {
+                createInstance('mbway');
+            } else if (paymentMethodID === $cache.paymentMethod.iDeal) {
+                createInstance('ideal');
+            } else {
+                disabledHipayCTA();
+            }
+
+        });
+
+        // select credit card from list
+        $('#creditCardList').on('change', function () {
+            var cardUUID = $(this).val();
+
+            if (!cardUUID) {
+                $('#hipay-hostedfields-form').removeClass('d-none');
+                $('.credit-card-cvn').addClass('d-none');
+                $('.credit-card-save-card').removeClass('d-none');
+                enabledHipayCTA();
+            } else {
+                $('#hipay-hostedfields-form').addClass('d-none');
+                $('.credit-card-cvn').removeClass('d-none');
+                $('.credit-card-save-card').addClass('d-none');
+                $('input[name$=_saveCard]').prop({checked: false, value: false});
+                disabledHipayCTA();
+            }
+        });
 
         // Fetch token.
         $('.hipay-submit-payment').on('click', function() {
