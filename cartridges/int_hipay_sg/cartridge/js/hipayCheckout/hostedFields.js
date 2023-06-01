@@ -96,7 +96,7 @@
 
         // Create hipayCTA custom.
         $('.button-fancy-large').addClass('d-none');
-        var hipayCTA = $('<div>').addClass('button-fancy-large hipay-submit-payment').text('VALIDER LA COMMANDE');
+        var hipayCTA = $('<div>').addClass('button-fancy-large hipay-submit-payment').text($('.button-fancy-large').val());
         $('.button-fancy-large').after(hipayCTA);
 
         /**
