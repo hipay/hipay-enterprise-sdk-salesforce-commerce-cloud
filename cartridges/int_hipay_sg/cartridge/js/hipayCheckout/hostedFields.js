@@ -31,6 +31,7 @@
     }
 
     function createInstance(type) {
+        removeAllHostedfieldsForms();
         enabledHipayCTA();
         $cache.instance = hipay.create(type, getPreferences()[type + 'Config'].config);
 
@@ -87,6 +88,8 @@
             $('#hipay-hostedfields-form').addClass('d-none');
             $('.credit-card-cvn').removeClass('d-none');
             $('.credit-card-save-card').addClass('d-none');
+            $('input[name$=_saveCard]').prop('checked', false);
+            $('input[name$=_saveCard]').prop('value', false);
             disabledHipayCTA();
         }
     });
@@ -99,7 +102,7 @@
 
         createInstance('card');
 
-        // Create custom hipayCTA.
+        // Create hipayCTA custom.
         $('.button-fancy-large').addClass('d-none');
         var hipayCTA = $('<div>').addClass('button-fancy-large hipay-submit-payment').text('VALIDER LA COMMANDE');
         $('.button-fancy-large').after(hipayCTA);
@@ -107,6 +110,8 @@
         // Fetch token.
         $('.hipay-submit-payment').on('click', function() {
             $cache.instance.getPaymentData().then(function (response) {
+                $('button[name=dwfrm_billing_save]').removeAttr('disabled');
+
                 /* Send token to your server to process payment */
                 $('input[name=dwfrm_billing_paymentMethods_hipayTokenize]').val(JSON.stringify(response));
                 $('button[name=dwfrm_billing_save]').trigger('click');
