@@ -70,7 +70,7 @@
         <credential-id>hipay.order.cred</credential-id>
     </service>
 
-    <service service-id="hipay.rest.transaction.SiteGenesis">
+    <service service-id="hipay.rest.transaction.SiteGenesisGlobal">
         <service-type>HTTP</service-type>
         <enabled>true</enabled>
         <log-prefix>HIPAY-REST-Payment</log-prefix>
