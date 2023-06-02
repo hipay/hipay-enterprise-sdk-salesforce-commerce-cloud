@@ -15,5 +15,3 @@
 <script type="text/javascript"><isinclude template="resources/appresources"/></script>
 <script type="text/javascript"><isinclude url="${URLUtils.url('Resources-LoadTransient')}"/></script>
 <script>var consent = ${session.custom.consentTracking};</script>
-
-<script src="${URLUtils.staticURL('/js/hipayCheckout.js')}"></script>

@@ -11,7 +11,7 @@
     "upload": "sgmf-scripts --upload -- ",
     "uploadCartridge": "sgmf-scripts --uploadCartridge int_hipay_sfra && sgmf-scripts --uploadCartridge int_hipay_core && sgmf-scripts --uploadCartridge bm_hipay",
     "compile:js": "sgmf-scripts --compile js",
-    "compile:js:sg": "node bin/js.js",
+    "move-file": "cp /home/formation/Bureau/HIPAY/sfcc/cartridges/int_hipay_sg/cartridge/js/hipayCheckout.js /home/formation/Bureau/HIPAY/sitegenesis/app_storefront_core/cartridge/js/hipayCheckout.js",
     "test": "sgmf-scripts --test './test/unit/**/*.js'",
     "test:sfra": "codeceptjs run tests/GlobalHipay_test.js --steps --config test/acceptance/codecept.conf.sfra.js",
     "test:sfra:api": "codeceptjs run tests/GlobalHipay_test.js --steps --config test/acceptance/codecept.conf.sfra.js --grep '@api'",
