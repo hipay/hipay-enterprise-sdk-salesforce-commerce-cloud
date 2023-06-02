@@ -262,10 +262,6 @@
                     </div>
                 </isif>
 
-                <div class="credit-card-cvn d-none">
-                    <isinputfield formfield="${pdict.CurrentForms.billing.paymentMethods.creditCard.cvn}" type="input" rowclass="cvn" dynamicname="true" help="${help}"/>
-                </div>
-
                 <div class="credit-card-uuid d-none">
                     <isinputfield formfield="${pdict.CurrentForms.billing.paymentMethods.creditCard.uuid}" type="input" dynamicname="true" />
                 </div>

@@ -127,12 +127,11 @@
 
             if (!cardUUID) {
                 $('#hipay-hostedfields-form').removeClass('d-none');
-                $('.credit-card-cvn').addClass('d-none');
                 $('.credit-card-save-card').removeClass('d-none');
+                $('input[name*=_uuid]').val('');
                 enabledHipayCTA();
             } else {
                 $('#hipay-hostedfields-form').addClass('d-none');
-                $('.credit-card-cvn').removeClass('d-none');
                 $('.credit-card-save-card').addClass('d-none');
                 $('input[name$=_saveCard]').prop({checked: false, value: false});
                 disabledHipayCTA();
