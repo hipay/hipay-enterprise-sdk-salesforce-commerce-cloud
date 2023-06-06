@@ -488,6 +488,13 @@
                 <externally-managed-flag>false</externally-managed-flag>
                 <min-length>0</min-length>
             </attribute-definition>
+            <attribute-definition attribute-id="hipayCancelButton">
+                <display-name xml:lang="x-default">Cancel Button</display-name>
+                <type>boolean</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <default-value>false</default-value>
+            </attribute-definition>
         </custom-attribute-definitions>
         <group-definitions>
             <attribute-group group-id="HiPay">
@@ -505,6 +512,7 @@
                 <attribute attribute-id="hipayCSSContent"/>
                 <attribute attribute-id="hipayHungOrderTimeout"/>
                 <attribute attribute-id="hipaySiteShippingMethodsList"/>
+                <attribute attribute-id="hipayCancelButton"/>
             </attribute-group>
             <attribute-group group-id="HipayHostedFieldsConfig">
                 <display-name xml:lang="x-default">Hipay HostedFields Configuration</display-name>
