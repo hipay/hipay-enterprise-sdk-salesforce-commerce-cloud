@@ -26,35 +26,6 @@ function getCredentialsPrivate() {
         ':' + HiPayConfig['hipayPrivate' + HiPayConfig.hipayEnvironment + 'Password'];
 }
 
-// HiPay Generate Token Service
-function createToken() {
-    var siteId = Site.getCurrent().getID();
-    var service = LocalServiceRegistry.createService('hipay.rest.createtoken.' + siteId, {
-        createRequest: function (svc, args) {
-            svc.setRequestMethod('POST');
-
-            // Set headers
-            svc.addHeader('Content-Type', 'application/json');
-            svc.addHeader('Cache-Control', 'no-cache');
-            svc.addHeader('Accept', 'application/json');
-
-            var credString = getCredentialsPublic();
-            var base64Credentials = Encoding.toBase64(new Bytes(credString));
-            svc.addHeader('Authorization', 'Basic ' + base64Credentials);
-
-            return JSON.stringify(args);
-        },
-        parseResponse: function (svc, response) {
-            return response;
-        },
-        filterLogMessage: function (msg) {
-            return msg;
-        }
-    });
-
-    return service;
-}
-
 // HiPay Order Service
 function order() {
     var siteId = Site.getCurrent().getID();
