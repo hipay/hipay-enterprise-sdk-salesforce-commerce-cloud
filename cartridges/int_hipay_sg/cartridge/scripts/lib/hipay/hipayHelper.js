@@ -120,7 +120,7 @@ function fillOrderData(order, params, pi) {
     params.source = JSON.stringify({
         source: 'CMS',
         brand: 'SFCC Site Genesis',
-        brand_version: '105.2.1', //TODO Resource.msg('revisioninfo.revisionnumber', 'revisioninfo', null)
+        brand_version: Resource.msg('revisioninfo.revisionnumber', 'revisioninfo', null),
         integration_version: Resource.msg('hipay.version.number', 'hipay', null)
     });
 
@@ -702,70 +702,6 @@ function getApplicablePaymentCards() {
     return applicablePaymentCards;
 }
 
-function getHostedFieldsPreferences() {
-    var Site = require('dw/system/Site');
-    var HiPayConfig = require('*/cartridge/scripts/lib/hipay/hipayConfig').HiPayConfig;
-    var currentSite = Site.getCurrent();
-
-    var hipayHostedFields = {
-        hipayEnabled: currentSite.getCustomPreferenceValue('hipayEnabled'),
-        hipayEnableOneClick: currentSite.getCustomPreferenceValue('hipayEnableOneClick'),
-        hipayOperationMode: currentSite.getCustomPreferenceValue('hipayOperationMode').value,
-        cardConfig: {
-            config: {
-                template: 'auto',
-                selector: 'hipay-hostedfields-form',
-                fields: {
-                    cardHolder: {
-                        uppercase: true,
-                        defaultFirstname: null,
-                        defaultLastname: null
-                    }
-                },
-                styles: {
-                    base: {
-                        color: currentSite.getCustomPreferenceValue('hipayHostedFieldsStyleBaseColor'),
-                        fontSize: currentSite.getCustomPreferenceValue('hipayHostedFieldsStyleBaseFrontSize'),
-                        fontWeight: currentSite.getCustomPreferenceValue('hipayHostedFieldsStyleBaseFrontWeight'),
-                        placeholderColor: currentSite.getCustomPreferenceValue('hipayHostedFieldsStyleBasePlaceHolderColor'),
-                        iconColor: currentSite.getCustomPreferenceValue('hipayHostedFieldsStyleBaseIconColor'),
-                        caretColor: currentSite.getCustomPreferenceValue('hipayHostedFieldsStyleBaseCaretColor')
-                    },
-                    invalid: {
-                        color: currentSite.getCustomPreferenceValue('hipayHostedFieldsStyleInvalidColor'),
-                        caretColor: currentSite.getCustomPreferenceValue('hipayHostedFieldsStyleInvalidCaretColor')
-                    }
-                }
-            }
-        },
-        idealConfig: {
-            config: {
-                template: 'auto',
-                selector: 'hipay-hostedfields-form-ideal' // form container div id
-            }
-        },
-        giropayConfig: {
-            config: {
-                template: 'auto',
-                selector: 'hipay-hostedfields-form-giropay' // form container div id
-            }
-        },
-        mbwayConfig: {
-            config: {
-                template: 'auto',
-                selector: 'hipay-hostedfields-form-mbway' // form container div id
-            }
-        },
-        globalVariable: {
-            username: HiPayConfig['hipayPublic' + HiPayConfig.hipayEnvironment + 'Username'],
-            password: HiPayConfig['hipayPublic' + HiPayConfig.hipayEnvironment + 'Password'],
-            environment: HiPayConfig.hipayEnvironment === 'Live' ? 'production' : 'stage'
-        }
-    };
-
-    return hipayHostedFields;
-}
-
 module.exports = {
     fillHeaderData: fillHeaderData,
     fillOrderData: fillOrderData,
@@ -773,5 +709,5 @@ module.exports = {
     getOrderPaymentInstrument: base.getOrderPaymentInstrument,
     updatePaymentStatus: base.updatePaymentStatus,
     validateOneyAvailability: base.validateOneyAvailability,
-    getHostedFieldsPreferences: getHostedFieldsPreferences
+    getHostedFieldsPreferences: base.getHostedFieldsPreferences
 };

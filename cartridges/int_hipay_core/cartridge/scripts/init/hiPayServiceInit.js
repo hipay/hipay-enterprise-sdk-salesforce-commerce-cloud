@@ -177,7 +177,6 @@ function transaction() {
 }
 
 module.exports = {
-    createToken: createToken,
     order: order,
     hpayment: hpayment,
     maintenance: maintenance,
