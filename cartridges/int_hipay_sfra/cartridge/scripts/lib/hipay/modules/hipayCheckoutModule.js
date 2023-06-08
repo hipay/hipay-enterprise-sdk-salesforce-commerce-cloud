@@ -221,7 +221,7 @@ HiPayCheckoutModule.hiPayOrderRequest = function (paymentInstrument, order, devi
     var status = require('*/cartridge/scripts/lib/hipay/hipayStatus').HiPayStatus;
     var log = new HiPayLogger('HiPayOrderRequest');
     var hiPayOrderService = new HiPayOrderService();
-    var hiPayDataService = new HiPayDataService();
+    var hipayData = new HiPayDataService();
     var pi = paymentInstrument;
     var fingeprint = deviceFingerprint;
     var params = {};
@@ -273,7 +273,7 @@ HiPayCheckoutModule.hiPayOrderRequest = function (paymentInstrument, order, devi
         // Only for payment by credit card
         if (pi.paymentMethod.equals('HIPAY_CREDIT_CARD')) {
             try {
-                hipayDataResponse = hiPayDataService.dataService(params, JSON.parse(hipayResponse.object.text), dateRequest, dateResponse);
+                hipayDataResponse = hipayData.dataService(params, JSON.parse(hipayResponse.object.text), dateRequest, dateResponse);
                 if (hipayDataResponse.ok) {
                     Logger.info('Hipay Api Data status message ::: {0}', hipayDataResponse.object.statusMessage);
                 }
@@ -375,7 +375,7 @@ HiPayCheckoutModule.hiPayHostedPageRequest = function (order, paymentInstrument)
         var Calendar = require('dw/util/Calendar');
         var log = new HiPayLogger('HiPayHostedPageRequest');
         var hiPayHostedService = new HiPayHostedService();
-        var hiPayDataService = new HiPayDataService();
+        var hipayData = new HiPayDataService();
         var pi = paymentInstrument;
         var hipayDataResponse;
         var response = {
@@ -420,7 +420,7 @@ HiPayCheckoutModule.hiPayHostedPageRequest = function (order, paymentInstrument)
             // Only for payment by credit card
             if (pi.paymentMethod.equals('HIPAY_HOSTED_CREDIT_CARD')) {
                 try {
-                    hipayDataResponse = hiPayDataService.dataService(params, JSON.parse(hipayResponse.object.text), dateRequest, dateResponse);
+                    hipayDataResponse = hipayData.dataService(params, JSON.parse(hipayResponse.object.text), dateRequest, dateResponse);
                     if (hipayDataResponse.ok) {
                         Logger.info('Hipay Api Data status message ::: {0}', hipayDataResponse.object.statusMessage);
                     }
