@@ -1,9 +1,13 @@
 'use strict';
 
+var Logger = require('dw/system/Logger');
 var server = require('server');
 var URLUtils = require('dw/web/URLUtils');
 var OrderMgr = require('dw/order/OrderMgr');
+var Transaction = require('dw/system/Transaction');
+var Resource = require('dw/web/Resource');
 
+var hiPayCheckoutModule = require('*/cartridge/scripts/lib/hipay/modules/hipayCheckoutModule');
 var HiPayOrderModule = require('*/cartridge/scripts/lib/hipay/modules/hipayOrderModule');
 var HiPayProcess = require('*/cartridge/scripts/lib/hipay/hipayProcess');
 var statuses = require('*/cartridge/scripts/lib/hipay/hipayStatus').HiPayStatus;
@@ -79,6 +83,35 @@ function declinePayment(req, res, next, mode) {
     return next();
 }
 
+/**
+ * Manage cancel payment.
+ * @param req
+ * @param res
+ * @param next
+ * @returns {*}
+ */
+function cancelPayment(req, res, next) {
+    var order = OrderMgr.getOrder(req.querystring.orderid);
+    var redirectURL = URLUtils.url('Home-Show');
+
+    if (order) {
+        try {
+            // Reopen basket if possible
+            Transaction.wrap(function () {
+                order.addNote('Order ' + order.orderNo + ' CANCEL STATUS:', 'OperationType : Cancel payment and failed order !');
+                OrderMgr.failOrder(order, true);
+            });
+
+            redirectURL = URLUtils.url('Checkout-Begin', 'stage', 'payment', 'authMessage', Resource.msg('hipay.payment.cancel', 'hipay', null));
+        } catch (e) {
+            Logger.error('[HiPayOrder.js] crashed on line: ' + e.lineNumber + ' with error: ' + e.message);
+        }
+    }
+
+    res.redirect(redirectURL);
+    return next();
+}
+
 /** Handles HiPay accepted payment */
 server.get(
     'Accept',
@@ -111,7 +144,7 @@ server.get(
     'Cancel',
     server.middleware.https,
     function (req, res, next) {
-        declinePayment(req, res, next, statuses.CANCEL.value);
+        cancelPayment(req, res, next)
     }
 );
 

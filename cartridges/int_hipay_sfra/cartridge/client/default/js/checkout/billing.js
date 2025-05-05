@@ -2,6 +2,28 @@
 
 var base = require('base/checkout/billing');
 
+function togglePaypalV2CTA(selectedPaypalV2) {
+    return function () {
+        var paypalButton = $('#paypal-button');
+
+        if ($('#checkout-main').attr("data-checkout-stage") === 'payment' &&
+            paypalButton.length > 0 &&
+            window.hipayCustomPreferences.paypalV2.hipayPaypalButtonPlacement === 'submitPayment') {
+            paypalButton.show();
+        } else if ($('#checkout-main').attr("data-checkout-stage") === 'placeOrder') {
+            if (selectedPaypalV2) {
+                paypalButton.show();
+                $('.btn-primary.btn-block.place-order').hide();
+            } else {
+                // Hides the PayPal button and shows the place order button.
+                paypalButton.hide();
+                $('.btn-primary.btn-block.place-order').show();
+            }
+        } else {
+            paypalButton.hide();
+        }
+    };
+}
 
 base.methods.updatePaymentInformation = function (order) {
     // update payment details
@@ -26,6 +48,21 @@ base.methods.updatePaymentInformation = function (order) {
     }
 
     $paymentSummary.empty().append(htmlToAppend);
+
+    // PAYPAL V2
+    if (order.billing && order.billing.payment && order.billing.payment.selectedPaymentInstruments) {
+        var selectedPaypalV2 = false;
+        for (var selectedPaymentInstrument of order.billing.payment.selectedPaymentInstruments) {
+            if (selectedPaymentInstrument.paymentMethod === 'HIPAY_PAYPAL_V2') {
+                selectedPaypalV2 = true;
+            }
+        }
+
+        var observer = new MutationObserver(togglePaypalV2CTA(selectedPaypalV2));
+        observer.observe(document.getElementById('checkout-main'), {
+            attributes: true
+        });
+    }
 };
 
 /**
@@ -46,24 +83,6 @@ base.methods.validateAndUpdateBillingPaymentInstrument = function (order) {
     // Force security code and card number clear
     $('input[name$=securityCode]', form).val('');
     $('input[name$=cardNumber]').lengh && $('input[name$=cardNumber]').data('cleave').setRawValue('');
-};
-
-base.addNewPaymentInstrument = function () {
-    $('.btn.add-payment').on('click', function (e) {
-        e.preventDefault();
-        $('.payment-information').data('is-new-payment', true);
-        $('.credit-card-form').removeClass('checkout-hidden');
-        $('.user-payment-instruments').addClass('checkout-hidden');
-    });
-};
-
-base.cancelNewPayment = function () {
-    $('.cancel-new-payment').on('click', function (e) {
-        e.preventDefault();
-        $('.payment-information').data('is-new-payment', false);
-        $('.user-payment-instruments').removeClass('checkout-hidden');
-        $('.credit-card-form').addClass('checkout-hidden');
-    });
 };
 
 module.exports = base;

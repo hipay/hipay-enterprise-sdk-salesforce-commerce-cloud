@@ -203,6 +203,15 @@ server.replace('PlaceOrder', server.middleware.https, function (req, res, next) 
         return next();
     }
 
+    /**
+     * Stores the PayPal V2 order ID from the request form into the session when the
+     * PayPal V2 button is placed on the 'placeOrder' stage.
+     * This order ID is necessary for further processing of the PayPal V2 payment.
+     */
+    if (req.form && req.form.paypalOrderID) {
+        session.forms.billing.paypalV2OrderID.value = req.form.paypalOrderID;
+    }
+
     // Check if the Card exists in the list of PaymentInstruments Only for Customer Authenticated
     if (req.currentCustomer && !empty(req.currentCustomer.wallet)) {
         var incrementAttempt = false;

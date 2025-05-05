@@ -37,7 +37,7 @@ function HiPayConfig() {
     this.hipayOperationMode = this.getSitePeference('hipayOperationMode').value;
     this.hipayEnvironment = this.getSitePeference('hipayEnvironment').value;
     this.hipayEnable3dSecure = this.getSitePeference('hipayEnable3dSecure').value;
-    this.hipayEnable3dSecureThresholdRule = this.getSitePeference('hipayEnable3dSecureThresholdRule').value;
+    this.hipayEnable3dSecureThresholdRule = this.getSitePeference('hipayEnable3dSecureThresholdRule');
     this.hipayApiPassphrase = this.getSitePeference('hipayApiPassphrase');
     this.hipayPaymentAction = this.getSitePeference('hipayPaymentAction').value;
     this.hipayIframeHeight = this.getSitePeference('hipayIframeHeight');
@@ -74,7 +74,7 @@ function HiPayConfig() {
 HiPayConfig.prototype.getSitePeference = function (preference) {
     var result = null;
     result = Site.getCurrent().getCustomPreferenceValue(preference);
-    if (empty(result)) {
+    if (result === null) {
         result = '';
         this.hiPayLogger.debug('HiPay Site specific custom preference ' + preference + ' is missing.');
     }

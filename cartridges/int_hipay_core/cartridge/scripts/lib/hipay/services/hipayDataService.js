@@ -3,17 +3,6 @@
  */
 function HiPayDataService() {}
 
-HiPayDataService.prototype.dataService = function (params, hipayResponse, dateRequest, dateResponse) {
-    var hipaytokenize = JSON.parse(session.forms.billing.hipaytokenize.value);
-    var hipayServices = require('*/cartridge/scripts/init/hiPayServiceInit');
-    // Init service
-    var service = hipayServices.apiData();
-    // Call API
-    var response = service.call(payload(params, hipayResponse, hipaytokenize, dateRequest, dateResponse));
-
-    return response;
-};
-
 /**
  * Generats the SHA256 encrypted String starting from the given String
  * @param {string} unicode - the string to be encrypted SHA256
@@ -33,8 +22,16 @@ function getDataId(deviceFingerprint, domain) {
 function payload(params, hipayResponse, hipaytokenize, dateRequest, dateResponse) {
     var Site = require('dw/system/Site');
     var cmsComponent = JSON.parse(params.source);
-    var deviceFingerprint = hipaytokenize && hipaytokenize.device_fingerpint ?
-    hipaytokenize.device_fingerpint : session.forms.billing.deviceFingerprint.value;
+
+    var deviceFingerprint;
+
+    if ((hipaytokenize && hipaytokenize.device_fingerpint) || session.forms.billing.deviceFingerprint) { // SFRA.
+        deviceFingerprint = hipaytokenize && hipaytokenize.device_fingerpint ?
+            hipaytokenize.device_fingerpint : session.forms.billing.deviceFingerprint.value;
+    } else if ((hipaytokenize && hipaytokenize.device_fingerpint) || session.forms.billing.paymentMethods.deviceFingerprint) { // Site Genesis
+        deviceFingerprint = hipaytokenize && hipaytokenize.device_fingerpint ?
+            hipaytokenize.device_fingerpint : session.forms.billing.paymentMethods.deviceFingerprint;
+    }
 
     return {
         id: getDataId(deviceFingerprint, request.getHttpHost()),
@@ -67,5 +64,23 @@ function payload(params, hipayResponse, hipaytokenize, dateRequest, dateResponse
         }
     };
 }
+
+HiPayDataService.prototype.dataService = function (params, hipayResponse, dateRequest, dateResponse) {
+    var hipaytokenize;
+
+    if (session.forms.billing.hipaytokenize) { // SFRA.
+        hipaytokenize = JSON.parse(session.forms.billing.hipaytokenize.value);
+    } else if (session.forms.billing.paymentMethods.hipayTokenize) { // Site Genesis
+        hipaytokenize = JSON.parse(session.forms.billing.paymentMethods.hipayTokenize.value);
+    }
+
+    var hipayServices = require('*/cartridge/scripts/init/hiPayServiceInit');
+    // Init service
+    var service = hipayServices.apiData();
+    // Call API
+    var response = service.call(payload(params, hipayResponse, hipaytokenize, dateRequest, dateResponse));
+
+    return response;
+};
 
  module.exports = HiPayDataService;

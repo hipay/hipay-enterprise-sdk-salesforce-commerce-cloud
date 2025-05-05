@@ -708,5 +708,6 @@ module.exports = {
     getApplicablePaymentCards: getApplicablePaymentCards,
     getOrderPaymentInstrument: base.getOrderPaymentInstrument,
     updatePaymentStatus: base.updatePaymentStatus,
-    validateOneyAvailability: base.validateOneyAvailability
+    validateOneyAvailability: base.validateOneyAvailability,
+    getHostedFieldsPreferences: base.getHostedFieldsPreferences
 };

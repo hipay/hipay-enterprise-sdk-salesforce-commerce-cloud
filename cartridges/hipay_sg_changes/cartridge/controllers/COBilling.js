@@ -524,7 +524,6 @@ function updateAddressDetails() {
  * - __selectAddress__ - calls the {@link module:controllers/COBilling~updateAddressDetails|updateAddressDetails} function.
  */
 function billing() {
-
     app.getForm('billing').handleAction({
         applyCoupon: function () {
             var couponCode = request.httpParameterMap.couponCode.stringValue || request.httpParameterMap.dwfrm_billing_couponCode.stringValue;

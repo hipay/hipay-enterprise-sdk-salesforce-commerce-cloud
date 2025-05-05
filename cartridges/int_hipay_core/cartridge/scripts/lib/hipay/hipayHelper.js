@@ -153,8 +153,113 @@ function updatePaymentStatus(order, paymentInstr, paymentStatus, capturedAmount)
     }
 }
 
+/**
+ * Get hosted fields custom preferences and build an object.
+ * @return {Object}
+ */
+function getHostedFieldsPreferences() {
+    var Site = require('dw/system/Site');
+    var HiPayConfig = require('*/cartridge/scripts/lib/hipay/hipayConfig').HiPayConfig;
+    var currentSite = Site.getCurrent();
+
+    return {
+        hipayEnabled: currentSite.getCustomPreferenceValue('hipayEnabled'),
+        hipayEnableOneClick: currentSite.getCustomPreferenceValue('hipayEnableOneClick'),
+        hipayOperationMode: currentSite.getCustomPreferenceValue('hipayOperationMode').value,
+        cardsDisplayCount: currentSite.getCustomPreferenceValue('hipayOneClickCardsDisplayCount'),
+        isSFRA6: currentSite.getCustomPreferenceValue('hipaySFRAVersion'),
+        cardConfig: {
+            config: {
+                template: 'auto',
+                selector: 'hipay-hostedfields-form',
+                fields: {
+                    cardHolder: {
+                        uppercase: true,
+                        defaultFirstname: null,
+                        defaultLastname: null
+                    }
+                },
+                styles: {
+                    base: {
+                        color: currentSite.getCustomPreferenceValue('hipayHostedFieldsStyleBaseColor'),
+                        fontSize: currentSite.getCustomPreferenceValue('hipayHostedFieldsStyleBaseFrontSize'),
+                        fontWeight: currentSite.getCustomPreferenceValue('hipayHostedFieldsStyleBaseFrontWeight'),
+                        placeholderColor: currentSite.getCustomPreferenceValue('hipayHostedFieldsStyleBasePlaceHolderColor'),
+                        iconColor: currentSite.getCustomPreferenceValue('hipayHostedFieldsStyleBaseIconColor'),
+                        caretColor: currentSite.getCustomPreferenceValue('hipayHostedFieldsStyleBaseCaretColor')
+                    },
+                    invalid: {
+                        color: currentSite.getCustomPreferenceValue('hipayHostedFieldsStyleInvalidColor'),
+                        caretColor: currentSite.getCustomPreferenceValue('hipayHostedFieldsStyleInvalidCaretColor')
+                    },
+                    components: {
+                        switch: {
+                            mainColor: currentSite.getCustomPreferenceValue('hipayOneClickSwitchButtonColor')
+                        },
+                        checkbox: {
+                            mainColor: currentSite.getCustomPreferenceValue('hipayOneClickCheckboxColor')
+                        }
+                    }
+                }
+            }
+        },
+        idealConfig: {
+            config: {
+                template: 'auto',
+                selector: 'hipay-hostedfields-form-ideal' // form container div id
+            }
+        },
+        giropayConfig: {
+            config: {
+                template: 'auto',
+                selector: 'hipay-hostedfields-form-giropay' // form container div id
+            }
+        },
+        mbwayConfig: {
+            config: {
+                template: 'auto',
+                selector: 'hipay-hostedfields-form-mbway' // form container div id
+            }
+        },
+        globalVariable: {
+            username: HiPayConfig['hipayPublic' + HiPayConfig.hipayEnvironment + 'Username'],
+            password: HiPayConfig['hipayPublic' + HiPayConfig.hipayEnvironment + 'Password'],
+            environment: HiPayConfig.hipayEnvironment === 'Live' ? 'production' : 'stage'
+        },
+        applePayConfig: {
+            total: {
+                label: currentSite.getCustomPreferenceValue('HipayAppleLabel')
+            },
+            request: {
+                countryCode: currentSite.getCustomPreferenceValue('hipayAppleCountryCode'),
+                supportedNetworks: currentSite.getCustomPreferenceValue('HipayAppleSupportedNetworks')
+            },
+            style: {
+                type: currentSite.getCustomPreferenceValue('HipayAppleTypeStyle'),
+                color: currentSite.getCustomPreferenceValue('HipayAppleColorStyle')
+            },
+            options: {
+                displayName: currentSite.getCustomPreferenceValue('HipayAppleDisplayName')
+            }
+        },
+        paypalV2: {
+            style: {
+                color: currentSite.getCustomPreferenceValue('hipayPaypal2Color').getValue(),
+                shape: currentSite.getCustomPreferenceValue('hipayPaypal2Shape').getValue(),
+                label: currentSite.getCustomPreferenceValue('hipayPaypal2Label').getValue(),
+                height: currentSite.getCustomPreferenceValue('hipayPaypal2Height')
+            },
+            options: {
+                canPayLater: currentSite.getCustomPreferenceValue('hipayPaypal2CanPayLater')
+            },
+            hipayPaypalButtonPlacement : currentSite.getCustomPreferenceValue('hipayPaypalButtonPlacement').getValue()
+        }
+    };
+}
+
 module.exports = {
     getOrderPaymentInstrument: getOrderPaymentInstrument,
     updatePaymentStatus: updatePaymentStatus,
-    validateOneyAvailability: validateOneyAvailability
+    validateOneyAvailability: validateOneyAvailability,
+    getHostedFieldsPreferences: getHostedFieldsPreferences
 };

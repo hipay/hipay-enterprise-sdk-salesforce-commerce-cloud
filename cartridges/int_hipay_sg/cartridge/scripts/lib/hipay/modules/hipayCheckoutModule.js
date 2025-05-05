@@ -54,16 +54,9 @@ HiPayCheckoutModule.hiPayUpdatePaymentInstrument = function (paymentInstrument) 
     var Transaction = require('dw/system/Transaction');
     var paymentMethod = null; // the payment method
     var pi = paymentInstrument;
-    var ccType; // credit card type
-    var card; // payment card
+    var hipayTokenize = JSON.parse(session.forms.billing.paymentMethods.hipayTokenize.value);
 
-    if (pi.paymentMethod.equals('HIPAY_CREDIT_CARD')) {
-        ccType = session.forms.billing.paymentMethods.creditCard.type.value;
-        card = PaymentMgr.getPaymentCard(ccType);
-        Transaction.wrap(function () {
-            pi.custom.hipayProductName = card.custom.hipayProductName;
-        });
-    } else {
+    if (!pi.paymentMethod.equals('HIPAY_CREDIT_CARD')) {
         paymentMethod = PaymentMgr.getPaymentMethod(pi.paymentMethod);
         Transaction.wrap(function () {
             pi.custom.hipayProductName = paymentMethod.custom.hipayProductName;
@@ -71,74 +64,16 @@ HiPayCheckoutModule.hiPayUpdatePaymentInstrument = function (paymentInstrument) 
             pi.custom.hipayPaymentCategoryList = paymentMethod.custom.hipayPaymentCategoryList;
         });
 
-        if (pi.paymentMethod.equals('HIPAY_IDEAL')) {
+        if (pi.paymentMethod.equals('HIPAY_GIROPAY')) {
             Transaction.wrap(function () {
-                pi.custom.hipayIdealBankID = session.forms.billing.paymentMethods.hipaymethods.issuer_bank_id.value;
+                pi.custom.hipayBic = hipayTokenize.issuer_bank_id;
             });
-        } else if (pi.paymentMethod.equals('HIPAY_GIROPAY')) {
+        } else if (pi.paymentMethod.equals('HIPAY_MBWAY')) {
             Transaction.wrap(function () {
-                pi.custom.hipayBic = session.forms.billing.paymentMethods.hipaymethods.giropay.bic.value;
+                pi.custom.hipayMbwayPhone = hipayTokenize.phone;
             });
         }
     }
-};
-
-/**
-* Make a call to HiPay to generate a token for the Credit Card payment using the information provided
-*
-* @param  {String} hiPayCardNumber
-* @param  {Number} hiPayCardExpiryMonth
-* @param  {Number} hiPayCardExpiryYear
-* @param  {String} hiPayCardHolder
-* @param  {String} hiPayCardCVC
-* @param  {Boolean} hiPayMultiUseToken
-*
-* @return {String} the hiPayToken if successful, null otherwise
-*/
-HiPayCheckoutModule.hiPayGenerateToken = function (hiPayCardNumber, hiPayCardExpiryMonth,
-    hiPayCardExpiryYear, hiPayCardHolder, hiPayCardCVC, hiPayMultiUseToken) {
-    var HiPayTokenService = require('*/cartridge/scripts/lib/hipay/services/hipayTokenService');
-    var HiPayLogger = require('*/cartridge/scripts/lib/hipay/hipayLogger');
-    var log = new HiPayLogger('HiPayGenerateToken');
-    var hiPayTokenService = new HiPayTokenService();
-    var params = {};
-    var month;
-    var hipayResponse;
-    var token;
-    var msg;
-    var pan;
-
-    params.card_number = hiPayCardNumber;
-    month = hiPayCardExpiryMonth;
-    params.card_expiry_month = month < 10 ? '0' + month : month;
-    params.card_expiry_year = hiPayCardExpiryYear;
-    params.card_holder = hiPayCardHolder;
-    params.cvc = hiPayCardCVC;
-    params.multi_use = hiPayMultiUseToken ? 1 : 0;
-    hipayResponse = hiPayTokenService.generateToken(params);
-
-    if (hipayResponse.ok === true) {
-        try {
-            msg = JSON.parse(hipayResponse.object.text);
-        } catch (e) {
-            log.error('Response text cannot be parsed as JSON ::: ' + JSON.stringify(hipayResponse.object.text, undefined, 2));
-            return { error: true };
-        }
-
-        token = msg.token;
-        pan = msg.pan;
-    } else {
-        log.error(hipayResponse.msg);
-        return { error: true };
-    }
-
-    log.info(JSON.stringify(msg, undefined, 2));
-
-    return {
-        error: false,
-        HiPayToken: token,
-        HiPayPan: pan
-    };
 };
 
 /**
@@ -260,12 +195,15 @@ HiPayCheckoutModule.calculateNonGiftCertificateAmount = function (basket) {
  */
 HiPayCheckoutModule.hiPayOrderRequest = function (paymentInstrument, order, deviceFingerprint, recurring) {
     var Transaction = require('dw/system/Transaction');
+    var Calendar = require('dw/util/Calendar');
+    var HiPayDataService = require('*/cartridge/scripts/lib/hipay/services/hipayDataService');
     var HiPayOrderService = require('*/cartridge/scripts/lib/hipay/services/hipayOrderService');
     var HiPayLogger = require('*/cartridge/scripts/lib/hipay/hipayLogger');
     var HiPayHelper = require('*/cartridge/scripts/lib/hipay/hipayHelper');
     var HiPayConfig = require('*/cartridge/scripts/lib/hipay/hipayConfig').HiPayConfig;
     var status = require('*/cartridge/scripts/lib/hipay/hipayStatus').HiPayStatus;
     var log = new HiPayLogger('HiPayOrderRequest');
+    var hipayData = new HiPayDataService();
     var hiPayOrderService = new HiPayOrderService();
     var pi = paymentInstrument;
     var fingeprint = deviceFingerprint;
@@ -279,6 +217,7 @@ HiPayCheckoutModule.hiPayOrderRequest = function (paymentInstrument, order, devi
     var responseMsg;
     var paymentState;
     var paymentTransaction;
+    var hipayDataResponse;
 
     try {
         params.operation = HiPayConfig.hipayPaymentAction;
@@ -288,21 +227,40 @@ HiPayCheckoutModule.hiPayOrderRequest = function (paymentInstrument, order, devi
             params.cardtoken = pi.creditCardToken;
         }
 
-        if (pi.paymentMethod.equals('HIPAY_IDEAL')) {
-            params.issuer_bank_id = pi.custom.hipayIdealBankID;
-        } else if (pi.paymentMethod.equals('HIPAY_GIROPAY')) {
+        if (pi.paymentMethod.equals('HIPAY_GIROPAY')) {
             params.issuer_bank_id = pi.custom.hipayBic;
+        } else if (pi.paymentMethod.equals('HIPAY_MBWAY')) {
+            params.phone = pi.custom.hipayMbwayPhone;
         }
 
-        params.payment_product = pi.custom.hipayProductName;
+        params.payment_product = pi.custom.hipayProductName || pi.creditCardType.toLowerCase();
         params.eci = recurring ? '9' : '7';
         params.device_fingerprint = fingeprint;
         params.cdata1 = order.getOrderToken();
+        params.cardholder = pi.creditCardHolder;
+
         HiPayHelper.fillHeaderData(HiPayConfig, order, params, pi); // fill in the common params
         HiPayHelper.fillOrderData(order, params, pi); // add order details
 
+        var dateRequest = new Calendar().getTime().toISOString();
+
         log.info('HiPay Order Request  ::: ' + JSON.stringify(params, undefined, 2));
         hipayResponse = hiPayOrderService.loadOrderPayment(params);
+
+        var dateResponse = new Calendar().getTime().toISOString();
+
+        // Data Api.
+        // Only for payment by credit card
+        if (pi.paymentMethod.equals('HIPAY_CREDIT_CARD')) {
+            try {
+                hipayDataResponse = hipayData.dataService(params, JSON.parse(hipayResponse.object.text), dateRequest, dateResponse);
+                if (hipayDataResponse.ok) {
+                    Logger.info('Hipay Api Data status message ::: {0}', hipayDataResponse.object.statusMessage);
+                }
+            } catch (error) {
+                log.error(error);
+            }
+        }
 
         if (hipayResponse.ok === true) {
             responseMsg = JSON.parse(hipayResponse.object.text);
@@ -392,10 +350,13 @@ HiPayCheckoutModule.hiPayOrderRequest = function (paymentInstrument, order, devi
  */
 
 HiPayCheckoutModule.hiPayHostedPageRequest = function (order, paymentInstrument) {
+    var Calendar = require('dw/util/Calendar');
     var Transaction = require('dw/system/Transaction');
     var Site = require('dw/system/Site');
     var URLUtils = require('dw/web/URLUtils');
+    var HiPayDataService = require('*/cartridge/scripts/lib/hipay/services/hipayDataService');
 
+    var hipayData = new HiPayDataService();
     return Transaction.wrap(function () {
         var HiPayHostedService = require('*/cartridge/scripts/lib/hipay/services/hipayHostedService');
         var HiPayLogger = require('*/cartridge/scripts/lib/hipay/hipayLogger');
@@ -404,6 +365,7 @@ HiPayCheckoutModule.hiPayHostedPageRequest = function (order, paymentInstrument)
         var log = new HiPayLogger('HiPayHostedPageRequest');
         var hiPayHostedService = new HiPayHostedService();
         var pi = paymentInstrument;
+        var hipayDataResponse;
         var response = {
             hiPayRedirectURL: null,
             hiPayIFrameEnabled: null,
@@ -419,6 +381,7 @@ HiPayCheckoutModule.hiPayHostedPageRequest = function (order, paymentInstrument)
             params.merchant_display_name = Site.current.getName();
             params.multi_use = 1;
             params.cdata1 = order.getOrderToken();
+            params.display_cancel_button = HiPayConfig.hipayCancelButton;
 
             if (!empty(pi.custom.hipayPaymentProductList)) {
                 params.payment_product_list = pi.custom.hipayPaymentProductList;
@@ -432,9 +395,27 @@ HiPayCheckoutModule.hiPayHostedPageRequest = function (order, paymentInstrument)
 
             HiPayHelper.fillOrderData(order, params, pi); // add order details
 
+            var dateRequest = new Calendar().getTime().toISOString();
+
             log.info('HiPay Hosted Page Request ::: ' + JSON.stringify(params, undefined, 2));
 
             var hipayResponse = hiPayHostedService.loadHostedPayment(params);
+
+            var dateResponse = new Calendar().getTime().toISOString();
+
+            // Data Api.
+            // Only for payment by credit card
+            if (pi.paymentMethod.equals('HIPAY_HOSTED_CREDIT_CARD')) {
+                try {
+                    hipayDataResponse = hipayData.dataService(params, JSON.parse(hipayResponse.object.text), dateRequest, dateResponse);
+                    if (hipayDataResponse.ok) {
+                        Logger.info('Hipay Api Data status message ::: {0}', hipayDataResponse.object.statusMessage);
+                    }
+                } catch (error) {
+                    log.error(error);
+                }
+            }
+
             var hipayRedirectURL = null;
             var msg = null;
 

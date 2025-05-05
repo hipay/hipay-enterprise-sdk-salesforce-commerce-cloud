@@ -120,3 +120,24 @@ i.payment-product-sprite-bancontact {
 .payment-options .nav-item {
     flex: 1 0 20%;
 }
+
+.hipay-submit-payment {
+    background-color: #84bd00;
+    border-color: #608a00;
+    border-radius: 2px;
+    border-style: solid;
+    border-width: 1px;
+    color: #fff;
+    cursor: pointer;
+    display: inline-block;
+    font-weight: 400;
+    padding: 0.5em 2em;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.hipay-submit-payment:hover {
+    background-color: #fff;
+    border-color: #84bd00;
+    color: #84bd00;
+}

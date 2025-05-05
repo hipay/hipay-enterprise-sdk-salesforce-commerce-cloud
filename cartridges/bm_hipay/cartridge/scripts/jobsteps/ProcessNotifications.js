@@ -15,7 +15,11 @@ function execute() {
     // Process notifications received at least 10 seconds ago to avoid race conditions.
     var calendar = new Calendar();
     calendar.set(Calendar.SECOND, calendar.get(Calendar.SECOND) - 10);
-    var notifications = CustomObjectMgr.queryCustomObjects(Constants.OBJ_NOTIFICATION, 'creationDate <= {0}', 'creationDate asc', calendar.getTime());
+    var notifications = CustomObjectMgr.queryCustomObjects(
+        Constants.OBJ_NOTIFICATION,
+        '',
+        'custom.hipayTimestamp ASC'
+    );
 
     while (notifications.hasNext()) {
         Transaction.wrap(function () {

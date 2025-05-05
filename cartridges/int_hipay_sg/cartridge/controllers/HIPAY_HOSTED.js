@@ -17,7 +17,6 @@ function Handle(args) {
     var paymentMethod = session.forms.billing.paymentMethods.selectedPaymentMethodID.value;
     var HiPayLogger = require('*/cartridge/scripts/lib/hipay/hipayLogger');
     var log = new HiPayLogger('HIPAY_HOSTED');
-
     if (!empty(paymentMethod)) {
         try {
             var hiPayCheckoutModule = require('*/cartridge/scripts/lib/hipay/modules/hipayCheckoutModule');

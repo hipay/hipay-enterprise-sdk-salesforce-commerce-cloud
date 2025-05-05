@@ -32,6 +32,28 @@
         $cache.btnSubmitSFRA.addClass('d-none');
     }
 
+    function initializeHipayCreditCard() {
+        if (window.hipayCustomPreferences && window.hipayCustomPreferences.hipayEnableOneClick) {
+            try {
+                $.ajax({
+                    url: $('#hipay-hostedfields-form').data('payment-instruments-list-url'),
+                    method: "GET",
+                    data: {
+                        'csrf_token': $('#hipay-hostedfields-form').data('csrf-token')
+                    },
+                    success: function (data) {
+                        createInstance('card', data.paymentInstruments, data.registeredUser);
+                    }
+                });
+            } catch (error) {
+                console.error('ERROR : ', error);
+            }
+        } else {
+            createInstance('card');
+        }
+        $('.credit-card-form').removeClass('checkout-hidden');
+    }
+
     function removeAllHostedfieldsForms() {
         $('#hipay-hostedfields-form').empty();
         $('#hipay-hostedfields-form-giropay').empty();
@@ -39,22 +61,30 @@
         $('#hipay-hostedfields-form-ideal').empty();
     }
 
-    function createInstance(type) {
+    function createInstance(type, paymentInstruments, registeredUser) {
         enableHipayCTA();
-
-        // If the customer uses the oneClick, disable hipayCTA.
-        if (isOneClickPayment()) {
-            disableHipayCTA();
-        }
 
         removeAllHostedfieldsForms();
 
-        // If payment type is card, set full name to credit card form.
+        var config = window.hipayCustomPreferences[type + 'Config'].config;
+
         if (type === 'card') {
+            // If payment type is card, set full name to credit card form.
             setFullnameToCreditCardForm();
+
+            if (registeredUser) {
+                config.one_click = {
+                    enabled: window.hipayCustomPreferences.hipayEnableOneClick
+                };
+
+                if (paymentInstruments) {
+                    config.one_click.cards = paymentInstruments;
+                    config.one_click.cards_display_count = window.hipayCustomPreferences.cardsDisplayCount;
+                }
+            }
         }
 
-        $cache.instance = hipay.create(type, window.hipayCustomPreferences[type + 'Config'].config);
+        $cache.instance = hipay.create(type, config);
         $cache.instance.on('change', function(event){
             /* Display error(s), if any */
             $("#hipay-error-message").innerHTML = event.error;
@@ -66,11 +96,9 @@
     }
 
     function toggleHipayCTA() {
-        // Check that we are at payment stage, and not using a saved payment instrument.
-        if ($('#checkout-main').attr("data-checkout-stage") === $cache.stage.payment &&
-            (!$('.user-payment-instruments').length || $('.user-payment-instruments').hasClass('checkout-hidden'))) {
+        if ($('#checkout-main').attr("data-checkout-stage") === $cache.stage.payment) {
             // Credit card form initialization first.
-            createInstance('card');
+            initializeHipayCreditCard()
 
             enableHipayCTA();
         } else {
@@ -86,18 +114,6 @@
     function isHostedFields(methodID) {
         return Object.values($cache.paymentMethod).indexOf(methodID) !== -1;
     }
-
-    /**
-     * Customer using one click payment?
-     * @param {String} methodID
-     * @returns {Boolean}
-     */
-    function isOneClickPayment() {
-        return $('#checkout-main').attr('data-customer-type') !== 'guest'
-            && $(this).data('method-id') === $cache.paymentMethod.hipayCreditCard
-            && !$('.user-payment-instruments').hasClass('checkout-hidden');
-    }
-
     /**
      * Set full name to credit card form.
      */
@@ -132,7 +148,7 @@
 
             // Trigger directly original submit if using non Hosted fields method,
             // or when using saved payment method.
-            if (!isHostedFields(methodID) || isOneClickPayment()) {
+            if (!isHostedFields(methodID)) {
                 $('button[value="submit-payment"]').trigger('click');
             }
 
@@ -162,7 +178,7 @@
             var methodID = $(this).data('method-id');
 
             if (methodID === $cache.paymentMethod.hipayCreditCard) {
-                createInstance('card');
+                initializeHipayCreditCard();
             } else if (methodID === $cache.paymentMethod.giropay) {
                 createInstance('giropay');
             } else if (methodID === $cache.paymentMethod.mbway) {
@@ -183,7 +199,7 @@
         $('button.cancel-new-payment').on('click', function() {
             toggleHipayCTA();
         });
-    };
+    }
 
     $cache.document.ready(function () {
         initialize();

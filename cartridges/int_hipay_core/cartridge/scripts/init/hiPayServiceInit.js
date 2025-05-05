@@ -26,35 +26,6 @@ function getCredentialsPrivate() {
         ':' + HiPayConfig['hipayPrivate' + HiPayConfig.hipayEnvironment + 'Password'];
 }
 
-// HiPay Generate Token Service
-function createToken() {
-    var siteId = Site.getCurrent().getID();
-    var service = LocalServiceRegistry.createService('hipay.rest.createtoken.' + siteId, {
-        createRequest: function (svc, args) {
-            svc.setRequestMethod('POST');
-
-            // Set headers
-            svc.addHeader('Content-Type', 'application/json');
-            svc.addHeader('Cache-Control', 'no-cache');
-            svc.addHeader('Accept', 'application/json');
-
-            var credString = getCredentialsPublic();
-            var base64Credentials = Encoding.toBase64(new Bytes(credString));
-            svc.addHeader('Authorization', 'Basic ' + base64Credentials);
-
-            return JSON.stringify(args);
-        },
-        parseResponse: function (svc, response) {
-            return response;
-        },
-        filterLogMessage: function (msg) {
-            return msg;
-        }
-    });
-
-    return service;
-}
-
 // HiPay Order Service
 function order() {
     var siteId = Site.getCurrent().getID();
@@ -205,11 +176,45 @@ function transaction() {
     return service;
 }
 
+/**
+ * Get available payment products.
+ * @returns {dw.svc.Service}
+ */
+function getAvailablePaymentProducts() {
+    var siteId = Site.getCurrent().getID();
+    var service = LocalServiceRegistry.createService('hipay.rest.available-payment-products.' + siteId, {
+        createRequest: function (svc, args) {
+            svc.setRequestMethod('GET');
+
+            // Set headers
+            svc.addHeader('Content-Type', 'application/json');
+            svc.addHeader('Cache-Control', 'no-cache');
+            svc.addHeader('Accept', 'application/json');
+
+            var credString = getCredentialsPrivate();
+            var base64Credentials = Encoding.toBase64(new Bytes(credString));
+            svc.addHeader('Authorization', 'Basic ' + base64Credentials);
+
+            svc.setURL(svc.getURL() + '?with_options=true&_format=json')
+
+            return '';
+        },
+        parseResponse: function (svc, response) {
+            return response;
+        },
+        filterLogMessage: function (msg) {
+            return msg;
+        }
+    });
+
+    return service;
+}
+
 module.exports = {
-    createToken: createToken,
     order: order,
     hpayment: hpayment,
     maintenance: maintenance,
     apiData: apiData,
-    transaction: transaction
+    transaction: transaction,
+    getAvailablePaymentProducts: getAvailablePaymentProducts
 };

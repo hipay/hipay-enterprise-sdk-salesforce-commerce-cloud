@@ -68,15 +68,7 @@ HiPayCheckoutModule.hiPayUpdatePaymentInstrument = function (paymentInstrument, 
             pi.custom.hipayPaymentCategoryList = paymentMethod.custom.hipayPaymentCategoryList;
         });
 
-        if (pi.paymentMethod.equals('HIPAY_IDEAL')) {
-            if (!hipayTokenize) {
-                return false;
-            }
-
-            Transaction.wrap(function () {
-                pi.custom.hipayIdealBankID = hipayTokenize.issuer_bank_id;
-            });
-        } else if (pi.paymentMethod.equals('HIPAY_GIROPAY')) {
+        if (pi.paymentMethod.equals('HIPAY_GIROPAY')) {
             if (!hipayTokenize) {
                 return false;
             }
@@ -221,7 +213,7 @@ HiPayCheckoutModule.hiPayOrderRequest = function (paymentInstrument, order, devi
     var status = require('*/cartridge/scripts/lib/hipay/hipayStatus').HiPayStatus;
     var log = new HiPayLogger('HiPayOrderRequest');
     var hiPayOrderService = new HiPayOrderService();
-    var hiPayDataService = new HiPayDataService();
+    var hipayData = new HiPayDataService();
     var pi = paymentInstrument;
     var fingeprint = deviceFingerprint;
     var params = {};
@@ -239,14 +231,16 @@ HiPayCheckoutModule.hiPayOrderRequest = function (paymentInstrument, order, devi
     try {
         params.operation = HiPayConfig.hipayPaymentAction;
 
+        if (pi.paymentMethod.equals('HIPAY_CREDIT_CARD')) {
+            params.one_click = pi.getCustom().hipayIsOneClick ? '1' : '0';
+        }
+
         if (pi.paymentMethod.equals('HIPAY_CREDIT_CARD') || pi.paymentMethod.equals('HIPAY_APPLEPAY')) {
             // credit card payment only
             params.cardtoken = pi.creditCardToken;
         }
 
-        if (pi.paymentMethod.equals('HIPAY_IDEAL')) {
-            params.issuer_bank_id = pi.custom.hipayIdealBankID;
-        } else if (pi.paymentMethod.equals('HIPAY_GIROPAY')) {
+        if (pi.paymentMethod.equals('HIPAY_GIROPAY')) {
             params.issuer_bank_id = pi.custom.hipayBic;
         }
 
@@ -262,6 +256,10 @@ HiPayCheckoutModule.hiPayOrderRequest = function (paymentInstrument, order, devi
             params.phone = pi.custom.hipayMbwayPhone;
         }
 
+        if (pi.paymentMethod.equals('HIPAY_PAYPAL_V2')) {
+            params.provider_data = {paypal_id: session.forms.billing.paypalV2OrderID.value};
+        }
+
         var dateRequest = new Calendar().getTime().toISOString();
 
         log.info('HiPay Order Request  ::: ' + JSON.stringify(params, undefined, 2));
@@ -273,7 +271,7 @@ HiPayCheckoutModule.hiPayOrderRequest = function (paymentInstrument, order, devi
         // Only for payment by credit card
         if (pi.paymentMethod.equals('HIPAY_CREDIT_CARD')) {
             try {
-                hipayDataResponse = hiPayDataService.dataService(params, JSON.parse(hipayResponse.object.text), dateRequest, dateResponse);
+                hipayDataResponse = hipayData.dataService(params, JSON.parse(hipayResponse.object.text), dateRequest, dateResponse);
                 if (hipayDataResponse.ok) {
                     Logger.info('Hipay Api Data status message ::: {0}', hipayDataResponse.object.statusMessage);
                 }
@@ -375,7 +373,7 @@ HiPayCheckoutModule.hiPayHostedPageRequest = function (order, paymentInstrument)
         var Calendar = require('dw/util/Calendar');
         var log = new HiPayLogger('HiPayHostedPageRequest');
         var hiPayHostedService = new HiPayHostedService();
-        var hiPayDataService = new HiPayDataService();
+        var hipayData = new HiPayDataService();
         var pi = paymentInstrument;
         var hipayDataResponse;
         var response = {
@@ -402,8 +400,21 @@ HiPayCheckoutModule.hiPayHostedPageRequest = function (order, paymentInstrument)
                 params.payment_product_category_list = pi.custom.hipayPaymentCategoryList;
             }
 
+            if (pi.paymentMethod.equals('HIPAY_HOSTED_PAYPAL_V2')) {
+                params.paypal_v2_label = Site.getCurrent().getCustomPreferenceValue('hipayPaypal2Label').getValue();
+                params.paypal_v2_shape = Site.getCurrent().getCustomPreferenceValue('hipayPaypal2Shape').getValue();
+                params.paypal_v2_color = Site.getCurrent().getCustomPreferenceValue('hipayPaypal2Color').getValue();
+                params.paypal_v2_height = Site.getCurrent().getCustomPreferenceValue('hipayPaypal2Height');
+                params.paypal_v2_bnpl = Site.getCurrent().getCustomPreferenceValue('hipayPaypal2CanPayLater') ? 1 : 0;
+            }
+
             HiPayHelper.fillHeaderData(HiPayConfig, order, params, pi); // fill in the common params
             HiPayHelper.fillOrderData(order, params, pi); // add order details
+
+            // Add orders parameters to be able reopen basket if possible
+            if (params.cancel_url) {
+                params.cancel_url += `?orderid=${order.getOrderNo()}`;
+            }
 
             log.info('HiPay Hosted Page Request ::: ' + JSON.stringify(params, undefined, 2));
 
@@ -420,7 +431,7 @@ HiPayCheckoutModule.hiPayHostedPageRequest = function (order, paymentInstrument)
             // Only for payment by credit card
             if (pi.paymentMethod.equals('HIPAY_HOSTED_CREDIT_CARD')) {
                 try {
-                    hipayDataResponse = hiPayDataService.dataService(params, JSON.parse(hipayResponse.object.text), dateRequest, dateResponse);
+                    hipayDataResponse = hipayData.dataService(params, JSON.parse(hipayResponse.object.text), dateRequest, dateResponse);
                     if (hipayDataResponse.ok) {
                         Logger.info('Hipay Api Data status message ::: {0}', hipayDataResponse.object.statusMessage);
                     }
@@ -461,7 +472,7 @@ HiPayCheckoutModule.saveCreditCard = function (paymentInstrument, creditCardHold
     var newCreditCard;
     var status;
 
-    if (customer.authenticated && session.forms.billing.creditCardFields.saveCard.value) {
+    if (customer.authenticated && paymentInstrument.custom.hipaySaveCreditCard) {
         creditCards = customer.getProfile().getWallet().getPaymentInstruments('HIPAY_CREDIT_CARD');
         status = Transaction.wrap(function () {
             newCreditCard = customer.getProfile().getWallet().createPaymentInstrument('HIPAY_CREDIT_CARD');
@@ -491,6 +502,11 @@ HiPayCheckoutModule.saveCreditCard = function (paymentInstrument, creditCardHold
             newCreditCard.setCreditCardExpirationYear(paymentInstrument.creditCardExpirationYear);
             newCreditCard.setCreditCardType(paymentInstrument.creditCardType);
             newCreditCard.setCreditCardToken(paymentInstrument.creditCardToken);
+
+            // SFCC stores the credit card number in a different format than what HiPay expects.
+            // To avoid incompatibility issues, we use a custom property (hipayCreditCardNumber)
+            // to store the number in the required HiPay format.
+            newCreditCard.getCustom().hipayCreditCardNumber = paymentInstrument.getCustom().hipayCreditCardNumber.replace(/\*/g, 'x');
 
             for (var i = 0; i < creditCards.length; i++) {
                 var creditcard = creditCards[i];

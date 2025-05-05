@@ -11,6 +11,7 @@ The **HiPay Fullservice cartridge for Salesforce Commerce Cloud B2C** (formerly 
 Read the **[project documentation][doc-home]** for comprehensive information about the requirements, general workflow and installation procedure.
 
 ## Resources
+
 - [Full project documentation][doc-home] — To have a comprehensive understanding of the workflow and get the installation procedure
 - [HiPay Support Center][hipay-help] — To get technical help from HiPay
 - [Issues][project-issues] — To report issues, submit pull requests and get involved (see [Apache 2.0 License][project-license])

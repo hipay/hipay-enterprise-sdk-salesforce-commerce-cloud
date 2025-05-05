@@ -1,3 +1,4 @@
+<isset name="Site" value="${require('dw/system/Site')}" scope="page" />
 <isloop items="${pdict.order.billing.payment.applicablePaymentMethods}" var="paymentOption">
     <iscomment>HIPAY Credit card</iscomment>
     <isif condition="${!empty(paymentOption.ID) && paymentOption.ID == 'HIPAY_CREDIT_CARD' && isHiPayHostedMode == false}">
@@ -25,12 +26,19 @@
                         <div id="hipay-error-message"></div>
                     <iscomment>Methods that perform redirection</iscomment>
 
+                    <iscomment>HIPAY_APPLEPAY</iscomment>
                     <iselseif condition="${paymentOption.ID == 'HIPAY_APPLEPAY'}"/>
-                        <div id="apple-pay-button"></div>
+                        <div id="apple-pay-button" data-total="${pdict.total}"></div>
                         <div id="hipay-apple-error-message"></div>
 
+                    <iscomment>HIPAY_PAYPAL_V2</iscomment>
+                    <iselseif condition="${paymentOption.ID == 'HIPAY_PAYPAL_V2' }"/>
+                        <isif condition="${Site.getCurrent().getCustomPreferenceValue('hipayPaypalButtonPlacement').getValue() === 'submitPayment'}">
+                            <isinclude template="checkout/billing/paypalV2Button" />
+                        <iselse/>
+                            ${Resource.msg('hipay.redirect.message', 'hipay', null)}
+                        </isif>
                     <iselse/>
-
                         ${Resource.msg('hipay.redirect.message', 'hipay', null)}
                     </isif>
                 </isif>

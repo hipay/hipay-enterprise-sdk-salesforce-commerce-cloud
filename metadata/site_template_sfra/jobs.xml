@@ -67,6 +67,25 @@
         </triggers>
     </job>
 
+    <job job-id="HipaySetAlmaBasketAmount">
+        <description/>
+        <parameters/>
+        <flow>
+            <context site-id="RefArchGlobal"/>
+            <step step-id="SetAlmaBasketAmount" type="custom.Hipay.SetAlmaBasketAmount" enforce-restart="false">
+                <description>Step-job to process set basket amount</description>
+                <parameters/>
+            </step>
+        </flow>
+        <rules/>
+        <triggers>
+            <run-once enabled="true">
+                <date>2025-04-07Z</date>
+                <time>09:49:00.000Z</time>
+            </run-once>
+        </triggers>
+    </job>
+
     <job job-id="HipayNotifications" priority="0">
         <description>Process notifications received from Hipay.</description>
         <parameters/>
