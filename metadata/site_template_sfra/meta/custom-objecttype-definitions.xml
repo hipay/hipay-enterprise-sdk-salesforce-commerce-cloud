@@ -72,6 +72,14 @@
             <min-length>0</min-length>
         </key-definition>
         <attribute-definitions>
+            <attribute-definition attribute-id="hipayTimestamp">
+                <display-name xml:lang="x-default">Timestamp</display-name>
+                <type>string</type>
+                <localizable-flag>false</localizable-flag>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <min-length>0</min-length>
+            </attribute-definition>
             <attribute-definition attribute-id="notification">
                 <display-name xml:lang="x-default">Notification</display-name>
                 <description xml:lang="x-default">Notification</description>
@@ -86,6 +94,7 @@
                 <display-name xml:lang="x-default">Hipay Notification Attributes</display-name>
                 <attribute attribute-id="id"/>
                 <attribute attribute-id="notification"/>
+                <attribute attribute-id="hipayTimestamp"/>
             </attribute-group>
         </group-definitions>
 	</custom-type>

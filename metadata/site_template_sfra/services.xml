@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <services xmlns="http://www.demandware.com/xml/impex/services/2014-09-26">
+    <service-credential service-credential-id="hipay.available-payment-products.cred">
+        <url>https://stage-secure-gateway.hipay-tpp.com/rest/v2/available-payment-products</url>
+    </service-credential>
+
     <service-credential service-credential-id="hipay.data.cred">
         <url>https://stage-data.hipay.com/checkout-data</url>
     </service-credential>
@@ -80,5 +84,16 @@
         <mock-mode-enabled>false</mock-mode-enabled>
         <profile-id>hipay.prof</profile-id>
         <credential-id>hipay.transaction.cred</credential-id>
+    </service>
+
+    <service service-id="hipay.rest.available-payment-products.RefArchGlobal">
+        <service-type>HTTP</service-type>
+        <enabled>true</enabled>
+        <log-prefix/>
+        <comm-log-enabled>false</comm-log-enabled>
+        <force-prd-enabled>true</force-prd-enabled>
+        <mock-mode-enabled>false</mock-mode-enabled>
+        <profile-id>hipay.prof</profile-id>
+        <credential-id>hipay.available-payment-products.cred</credential-id>
     </service>
 </services>

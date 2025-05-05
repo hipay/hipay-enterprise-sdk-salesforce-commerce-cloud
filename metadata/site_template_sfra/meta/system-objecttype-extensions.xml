@@ -68,12 +68,11 @@
                 <externally-managed-flag>false</externally-managed-flag>
                 <min-length>0</min-length>
             </attribute-definition>
-            <attribute-definition attribute-id="hipayIdealBankID">
-                <display-name xml:lang="x-default">HiPay Ideal Bank ID</display-name>
-                <type>string</type>
+            <attribute-definition attribute-id="hipayIsOneClick">
+                <display-name xml:lang="x-default">Is one click payment ?</display-name>
+                <type>boolean</type>
                 <mandatory-flag>false</mandatory-flag>
                 <externally-managed-flag>false</externally-managed-flag>
-                <min-length>0</min-length>
             </attribute-definition>
             <attribute-definition attribute-id="hipayMbwayPhone">
                 <display-name xml:lang="x-default">Hipay mbway phone</display-name>
@@ -109,6 +108,12 @@
                 <mandatory-flag>false</mandatory-flag>
                 <externally-managed-flag>false</externally-managed-flag>
                 <min-length>0</min-length>
+            </attribute-definition>
+            <attribute-definition attribute-id="hipaySaveCreditCard">
+                <display-name xml:lang="x-default">Hipay save credit card</display-name>
+                <type>boolean</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
             </attribute-definition>
             <attribute-definition attribute-id="hipayTransactionCaptureRequestAmount">
                 <display-name xml:lang="x-default">HiPay Capture Request Amount</display-name>
@@ -180,10 +185,29 @@
                 <attribute attribute-id="hipayCreditCardToken"/>
                 <attribute attribute-id="hipayCreditCardCountry"/>
                 <attribute attribute-id="hipayCreditCardIssuer"/>
-                <attribute attribute-id="hipayIdealBankID"/>
                 <attribute attribute-id="hipayBic"/>
                 <attribute attribute-id="hipayOneClickDisabled"/>
                 <attribute attribute-id="hipayMbwayPhone"/>
+                <attribute attribute-id="hipaySaveCreditCard"/>
+                <attribute attribute-id="hipayIsOneClick"/>
+            </attribute-group>
+        </group-definitions>
+    </type-extension>
+
+    <type-extension type-id="CustomerPaymentInstrument">
+        <custom-attribute-definitions>
+            <attribute-definition attribute-id="hipayCreditCardNumber">
+                <display-name xml:lang="x-default">Credit Card Number</display-name>
+                <type>string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <min-length>0</min-length>
+            </attribute-definition>
+        </custom-attribute-definitions>
+        <group-definitions>
+            <attribute-group group-id="HiPay">
+                <display-name xml:lang="x-default">HiPay</display-name>
+                <attribute attribute-id="hipayCreditCardNumber"/>
             </attribute-group>
         </group-definitions>
     </type-extension>
@@ -389,6 +413,33 @@
                 <externally-managed-flag>false</externally-managed-flag>
                 <default-value>950</default-value>
             </attribute-definition>
+            <attribute-definition attribute-id="hipayOneClickCardsDisplayCount">
+                <display-name xml:lang="x-default">Card Display Count</display-name>
+                <description xml:lang="x-default">The maximum count of visible saved cards when there are any. Additionnal cards can be displayed by clicking on the “Show more” button. By default, it’s 0 and it means displaying all saved cards.</description>
+                <type>double</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <min-value>1.0</min-value>
+                <default-value>1</default-value>
+            </attribute-definition>
+            <attribute-definition attribute-id="hipayOneClickCheckboxColor">
+                <display-name xml:lang="x-default">Checkbox Color</display-name>
+                <description xml:lang="x-default">Applies custom style on a checkbox button, like those for each saved cards.</description>
+                <type>string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <min-length>0</min-length>
+                <default-value>#6864E7</default-value>
+            </attribute-definition>
+            <attribute-definition attribute-id="hipayOneClickSwitchButtonColor">
+                <display-name xml:lang="x-default">Switch Button Color</display-name>
+                <description xml:lang="x-default">Applies custom style on a swith button, like the “Save this card” button.</description>
+                <type>string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <min-length>0</min-length>
+                <default-value>#FF8C50</default-value>
+            </attribute-definition>
             <attribute-definition attribute-id="hipayOperationMode">
                 <display-name xml:lang="x-default">HiPay Operation Mode</display-name>
                 <description xml:lang="x-default">Defines which operation payment mode to be used</description>
@@ -424,6 +475,94 @@
                     <value-definition>
                         <display xml:lang="x-default">Authorization Only</display>
                         <value>Authorization</value>
+                    </value-definition>
+                </value-definitions>
+            </attribute-definition>
+            <attribute-definition attribute-id="hipayPaypal2CanPayLater">
+                <display-name xml:lang="x-default">canPayLater</display-name>
+                <type>boolean</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <default-value>true</default-value>
+            </attribute-definition>
+            <attribute-definition attribute-id="hipayPaypal2Color">
+                <display-name xml:lang="x-default">Color</display-name>
+                <type>enum-of-string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <value-definitions>
+                    <value-definition default="true">
+                        <display xml:lang="x-default">gold</display>
+                        <value>gold</value>
+                    </value-definition>
+                    <value-definition>
+                        <display xml:lang="x-default">blue</display>
+                        <value>blue</value>
+                    </value-definition>
+                    <value-definition>
+                        <display xml:lang="x-default">black</display>
+                        <value>black</value>
+                    </value-definition>
+                    <value-definition>
+                        <display xml:lang="x-default">silver</display>
+                        <value>silver</value>
+                    </value-definition>
+                    <value-definition>
+                        <display xml:lang="x-default">white</display>
+                        <value>white</value>
+                    </value-definition>
+                </value-definitions>
+            </attribute-definition>
+            <attribute-definition attribute-id="hipayPaypal2Height">
+                <display-name xml:lang="x-default">Height</display-name>
+                <type>double</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <min-value>25.0</min-value>
+                <max-value>55.0</max-value>
+                <default-value>40</default-value>
+            </attribute-definition>
+            <attribute-definition attribute-id="hipayPaypal2Shape">
+                <display-name xml:lang="x-default">Shape</display-name>
+                <type>enum-of-string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <value-definitions>
+                    <value-definition>
+                        <display xml:lang="x-default">rectangle</display>
+                        <value>rect</value>
+                    </value-definition>
+                    <value-definition default="true">
+                        <display xml:lang="x-default">pill</display>
+                        <value>pill</value>
+                    </value-definition>
+                </value-definitions>
+            </attribute-definition>
+            <attribute-definition attribute-id="hipayPaypal2Label">
+                <display-name xml:lang="x-default">Label</display-name>
+                <type>enum-of-string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <value-definitions>
+                    <value-definition default="true">
+                        <display xml:lang="x-default">pay</display>
+                        <value>pay</value>
+                    </value-definition>
+                    <value-definition>
+                        <display xml:lang="x-default">paypal</display>
+                        <value>paypal</value>
+                    </value-definition>
+                    <value-definition>
+                        <display xml:lang="x-default">subscribe</display>
+                        <value>subscribe</value>
+                    </value-definition>
+                    <value-definition>
+                        <display xml:lang="x-default">checkout</display>
+                        <value>checkout</value>
+                    </value-definition>
+                    <value-definition>
+                        <display xml:lang="x-default">buynow</display>
+                        <value>buynow</value>
                     </value-definition>
                 </value-definitions>
             </attribute-definition>
@@ -566,6 +705,46 @@ Username for the environment test</description>
                 <min-length>0</min-length>
                 <default-value>plain</default-value>
             </attribute-definition>
+            <attribute-definition attribute-id="hipayPaypalButtonPlacement">
+                <display-name xml:lang="x-default">Paypal button placement</display-name>
+                <type>enum-of-string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <value-definitions>
+                    <value-definition default="true">
+                        <display xml:lang="x-default">Submit Payment</display>
+                        <value>submitPayment</value>
+                    </value-definition>
+                    <value-definition>
+                        <display xml:lang="x-default">Place Order</display>
+                        <value>placeOrder</value>
+                    </value-definition>
+                </value-definitions>
+            </attribute-definition>
+            <attribute-definition attribute-id="almaBasketAmountMax3x">
+                <display-name xml:lang="x-default">Basket amount max 3x</display-name>
+                <type>double</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>true</externally-managed-flag>
+            </attribute-definition>
+            <attribute-definition attribute-id="almaBasketAmountMax4x">
+                <display-name xml:lang="x-default">Basket amount max 4x</display-name>
+                <type>double</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>true</externally-managed-flag>
+            </attribute-definition>
+            <attribute-definition attribute-id="almaBasketAmountMin3x">
+                <display-name xml:lang="x-default">Basket amount min 3x</display-name>
+                <type>double</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>true</externally-managed-flag>
+            </attribute-definition>
+            <attribute-definition attribute-id="almaBasketAmountMin4x">
+                <display-name xml:lang="x-default">Basket amount min 4x</display-name>
+                <type>double</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>true</externally-managed-flag>
+            </attribute-definition>
         </custom-attribute-definitions>
         <group-definitions>
             <attribute-group group-id="HiPay">
@@ -603,6 +782,28 @@ Username for the environment test</description>
                 <attribute attribute-id="HipayAppleTypeStyle"/>
                 <attribute attribute-id="HipayAppleColorStyle"/>
                 <attribute attribute-id="HipayAppleDisplayName"/>
+            </attribute-group>
+            <attribute-group group-id="Hipay Paypal2">
+                <display-name xml:lang="x-default">Hipay Paypal2</display-name>
+                <attribute attribute-id="hipayPaypal2Shape"/>
+                <attribute attribute-id="hipayPaypal2Color"/>
+                <attribute attribute-id="hipayPaypal2CanPayLater"/>
+                <attribute attribute-id="hipayPaypalButtonPlacement"/>
+                <attribute attribute-id="hipayPaypal2Label"/>
+                <attribute attribute-id="hipayPaypal2Height"/>
+            </attribute-group>
+            <attribute-group group-id="Hipay Alma">
+                <display-name xml:lang="x-default">Hipay Alma</display-name>
+                <attribute attribute-id="almaBasketAmountMin3x"/>
+                <attribute attribute-id="almaBasketAmountMax3x"/>
+                <attribute attribute-id="almaBasketAmountMin4x"/>
+                <attribute attribute-id="almaBasketAmountMax4x"/>
+            </attribute-group>
+            <attribute-group group-id="Hipay OneClick Config">
+                <display-name xml:lang="x-default">Hipay OneClick Configuration</display-name>
+                <attribute attribute-id="hipayOneClickSwitchButtonColor"/>
+                <attribute attribute-id="hipayOneClickCheckboxColor"/>
+                <attribute attribute-id="hipayOneClickCardsDisplayCount"/>
             </attribute-group>
         </group-definitions>
     </type-extension>

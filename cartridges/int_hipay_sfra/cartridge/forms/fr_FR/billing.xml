@@ -22,4 +22,6 @@
 
     <field formid="hipaytokenize" type="string"/>
 
+    <field formid="paypalV2OrderID" type="string"/>
+
 </form>

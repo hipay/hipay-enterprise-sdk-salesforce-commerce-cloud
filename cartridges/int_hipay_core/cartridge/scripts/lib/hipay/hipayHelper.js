@@ -162,10 +162,11 @@ function getHostedFieldsPreferences() {
     var HiPayConfig = require('*/cartridge/scripts/lib/hipay/hipayConfig').HiPayConfig;
     var currentSite = Site.getCurrent();
 
-    var hipayHostedFields = {
+    return {
         hipayEnabled: currentSite.getCustomPreferenceValue('hipayEnabled'),
         hipayEnableOneClick: currentSite.getCustomPreferenceValue('hipayEnableOneClick'),
         hipayOperationMode: currentSite.getCustomPreferenceValue('hipayOperationMode').value,
+        cardsDisplayCount: currentSite.getCustomPreferenceValue('hipayOneClickCardsDisplayCount'),
         isSFRA6: currentSite.getCustomPreferenceValue('hipaySFRAVersion'),
         cardConfig: {
             config: {
@@ -190,6 +191,14 @@ function getHostedFieldsPreferences() {
                     invalid: {
                         color: currentSite.getCustomPreferenceValue('hipayHostedFieldsStyleInvalidColor'),
                         caretColor: currentSite.getCustomPreferenceValue('hipayHostedFieldsStyleInvalidCaretColor')
+                    },
+                    components: {
+                        switch: {
+                            mainColor: currentSite.getCustomPreferenceValue('hipayOneClickSwitchButtonColor')
+                        },
+                        checkbox: {
+                            mainColor: currentSite.getCustomPreferenceValue('hipayOneClickCheckboxColor')
+                        }
                     }
                 }
             }
@@ -232,10 +241,20 @@ function getHostedFieldsPreferences() {
             options: {
                 displayName: currentSite.getCustomPreferenceValue('HipayAppleDisplayName')
             }
+        },
+        paypalV2: {
+            style: {
+                color: currentSite.getCustomPreferenceValue('hipayPaypal2Color').getValue(),
+                shape: currentSite.getCustomPreferenceValue('hipayPaypal2Shape').getValue(),
+                label: currentSite.getCustomPreferenceValue('hipayPaypal2Label').getValue(),
+                height: currentSite.getCustomPreferenceValue('hipayPaypal2Height')
+            },
+            options: {
+                canPayLater: currentSite.getCustomPreferenceValue('hipayPaypal2CanPayLater')
+            },
+            hipayPaypalButtonPlacement : currentSite.getCustomPreferenceValue('hipayPaypalButtonPlacement').getValue()
         }
     };
-
-    return hipayHostedFields;
 }
 
 module.exports = {

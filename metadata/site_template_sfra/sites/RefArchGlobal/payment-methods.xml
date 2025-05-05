@@ -481,6 +481,94 @@
         </custom-attributes>
     </payment-method>
 
+    <payment-method method-id="HIPAY_ALMA_3X">
+        <name xml:lang="x-default">Alma 3x</name>
+        <enabled-flag>true</enabled-flag>
+        <processor-id>HIPAY</processor-id>
+        <countries>
+            <country country-code="FR"/>
+        </countries>
+        <currencies>
+            <currency>EUR</currency>
+        </currencies>
+        <custom-attributes>
+            <custom-attribute attribute-id="hipayOnlyCompleteCapture">false</custom-attribute>
+            <custom-attribute attribute-id="hipayProductName">alma-3x</custom-attribute>
+        </custom-attributes>
+    </payment-method>
+
+    <payment-method method-id="HIPAY_ALMA_4X">
+        <name xml:lang="x-default">Alma 4x</name>
+        <enabled-flag>true</enabled-flag>
+        <processor-id>HIPAY</processor-id>
+        <countries>
+            <country country-code="FR"/>
+        </countries>
+        <currencies>
+            <currency>EUR</currency>
+        </currencies>
+        <custom-attributes>
+            <custom-attribute attribute-id="hipayOnlyCompleteCapture">false</custom-attribute>
+            <custom-attribute attribute-id="hipayProductName">alma-4x</custom-attribute>
+        </custom-attributes>
+    </payment-method>
+
+    <payment-method method-id="HIPAY_HOSTED_ALMA_3X">
+        <name xml:lang="x-default">Hosted Alma 3x</name>
+        <enabled-flag>true</enabled-flag>
+        <processor-id>HIPAY_HOSTED</processor-id>
+        <countries>
+            <country country-code="FR"/>
+        </countries>
+        <currencies>
+            <currency>EUR</currency>
+        </currencies>
+        <custom-attributes>
+            <custom-attribute attribute-id="hipayOnlyCompleteCapture">false</custom-attribute>
+            <custom-attribute attribute-id="hipayPaymentProductList">alma-3x</custom-attribute>
+            <custom-attribute attribute-id="hipayProductName">alma-3x</custom-attribute>
+        </custom-attributes>
+    </payment-method>
+
+    <payment-method method-id="HIPAY_HOSTED_ALMA_4X">
+        <name xml:lang="x-default">Hosted alma 4x</name>
+        <enabled-flag>true</enabled-flag>
+        <processor-id>HIPAY_HOSTED</processor-id>
+        <countries>
+            <country country-code="FR"/>
+        </countries>
+        <currencies>
+            <currency>EUR</currency>
+        </currencies>
+        <custom-attributes>
+            <custom-attribute attribute-id="hipayOnlyCompleteCapture">false</custom-attribute>
+            <custom-attribute attribute-id="hipayPaymentProductList">alma-4x</custom-attribute>
+            <custom-attribute attribute-id="hipayProductName">alma-4x</custom-attribute>
+        </custom-attributes>
+    </payment-method>
+
+    <payment-method method-id="HIPAY_PAYPAL_V2">
+        <name xml:lang="x-default">PayPal</name>
+        <enabled-flag>true</enabled-flag>
+        <processor-id>HIPAY</processor-id>
+        <custom-attributes>
+            <custom-attribute attribute-id="hipayOnlyCompleteCapture">false</custom-attribute>
+            <custom-attribute attribute-id="hipayPaymentProductList">paypal</custom-attribute>
+            <custom-attribute attribute-id="hipayProductName">paypal</custom-attribute>
+        </custom-attributes>
+    </payment-method>
+
+    <payment-method method-id="HIPAY_HOSTED_PAYPAL_V2">
+        <name xml:lang="x-default">PayPal</name>
+        <enabled-flag>true</enabled-flag>
+        <processor-id>HIPAY_HOSTED</processor-id>
+        <custom-attributes>
+            <custom-attribute attribute-id="hipayOnlyCompleteCapture">false</custom-attribute>
+            <custom-attribute attribute-id="hipayPaymentProductList">paypal</custom-attribute>
+            <custom-attribute attribute-id="hipayProductName">paypal</custom-attribute>
+        </custom-attributes>
+    </payment-method>
+
     <payment-card card-type="Master">
         <name xml:lang="x-default">Master Card</name>
         <name xml:lang="fr-FR">Master Card</name>

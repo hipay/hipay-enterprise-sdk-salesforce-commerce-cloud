@@ -112,6 +112,23 @@
                             <button class="btn btn-primary btn-block place-order" data-action="${URLUtils.url('CheckoutServices-PlaceOrder')}"
                                     type="submit" name="submit" value="place-order">${Resource.msg('button.place.order', 'checkout', null)}
                             </button>
+
+                            <iscomment> Renders the PayPal V2 button in two different scenarios:
+                            1. When the user reloads the 'placeOrder' page and PayPal V2 is the selected payment method.
+                            This ensures the button is displayed correctly after a page refresh during the checkout process.
+                            (Conditional rendering within the loop).
+
+                            2. For the standard checkout flow, regardless of page reload status.
+                            This ensures the button is always available during the normal checkout process.
+                            </iscomment>
+
+                            <isloop items="${pdict.order.billing.payment.selectedPaymentInstruments}" var="selectedPaymentInstrument">
+                                <isif condition="${selectedPaymentInstrument.paymentMethod == 'HIPAY_PAYPAL_V2' && Site.getCurrent().getCustomPreferenceValue('hipayPaypalButtonPlacement').getValue() === 'placeOrder' && pdict.currentStage === 'placeOrder'}">
+                                    <isinclude template="checkout/billing/paypalV2Button" />
+                               </isif>
+                            </isloop>
+
+                            <isinclude template="checkout/billing/paypalV2Button" />
                         </div>
                     </div>
                 </div>

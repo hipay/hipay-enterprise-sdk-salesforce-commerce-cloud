@@ -707,6 +707,99 @@ function setGift(shipment, isGift, giftMessage) {
     return result;
 }
 
+/**
+ * Filter Alma payment methods
+ * @param applicablePaymentMethods
+ * @returns {*}
+ */
+function filterAlmaPaymentMethods(applicablePaymentMethods) {
+    return applicablePaymentMethods.filter(method => method.ID.includes('ALMA'));
+}
+
+/**
+ * Get Alma payment products from Hipay.
+ * @param hipayAvailablePaymentProductService
+ * @returns {*|null}
+ */
+function getAlmaPaymentProducts(hipayAvailablePaymentProductService) {
+    var availablePaymentsProducts = hipayAvailablePaymentProductService.availablePaymentProducts();
+    if (availablePaymentsProducts) {
+        return availablePaymentsProducts.filter(product => product.code.includes('alma'));
+    }
+    return null;
+}
+
+/**
+ * Should remove Alma payment.
+ * @param total
+ * @param almaRanges
+ * @param installmentCount
+ * @returns {boolean}
+ */
+function shouldRemoveAlmaPayment(total, almaRanges, installmentCount) {
+    var minAmount = Number(almaRanges[`basketAmountMin${installmentCount}x`]);
+    var maxAmount = Number(almaRanges[`basketAmountMax${installmentCount}x`]);
+    return total < minAmount || total > maxAmount;
+}
+
+/**
+ * Filter applicable payment methods
+ * @param applicablePaymentMethods
+ * @param removeAlma3x
+ * @param removeAlma4x
+ * @returns {*}
+ */
+function filterApplicablePaymentMethods(applicablePaymentMethods, removeAlma3x, removeAlma4x) {
+    return applicablePaymentMethods.filter(method => {
+        if (removeAlma3x && method.ID.includes('ALMA_3X')) {
+            return false;
+        }
+        if (removeAlma4x && method.ID.includes('ALMA_4X')) {
+            return false;
+        }
+
+        return true;
+    });
+}
+
+/**
+ * Process alma Payment methods
+ * @param viewData
+ * @returns {*}
+ */
+function processAlmaPaymentMethods(viewData) {
+    var HipayAvailablePaymentProductService = require('*/cartridge/scripts/lib/hipay/services/hipayAvailablePaymentProductService');
+
+    var applicablePaymentMethods = viewData.order.billing.payment.applicablePaymentMethods;
+    var almaPaymentMethods = filterAlmaPaymentMethods(applicablePaymentMethods);
+
+    if (almaPaymentMethods.length > 0) {
+        var hipayAvailablePaymentProductService = new HipayAvailablePaymentProductService();
+        var almaPaymentProducts = getAlmaPaymentProducts(hipayAvailablePaymentProductService);
+
+        if (almaPaymentProducts && almaPaymentProducts.length > 0) {
+            var removeAlma3x = false;
+            var removeAlma4x = false;
+            var total = Number(viewData.total);
+
+            for (var almaPaymentProduct of almaPaymentProducts) {
+                if (removeAlma3x && removeAlma4x) {
+                    break;
+                }
+                var almaRanges = almaPaymentProduct.options;
+
+                if (!removeAlma3x && shouldRemoveAlmaPayment(total, almaRanges, 3)) {
+                    removeAlma3x = true;
+                }
+                if (!removeAlma4x && shouldRemoveAlmaPayment(total, almaRanges, 4)) {
+                    removeAlma4x = true;
+                }
+            }
+            return filterApplicablePaymentMethods(applicablePaymentMethods, removeAlma3x, removeAlma4x);
+        }
+    }
+}
+
 module.exports = {
     getFirstNonDefaultShipmentWithProductLineItems: getFirstNonDefaultShipmentWithProductLineItems,
     ensureNoEmptyShipments: ensureNoEmptyShipments,
@@ -734,5 +827,10 @@ module.exports = {
     getRenderedPaymentInstruments: getRenderedPaymentInstruments,
     sendConfirmationEmail: sendConfirmationEmail,
     ensureValidShipments: ensureValidShipments,
-    setGift: setGift
+    setGift: setGift,
+    filterAlmaPaymentMethods: filterAlmaPaymentMethods,
+    getAlmaPaymentProducts: getAlmaPaymentProducts,
+    shouldRemoveAlmaPayment: shouldRemoveAlmaPayment,
+    filterApplicablePaymentMethods: filterApplicablePaymentMethods,
+    processAlmaPaymentMethods: processAlmaPaymentMethods
 };

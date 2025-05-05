@@ -17,8 +17,7 @@ HiPaySignitureMgr.checkIsValidResponse = function (paramsMap, passPhrase) {
     var shaSign = paramsMap.get('hash')[0];
     var shaOut = HiPaySignitureMgr.calculateSigniture(paramsMap, passPhrase);
 
-    var isValid = shaSign === shaOut;
-    return isValid;
+    return shaSign === shaOut;
 };
 
 /**
@@ -26,9 +25,7 @@ HiPaySignitureMgr.checkIsValidResponse = function (paramsMap, passPhrase) {
  */
 HiPaySignitureMgr.checkIsValidNotification = function (paramsMap, passPhrase, shaSign) {
     var shaOut = HiPaySignitureMgr.calculateNotificationSigniture(paramsMap, passPhrase);
-    var isValid = shaSign === shaOut;
-
-    return isValid;
+    return shaSign === shaOut;
 };
 
 /**
@@ -55,9 +52,7 @@ HiPaySignitureMgr.calculateSigniture = function (paramsMap, passPhrase) {
 
     // Hash the final string
     var digest = new MessageDigest(MessageDigest.DIGEST_SHA_256);
-    var hash = Encoding.toHex(digest.digestBytes(new Bytes(stringToHash, 'UTF-8')));
-
-    return hash;
+    return Encoding.toHex(digest.digestBytes(new Bytes(stringToHash, 'UTF-8')));
 };
 
 /**
@@ -80,9 +75,7 @@ HiPaySignitureMgr.calculateNotificationSigniture = function (paramsMap, passPhra
     var hashAlgo = Site.getCurrent().getCustomPreferenceValue('hipayHashAlgorithm').value;
 
     var digest = new MessageDigest(MessageDigest[hashAlgo]);
-    var hash = Encoding.toHex(digest.digestBytes(new Bytes(stringToHash, 'UTF-8')));
-
-    return hash;
+    return Encoding.toHex(digest.digestBytes(new Bytes(stringToHash, 'UTF-8')));
 };
 
 module.exports.HiPaySignitureMgr = HiPaySignitureMgr;
