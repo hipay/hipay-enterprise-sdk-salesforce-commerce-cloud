@@ -64,11 +64,7 @@ HiPayCheckoutModule.hiPayUpdatePaymentInstrument = function (paymentInstrument) 
             pi.custom.hipayPaymentCategoryList = paymentMethod.custom.hipayPaymentCategoryList;
         });
 
-        if (pi.paymentMethod.equals('HIPAY_IDEAL')) {
-            Transaction.wrap(function () {
-                pi.custom.hipayIdealBankID = hipayTokenize.issuer_bank_id;
-            });
-        } else if (pi.paymentMethod.equals('HIPAY_GIROPAY')) {
+        if (pi.paymentMethod.equals('HIPAY_GIROPAY')) {
             Transaction.wrap(function () {
                 pi.custom.hipayBic = hipayTokenize.issuer_bank_id;
             });
@@ -231,9 +227,7 @@ HiPayCheckoutModule.hiPayOrderRequest = function (paymentInstrument, order, devi
             params.cardtoken = pi.creditCardToken;
         }
 
-        if (pi.paymentMethod.equals('HIPAY_IDEAL')) {
-            params.issuer_bank_id = pi.custom.hipayIdealBankID;
-        } else if (pi.paymentMethod.equals('HIPAY_GIROPAY')) {
+        if (pi.paymentMethod.equals('HIPAY_GIROPAY')) {
             params.issuer_bank_id = pi.custom.hipayBic;
         } else if (pi.paymentMethod.equals('HIPAY_MBWAY')) {
             params.phone = pi.custom.hipayMbwayPhone;

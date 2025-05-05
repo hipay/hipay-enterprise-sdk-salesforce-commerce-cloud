@@ -1,6 +1,6 @@
 {
   "name": "int_hipay_sfra",
-  "version": "23.1.0",
+  "version": "25.4.0",
   "description": "Hipay cartridge",
   "main": "index.js",
   "engines": {

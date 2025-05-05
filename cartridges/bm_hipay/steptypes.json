@@ -69,6 +69,29 @@
             }
           ]
         }
+      },
+      {
+        "@supports-organization-context": "false",
+        "@supports-site-context": "true",
+        "@type-id": "custom.Hipay.SetAlmaBasketAmount",
+        "description": "Step-job to process set basket amount",
+        "module": "bm_hipay/cartridge/scripts/jobsteps/SetBasketAmount.js",
+        "function": "execute",
+        "parameters": {
+
+        },
+        "status-codes": {
+          "status": [
+            {
+              "@code": "ERROR",
+              "description": "Used when an error occurred."
+            },
+            {
+              "@code": "OK",
+              "description": "Used when everything went well."
+            }
+          ]
+        }
       }
     ]
   }

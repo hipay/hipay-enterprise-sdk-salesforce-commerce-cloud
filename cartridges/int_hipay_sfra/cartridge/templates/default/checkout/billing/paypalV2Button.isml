@@ -1,0 +1,2 @@
+<div id="paypal-button" data-total="${pdict.total}"></div>
+<div id="hipay-paypalv2-error-message"></div>

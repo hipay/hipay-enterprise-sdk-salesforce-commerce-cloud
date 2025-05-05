@@ -10,41 +10,14 @@ var COHelpers = require('*/cartridge/scripts/checkout/checkoutHelpers');
  * @returns {Object} an object that has error information or payment information
  */
 function processForm(req, paymentForm, viewFormData) {
-    var array = require('*/cartridge/scripts/util/array');
-    var PaymentMgr = require('dw/order/PaymentMgr');
-
     var viewData = viewFormData;
-    var creditCardErrors = {};
 
-    if (!req.form.storedPaymentUUID) {
-        if (paymentForm.paymentMethod.htmlValue === 'CREDIT_CARD' || paymentForm.paymentMethod.htmlValue === 'HIPAY_CREDIT_CARD') {
-            // verify credit card form data
-            delete paymentForm.hipayMethodsFields;
-
-            if (!empty(paymentForm.creditCardFields.cardType.value)) {
-                var paymentCard = PaymentMgr.getPaymentCard(paymentForm.creditCardFields.cardType.value);
-
-                if (!empty(paymentCard) && paymentCard.custom.hipayCVVIgnored) {
-                    delete paymentForm.creditCardFields.securityCode;
-                }
-            }
-
-            creditCardErrors = COHelpers.validateCreditCard(paymentForm);
-        } else if (paymentForm.paymentMethod.htmlValue === 'HIPAY_IDEAL' && paymentForm.hipayMethodsFields.ideal) {
-            COHelpers.validateFields(paymentForm.hipayMethodsFields.ideal);
-            paymentForm.hipayMethodsFields = paymentForm.hipayMethodsFields.ideal;
-        } else if (paymentForm.paymentMethod.htmlValue === 'HIPAY_GIROPAY' && paymentForm.hipayMethodsFields.giropay) {
-            COHelpers.validateFields(paymentForm.hipayMethodsFields.giropay);
-            paymentForm.hipayMethodsFields = paymentForm.hipayMethodsFields.giropay;
-        }
-    }
-
-
-    if (Object.keys(creditCardErrors).length) {
-        return {
-            fieldErrors: creditCardErrors,
-            error: true
-        };
+    if (paymentForm.paymentMethod.htmlValue === 'HIPAY_IDEAL' && paymentForm.hipayMethodsFields.ideal) {
+        COHelpers.validateFields(paymentForm.hipayMethodsFields.ideal);
+        paymentForm.hipayMethodsFields = paymentForm.hipayMethodsFields.ideal;
+    } else if (paymentForm.paymentMethod.htmlValue === 'HIPAY_GIROPAY' && paymentForm.hipayMethodsFields.giropay) {
+        COHelpers.validateFields(paymentForm.hipayMethodsFields.giropay);
+        paymentForm.hipayMethodsFields = paymentForm.hipayMethodsFields.giropay;
     }
 
     viewData.paymentMethod = {
@@ -52,59 +25,6 @@ function processForm(req, paymentForm, viewFormData) {
         htmlName: paymentForm.paymentMethod.value
     };
 
-    viewData.paymentInformation = {
-        cardType: {
-            value: paymentForm.creditCardFields.cardType.value,
-            htmlName: paymentForm.creditCardFields.cardType.htmlName
-        },
-        cardNumber: {
-            value: paymentForm.creditCardFields.cardNumber.value,
-            htmlName: paymentForm.creditCardFields.cardNumber.htmlName
-        },
-        securityCode: {
-            value: paymentForm.creditCardFields.securityCode.value,
-            htmlName: paymentForm.creditCardFields.securityCode.htmlName
-        },
-        expirationMonth: {
-            value: parseInt(
-                paymentForm.creditCardFields.expirationMonth.selectedOption,
-                10
-            ),
-            htmlName: paymentForm.creditCardFields.expirationMonth.htmlName
-        },
-        expirationYear: {
-            value: parseInt(paymentForm.creditCardFields.expirationYear.value, 10),
-            htmlName: paymentForm.creditCardFields.expirationYear.htmlName
-        },
-        cardOwner: {
-            value: paymentForm.addressFields.firstName.value + ' ' + paymentForm.addressFields.lastName.value,
-            htmlName: paymentForm.creditCardFields.cardOwner.htmlName
-        }
-    };
-
-    if (req.form.storedPaymentUUID) {
-        viewData.storedPaymentUUID = req.form.storedPaymentUUID;
-    }
-
-    viewData.saveCard = paymentForm.creditCardFields.saveCard.checked;
-
-    // process payment information
-    if (viewData.storedPaymentUUID
-        && req.currentCustomer.raw.authenticated
-        && req.currentCustomer.raw.registered
-    ) {
-        var paymentInstruments = req.currentCustomer.wallet.paymentInstruments;
-        var paymentInstrument = array.find(paymentInstruments, function (item) {
-            return viewData.storedPaymentUUID === item.UUID;
-        });
-
-        viewData.paymentInformation.cardNumber.value = paymentInstrument.creditCardNumber;
-        viewData.paymentInformation.cardType.value = paymentInstrument.creditCardType;
-        viewData.paymentInformation.securityCode.value = req.form.securityCode;
-        viewData.paymentInformation.expirationMonth.value = paymentInstrument.creditCardExpirationMonth;
-        viewData.paymentInformation.expirationYear.value = paymentInstrument.creditCardExpirationYear;
-        viewData.paymentInformation.creditCardToken = paymentInstrument.raw.creditCardToken;
-    }
 
     return {
         error: false,

@@ -116,6 +116,7 @@ function saveNotification(request) {
     Transaction.wrap(function () {
         var instance = CustomObjectMgr.createCustomObject(Constants.OBJ_NOTIFICATION, id);
         instance.custom.notification = JSON.stringify(notification);
+        instance.custom.hipayTimestamp = Date.now().toString();
     });
 }
 
