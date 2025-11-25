@@ -284,7 +284,7 @@ HiPayCheckoutModule.hiPayOrderRequest = function (paymentInstrument, order, devi
             responseMsg = JSON.parse(hipayResponse.object.text);
             log.info('HiPay Order Response ::: ' + JSON.stringify(responseMsg, undefined, 2));
             paymentTransaction = pi.getPaymentTransaction();
-
+            paymentState = responseMsg.state;
             Transaction.wrap(function () {
                 paymentTransaction.setTransactionID(responseMsg.transactionReference); // set the reference from hipay
                 pi.custom.hipayTransactionType = responseMsg.paymentProduct; // set transaction type = ideal,visa;

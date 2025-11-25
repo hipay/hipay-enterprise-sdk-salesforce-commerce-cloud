@@ -2,9 +2,10 @@
 
 /**
  * HiPayStatus object contains all status response types
+ * Documentation : https://developer.hipay.com/payment-fundamentals/essentials/transaction-status
  */
 var HiPayStatus = {
-    // payment state
+    // CUSTOM
     COMPLETED: {
         code: 'completed',
         value: 'COMPLETED'
@@ -42,46 +43,11 @@ var HiPayStatus = {
         code: 'error',
         value: 'ERROR'
     },
-    // payment status
-    CREATED: {
-        code: '101',
-        value: 'Created',
-        description: 'The payment attempt was created.'
-    },
-    CARDHOLDER_ENROLLED: {
-        code: '103',
-        value: 'Cardholder Enrolled',
-        description: 'Card is enrolled in the 3-D Secure program. The merchant has to forward the cardholder to the authentication pages of the card issuer.'
-    },
-    CARDHOLDER_NOT_ENROLLED: {
-        code: '104',
-        value: 'Cardholder Not Enrolled',
-        description: 'Card is not enrolled in 3-D Secure program.'
-    },
-    UNABLE_TO_AUTHENTICATE: {
-        code: '105',
-        value: 'Unable to Authenticate',
-        description: 'Unable to complete the authentication request.'
-    },
-    CARDHOLDER_AUTHENTICATED: {
-        code: '106',
-        value: 'Cardholder Authenticated',
-        description: 'Cardholder was successfully authenticated in the 3-D Secure program.'
-    },
-    AUTHENTICATION_ATTEMPTED: {
-        code: '107',
-        value: 'Authentication Attempted',
-        description: 'The Merchant has attempted to authenticate the cardholder in the 3-D Secure program and either the Issuer or cardholder is not enrolled.'
-    },
-    COULD_NOT_AUTHENTICATE: {
-        code: '108',
-        value: 'Could Not Authenticate',
-        description: 'The Issuer is not able to complete the authentication request.'
-    },
+    // Sent by server-to-server notification
     AUTHENTICATION_FAILED: {
         code: '109',
         value: 'Authentication Failed',
-        description: 'Cardholder authentication failed. Authorization request should not be submitted. An authentication failure may be a possible indication of a fraudulent user.'
+        description: 'The cardholder’s authentication failed.'
     },
     BLOCKED: {
         code: '110',
@@ -91,32 +57,32 @@ var HiPayStatus = {
     DENIED: {
         code: '111',
         value: 'Denied',
-        description: 'Merchant denied the payment attempt. After reviewing the fraud screening result, the merchant decided to decline the payment.'
+        description: 'The merchant denied the payment attempt.'
     },
     AUTHORIZED_AND_PENDING: {
         code: '112',
         value: 'Authorized and Pending',
-        description: 'The payment was challenged by the fraud rule set and is pending.'
+        description: 'The payment has been challenged by the fraud rule set and is pending.'
     },
     REFUSED: {
         code: '113',
         value: 'Refused',
-        description: 'The financial institution refused to authorize the payment. The refusal reasons can be : an exceeded credit limit, an incorrect expiry date, insufficient balance, or many other depending on the selected payment method.'
+        description: 'The financial institution refused to authorize the payment.'
     },
     EXPIRED: {
         code: '114',
         value: 'Expired',
-        description: 'The validity period of the payment authorization has expired. This happens when no capture request is submitted for an authorized payment typically within 7 days after authorization. Note : Depending on the customer\'s issuing bank, the authorization validity period may last from 1-5 days for a debit card and up to 30 days for a credit card.'
+        description: 'The validity period of the payment authorization has expired.'
     },
     CANCELLED: {
         code: '115',
         value: 'Cancelled',
-        description: 'Merchant cancelled the payment attempt. You can only cancel payments with status "Authorized" and that have not yet reached the status "Captured". In the case of a credit card payment, cancelling the transaction consists in voiding the authorization.'
+        description: 'The merchant has cancelled the payment attempt.'
     },
     AUTHORIZED: {
         code: '116',
         value: 'Authorized',
-        description: 'The financial institution has approved the payment. In the case of a credit card payment, funds are "held" and deducted from the customer\'s credit limit (or bank balance, in the case of a debit card) but are not yet transferred to the merchant. In the case of bank transfers and some other payment methods, the payment immediately obtains the status "Captured" after being set to "Authorized".'
+        description: 'The financial institution has approved the payment.'
     },
     CAPTURE_REQUESTED: {
         code: '117',
@@ -126,32 +92,12 @@ var HiPayStatus = {
     CAPTURED: {
         code: '118',
         value: 'Captured',
-        description: 'The financial institution has processed the payment. The funds will be transferred to HiPay TPP before being settled to your bank account. Authorized payments can be captured as long as the authorization has not expired. Some payment methods, like bank transfers or direct debits, reach the "Captured" status straight away after being authorized.'
+        description: 'The financial institution has processed the payment.'
     },
     PARTIALLY_CAPTURED: {
         code: '119',
         value: 'Partially Captured',
-        description: 'The financial institution has processed part of the payment. If only part of the order can be shipped, it is allowed to capture an amount equal to the shipped part of the order. This is called a partial capture. Note : Remember! As all credit card companies dictate, it is not allowed for a merchant to capture a payment before shipping has completed. Merchant should start shipping the order once the status "Authorized" is reached!'
-    },
-    COLLECTED: {
-        code: '120',
-        value: 'Collected',
-        description: 'The funds have been made available for remittance to the merchant. A payment with the status \'Collected\' is ready to be paid out. HiPay TPP either will transfer the amount to your bank account within the next few days (depends on your settlement frequency), or the amount is already transferred to your bank account.'
-    },
-    PARTIALLY_COLLECTED: {
-        code: '121',
-        value: 'Partially Collected',
-        description: 'A part of the transaction has been collected.'
-    },
-    SETTLED: {
-        code: '122',
-        value: 'Settled',
-        description: 'The financial operations linked to this transaction are closed. Funds have been debited or credited from your merchant account at Hipay.'
-    },
-    PARTIALLY_SETTLED: {
-        code: '123',
-        value: 'Partially Settled',
-        description: 'A part of the financial operations linked to this transaction is closed.'
+        description: 'The financial institution has processed part of the payment.'
     },
     REFUND_REQUESTED: {
         code: '124',
@@ -161,17 +107,144 @@ var HiPayStatus = {
     REFUNDED: {
         code: '125',
         value: 'Refunded',
-        description: 'The payment was refunded. A payment obtains the status \'Refunded\' when the financial institution processed the refund and the amount has been transferred to the shopper\'s account. The amount will be deducted from the next total amount, to be paid out to the merchant.'
+        description: 'The payment was refunded.'
     },
     PARTIALLY_REFUNDED: {
         code: '126',
         value: 'Partially Refunded',
-        description: 'A part of the transaction has been refunded.'
+        description: 'The payment was partially refunded.'
     },
     CHARGED_BACK: {
         code: '129',
         value: 'Charged Back',
-        description: 'The cardholder reversed a capture processed by their bank or credit card company. For instance, the cardholder contacts his credit card company and denies having made the transaction. The credit card company then revokes the already captured payment. Please note the legal difference between the shopper (who ordered the goods) and the cardholder (who owns the credit card and ends up paying for the order). In general, charge backs only occurs incidentally. When they do, a contact with the shopper can often solve the situation. Occasionally it is an indication of credit card fraud.'
+        description: 'The payment was charged back.'
+    },
+    DISPUTE_LOST: {
+        code: '134',
+        value: 'Dispute Lost',
+        description: 'The merchant lost the chargeback dispute.'
+    },
+    AUTHORIZATION_REQUESTED: {
+        code: '142',
+        value: 'Authorization Requested',
+        description: 'The payment method used requires an authorization request; the request was sent and the system is waiting for the approval of the financial institution.'
+    },
+    AUTHORIZATION_CANCELLED: {
+        code: '143',
+        value: 'Authorization Cancelled',
+        description: 'The authorization has been cancelled'
+    },
+    REFERENCE_RENDERED: {
+        code: '144',
+        value: 'Reference Rendered',
+        description: 'The payment reference to pay has been generated'
+    },
+    REFUND_REFUSED: {
+        code: '165',
+        value: 'Refund Refused',
+        description: 'The refund operation was refused by the financial institution.'
+    },
+    DEBITED_CARDHOLDER_CREDIT: {
+        code: '166',
+        value: 'Debited (cardholder credit)',
+        description: 'The credit request was accepted and the cardholder was credited of the requested amount.'
+    },
+    CREDIT_REQUESTED: {
+        code: '169',
+        value: 'Credit Requested',
+        description: 'The merchant requested to directly credit the cardholder.'
+    },
+    IN_PROGRESS: {
+        code: '172',
+        value: 'In progress',
+        description: 'This status only applies to MixPayment master transactions. All of the master transaction’s sub-transactions are not yet authorized.'
+    },
+    CAPTURE_REFUSED: {
+        code: '173',
+        value: 'Capture Refused',
+        description: 'The capture was refused by the financial institution.'
+    },
+    AWAITING_TERMINAL: {
+        code: '174',
+        value: 'Awaiting Terminal',
+        description: 'The transaction request was sent to the payment terminal.'
+    },
+    AUTHORIZATION_CANCELLATION_REQUESTED: {
+        code: '175',
+        value: 'Authorization cancellation requested',
+        description: 'The merchant requested to cancel the transaction’s authorization.'
+    },
+    CHALLENGE_REQUESTED: {
+        code: '177',
+        value: 'Challenge Requested',
+        description: 'The payment method used requires authentication; authentication request has been sent and the system is waiting for an action from the customer.'
+    },
+    SOFT_DECLINED: {
+        code: '178',
+        value: 'Soft declined',
+        description: 'The authorization was declined by the issuer because the transaction was not authenticated.'
+    },
+    PENDING_PAYMENT: {
+        code: '200',
+        value: 'Pending Payment',
+        description: 'The transaction request was submitted to the acquirer but the response is not yet available.'
+    },
+
+    // Not sent by server-to-server notification
+    CREATED: {
+        code: '101',
+        value: 'Created',
+        description: 'The payment attempt was created.'
+    },
+    CARDHOLDER_ENROLLED: {
+        code: '103',
+        value: 'Cardholder Enrolled',
+        description: 'The card is enrolled in the 3-D Secure program.'
+    },
+    CARDHOLDER_NOT_ENROLLED: {
+        code: '104',
+        value: 'Cardholder Not Enrolled',
+        description: 'The card is not enrolled in the 3-D Secure program.'
+    },
+    UNABLE_TO_AUTHENTICATE: {
+        code: '105',
+        value: 'Unable to Authenticate',
+        description: 'The card issuer is unable to complete the authentication request.'
+    },
+    CARDHOLDER_AUTHENTICATED: {
+        code: '106',
+        value: 'Cardholder Authenticated',
+        description: 'The cardholder was successfully authenticated in the 3-D Secure program.'
+    },
+    AUTHENTICATION_ATTEMPTED: {
+        code: '107',
+        value: 'Authentication Attempted',
+        description: 'The merchant has attempted to authenticate the cardholder in the 3-D Secure program.'
+    },
+    COULD_NOT_AUTHENTICATE: {
+        code: '108',
+        value: 'Could Not Authenticate',
+        description: 'The card issuer is not able to complete the authentication request.'
+    },
+    COLLECTED: {
+        code: '120',
+        value: 'Collected',
+        description: 'The funds have been made available for remittance to the merchant.'
+    },
+    PARTIALLY_COLLECTED: {
+        code: '121',
+        value: 'Partially Collected',
+        description: 'A part of the transaction has been collected.'
+    },
+    SETTLED: {
+        code: '122',
+        value: 'Settled',
+        description: 'The financial operations linked to this transaction are closed.'
+    },
+    PARTIALLY_SETTLED: {
+        code: '123',
+        value: 'Partially Settled',
+        description: 'A part of the financial operations linked to this transaction is closed.'
     },
     DEBITED: {
         code: '131',
@@ -186,27 +259,22 @@ var HiPayStatus = {
     AUTHENTICATION_REQUESTED: {
         code: '140',
         value: 'Authentication Requested',
-        description: 'The payment method used requires authentication, authentication request was send and system is waiting for a customers’ action.'
+        description: 'The payment method used requires authentication; authentication request has been sent and the system is waiting for an action from the customer.'
     },
     AUTHENTICATED: {
         code: '141',
         value: 'Authenticated',
-        description: 'The payment method used requires authentication and it was successfull.'
-    },
-    AUTHORIZATION: {
-        code: '142',
-        value: 'Authorization',
-        description: 'Requested The payment method used requires an authorization request; the request was send and the system is waiting for the financial institution approval.'
+        description: 'The payment method used requires authentication and it was successful.'
     },
     ACQUIRER_FOUND: {
         code: '150',
         value: 'Acquirer Found',
-        description: 'The acquirer payment route has been found.'
+        description: 'The acquirer’s payment route has been found.'
     },
     ACQUIRER_NOT_FOUND: {
         code: '151',
         value: 'Acquirer not Found',
-        description: 'The acquirer payment route has not been found.'
+        description: 'The acquirer’s payment route has not been found.'
     },
     CARDHOLDER_ENROLLMENT_UNKNOWN: {
         code: '160',
@@ -222,16 +290,6 @@ var HiPayStatus = {
         code: '163',
         value: 'Authorization Refused',
         description: 'The authorization was refused by the financial institution.'
-    },
-    CAPTURE_REFUSED: {
-        code: '173',
-        value: 'Capture Refused',
-        description: 'The capture was refused by the financial institution.'
-    },
-    PENDING_PAYMENT: {
-        code: '200',
-        value: 'Pending Payment',
-        description: 'The transaction request was submitted to the acquirer but response is not yet available.'
     }
 };
 
