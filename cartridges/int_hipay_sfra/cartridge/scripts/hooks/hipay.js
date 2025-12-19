@@ -28,7 +28,8 @@ function creditCardHandle(paymentInstrument, paymentInformation, req) {
     var hiPayCardType;
 
     if (
-        creditCard.one_click
+        !empty(creditCard)
+        && creditCard.one_click
         && !creditCard.hasOwnProperty('multi_use')
         && hipayEnableOneClick
         && !empty(customer.getProfile().getWallet())
@@ -80,7 +81,9 @@ function creditCardHandle(paymentInstrument, paymentInformation, req) {
             paymentInstrument.getCustom().hipayIsOneClick = creditCard.one_click ? creditCard.one_click : false;
         });
     } else {
-        return { error: true };
+        if (paymentInstrument.paymentTransaction.amount.value > 0) {
+            return { error: true };
+        }
     }
 
     return { success: true };
