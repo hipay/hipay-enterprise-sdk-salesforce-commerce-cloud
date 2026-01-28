@@ -7,10 +7,10 @@
            max-length="50" missing-error="error.message.required" range-error="error.message.lessthan50"/>
     <field formid="lastName" label="label.input.lastname.profile" type="string" mandatory="true" binding="lastName" max-length="50"
            missing-error="error.message.required" range-error="error.message.lessthan50"/>
-    <field formid="address1" label="label.input.address1" type="string" mandatory="true" binding="address1" max-length="50"
-           missing-error="error.message.required" range-error="error.message.lessthan50"/>
+    <field formid="address1" label="label.input.address1" type="string" mandatory="true" binding="address1" max-length="255"
+           missing-error="error.message.required" range-error="error.message.lessthan255"/>
     <field formid="address2" label="label.input.address2" type="string" mandatory="false" binding="address2"
-           max-length="50" range-error="error.message.lessthan50"/>
+           max-length="255" range-error="error.message.lessthan255"/>
     <field formid="city" label="label.input.city" type="string" mandatory="true" binding="city" min-length="2"
            max-length="50" missing-error="error.message.required" range-error="error.message.between2and50"/>
 
@@ -39,7 +39,7 @@
            missing-error="error.message.required"
            range-error="error.message.between10and20"
            parse-error="error.message.parse.phone"/>
-           
+
     <field formid="email" label="profile.email" type="string" mandatory="true" binding="email"
            max-length="50" regexp="^[\w.%+-]+@[\w.-]+\.[\w]{2,6}$" missing-error="error.card.info.missing.email"
            parse-error="error.message.parse.email.profile.form" range-error="error.message.lessthan50"
