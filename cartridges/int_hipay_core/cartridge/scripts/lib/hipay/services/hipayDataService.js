@@ -47,7 +47,7 @@ function payload(params, hipayResponse, hipaytokenize, dateRequest, dateResponse
         customer: {
             email: params.email,
             cid: params.cid,
-            paddr: params.ipaddr
+            ipaddr: params.ipaddr
         },
         merchant_display_name: Site.current.getName(),
         monitoring: {
