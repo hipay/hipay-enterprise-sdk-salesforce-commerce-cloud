@@ -1,4 +1,9 @@
 ## CHANGELOG
+## Version 26.1.0
+- Fixed payment processing when the transaction amount was equal to zero.
+- Changed the maximum length validation for the address form fields.
+- Fixed the ipaddr variable in the API request.
+- Changed logo iDeal
 
 ## Version 25.4.2
 - fix: Map new status codes to correctly handle 3DS flow
