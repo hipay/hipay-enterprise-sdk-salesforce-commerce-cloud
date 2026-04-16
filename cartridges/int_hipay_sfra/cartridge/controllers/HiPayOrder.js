@@ -11,6 +11,7 @@ var hiPayCheckoutModule = require('*/cartridge/scripts/lib/hipay/modules/hipayCh
 var HiPayOrderModule = require('*/cartridge/scripts/lib/hipay/modules/hipayOrderModule');
 var HiPayProcess = require('*/cartridge/scripts/lib/hipay/hipayProcess');
 var statuses = require('*/cartridge/scripts/lib/hipay/hipayStatus').HiPayStatus;
+var hipayPendingOrderHelper = require('*/cartridge/scripts/lib/hipay/hipayPendingOrderHelper');
 
 function acceptPayment(req, res, next, mode) {
     var isHashValid = HiPayProcess.verifyHash();
@@ -102,6 +103,7 @@ function cancelPayment(req, res, next) {
                 OrderMgr.failOrder(order, true);
             });
 
+            hipayPendingOrderHelper.clearPendingHipayOrder(req);
             redirectURL = URLUtils.url('Checkout-Begin', 'stage', 'payment', 'authMessage', Resource.msg('hipay.payment.cancel', 'hipay', null));
         } catch (e) {
             Logger.error('[HiPayOrder.js] crashed on line: ' + e.lineNumber + ' with error: ' + e.message);
