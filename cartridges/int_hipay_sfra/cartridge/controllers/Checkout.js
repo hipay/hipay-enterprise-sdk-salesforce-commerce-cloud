@@ -3,10 +3,33 @@
 var server = require('server');
 var BasketMgr = require('dw/order/BasketMgr');
 var Logger = require('dw/system/Logger');
+var URLUtils = require('dw/web/URLUtils');
 
 var COHelpers = require('*/cartridge/scripts/checkout/checkoutHelpers');
+var hipayPendingOrderHelper = require('*/cartridge/scripts/lib/hipay/hipayPendingOrderHelper');
 
 server.extend(module.superModule);
+
+server.prepend(
+    'Begin',
+    server.middleware.https,
+    function (req, res, next) {
+        var currentBasket = BasketMgr.getCurrentBasket();
+        var stage = req.querystring.stage;
+        var isBasketEmpty = !currentBasket || currentBasket.productLineItems.length === 0;
+
+        if (isBasketEmpty) {
+            var restoredFromHipay = hipayPendingOrderHelper.tryRestoreBasketFromPendingHipay(req);
+
+            if (restoredFromHipay && (stage === 'submitted' || stage === 'placeOrder')) {
+                res.redirect(URLUtils.url('Checkout-Begin', 'stage', 'payment'));
+                return next();
+            }
+        }
+
+        return next();
+    }
+);
 
 /**
  * Appends the 'Begin' route to the Checkout controller.
