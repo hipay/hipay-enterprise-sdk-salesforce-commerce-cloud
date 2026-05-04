@@ -153,6 +153,71 @@ function updatePaymentStatus(order, paymentInstr, paymentStatus, capturedAmount)
     }
 }
 
+function updateOrderStatus(order, notification) {
+    var statuses = require('*/cartridge/scripts/lib/hipay/hipayStatus').HiPayStatus;
+    var OrderMgr = require('dw/order/OrderMgr');
+    var Transaction = require('dw/system/Transaction');
+    var COHelpers = require('*/cartridge/scripts/checkout/checkoutHelpers');
+    if (!order) {
+        return false;
+    }
+
+    if (order) {
+        // if payment succeeded and status order failed
+        // if the notification is captured, update order status from failed to confirmed step by step
+        Transaction.wrap(function () {
+            if (empty(order.custom.hipayTransactionID)) {
+                order.getCustom().hipayTransactionID = notification.transaction_reference;
+            }
+
+            if (order.status.value !== Order.CONFIRMATION_STATUS_CONFIRMED && notification.status === statuses.CAPTURED.code && notification.message === statuses.CAPTURED.value) {
+                if (order.status.value === Order.ORDER_STATUS_FAILED) {
+                    var failOrderStatus = OrderMgr.undoFailOrder(order);
+                    if (failOrderStatus.error) {
+                        Logger.error('[HiPayHelper.js] - Failed to place an order: {0}, during notification process.', order.orderNo);
+                    } else {
+                        // Change order status from CREATED to NEW
+                        var placeOrderStatus = OrderMgr.placeOrder(order);
+                        Logger.info('[HiPayHelper.js] - Order {0}] Update order from FAILED to NEW', order.orderNo);
+                        if (placeOrderStatus.error) {
+                            throw '[HiPayHelper.js] - Failed to change status from CREATED to NEW for order ' + order.orderNo;
+                        }
+                        Logger.info('[HiPayHelper.js] - Order {0}] Update order from NEW to OPEN', order.orderNo);
+                        // Change order status from NEW to OPEN
+                        order.setStatus(Order.ORDER_STATUS_OPEN);
+                        // Set other status
+                        order.setConfirmationStatus(Order.CONFIRMATION_STATUS_CONFIRMED);
+                        order.setExportStatus(Order.EXPORT_STATUS_READY);
+                        Logger.info('[HiPayHelper.js] - Order {0} is updated', order.orderNo);
+                        //send mail confirmation order
+                        if (order.getCustomerEmail()) {
+                            COHelpers.sendConfirmationEmail(order, order.getCustomerLocaleID());
+                        }
+                    }
+                } else {
+                    // Change order status from CREATED to NEW
+                    var placeOrderStatus = OrderMgr.placeOrder(order);
+                    Logger.info('[HiPayHelper.js] - Order {0}] Update order from FAILED to NEW', order.orderNo);
+                    if (placeOrderStatus.error) {
+                        throw '[HiPayHelper.js] - Failed to change status from CREATED to NEW for order ' + order.orderNo;
+                    }
+                    Logger.info('[HiPayHelper.js] - Order {0}] Update order from NEW to OPEN', order.orderNo);
+                    // Change order status from NEW to OPEN
+                    order.setStatus(Order.ORDER_STATUS_OPEN);
+                    // Set other status
+                    order.setConfirmationStatus(Order.CONFIRMATION_STATUS_CONFIRMED);
+                    order.setExportStatus(Order.EXPORT_STATUS_READY);
+                    Logger.info('[HiPayHelper.js] - Order {0} is updated', order.orderNo);
+                    //send mail confirmation order
+                    if (order.getCustomerEmail()) {
+                        COHelpers.sendConfirmationEmail(order, order.getCustomerLocaleID());
+                    }
+                }
+            }
+        });
+    }
+}
+
 /**
  * Get hosted fields custom preferences and build an object.
  * @return {Object}
@@ -261,5 +326,6 @@ module.exports = {
     getOrderPaymentInstrument: getOrderPaymentInstrument,
     updatePaymentStatus: updatePaymentStatus,
     validateOneyAvailability: validateOneyAvailability,
-    getHostedFieldsPreferences: getHostedFieldsPreferences
+    getHostedFieldsPreferences: getHostedFieldsPreferences,
+    updateOrderStatus: updateOrderStatus
 };
