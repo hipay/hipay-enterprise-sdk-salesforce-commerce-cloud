@@ -9,7 +9,7 @@ var formHelpers = require('base/checkout/formErrors');
 // Configuration
 const total = {
     label: window.hipayCustomPreferences.applePayConfig.total.label,
-    amount: $('#apple-pay-button').data('total')
+    amount: $('#apple-pay-button').data('total').toString()
 };
 
 const request = {
