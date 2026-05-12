@@ -199,40 +199,40 @@ function updateOrderStatus(order, notification) {
     var OrderMgr = require('dw/order/OrderMgr');
     var Transaction = require('dw/system/Transaction');
 
-    if (order) {
-        // if payment succeeded and status order created, update order status to open and send confirmation email to customer
-        if (empty(order.custom.hipayTransactionID)) {
+    if (!order) { return; }
+
+    // if payment succeeded and status order created, update order status to open and send confirmation email to customer
+    if (empty(order.custom.hipayTransactionID)) {
+        Transaction.wrap(function () {
+            order.getCustom().hipayTransactionID = notification.transaction_reference;
+        });
+    }
+
+    if (order.status.value === Order.ORDER_STATUS_CREATED) {
+        var placedStatuses = [
+            statuses.AUTHORIZED.code,        // 116
+            statuses.CAPTURE_REQUESTED.code, // 117
+            statuses.CAPTURED.code,          // 118
+            statuses.PARTIALLY_CAPTURED.code // 119
+        ];
+
+        if (placedStatuses.indexOf(notification.status) > -1) {
+            // Change order status from CREATED to NEW
+            var placeOrderStatus = OrderMgr.placeOrder(order);
+
+            if (placeOrderStatus.error) {
+                throw '[HiPayHelper.js] - Failed to change status from CREATED to NEW for order ' + order.orderNo;
+            }
+            Logger.info('[HiPayHelper.js] - Order {0}] Update order from CREATED to OPEN', order.orderNo);
             Transaction.wrap(function () {
-                order.getCustom().hipayTransactionID = notification.transaction_reference;
+                // Set other status
+                order.setConfirmationStatus(Order.CONFIRMATION_STATUS_CONFIRMED);
+                order.setExportStatus(Order.EXPORT_STATUS_READY);
             });
-        }
-
-        if (order.status.value === Order.ORDER_STATUS_CREATED) {
-            var placedStatuses = [
-                statuses.AUTHORIZED.code,        // 116
-                statuses.CAPTURE_REQUESTED.code, // 117
-                statuses.CAPTURED.code,          // 118
-                statuses.PARTIALLY_CAPTURED.code // 119
-            ];
-
-            if (placedStatuses.indexOf(notification.status) > -1) {
-                // Change order status from CREATED to NEW
-                var placeOrderStatus = OrderMgr.placeOrder(order);
-
-                if (placeOrderStatus.error) {
-                    throw '[HiPayHelper.js] - Failed to change status from CREATED to NEW for order ' + order.orderNo;
-                }
-                Logger.info('[HiPayHelper.js] - Order {0}] Update order from CREATED to OPEN', order.orderNo);
-                Transaction.wrap(function () {
-                    // Set other status
-                    order.setConfirmationStatus(Order.CONFIRMATION_STATUS_CONFIRMED);
-                    order.setExportStatus(Order.EXPORT_STATUS_READY);
-                });
-                Logger.info('[HiPayHelper.js] - Order {0} is updated', order.orderNo);
-                //send mail confirmation order
-                if (order.getCustomerEmail()) {
-                    sendConfirmationEmailFromJob(order);
-                }
+            Logger.info('[HiPayHelper.js] - Order {0} is updated', order.orderNo);
+            // Send mail confirmation order
+            if (order.getCustomerEmail()) {
+                sendConfirmationEmailFromJob(order);
             }
         }
     }
