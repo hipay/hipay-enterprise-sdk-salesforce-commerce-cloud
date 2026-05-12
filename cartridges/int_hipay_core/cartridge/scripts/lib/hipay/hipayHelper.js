@@ -178,6 +178,22 @@ function sendConfirmationEmailFromJob(order) {
     emailHelpers.sendEmail(emailObj, 'checkout/confirmation/confirmationEmail', orderObject);
 }
 
+/**
+ * Updates the order status based on a HiPay notification.
+ *
+ * If the order is still in CREATED status and the notification reports a
+ * payment success (AUTHORIZED, CAPTURE_REQUESTED, CAPTURED or
+ * PARTIALLY_CAPTURED), the order is placed (CREATED → NEW), its confirmation
+ * and export statuses are set, and a confirmation email is sent to the
+ * customer.
+ *
+ * The HiPay transaction reference is also persisted on the order's custom
+ * attribute `hipayTransactionID` when it is not already set.
+ *
+ * @param {dw.order.Order} order - The SFCC order to update.
+ * @param {Object} notification - The parsed HiPay notification payload.
+ * @returns {void}
+ */
 function updateOrderStatus(order, notification) {
     var statuses = require('*/cartridge/scripts/lib/hipay/hipayStatus').HiPayStatus;
     var OrderMgr = require('dw/order/OrderMgr');
