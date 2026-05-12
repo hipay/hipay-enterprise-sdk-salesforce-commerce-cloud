@@ -167,17 +167,22 @@ function updateOrderStatus(order, notification) {
         }
 
         if (order.status.value === Order.ORDER_STATUS_CREATED) {
-            if (notification.status === statuses.CAPTURED.code && notification.message === statuses.CAPTURED.value) {
+            var placedStatuses = [
+                statuses.AUTHORIZED.code,        // 116
+                statuses.CAPTURE_REQUESTED.code, // 117
+                statuses.CAPTURED.code,          // 118
+                statuses.PARTIALLY_CAPTURED.code // 119
+            ];
+
+            if (placedStatuses.indexOf(notification.status) > -1) {
                 // Change order status from CREATED to NEW
                 var placeOrderStatus = OrderMgr.placeOrder(order);
-                Logger.info('[HiPayHelper.js] - Order {0}] Update order from FAILED to NEW', order.orderNo);
+                Logger.info('[HiPayHelper.js] - Order {0}] Update order from CREATED to NEW', order.orderNo);
                 if (placeOrderStatus.error) {
                     throw '[HiPayHelper.js] - Failed to change status from CREATED to NEW for order ' + order.orderNo;
                 }
                 Logger.info('[HiPayHelper.js] - Order {0}] Update order from NEW to OPEN', order.orderNo);
                 Transaction.wrap(function () {
-                    // Change order status from NEW to OPEN
-                    order.setStatus(Order.ORDER_STATUS_OPEN);
                     // Set other status
                     order.setConfirmationStatus(Order.CONFIRMATION_STATUS_CONFIRMED);
                     order.setExportStatus(Order.EXPORT_STATUS_READY);
