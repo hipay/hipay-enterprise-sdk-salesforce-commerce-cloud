@@ -153,11 +153,36 @@ function updatePaymentStatus(order, paymentInstr, paymentStatus, capturedAmount)
     }
 }
 
+/**
+ * Sends a confirmation email for an order placed by a job (no customer session required)
+ * @param {dw.order.Order} order - The current user's order
+ * @returns {void}
+ */
+function sendConfirmationEmailFromJob(order) {
+    var OrderModel = require('*/cartridge/models/order');
+    var emailHelpers = require('*/cartridge/scripts/helpers/emailHelpers');
+    var Resource = require('dw/web/Resource');
+    var Site = require('dw/system/Site');
+
+    var orderModel = new OrderModel(order, { containerView: 'order' });
+
+    var orderObject = { order: orderModel };
+
+    var emailObj = {
+        to: order.customerEmail,
+        subject: Resource.msg('subject.order.confirmation.email', 'order', null),
+        from: Site.current.getCustomPreferenceValue('customerServiceEmail') || 'no-reply@salesforce.com',
+        type: emailHelpers.emailTypes.orderConfirmation
+    };
+
+    emailHelpers.sendEmail(emailObj, 'checkout/confirmation/confirmationEmail', orderObject);
+}
+
 function updateOrderStatus(order, notification) {
     var statuses = require('*/cartridge/scripts/lib/hipay/hipayStatus').HiPayStatus;
     var OrderMgr = require('dw/order/OrderMgr');
     var Transaction = require('dw/system/Transaction');
-    var COHelpers = require('*/cartridge/scripts/checkout/checkoutHelpers');
+
     if (order) {
         // if payment succeeded and status order created, update order status to open and send confirmation email to customer
         if (empty(order.custom.hipayTransactionID)) {
@@ -177,11 +202,11 @@ function updateOrderStatus(order, notification) {
             if (placedStatuses.indexOf(notification.status) > -1) {
                 // Change order status from CREATED to NEW
                 var placeOrderStatus = OrderMgr.placeOrder(order);
-                Logger.info('[HiPayHelper.js] - Order {0}] Update order from CREATED to NEW', order.orderNo);
+
                 if (placeOrderStatus.error) {
                     throw '[HiPayHelper.js] - Failed to change status from CREATED to NEW for order ' + order.orderNo;
                 }
-                Logger.info('[HiPayHelper.js] - Order {0}] Update order from NEW to OPEN', order.orderNo);
+                Logger.info('[HiPayHelper.js] - Order {0}] Update order from CREATED to OPEN', order.orderNo);
                 Transaction.wrap(function () {
                     // Set other status
                     order.setConfirmationStatus(Order.CONFIRMATION_STATUS_CONFIRMED);
@@ -190,7 +215,7 @@ function updateOrderStatus(order, notification) {
                 Logger.info('[HiPayHelper.js] - Order {0} is updated', order.orderNo);
                 //send mail confirmation order
                 if (order.getCustomerEmail()) {
-                    COHelpers.sendConfirmationEmail(order, order.getCustomerLocaleID());
+                    sendConfirmationEmailFromJob(order);
                 }
             }
         }
@@ -306,5 +331,6 @@ module.exports = {
     updatePaymentStatus: updatePaymentStatus,
     validateOneyAvailability: validateOneyAvailability,
     getHostedFieldsPreferences: getHostedFieldsPreferences,
-    updateOrderStatus: updateOrderStatus
+    updateOrderStatus: updateOrderStatus,
+    sendConfirmationEmailFromJob: sendConfirmationEmailFromJob
 };
