@@ -22,15 +22,20 @@ function execute() {
     );
 
     while (notifications.hasNext()) {
-        Transaction.wrap(function () {
-            var currentNotification = notifications.next();
-            Logger.info('Process HiPay Notification :: {0}', currentNotification.custom.id);
+        // Catch errors per notification so a single failure does not abort the entire job run.
+        try {
+            Transaction.wrap(function () {
+                var currentNotification = notifications.next();
+                Logger.info('Process HiPay Notification :: {0}', currentNotification.custom.id);
 
-            var notification = JSON.parse(currentNotification.custom.notification || '{}');
-            hipayNotificationModule.processNotification(notification);
+                var notification = JSON.parse(currentNotification.custom.notification || '{}');
+                hipayNotificationModule.processNotification(notification);
 
-            CustomObjectMgr.remove(currentNotification);
-        });
+                CustomObjectMgr.remove(currentNotification);
+            });
+        } catch (e) {
+            Logger.error('Failed to process HiPay notification: ' + e.message);
+        }
     }
     notifications.close();
 
