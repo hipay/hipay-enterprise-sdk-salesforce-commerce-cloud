@@ -243,6 +243,12 @@ function getHostedFieldsPreferences() {
             }
         },
         paypalV2: {
+            // Exposes the merchant-controlled PayPal V2 site preference to the
+            // client. The new client-side `isPaypalV2Eligible()` helper reads
+            // this flag to decide whether the PayPal tab should be rendered at
+            // all and whether the SDK should be mounted, so a per-locale toggle
+            // takes effect without changing storefront templates.
+            enabled: currentSite.getCustomPreferenceValue('hipayPaypal2Enabled'),
             style: {
                 color: currentSite.getCustomPreferenceValue('hipayPaypal2Color').getValue(),
                 shape: currentSite.getCustomPreferenceValue('hipayPaypal2Shape').getValue(),
