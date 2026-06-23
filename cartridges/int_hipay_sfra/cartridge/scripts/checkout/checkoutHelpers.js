@@ -797,6 +797,8 @@ function processAlmaPaymentMethods(viewData) {
             }
             return filterApplicablePaymentMethods(applicablePaymentMethods, removeAlma3x, removeAlma4x);
         }
+    } else {
+        return applicablePaymentMethods;
     }
 }
 

@@ -7,14 +7,22 @@ var hipayPaymentHelper = require('./hipayPaymentHelper');
 var formHelpers = require('base/checkout/formErrors');
 
 // Configuration
+var amount = '0.00';
+if ($('#apple-pay-button') && $('#apple-pay-button').data('total')) {
+    amount = $('.apple-pay-button').data('total').toString();
+}
+var currencyCode = '';
+if ($('.form-control.paymentMethod') && $('.form-control.paymentMethod').data('currency-code')) {
+    currencyCode = $('.form-control.paymentMethod').data('currency-code');
+}
 const total = {
     label: window.hipayCustomPreferences.applePayConfig.total.label,
-    amount: $('#apple-pay-button').data('total').toString()
+    amount: amount
 };
 
 const request = {
     countryCode: window.hipayCustomPreferences.applePayConfig.request.countryCode,
-    currencyCode: $('.form-control.paymentMethod').data('currency-code'),
+    currencyCode: currencyCode,
     total: total,
     supportedNetworks: window.hipayCustomPreferences.applePayConfig.request.supportedNetworks
 };
