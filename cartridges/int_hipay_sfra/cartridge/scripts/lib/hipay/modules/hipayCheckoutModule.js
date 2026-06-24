@@ -424,11 +424,12 @@ HiPayCheckoutModule.hiPayHostedPageRequest = function (order, paymentInstrument)
             }
 
             if (pi.paymentMethod.equals('HIPAY_HOSTED_PAYPAL_V2')) {
-                params.paypal_v2_label = Site.getCurrent().getCustomPreferenceValue('hipayPaypal2Label').getValue();
-                params.paypal_v2_shape = Site.getCurrent().getCustomPreferenceValue('hipayPaypal2Shape').getValue();
-                params.paypal_v2_color = Site.getCurrent().getCustomPreferenceValue('hipayPaypal2Color').getValue();
-                params.paypal_v2_height = Site.getCurrent().getCustomPreferenceValue('hipayPaypal2Height');
-                params.paypal_v2_bnpl = Site.getCurrent().getCustomPreferenceValue('hipayPaypal2CanPayLater') ? 1 : 0;
+                var HiPayMultiLocaleConfigs = require('*/cartridge/scripts/util/hipayMultiLocaleConfigs');
+                params.paypal_v2_label = HiPayMultiLocaleConfigs.getHiPayPaypal2Label();
+                params.paypal_v2_shape = HiPayMultiLocaleConfigs.getHiPayPaypal2Shape();
+                params.paypal_v2_color = HiPayMultiLocaleConfigs.getHiPayPaypal2Color();
+                params.paypal_v2_height = HiPayMultiLocaleConfigs.getHiPayPaypal2Height();
+                params.paypal_v2_bnpl = HiPayMultiLocaleConfigs.getHiPayPaypal2CanPayLater() ? 1 : 0;
             }
 
             HiPayHelper.fillHeaderData(HiPayConfig, order, params, pi); // fill in the common params

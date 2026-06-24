@@ -40,7 +40,7 @@
                         billing.js to pick the right mount point.
                     </iscomment>
                     <iselseif condition="${paymentOption.ID == 'HIPAY_PAYPAL_V2' }"/>
-                        <isif condition="${Site.getCurrent().getCustomPreferenceValue('hipayPaypalButtonPlacement').getValue() === 'submitPayment'}">
+                        <isif condition="${require('*/cartridge/scripts/util/hipayMultiLocaleConfigs').getHiPayPaypalButtonPlacement() === 'submitPayment'}">
                             <isset name="paypalButtonId" value="${'paypal-button-submit-payment'}" scope="page" />
                             <isset name="paypalErrorId" value="${'hipay-paypalv2-error-message-submit-payment'}" scope="page" />
                             <isinclude template="checkout/billing/paypalV2Button" />

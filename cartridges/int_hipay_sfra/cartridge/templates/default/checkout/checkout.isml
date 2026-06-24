@@ -134,7 +134,7 @@
                                 currently selected payment instrument, so we no longer need a
                                 template-side loop on `selectedPaymentInstruments`.
                             </iscomment>
-                            <isif condition="${Site.getCurrent().getCustomPreferenceValue('hipayPaypalButtonPlacement').getValue() === 'placeOrder'}">
+                            <isif condition="${require('*/cartridge/scripts/util/hipayMultiLocaleConfigs').getHiPayPaypalButtonPlacement() === 'placeOrder'}">
                                 <isset name="paypalButtonId" value="${'paypal-button-place-order'}" scope="page" />
                                 <isset name="paypalErrorId" value="${'hipay-paypalv2-error-message-place-order'}" scope="page" />
                                 <isinclude template="checkout/billing/paypalV2Button" />

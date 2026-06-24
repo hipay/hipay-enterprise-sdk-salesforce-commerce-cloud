@@ -160,6 +160,7 @@ function updatePaymentStatus(order, paymentInstr, paymentStatus, capturedAmount)
 function getHostedFieldsPreferences() {
     var Site = require('dw/system/Site');
     var HiPayConfig = require('*/cartridge/scripts/lib/hipay/hipayConfig').HiPayConfig;
+    var HiPayMultiLocaleConfigs = require('*/cartridge/scripts/util/hipayMultiLocaleConfigs');
     var currentSite = Site.getCurrent();
 
     return {
@@ -243,22 +244,17 @@ function getHostedFieldsPreferences() {
             }
         },
         paypalV2: {
-            // Exposes the merchant-controlled PayPal V2 site preference to the
-            // client. The new client-side `isPaypalV2Eligible()` helper reads
-            // this flag to decide whether the PayPal tab should be rendered at
-            // all and whether the SDK should be mounted, so a per-locale toggle
-            // takes effect without changing storefront templates.
-            enabled: currentSite.getCustomPreferenceValue('hipayPaypal2Enabled'),
+            enabled: HiPayMultiLocaleConfigs.isHiPayPaypal2Enabled(),
             style: {
-                color: currentSite.getCustomPreferenceValue('hipayPaypal2Color').getValue(),
-                shape: currentSite.getCustomPreferenceValue('hipayPaypal2Shape').getValue(),
-                label: currentSite.getCustomPreferenceValue('hipayPaypal2Label').getValue(),
-                height: currentSite.getCustomPreferenceValue('hipayPaypal2Height')
+                color: HiPayMultiLocaleConfigs.getHiPayPaypal2Color(),
+                shape: HiPayMultiLocaleConfigs.getHiPayPaypal2Shape(),
+                label: HiPayMultiLocaleConfigs.getHiPayPaypal2Label(),
+                height: HiPayMultiLocaleConfigs.getHiPayPaypal2Height()
             },
             options: {
-                canPayLater: currentSite.getCustomPreferenceValue('hipayPaypal2CanPayLater')
+                canPayLater: HiPayMultiLocaleConfigs.getHiPayPaypal2CanPayLater()
             },
-            hipayPaypalButtonPlacement : currentSite.getCustomPreferenceValue('hipayPaypalButtonPlacement').getValue()
+            hipayPaypalButtonPlacement : HiPayMultiLocaleConfigs.getHiPayPaypalButtonPlacement()
         }
     };
 }
