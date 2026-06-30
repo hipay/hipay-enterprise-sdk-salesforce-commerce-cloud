@@ -24,7 +24,11 @@ function acceptPayment(req, res, next, mode) {
     var error;
     var redirectURL;
 
-    if (isHashValid && isStateValid && isStatusValid) {
+    if (mode === 'ACCEPT' && hiPayState === 'forwarding') {
+        isStateValid = true;
+    }
+
+    if ((isHashValid && isStateValid && isStatusValid)) {
         processOrder = HiPayOrderModule.hiPayProcessOrderCall();
         order = processOrder.order;
         error = processOrder.error;
