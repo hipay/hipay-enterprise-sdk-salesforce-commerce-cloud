@@ -12,6 +12,7 @@ var COHelpers = require('*/cartridge/scripts/checkout/checkoutHelpers');
 var HiPayLogger = require('*/cartridge/scripts/lib/hipay/hipayLogger');
 var HipayCustomObject = require('*/cartridge/scripts/lib/hipay/hipayCustomObject');
 var Constants = require('*/cartridge/scripts/util/hipayConstants');
+var hipayPendingOrderHelper = require('*/cartridge/scripts/lib/hipay/hipayPendingOrderHelper');
 
 server.extend(page);
 
@@ -260,6 +261,8 @@ server.replace('PlaceOrder', server.middleware.https, function (req, res, next) 
 
     if (handlePaymentResult.HiPay) {
         if ((handlePaymentResult.Hosted || handlePaymentResult.API) && !empty(handlePaymentResult.HiPayRedirectURL)) {
+            hipayPendingOrderHelper.setPendingHipayOrder(req, order);
+
             res.json({
                 error: false,
                 continueUrl: handlePaymentResult.HiPayRedirectURL
