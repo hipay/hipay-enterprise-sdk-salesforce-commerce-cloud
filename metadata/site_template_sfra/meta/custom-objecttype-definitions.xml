@@ -99,4 +99,162 @@
         </group-definitions>
 	</custom-type>
 
+    <custom-type type-id="HiPayMultiLocaleConfig">
+        <display-name xml:lang="x-default">HiPay Multilocale Config</display-name>
+        <description xml:lang="x-default">Country-specific PayPal V2 settings. The object ID is the ISO country code resolved from the request locale, for example FR or DE.</description>
+        <staging-mode>no-staging</staging-mode>
+        <storage-scope>site</storage-scope>
+        <key-definition attribute-id="country">
+            <type>string</type>
+            <min-length>0</min-length>
+        </key-definition>
+        <attribute-definitions>
+            <attribute-definition attribute-id="hipayPaypal2Enabled">
+                <display-name xml:lang="x-default">PayPal V2 Enabled</display-name>
+                <type>enum-of-string</type>
+                <localizable-flag>true</localizable-flag>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <value-definitions>
+                    <value-definition>
+                        <display xml:lang="x-default">yes</display>
+                        <value>yes</value>
+                    </value-definition>
+                    <value-definition default="true">
+                        <display xml:lang="x-default">no</display>
+                        <value>no</value>
+                    </value-definition>
+                </value-definitions>
+            </attribute-definition>
+            <attribute-definition attribute-id="hipayPaypal2Color">
+                <display-name xml:lang="x-default">PayPal V2 Color</display-name>
+                <type>enum-of-string</type>
+                <localizable-flag>true</localizable-flag>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <value-definitions>
+                    <value-definition default="true">
+                        <display xml:lang="x-default">gold</display>
+                        <value>gold</value>
+                    </value-definition>
+                    <value-definition>
+                        <display xml:lang="x-default">blue</display>
+                        <value>blue</value>
+                    </value-definition>
+                    <value-definition>
+                        <display xml:lang="x-default">black</display>
+                        <value>black</value>
+                    </value-definition>
+                    <value-definition>
+                        <display xml:lang="x-default">silver</display>
+                        <value>silver</value>
+                    </value-definition>
+                    <value-definition>
+                        <display xml:lang="x-default">white</display>
+                        <value>white</value>
+                    </value-definition>
+                </value-definitions>
+            </attribute-definition>
+            <attribute-definition attribute-id="hipayPaypal2Shape">
+                <display-name xml:lang="x-default">PayPal V2 Shape</display-name>
+                <type>enum-of-string</type>
+                <localizable-flag>true</localizable-flag>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <value-definitions>
+                    <value-definition>
+                        <display xml:lang="x-default">rectangle</display>
+                        <value>rect</value>
+                    </value-definition>
+                    <value-definition default="true">
+                        <display xml:lang="x-default">pill</display>
+                        <value>pill</value>
+                    </value-definition>
+                </value-definitions>
+            </attribute-definition>
+            <attribute-definition attribute-id="hipayPaypal2Label">
+                <display-name xml:lang="x-default">PayPal V2 Label</display-name>
+                <type>enum-of-string</type>
+                <localizable-flag>true</localizable-flag>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <value-definitions>
+                    <value-definition default="true">
+                        <display xml:lang="x-default">pay</display>
+                        <value>pay</value>
+                    </value-definition>
+                    <value-definition>
+                        <display xml:lang="x-default">paypal</display>
+                        <value>paypal</value>
+                    </value-definition>
+                    <value-definition>
+                        <display xml:lang="x-default">checkout</display>
+                        <value>checkout</value>
+                    </value-definition>
+                    <value-definition>
+                        <display xml:lang="x-default">buynow</display>
+                        <value>buynow</value>
+                    </value-definition>
+                </value-definitions>
+            </attribute-definition>
+            <attribute-definition attribute-id="hipayPaypal2Height">
+                <display-name xml:lang="x-default">PayPal V2 Height</display-name>
+                <type>double</type>
+                <localizable-flag>true</localizable-flag>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <min-value>25.0</min-value>
+                <max-value>55.0</max-value>
+                <default-value>40</default-value>
+            </attribute-definition>
+            <attribute-definition attribute-id="hipayPaypal2CanPayLater">
+                <display-name xml:lang="x-default">PayPal V2 Can Pay Later</display-name>
+                <type>enum-of-string</type>
+                <localizable-flag>true</localizable-flag>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <value-definitions>
+                    <value-definition>
+                        <display xml:lang="x-default">yes</display>
+                        <value>yes</value>
+                    </value-definition>
+                    <value-definition default="true">
+                        <display xml:lang="x-default">no</display>
+                        <value>no</value>
+                    </value-definition>
+                </value-definitions>
+            </attribute-definition>
+            <attribute-definition attribute-id="hipayPaypalButtonPlacement">
+                <display-name xml:lang="x-default">PayPal button placement</display-name>
+                <type>enum-of-string</type>
+                <localizable-flag>true</localizable-flag>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <value-definitions>
+                    <value-definition default="true">
+                        <display xml:lang="x-default">Submit Payment</display>
+                        <value>submitPayment</value>
+                    </value-definition>
+                    <value-definition>
+                        <display xml:lang="x-default">Place Order</display>
+                        <value>placeOrder</value>
+                    </value-definition>
+                </value-definitions>
+            </attribute-definition>
+        </attribute-definitions>
+        <group-definitions>
+            <attribute-group group-id="Hipay Paypal2">
+                <display-name xml:lang="x-default">Hipay Paypal2</display-name>
+                <attribute attribute-id="country"/>
+                <attribute attribute-id="hipayPaypal2Enabled"/>
+                <attribute attribute-id="hipayPaypal2Shape"/>
+                <attribute attribute-id="hipayPaypal2Color"/>
+                <attribute attribute-id="hipayPaypal2CanPayLater"/>
+                <attribute attribute-id="hipayPaypalButtonPlacement"/>
+                <attribute attribute-id="hipayPaypal2Label"/>
+                <attribute attribute-id="hipayPaypal2Height"/>
+            </attribute-group>
+        </group-definitions>
+    </custom-type>
+
 </metadata>

@@ -257,7 +257,30 @@ HiPayCheckoutModule.hiPayOrderRequest = function (paymentInstrument, order, devi
         }
 
         if (pi.paymentMethod.equals('HIPAY_PAYPAL_V2')) {
-            params.provider_data = {paypal_id: session.forms.billing.paypalV2OrderID.value};
+            // Guard against an empty PayPal V2 orderID before we call HiPay.
+            //
+            // The orderID is captured by the client-side SDK and pushed into the
+            // hidden `paypalV2OrderID` billing form field. If the user managed to
+            // trigger order placement before the SDK populated that field (for
+            // example via a stale browser tab, an extension that reposts the
+            // form, or a race during basket recalculation), HiPay would respond
+            // with an opaque "missing provider data" failure that is hard to
+            // diagnose post-mortem.
+            //
+            // We bail out early with a logged error so the order is never sent
+            // to HiPay in this invalid state; the caller already initialised
+            // `response.error = true`, so returning it propagates the failure
+            // through the normal place-order error path.
+            var paypalOrderID = session.forms.billing.paypalV2OrderID.value;
+
+            if (empty(paypalOrderID)) {
+                log.error('Missing PayPal V2 order ID before HiPay order request for order :: ' + order.orderNo);
+                return response;
+            }
+
+            params.provider_data = {
+                paypal_id: paypalOrderID
+            };
         }
 
         var dateRequest = new Calendar().getTime().toISOString();
@@ -401,11 +424,12 @@ HiPayCheckoutModule.hiPayHostedPageRequest = function (order, paymentInstrument)
             }
 
             if (pi.paymentMethod.equals('HIPAY_HOSTED_PAYPAL_V2')) {
-                params.paypal_v2_label = Site.getCurrent().getCustomPreferenceValue('hipayPaypal2Label').getValue();
-                params.paypal_v2_shape = Site.getCurrent().getCustomPreferenceValue('hipayPaypal2Shape').getValue();
-                params.paypal_v2_color = Site.getCurrent().getCustomPreferenceValue('hipayPaypal2Color').getValue();
-                params.paypal_v2_height = Site.getCurrent().getCustomPreferenceValue('hipayPaypal2Height');
-                params.paypal_v2_bnpl = Site.getCurrent().getCustomPreferenceValue('hipayPaypal2CanPayLater') ? 1 : 0;
+                var HiPayMultiLocaleConfigs = require('*/cartridge/scripts/util/hipayMultiLocaleConfigs');
+                params.paypal_v2_label = HiPayMultiLocaleConfigs.getHiPayPaypal2Label();
+                params.paypal_v2_shape = HiPayMultiLocaleConfigs.getHiPayPaypal2Shape();
+                params.paypal_v2_color = HiPayMultiLocaleConfigs.getHiPayPaypal2Color();
+                params.paypal_v2_height = HiPayMultiLocaleConfigs.getHiPayPaypal2Height();
+                params.paypal_v2_bnpl = HiPayMultiLocaleConfigs.getHiPayPaypal2CanPayLater() ? 1 : 0;
             }
 
             HiPayHelper.fillHeaderData(HiPayConfig, order, params, pi); // fill in the common params

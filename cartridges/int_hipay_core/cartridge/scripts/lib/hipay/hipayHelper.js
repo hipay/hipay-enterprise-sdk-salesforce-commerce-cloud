@@ -245,6 +245,7 @@ function updateOrderStatus(order, notification) {
 function getHostedFieldsPreferences() {
     var Site = require('dw/system/Site');
     var HiPayConfig = require('*/cartridge/scripts/lib/hipay/hipayConfig').HiPayConfig;
+    var HiPayMultiLocaleConfigs = require('*/cartridge/scripts/util/hipayMultiLocaleConfigs');
     var currentSite = Site.getCurrent();
 
     return {
@@ -328,16 +329,17 @@ function getHostedFieldsPreferences() {
             }
         },
         paypalV2: {
+            enabled: HiPayMultiLocaleConfigs.isHiPayPaypal2Enabled(),
             style: {
-                color: currentSite.getCustomPreferenceValue('hipayPaypal2Color').getValue(),
-                shape: currentSite.getCustomPreferenceValue('hipayPaypal2Shape').getValue(),
-                label: currentSite.getCustomPreferenceValue('hipayPaypal2Label').getValue(),
-                height: currentSite.getCustomPreferenceValue('hipayPaypal2Height')
+                color: HiPayMultiLocaleConfigs.getHiPayPaypal2Color(),
+                shape: HiPayMultiLocaleConfigs.getHiPayPaypal2Shape(),
+                label: HiPayMultiLocaleConfigs.getHiPayPaypal2Label(),
+                height: HiPayMultiLocaleConfigs.getHiPayPaypal2Height()
             },
             options: {
-                canPayLater: currentSite.getCustomPreferenceValue('hipayPaypal2CanPayLater')
+                canPayLater: HiPayMultiLocaleConfigs.getHiPayPaypal2CanPayLater()
             },
-            hipayPaypalButtonPlacement : currentSite.getCustomPreferenceValue('hipayPaypalButtonPlacement').getValue()
+            hipayPaypalButtonPlacement : HiPayMultiLocaleConfigs.getHiPayPaypalButtonPlacement()
         }
     };
 }
