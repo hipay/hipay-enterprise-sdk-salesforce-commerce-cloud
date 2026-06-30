@@ -618,6 +618,50 @@ function syncPayPal() {
     observePaypalButtonRender();
     notifyPaypalAvailability();
     initializePayPal();
+
+    // Hides the PayPal button if the current page is not the 'placeOrder' stage and
+    // the PayPal button placement is configured to be only on the 'placeOrder' stage.
+    // This prevents the PayPal button from being displayed on page.
+    var urlParams = new URLSearchParams(window.location.search);
+    var stage = urlParams.get('stage');
+    // Remove next-step-button if HIPAY_PAYPAL_V2 is clicked.
+    if (window.hipayCustomPreferences &&
+        window.hipayCustomPreferences.paypalV2 &&
+        window.hipayCustomPreferences.paypalV2.hipayPaypalButtonPlacement === 'submitPayment'
+        && stage === 'payment'
+    )
+    {
+        console.log('window.hipayCustomPreferences.paypalV2.hipayPaypalButtonPlacement', window.hipayCustomPreferences.paypalV2.hipayPaypalButtonPlacement);
+        setTimeout(function () {
+            $('.nav-item').on('click', function() {
+                if ($(this).data('method-id') === 'HIPAY_PAYPAL_V2') {
+                    $('.next-step-button').toggleClass('d-none');
+                } else {
+                    $('.next-step-button').toggleClass('d-none');
+                }
+            });
+        }, 500);
+    }
+
+    if ($('.nav-item .nav-link.active').parents().data('method-id') === 'HIPAY_PAYPAL_V2')
+    {
+        if (stage === 'placeOrder' && window.hipayCustomPreferences.paypalV2.hipayPaypalButtonPlacement === 'placeOrder') {
+            $('.next-step-button .btn-block.place-order').addClass('d-none');
+            $('#paypal-button-place-order').removeClass('d-none');
+        } else if (stage === 'payment' && window.hipayCustomPreferences.paypalV2.hipayPaypalButtonPlacement === 'submitPayment') {
+            $('.next-step-button .btn-block.submit-payment').addClass('d-none');
+            $('#paypal-button-place-order').removeClass('d-none');
+        }
+    } else {
+        if (stage === 'payment' ) {
+            $('.next-step-button .btn-block.submit-payment').removeClass('d-none');
+            $('.next-step-button .btn-block.place-order').addClass('d-none');
+        } else if(stage === 'placeOrder') {
+            $('.next-step-button .btn-block.submit-payement').addClass('d-none');
+            $('.next-step-button .btn-block.place-order').removeClass('d-none');
+        }
+        $('#paypal-button-place-order').addClass('d-none');
+    }
 }
 
 /*
