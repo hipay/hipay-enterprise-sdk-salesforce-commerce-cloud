@@ -8,7 +8,7 @@
             <fieldset class="payment-form-fields">
 
                 <input type="hidden" class="form-control paymentMethod" name="${pdict.forms.billingForm.paymentMethod.htmlName}" value="${paymentOption.ID}" data-currency-code="${pdict.order.currencyCode}"/>
-
+                <div class="apple-pay-button" data-total="${pdict.total}"></div>
                 <isif condition="${!empty(paymentOption.ID)}">
                     <iscomment>Giropay</iscomment>
                     <isif condition="${paymentOption.ID == 'HIPAY_GIROPAY'}">
