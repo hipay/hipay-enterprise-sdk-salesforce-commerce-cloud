@@ -9,7 +9,7 @@ var formHelpers = require('base/checkout/formErrors');
 // Configuration
 const total = {
     label: window.hipayCustomPreferences.applePayConfig.total.label,
-    amount: $('#apple-pay-button').data('total')
+    amount: $('#apple-pay-button').data('total').toString()
 };
 
 const request = {
@@ -31,13 +31,22 @@ const options = {
     selector: 'apple-pay-button'
 };
 
-var intanceApplePayButton = hipay.create(
+window.intanceApplePayButton = hipay.create(
     'paymentRequestButton',
     options
 );
 
-if (intanceApplePayButton) {
-    intanceApplePayButton.on('paymentAuthorized', function(hipayToken) {
+if (window.intanceApplePayButton) {
+    $('body').trigger('hipay:applepay-availability');
+
+    window.intanceApplePayButton.on('ready', function() {
+        var $notice = $('.next-step-button .js-checkout-privacy-notice').clone();
+        if ($notice.length) {
+            $('#apple-pay-button').append($notice);
+        }
+    });
+
+    window.intanceApplePayButton.on('paymentAuthorized', function(hipayToken) {
         $('#hipay-apple-error-message').empty();
 
         formHelpers.clearPreviousErrors('.payment-form');
@@ -48,11 +57,12 @@ if (intanceApplePayButton) {
         // disable the next:Place Order button here
         $('body').trigger('checkout:disableButton', '.next-step-button button');
 
-        hipayPaymentHelper.placeOrder(paymentForm, 'HIPAY_APPLEPAY')
+        hipayPaymentHelper.submitBillingAndplaceOrder(paymentForm, 'HIPAY_APPLEPAY');
     });
 } else {
     // Removed Apple Pay nav-item if intanceApplePayButton don't exists.
-    $("li[data-method-id='HIPAY_APPLEPAY']").toggleClass("d-none");
+    $("li[data-method-id='HIPAY_APPLEPAY']").addClass("d-none");
+    $('body').trigger('hipay:applepay-availability');
 }
 
 // Remove next-step-button if HIPAY_APPLEPAY is clicked.
