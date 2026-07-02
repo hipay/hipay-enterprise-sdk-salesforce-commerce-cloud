@@ -1,4 +1,12 @@
 ## CHANGELOG
+## Version 26.2.0
+- Multi-country support: Enable or disable PayPal per country. When disabled, the checkout automatically falls back to another payment method.
+- Flexible button placement: Support for displaying the PayPal button at different checkout steps (Submit Payment or Place Order).
+- Automatic reinitialization: The PayPal module resets when key parameters change (amount, currency, button placement, or checkout structure).
+- Improved security: PayPal order IDs are invalidated when the cart changes, and server-side validation prevents submission without a valid PayPal order ID.
+- Enhanced error handling: Error messages are displayed next to the active PayPal button.
+- Alma payment: Preserve the basket when the payment is cancelled or declined.
+
 ## Version 26.1.0
 - Fixed payment processing when the transaction amount was equal to zero.
 - Changed the maximum length validation for the address form fields.
