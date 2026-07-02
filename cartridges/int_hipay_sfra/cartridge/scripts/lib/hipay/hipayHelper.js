@@ -674,5 +674,6 @@ module.exports = {
     getHostedFieldsPreferences: base.getHostedFieldsPreferences,
     getOrderPaymentInstrument: base.getOrderPaymentInstrument,
     updatePaymentStatus: base.updatePaymentStatus,
-    validateOneyAvailability: base.validateOneyAvailability
+    validateOneyAvailability: base.validateOneyAvailability,
+    updateOrderStatus: base.updateOrderStatus
 };

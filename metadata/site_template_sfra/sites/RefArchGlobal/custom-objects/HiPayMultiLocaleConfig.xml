@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<custom-objects xmlns="http://www.demandware.com/xml/impex/customobject/2006-10-31">
+    <custom-object type-id="HiPayMultiLocaleConfig" object-id="FR">
+        <object-attribute attribute-id="hipayPaypal2Enabled" xml:lang="x-default">yes</object-attribute>
+        <object-attribute attribute-id="hipayPaypal2Color" xml:lang="x-default">gold</object-attribute>
+        <object-attribute attribute-id="hipayPaypal2Shape" xml:lang="x-default">pill</object-attribute>
+        <object-attribute attribute-id="hipayPaypal2Label" xml:lang="x-default">pay</object-attribute>
+        <object-attribute attribute-id="hipayPaypal2Height" xml:lang="x-default">40</object-attribute>
+        <object-attribute attribute-id="hipayPaypal2CanPayLater" xml:lang="x-default">yes</object-attribute>
+        <object-attribute attribute-id="hipayPaypalButtonPlacement" xml:lang="x-default">submitPayment</object-attribute>
+    </custom-object>
+
+    <custom-object type-id="HiPayMultiLocaleConfig" object-id="DE">
+        <object-attribute attribute-id="hipayPaypal2Enabled" xml:lang="x-default">no</object-attribute>
+        <object-attribute attribute-id="hipayPaypal2Color" xml:lang="x-default">gold</object-attribute>
+        <object-attribute attribute-id="hipayPaypal2Shape" xml:lang="x-default">pill</object-attribute>
+        <object-attribute attribute-id="hipayPaypal2Label" xml:lang="x-default">pay</object-attribute>
+        <object-attribute attribute-id="hipayPaypal2Height" xml:lang="x-default">40</object-attribute>
+        <object-attribute attribute-id="hipayPaypal2CanPayLater" xml:lang="x-default">no</object-attribute>
+        <object-attribute attribute-id="hipayPaypalButtonPlacement" xml:lang="x-default">submitPayment</object-attribute>
+    </custom-object>
+</custom-objects>

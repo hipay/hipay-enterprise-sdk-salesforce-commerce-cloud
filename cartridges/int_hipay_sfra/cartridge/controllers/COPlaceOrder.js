@@ -8,6 +8,7 @@ var BasketMgr = require('dw/order/BasketMgr');
 var URLUtils = require('dw/web/URLUtils');
 var hooksHelper = require('*/cartridge/scripts/helpers/hooks');
 var Site = require('dw/system/Site');
+var hipayPendingOrderHelper = require('*/cartridge/scripts/lib/hipay/hipayPendingOrderHelper');
 
 /**
  * Handle order submit and send the confirmation email.
@@ -86,6 +87,7 @@ server.use('Submit', csrfProtection.generateToken, function (req, res, next) {
     var order = OrderMgr.getOrder(req.querystring.order_id);
 
     if (order && req.querystring.order_token === order.getOrderToken()) {
+        hipayPendingOrderHelper.clearPendingHipayOrder(req);
         submitOrder(req.querystring.order_id, req, res, next);
     }
 

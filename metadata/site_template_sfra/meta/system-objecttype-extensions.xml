@@ -478,6 +478,23 @@
                     </value-definition>
                 </value-definitions>
             </attribute-definition>
+            <attribute-definition attribute-id="hipayPaypal2Enabled">
+                <display-name xml:lang="x-default">PayPal V2 Enabled</display-name>
+                <type>enum-of-string</type>
+                <localizable-flag>true</localizable-flag>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <value-definitions>
+                    <value-definition>
+                        <display xml:lang="x-default">yes</display>
+                        <value>yes</value>
+                    </value-definition>
+                    <value-definition default="true">
+                        <display xml:lang="x-default">no</display>
+                        <value>no</value>
+                    </value-definition>
+                </value-definitions>
+            </attribute-definition>
             <attribute-definition attribute-id="hipayPaypal2CanPayLater">
                 <display-name xml:lang="x-default">canPayLater</display-name>
                 <type>boolean</type>
@@ -785,6 +802,7 @@ Username for the environment test</description>
             </attribute-group>
             <attribute-group group-id="Hipay Paypal2">
                 <display-name xml:lang="x-default">Hipay Paypal2</display-name>
+                <attribute attribute-id="hipayPaypal2Enabled"/>
                 <attribute attribute-id="hipayPaypal2Shape"/>
                 <attribute attribute-id="hipayPaypal2Color"/>
                 <attribute attribute-id="hipayPaypal2CanPayLater"/>

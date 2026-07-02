@@ -154,12 +154,98 @@ function updatePaymentStatus(order, paymentInstr, paymentStatus, capturedAmount)
 }
 
 /**
+ * Sends a confirmation email for an order placed by a job (no customer session required)
+ * @param {dw.order.Order} order - The current user's order
+ * @returns {void}
+ */
+function sendConfirmationEmailFromJob(order) {
+    var OrderModel = require('*/cartridge/models/order');
+    var emailHelpers = require('*/cartridge/scripts/helpers/emailHelpers');
+    var Resource = require('dw/web/Resource');
+    var Site = require('dw/system/Site');
+
+    var orderModel = new OrderModel(order, { containerView: 'order' });
+
+    var orderObject = { order: orderModel };
+
+    var emailObj = {
+        to: order.customerEmail,
+        subject: Resource.msg('subject.order.confirmation.email', 'order', null),
+        from: Site.current.getCustomPreferenceValue('customerServiceEmail') || 'no-reply@salesforce.com',
+        type: emailHelpers.emailTypes.orderConfirmation
+    };
+
+    emailHelpers.sendEmail(emailObj, 'checkout/confirmation/confirmationEmail', orderObject);
+}
+
+/**
+ * Updates the order status based on a HiPay notification.
+ *
+ * If the order is still in CREATED status and the notification reports a
+ * payment success (AUTHORIZED, CAPTURE_REQUESTED, CAPTURED or
+ * PARTIALLY_CAPTURED), the order is placed (CREATED → NEW), its confirmation
+ * and export statuses are set, and a confirmation email is sent to the
+ * customer.
+ *
+ * The HiPay transaction reference is also persisted on the order's custom
+ * attribute `hipayTransactionID` when it is not already set.
+ *
+ * @param {dw.order.Order} order - The SFCC order to update.
+ * @param {Object} notification - The parsed HiPay notification payload.
+ * @returns {void}
+ */
+function updateOrderStatus(order, notification) {
+    var statuses = require('*/cartridge/scripts/lib/hipay/hipayStatus').HiPayStatus;
+    var OrderMgr = require('dw/order/OrderMgr');
+    var Transaction = require('dw/system/Transaction');
+
+    if (!order) { return; }
+
+    // if payment succeeded and status order created, update order status to open and send confirmation email to customer
+    if (empty(order.custom.hipayTransactionID)) {
+        Transaction.wrap(function () {
+            order.getCustom().hipayTransactionID = notification.transaction_reference;
+        });
+    }
+
+    if (order.status.value === Order.ORDER_STATUS_CREATED) {
+        var placedStatuses = [
+            statuses.AUTHORIZED.code,        // 116
+            statuses.CAPTURE_REQUESTED.code, // 117
+            statuses.CAPTURED.code,          // 118
+            statuses.PARTIALLY_CAPTURED.code // 119
+        ];
+
+        if (placedStatuses.indexOf(notification.status) > -1) {
+            // Change order status from CREATED to NEW
+            var placeOrderStatus = OrderMgr.placeOrder(order);
+
+            if (placeOrderStatus.error) {
+                throw '[HiPayHelper.js] - Failed to change status from CREATED to NEW for order ' + order.orderNo;
+            }
+            Logger.info('[HiPayHelper.js] - Order {0}] Update order from CREATED to OPEN', order.orderNo);
+            Transaction.wrap(function () {
+                // Set other status
+                order.setConfirmationStatus(Order.CONFIRMATION_STATUS_CONFIRMED);
+                order.setExportStatus(Order.EXPORT_STATUS_READY);
+            });
+            Logger.info('[HiPayHelper.js] - Order {0} is updated', order.orderNo);
+            // Send mail confirmation order
+            if (order.getCustomerEmail()) {
+                sendConfirmationEmailFromJob(order);
+            }
+        }
+    }
+}
+
+/**
  * Get hosted fields custom preferences and build an object.
  * @return {Object}
  */
 function getHostedFieldsPreferences() {
     var Site = require('dw/system/Site');
     var HiPayConfig = require('*/cartridge/scripts/lib/hipay/hipayConfig').HiPayConfig;
+    var HiPayMultiLocaleConfigs = require('*/cartridge/scripts/util/hipayMultiLocaleConfigs');
     var currentSite = Site.getCurrent();
 
     return {
@@ -243,16 +329,17 @@ function getHostedFieldsPreferences() {
             }
         },
         paypalV2: {
+            enabled: HiPayMultiLocaleConfigs.isHiPayPaypal2Enabled(),
             style: {
-                color: currentSite.getCustomPreferenceValue('hipayPaypal2Color').getValue(),
-                shape: currentSite.getCustomPreferenceValue('hipayPaypal2Shape').getValue(),
-                label: currentSite.getCustomPreferenceValue('hipayPaypal2Label').getValue(),
-                height: currentSite.getCustomPreferenceValue('hipayPaypal2Height')
+                color: HiPayMultiLocaleConfigs.getHiPayPaypal2Color(),
+                shape: HiPayMultiLocaleConfigs.getHiPayPaypal2Shape(),
+                label: HiPayMultiLocaleConfigs.getHiPayPaypal2Label(),
+                height: HiPayMultiLocaleConfigs.getHiPayPaypal2Height()
             },
             options: {
-                canPayLater: currentSite.getCustomPreferenceValue('hipayPaypal2CanPayLater')
+                canPayLater: HiPayMultiLocaleConfigs.getHiPayPaypal2CanPayLater()
             },
-            hipayPaypalButtonPlacement : currentSite.getCustomPreferenceValue('hipayPaypalButtonPlacement').getValue()
+            hipayPaypalButtonPlacement : HiPayMultiLocaleConfigs.getHiPayPaypalButtonPlacement()
         }
     };
 }
@@ -261,5 +348,7 @@ module.exports = {
     getOrderPaymentInstrument: getOrderPaymentInstrument,
     updatePaymentStatus: updatePaymentStatus,
     validateOneyAvailability: validateOneyAvailability,
-    getHostedFieldsPreferences: getHostedFieldsPreferences
+    getHostedFieldsPreferences: getHostedFieldsPreferences,
+    updateOrderStatus: updateOrderStatus,
+    sendConfirmationEmailFromJob: sendConfirmationEmailFromJob
 };

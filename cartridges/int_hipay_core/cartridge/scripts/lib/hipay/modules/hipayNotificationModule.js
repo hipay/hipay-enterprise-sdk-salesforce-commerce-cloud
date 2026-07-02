@@ -163,6 +163,7 @@ function processNotification(notification) {
 
     Transaction.wrap(function () {
         HiPayHelper.updatePaymentStatus(order, paymentInstr, notification.status, notification.captured_amount);
+        HiPayHelper.updateOrderStatus(order, notification);
         addOrderNote(order, notification);
     });
 
