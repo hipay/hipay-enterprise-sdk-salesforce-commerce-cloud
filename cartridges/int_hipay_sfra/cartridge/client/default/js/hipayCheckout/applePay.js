@@ -37,9 +37,11 @@ window.intanceApplePayButton = hipay.create(
 );
 
 if (window.intanceApplePayButton) {
+    // PROJECT-SPECIFIC: local checkout UI listens to this event to sync CTA visibility.
     $('body').trigger('hipay:applepay-availability');
 
     window.intanceApplePayButton.on('ready', function() {
+        // PROJECT-SPECIFIC: mirror the storefront privacy notice near Apple Pay CTA.
         var $notice = $('.next-step-button .js-checkout-privacy-notice').clone();
         if ($notice.length) {
             $('#apple-pay-button').append($notice);
@@ -62,9 +64,11 @@ if (window.intanceApplePayButton) {
 } else {
     // Removed Apple Pay nav-item if intanceApplePayButton don't exists.
     $("li[data-method-id='HIPAY_APPLEPAY']").addClass("d-none");
+    // PROJECT-SPECIFIC: notify checkout UI that Apple Pay is not available.
     $('body').trigger('hipay:applepay-availability');
 }
 
+// PROJECT-SPECIFIC: fallback UI behavior for checkouts that do not handle CTA toggling elsewhere.
 // Remove next-step-button if HIPAY_APPLEPAY is clicked.
 $('.nav-item').on('click', function() {
     $('.next-step-button').toggleClass('d-none',  $(this).data('method-id') === 'HIPAY_APPLEPAY');
