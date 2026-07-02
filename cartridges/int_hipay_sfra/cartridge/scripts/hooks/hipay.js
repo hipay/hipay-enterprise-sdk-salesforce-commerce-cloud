@@ -17,7 +17,7 @@ var sitePrefs = require('dw/system/Site').getCurrent().getPreferences().getCusto
 * @return {Object} Object indicating success or error
 */
 function creditCardHandle(paymentInstrument, paymentInformation, req) {
-    var creditCard = paymentInformation;
+    var creditCard = paymentInformation || {};
     var hipayEnableOneClick = sitePrefs.hipayEnableOneClick;
     var hiPayMultiUseToken;
     var hiPayToken = null;
@@ -28,9 +28,8 @@ function creditCardHandle(paymentInstrument, paymentInformation, req) {
     var hiPayCardType;
 
     if (
-        !empty(creditCard)
-        && creditCard.one_click
-        && !creditCard.hasOwnProperty('multi_use')
+        !!creditCard.one_click
+        && !Object.hasOwnProperty.call(creditCard, 'multi_use')
         && hipayEnableOneClick
         && !empty(customer.getProfile().getWallet())
         && customer.getProfile().getWallet().getPaymentInstruments('HIPAY_CREDIT_CARD').length > 0
@@ -78,12 +77,10 @@ function creditCardHandle(paymentInstrument, paymentInformation, req) {
             paymentInstrument.setCreditCardExpirationYear(hiPayCardExpiryYear);
             paymentInstrument.setCreditCardToken(hiPayToken);
             paymentInstrument.getCustom().hipaySaveCreditCard = !!creditCard.multi_use;
-            paymentInstrument.getCustom().hipayIsOneClick = creditCard.one_click ? creditCard.one_click : false;
+            paymentInstrument.getCustom().hipayIsOneClick = !!creditCard.one_click;
         });
     } else {
-        if (paymentInstrument.paymentTransaction.amount.value > 0) {
-            return { error: true };
-        }
+        return { error: true };
     }
 
     return { success: true };
@@ -98,7 +95,13 @@ function Handle(currentBasket, paymentInformation, paymentUUID, req) {
     var basket = currentBasket;
     var paymentMethod = session.forms.billing.paymentMethod.value;
     var paymentInstrument;
-    var hipayTokenize = JSON.parse(session.forms.billing.hipaytokenize.value);
+    var hipayTokenize = {};
+
+    try {
+        hipayTokenize = JSON.parse(session.forms.billing.hipaytokenize.value || '{}') || {};
+    } catch (e) {
+        hipayTokenize = {};
+    }
 
     if (!empty(paymentMethod)) {
         paymentInstrument = hiPayCheckoutModule.createPaymentInstrument(basket, paymentMethod, true);

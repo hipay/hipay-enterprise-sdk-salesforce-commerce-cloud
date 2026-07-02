@@ -9,7 +9,7 @@ var formHelpers = require('base/checkout/formErrors');
 // Configuration
 const total = {
     label: window.hipayCustomPreferences.applePayConfig.total.label,
-    amount: $('#apple-pay-button').data('total')
+    amount: $('#apple-pay-button').data('total').toString()
 };
 
 const request = {
@@ -31,13 +31,24 @@ const options = {
     selector: 'apple-pay-button'
 };
 
-var intanceApplePayButton = hipay.create(
+window.intanceApplePayButton = hipay.create(
     'paymentRequestButton',
     options
 );
 
-if (intanceApplePayButton) {
-    intanceApplePayButton.on('paymentAuthorized', function(hipayToken) {
+if (window.intanceApplePayButton) {
+    // PROJECT-SPECIFIC: local checkout UI listens to this event to sync CTA visibility.
+    $('body').trigger('hipay:applepay-availability');
+
+    window.intanceApplePayButton.on('ready', function() {
+        // PROJECT-SPECIFIC: mirror the storefront privacy notice near Apple Pay CTA.
+        var $notice = $('.next-step-button .js-checkout-privacy-notice').clone();
+        if ($notice.length) {
+            $('#apple-pay-button').append($notice);
+        }
+    });
+
+    window.intanceApplePayButton.on('paymentAuthorized', function(hipayToken) {
         $('#hipay-apple-error-message').empty();
 
         formHelpers.clearPreviousErrors('.payment-form');
@@ -48,13 +59,16 @@ if (intanceApplePayButton) {
         // disable the next:Place Order button here
         $('body').trigger('checkout:disableButton', '.next-step-button button');
 
-        hipayPaymentHelper.placeOrder(paymentForm, 'HIPAY_APPLEPAY')
+        hipayPaymentHelper.submitBillingAndplaceOrder(paymentForm, 'HIPAY_APPLEPAY');
     });
 } else {
     // Removed Apple Pay nav-item if intanceApplePayButton don't exists.
-    $("li[data-method-id='HIPAY_APPLEPAY']").toggleClass("d-none");
+    $("li[data-method-id='HIPAY_APPLEPAY']").addClass("d-none");
+    // PROJECT-SPECIFIC: notify checkout UI that Apple Pay is not available.
+    $('body').trigger('hipay:applepay-availability');
 }
 
+// PROJECT-SPECIFIC: fallback UI behavior for checkouts that do not handle CTA toggling elsewhere.
 // Remove next-step-button if HIPAY_APPLEPAY is clicked.
 $('.nav-item').on('click', function() {
     $('.next-step-button').toggleClass('d-none',  $(this).data('method-id') === 'HIPAY_APPLEPAY');

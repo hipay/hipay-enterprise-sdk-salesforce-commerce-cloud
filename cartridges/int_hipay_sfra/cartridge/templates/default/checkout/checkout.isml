@@ -113,22 +113,32 @@
                                     type="submit" name="submit" value="place-order">${Resource.msg('button.place.order', 'checkout', null)}
                             </button>
 
-                            <iscomment> Renders the PayPal V2 button in two different scenarios:
-                            1. When the user reloads the 'placeOrder' page and PayPal V2 is the selected payment method.
-                            This ensures the button is displayed correctly after a page refresh during the checkout process.
-                            (Conditional rendering within the loop).
+                            <iscomment>
+                                PayPal V2 "placeOrder" placement.
 
-                            2. For the standard checkout flow, regardless of page reload status.
-                            This ensures the button is always available during the normal checkout process.
+                                Previous behaviour rendered the PayPal button container twice:
+                                  - once inside an isloop over `selectedPaymentInstruments`
+                                    (covering page reloads while PayPal was the selected method);
+                                  - once unconditionally (covering the normal flow).
+
+                                With a single hard-coded id this produced two `#paypal-button`
+                                elements in the DOM, which broke the HiPay JS SDK mount and made
+                                the error message container ambiguous.
+
+                                The button is now rendered exactly once, guarded by the
+                                placement preference. The placeOrder-specific ids
+                                (`paypal-button-place-order` / `hipay-paypalv2-error-message-place-order`)
+                                guarantee uniqueness vs the submitPayment placement defined in
+                                hiPayContent.isml. The client (paypalV2.js / billing.js)
+                                handles visibility based on the active checkout stage and the
+                                currently selected payment instrument, so we no longer need a
+                                template-side loop on `selectedPaymentInstruments`.
                             </iscomment>
-
-                            <isloop items="${pdict.order.billing.payment.selectedPaymentInstruments}" var="selectedPaymentInstrument">
-                                <isif condition="${selectedPaymentInstrument.paymentMethod == 'HIPAY_PAYPAL_V2' && Site.getCurrent().getCustomPreferenceValue('hipayPaypalButtonPlacement').getValue() === 'placeOrder' && pdict.currentStage === 'placeOrder'}">
-                                    <isinclude template="checkout/billing/paypalV2Button" />
-                               </isif>
-                            </isloop>
-
-                            <isinclude template="checkout/billing/paypalV2Button" />
+                            <isif condition="${require('*/cartridge/scripts/util/hipayMultiLocaleConfigs').getHiPayPaypalButtonPlacement() === 'placeOrder'}">
+                                <isset name="paypalButtonId" value="${'paypal-button-place-order'}" scope="page" />
+                                <isset name="paypalErrorId" value="${'hipay-paypalv2-error-message-place-order'}" scope="page" />
+                                <isinclude template="checkout/billing/paypalV2Button" />
+                            </isif>
                         </div>
                     </div>
                 </div>

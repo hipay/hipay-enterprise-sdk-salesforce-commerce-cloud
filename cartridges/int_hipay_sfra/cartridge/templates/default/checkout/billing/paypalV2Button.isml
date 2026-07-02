@@ -1,2 +1,22 @@
-<div id="paypal-button" data-total="${pdict.total}"></div>
-<div id="hipay-paypalv2-error-message"></div>
+<iscomment>
+    PayPal V2 button container.
+
+    The element id and the matching error-message id are now provided by the caller via the
+    `paypalButtonId` and `paypalErrorId` template variables, instead of being hard-coded.
+
+    Why: the PayPal V2 button can be rendered in two different placements during the same
+    checkout (in the payment tab via hiPayContent.isml, and on the place-order step via
+    checkout.isml). When the template hard-coded a single id, the second occurrence collided
+    with the first one in the DOM, the HiPay JS SDK could not figure out which container to
+    mount on, and the error message div was shared/clobbered between the two placements.
+
+    Dedicated ids (`paypal-button-submit-payment` / `paypal-button-place-order` and their
+    matching error message ids) let the client-side code (paypalV2.js, billing.js,
+    hipayPaymentHelper.js) target the right container for the active placement and pick the
+    currently visible error container via the `js-hipay-paypalv2-error-message` class hook.
+
+    The error container is rendered before the button so a server-side error message remains
+    visible when the button reflows or re-renders.
+</iscomment>
+<div id="${paypalErrorId}" class="js-hipay-paypalv2-error-message paypal-error-message"></div>
+<div id="${paypalButtonId}" class="js-hipay-paypalv2-button" data-total="${pdict.total}"></div>
