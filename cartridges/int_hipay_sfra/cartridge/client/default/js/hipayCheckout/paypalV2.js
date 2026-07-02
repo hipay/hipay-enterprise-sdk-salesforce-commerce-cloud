@@ -631,7 +631,6 @@ function syncPayPal() {
         && stage === 'payment'
     )
     {
-        console.log('window.hipayCustomPreferences.paypalV2.hipayPaypalButtonPlacement', window.hipayCustomPreferences.paypalV2.hipayPaypalButtonPlacement);
         setTimeout(function () {
             $('.nav-item').on('click', function() {
                 if ($(this).data('method-id') === 'HIPAY_PAYPAL_V2') {
