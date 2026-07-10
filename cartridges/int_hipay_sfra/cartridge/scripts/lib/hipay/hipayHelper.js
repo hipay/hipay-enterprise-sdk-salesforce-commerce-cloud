@@ -221,8 +221,8 @@ function fillOrderData(order, params, pi) {
                 }
             }
 
-            var masterProd = pli.product.getMasterProduct();
-            var assignedCategories = masterProd.getCategories();
+            var masterProd = !empty(pli.product) && pli.product.isVariant() ? pli.product.getMasterProduct() : pli.product;
+            var assignedCategories = !empty(masterProd) ? masterProd.getCategories() : [];
 
             for (var aci = 0; aci < assignedCategories.length; aci++) {
                 var assignedCategory = assignedCategories[aci];

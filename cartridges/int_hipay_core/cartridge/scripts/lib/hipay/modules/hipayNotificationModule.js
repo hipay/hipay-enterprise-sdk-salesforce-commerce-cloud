@@ -154,14 +154,36 @@ function getOrderFromNotification(notification) {
  * @param {dw.web.HttpParameterMap} httpParams
  */
 function processNotification(notification) {
-    var order = getOrderFromNotification(notification);
-    if (!order) {
+    var OrderMgr = require('dw/order/OrderMgr');
+    var hipayUtils = require('*/cartridge/scripts/lib/hipay/hipayUtils');
+
+    // Extract and validate the order number before opening any transaction.
+    var orderNo;
+    if (Object.hasOwnProperty.call(notification, 'order[id]')) {
+        orderNo = hipayUtils.extractOrderId(notification['order[id]']);
+    }
+
+    if (empty(orderNo)) {
+        log.error('Notification is missing a valid order[id]');
         return false;
     }
 
-    var paymentInstr = HiPayHelper.getOrderPaymentInstrument(order);
+    // Pre-check: fail fast without opening a transaction if the order does not exist.
+    if (empty(OrderMgr.getOrder(orderNo))) {
+        log.error('Notification references unknown order :: ' + orderNo);
+        return false;
+    }
 
     Transaction.wrap(function () {
+        // Re-fetch the order inside the transaction to get the latest committed version.
+        // This prevents stale-read optimistic locking conflicts when a concurrent checkout
+        // or notification job has already written to the same order between the pre-check
+        // above and this write.
+        var order = OrderMgr.getOrder(orderNo);
+        if (empty(order)) {
+            throw new Error('Order not found inside transaction: ' + orderNo);
+        }
+        var paymentInstr = HiPayHelper.getOrderPaymentInstrument(order);
         HiPayHelper.updatePaymentStatus(order, paymentInstr, notification.status, notification.captured_amount);
         HiPayHelper.updateOrderStatus(order, notification);
         addOrderNote(order, notification);

@@ -82,7 +82,7 @@
   <icon>icons/hipay_logo.jpg</icon>
 </menuaction>
 <menuaction id="hipay_transactions" menupath="orders" position="999" site="true">
-  <name xml:lang="x-default">Hipay Transations</name>
+  <name xml:lang="x-default">Hipay Transactions</name>
   <short_description xml:lang="x-default">
       Click here to capture already authenticated orders
   </short_description>

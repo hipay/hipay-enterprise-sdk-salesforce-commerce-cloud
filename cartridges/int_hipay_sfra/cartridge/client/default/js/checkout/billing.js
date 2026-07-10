@@ -1,26 +1,14 @@
 'use strict';
 
 var base = require('base/checkout/billing');
+var formHelpers = require('base/checkout/formErrors');
 
-/*
- * Holds the MutationObserver that watches the `data-checkout-stage` attribute on the
- * checkout root. We need to keep a reference so we can disconnect it before creating a
- * new one when `updatePaymentInformation` is re-invoked (e.g. on each Ajax checkout
- * refresh). Without disconnecting, observers stacked up on every refresh and each one
- * triggered redundant DOM work (and could fight with each other to show/hide buttons).
- */
+// Tracks the MutationObserver so it can be disconnected before creating a new one.
 var paypalV2Observer = null;
 
 /**
- * Returns the PayPal V2 button element for the current placement.
- *
- * The placement (submitPayment | placeOrder) is configured by a HiPay site preference
- * and exposed via `window.hipayCustomPreferences.paypalV2.hipayPaypalButtonPlacement`.
- * The two placements have different DOM ids (`paypal-button-submit-payment` vs
- * `paypal-button-place-order`) so that both can coexist safely in the template tree.
- *
- * Returning a placement-aware selector here keeps `togglePaypalV2CTA` free of the
- * id-vs-placement branching duplication it used to carry.
+ * Returns the PayPal V2 button element for the configured placement
+ * (`window.hipayCustomPreferences.paypalV2.hipayPaypalButtonPlacement`).
  */
 function getPaypalButton() {
     var placement = window.hipayCustomPreferences
@@ -34,17 +22,17 @@ function getPaypalButton() {
 }
 
 /**
- * Indicates whether the HiPay JS SDK has finished rendering the PayPal button inside
- * its container.
- *
- * paypalV2.js sets `data-hipay-paypal-ready="true"` on the container after the SDK
- * fires its `ready` event. We read that flag here to decide whether the standard
- * "Place Order" button should still be visible: while PayPal is the selected method
- * but the PayPal button is not yet rendered, we keep the SFRA place-order CTA visible
- * to avoid leaving the user with no actionable button.
+ * Whether the HiPay SDK has finished rendering the PayPal button
+ * (paypalV2.js sets `data-hipay-paypal-ready` on the container).
  */
 function isPaypalButtonReady() {
     return getPaypalButton().attr('data-hipay-paypal-ready') === 'true';
+}
+
+// Clears any inline display override, handing control back to base SFRA's stage-driven CSS.
+function resetNativeCheckoutButtons() {
+    $('.submit-payment').css('display', '');
+    $('.place-order').css('display', '');
 }
 
 function togglePaypalV2CTA(selectedPaypalV2) {
@@ -53,31 +41,53 @@ function togglePaypalV2CTA(selectedPaypalV2) {
             && window.hipayCustomPreferences.paypalV2
             && window.hipayCustomPreferences.paypalV2.hipayPaypalButtonPlacement;
         var paypalButton = getPaypalButton();
+        var stage = $('#checkout-main').attr('data-checkout-stage');
 
-        if ($('#checkout-main').attr("data-checkout-stage") === 'payment' &&
-            paypalButton.length > 0 &&
-            placement === 'submitPayment') {
+        if (!selectedPaypalV2) {
+            paypalButton.hide();
+            resetNativeCheckoutButtons();
+            return;
+        }
+
+        if (stage === 'payment' && paypalButton.length > 0 && placement === 'submitPayment') {
             paypalButton.show();
-        } else if ($('#checkout-main').attr("data-checkout-stage") === 'placeOrder' && placement === 'placeOrder') {
-            if (selectedPaypalV2) {
-                paypalButton.show();
-                // Only hide the SFRA place-order button once the PayPal SDK button is
-                // actually rendered; otherwise the user would see no CTA at all during
-                // the brief gap between selecting PayPal and the SDK initialising.
-                // The narrower `.place-order` selector (instead of the previous
-                // `.btn-primary.btn-block.place-order`) is intentional: it matches any
-                // styling variant of the SFRA place-order button.
-                $('.place-order').toggle(!isPaypalButtonReady());
-            } else {
-                // Hides the PayPal button and shows the place order button.
-                paypalButton.hide();
-                $('.place-order').show();
-            }
+            $('.submit-payment').toggle(!isPaypalButtonReady());
+        } else if (stage === 'placeOrder' && placement === 'placeOrder') {
+            paypalButton.show();
+            $('.place-order').toggle(!isPaypalButtonReady());
         } else {
             paypalButton.hide();
+            resetNativeCheckoutButtons();
         }
     };
 }
+
+// Whether HIPAY_PAYPAL_V2 is the currently selected payment method.
+function isPaypalV2Selected() {
+    var activeMethodId = $('.payment-options .nav-link.active').closest('.nav-item').data('method-id');
+
+    if (activeMethodId) {
+        return activeMethodId === 'HIPAY_PAYPAL_V2';
+    }
+
+    return $('.payment-information').data('payment-method-id') === 'HIPAY_PAYPAL_V2';
+}
+
+// Re-run the toggle on SDK readiness changes, not just stage transitions.
+$('body').on('hipay:paypalv2-availability', function () {
+    togglePaypalV2CTA(isPaypalV2Selected())();
+});
+
+// Clears every HiPay payment error surface across all payment methods.
+function clearHipayPaymentErrors() {
+    formHelpers.clearPreviousErrors('.payment-form');
+    $('#hipay-error-message').empty();
+    $('#hipay-apple-error-message').empty();
+    $('.js-hipay-paypalv2-error-message').empty();
+}
+
+$('.payment-options .nav-item').on('click', clearHipayPaymentErrors);
+$('body').on('checkout:disableButton', clearHipayPaymentErrors);
 
 base.methods.updatePaymentInformation = function (order) {
     // update payment details
@@ -112,25 +122,16 @@ base.methods.updatePaymentInformation = function (order) {
             }
         }
 
-        // Disconnect any previously installed observer so that successive Ajax
-        // refreshes (each of which calls updatePaymentInformation) do not stack
-        // observers on the checkout root.
         if (paypalV2Observer) {
             paypalV2Observer.disconnect();
         }
 
-        // `attributeFilter` keeps us from waking up on unrelated attribute mutations.
-        // We only need to react when the checkout stage changes (payment -> placeOrder
-        // and back), which is what drives the show/hide rules above.
         paypalV2Observer = new MutationObserver(togglePaypalV2CTA(selectedPaypalV2));
         paypalV2Observer.observe(document.getElementById('checkout-main'), {
             attributes: true,
             attributeFilter: ['data-checkout-stage']
         });
 
-        // Run the toggler once immediately so the current stage is honoured even when
-        // no further attribute mutation happens (e.g. user is already on the
-        // place-order step).
         togglePaypalV2CTA(selectedPaypalV2)();
     }
 };

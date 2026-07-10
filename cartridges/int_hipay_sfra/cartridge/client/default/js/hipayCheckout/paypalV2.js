@@ -1,54 +1,8 @@
 'use strict';
 
 /**
- * PayPal V2 (HiPay SDK) checkout integration.
- *
- * This file replaces the previous "one-shot at page load" implementation. The original
- * code:
- *   - read the total/currency once at module load (so a basket total change required a
- *     full page reload),
- *   - mounted on a single hard-coded `#paypal-button` id (so it could not coexist with
- *     a second placement),
- *   - never re-mounted, never destroyed, and only listened for `paymentAuthorized`,
- *   - did not check whether PayPal was even enabled before mounting,
- *   - blindly hid the `.place-order` button as a side effect of creating the instance.
- *
- * The rewrite addresses each of those points:
- *
- *  1. Placement awareness
- *     The HiPay site preference `hipayPaypalButtonPlacement` selects between
- *     `submitPayment` (button rendered in the payment tab) and `placeOrder` (button
- *     rendered on the place-order step). The two placements have distinct DOM ids
- *     (`paypal-button-submit-payment` / `paypal-button-place-order`) and the helpers
- *     below always derive the active id from the current preference.
- *
- *  2. Eligibility & fallback
- *     `isPaypalV2Eligible()` (in hipayPaymentHelper.js) tells us whether PayPal V2
- *     should be offered to the current user. When the answer is "no" we hide the
- *     PayPal nav item and, if the user happened to have it selected, automatically
- *     click the first available fallback payment method so the checkout never gets
- *     stuck on an unusable tab.
- *
- *  3. Dynamic re-initialisation
- *     The HiPay SDK does not let us mutate the amount/currency of an existing PayPal
- *     instance reliably across all flows. We therefore keep track of a "request
- *     signature" (placement + amount + currency) and, when it changes, tear down the
- *     instance and remount on the live container. A MutationObserver on
- *     `data-checkout-stage` triggers re-sync when the user moves between checkout
- *     steps, and a second observer on the button container itself reports when the
- *     SDK actually finishes rendering (used by billing.js to decide whether to keep
- *     the SFRA place-order CTA visible).
- *
- *  4. Order ID hygiene
- *     `paypalOrderState` keeps the last orderID together with the signature it was
- *     authorised for. If the basket changes (different signature) the orderID is
- *     invalidated so we cannot submit a stale PayPal authorisation against a
- *     different amount/currency. The hidden form field is kept in sync.
- *
- *  5. Privacy notice mirroring
- *     In the `submitPayment` placement the standard SFRA "next step" button carries a
- *     privacy notice; we clone it under the PayPal button so the notice still appears
- *     when PayPal replaces that CTA.
+ * PayPal V2 SDK integration: placement-aware rendering, reinitialization on checkout
+ * changes, and PayPal order ID tracking.
  */
 
 var formHelpers = require('base/checkout/formErrors');
@@ -618,49 +572,6 @@ function syncPayPal() {
     observePaypalButtonRender();
     notifyPaypalAvailability();
     initializePayPal();
-
-    // Hides the PayPal button if the current page is not the 'placeOrder' stage and
-    // the PayPal button placement is configured to be only on the 'placeOrder' stage.
-    // This prevents the PayPal button from being displayed on page.
-    var urlParams = new URLSearchParams(window.location.search);
-    var stage = urlParams.get('stage');
-    // Remove next-step-button if HIPAY_PAYPAL_V2 is clicked.
-    if (window.hipayCustomPreferences &&
-        window.hipayCustomPreferences.paypalV2 &&
-        window.hipayCustomPreferences.paypalV2.hipayPaypalButtonPlacement === 'submitPayment'
-        && stage === 'payment'
-    )
-    {
-        setTimeout(function () {
-            $('.nav-item').on('click', function() {
-                if ($(this).data('method-id') === 'HIPAY_PAYPAL_V2') {
-                    $('.next-step-button').toggleClass('d-none');
-                } else {
-                    $('.next-step-button').toggleClass('d-none');
-                }
-            });
-        }, 500);
-    }
-
-    if ($('.nav-item .nav-link.active').parents().data('method-id') === 'HIPAY_PAYPAL_V2')
-    {
-        if (stage === 'placeOrder' && window.hipayCustomPreferences.paypalV2.hipayPaypalButtonPlacement === 'placeOrder') {
-            $('.next-step-button .btn-block.place-order').addClass('d-none');
-            $('#paypal-button-place-order').removeClass('d-none');
-        } else if (stage === 'payment' && window.hipayCustomPreferences.paypalV2.hipayPaypalButtonPlacement === 'submitPayment') {
-            $('.next-step-button .btn-block.submit-payment').addClass('d-none');
-            $('#paypal-button-place-order').removeClass('d-none');
-        }
-    } else {
-        if (stage === 'payment' ) {
-            $('.next-step-button .btn-block.submit-payment').removeClass('d-none');
-            $('.next-step-button .btn-block.place-order').addClass('d-none');
-        } else if(stage === 'placeOrder') {
-            $('.next-step-button .btn-block.submit-payement').addClass('d-none');
-            $('.next-step-button .btn-block.place-order').removeClass('d-none');
-        }
-        $('#paypal-button-place-order').addClass('d-none');
-    }
 }
 
 /*

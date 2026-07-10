@@ -1,4 +1,22 @@
 ## CHANGELOG
+
+## Version 26.2.1
+- Fixed the Apple Pay checkout flow by ensuring `CheckoutServices-SubmitPayment` is executed before `CheckoutServices-PlaceOrder`.
+- Improved Apple Pay session handling by correctly completing the payment sheet on both success and failure.
+- Added additional validation before Apple Pay initialization to prevent execution when the browser or configuration is not eligible.
+- Fixed Apple Pay currency initialization by using the storefront currency configuration.
+- Fixed Apple Pay payment request synchronization after basket updates (such as coupon application) so the Apple Pay sheet always displays the latest basket total.
+- Enabled Hosted Credit Card payment method for all configured countries and currencies by removing unnecessary Business Manager restrictions.
+- Fixed the Hosted Fields layout for co-branded BCMC/Bancontact cards to prevent the network selection label from overlapping the CVC field.
+- Fixed payment method fallback when Alma is unavailable so supported payment methods remain visible.
+- Improved cleanup of stale HiPay payment error messages when switching payment methods or retrying checkout.
+- Improved notification persistence when optional notification timestamp metadata is unavailable.
+- Updated notification processing to sort notifications using `creationDate`.
+- Improved notification processing robustness to reduce optimistic locking conflicts during concurrent order updates.
+- Fixed category retrieval for non-variant products when building HiPay requests.
+- Fixed the Business Manager menu label from `Hipay Transations` to `Hipay Transactions`.
+- Updated the recommended BCMC/Bancontact 3-D Secure configuration to use "3-D Secure authentication if available".
+
 ## Version 26.2.0
 - Multi-country support: Enable or disable PayPal per country. When disabled, the checkout automatically falls back to another payment method.
 - Flexible button placement: Support for displaying the PayPal button at different checkout steps (Submit Payment or Place Order).

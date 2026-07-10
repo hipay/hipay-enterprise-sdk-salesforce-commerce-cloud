@@ -24,11 +24,7 @@ function acceptPayment(req, res, next, mode) {
     var error;
     var redirectURL;
 
-    if (mode === 'ACCEPT' && hiPayState === 'forwarding') {
-        isStateValid = true;
-    }
-
-    if ((isHashValid && isStateValid && isStatusValid)) {
+    if (isHashValid && isStateValid && isStatusValid) {
         processOrder = HiPayOrderModule.hiPayProcessOrderCall();
         order = processOrder.order;
         error = processOrder.error;
@@ -58,15 +54,7 @@ function acceptPayment(req, res, next, mode) {
 function declinePayment(req, res, next, mode) {
     var isHashValid = HiPayProcess.verifyHash();
     var isStatusValid = HiPayOrderModule.hiPayVerifyStatus(mode);
-    var orderId = req.querystring.orderid;
-    // remove suffixe _<timestamp> if exist
-    var cleanOrderId = orderId;
-    var parts = orderId.split('_');
-    if (parts.length > 1 && /^\d{13}$/.test(parts[parts.length - 1])) {
-        parts.pop();
-        cleanOrderId = parts.join('_');
-    }
-    var order = OrderMgr.getOrder(cleanOrderId);
+    var order = OrderMgr.getOrder(req.querystring.orderid);
     var hiPayState = req.querystring.state;
     var result;
 
@@ -106,13 +94,14 @@ function declinePayment(req, res, next, mode) {
  */
 function cancelPayment(req, res, next) {
     var orderId = req.querystring.orderid;
-    // remove suffixe _<timestamp> if exist
     var cleanOrderId = orderId;
     var parts = orderId.split('_');
+
     if (parts.length > 1 && /^\d{13}$/.test(parts[parts.length - 1])) {
         parts.pop();
         cleanOrderId = parts.join('_');
     }
+
     var order = OrderMgr.getOrder(cleanOrderId);
     var redirectURL = URLUtils.url('Home-Show');
 

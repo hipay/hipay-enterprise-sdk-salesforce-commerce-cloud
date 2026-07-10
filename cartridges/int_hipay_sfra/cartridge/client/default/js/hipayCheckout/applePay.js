@@ -6,61 +6,79 @@ var hipayPaymentHelper = require('./hipayPaymentHelper');
 
 var formHelpers = require('base/checkout/formErrors');
 
-// Configuration
-var amount = '0.00';
-if ($('#apple-pay-button') && $('#apple-pay-button').data('total')) {
-    amount = $('.apple-pay-button').data('total').toString();
+/**
+ * Hides the Apple Pay nav-item. Shared by every early-exit guard below and
+ * by the existing fallback when hipay.create() returns a falsy instance.
+ * Uses addClass (not toggleClass) because these are all failure/guard paths
+ * where Apple Pay must end up hidden, never re-shown.
+ */
+function hideApplePayNavItem() {
+    $("li[data-method-id='HIPAY_APPLEPAY']").addClass("d-none");
 }
-var currencyCode = '';
-if ($('.form-control.paymentMethod') && $('.form-control.paymentMethod').data('currency-code')) {
-    currencyCode = $('.form-control.paymentMethod').data('currency-code');
-}
-const total = {
-    label: window.hipayCustomPreferences.applePayConfig.total.label,
-    amount: amount
-};
 
-const request = {
-    countryCode: window.hipayCustomPreferences.applePayConfig.request.countryCode,
-    currencyCode: currencyCode,
-    total: total,
-    supportedNetworks: window.hipayCustomPreferences.applePayConfig.request.supportedNetworks
-};
-
-const applePayStyle = {
-    type: window.hipayCustomPreferences.applePayConfig.style.type,
-    color: window.hipayCustomPreferences.applePayConfig.style.color
-};
-
-const options = {
-    displayName: window.hipayCustomPreferences.applePayConfig.options.displayName,
-    request: request,
-    applePayStyle: applePayStyle,
-    selector: 'apple-pay-button'
-};
-
-var intanceApplePayButton = hipay.create(
-    'paymentRequestButton',
-    options
-);
-
-if (intanceApplePayButton) {
-    intanceApplePayButton.on('paymentAuthorized', function(hipayToken) {
-        $('#hipay-apple-error-message').empty();
-
-        formHelpers.clearPreviousErrors('.payment-form');
-        $('input[name=dwfrm_billing_hipaytokenize]').val(JSON.stringify(hipayToken));
-
-        var paymentForm = hipayPaymentHelper.serializeBillingAddressForm();
-
-        // disable the next:Place Order button here
-        $('body').trigger('checkout:disableButton', '.next-step-button button');
-
-        hipayPaymentHelper.placeOrder(paymentForm, 'HIPAY_APPLEPAY')
-    });
+if ($('#apple-pay-button').length === 0) {
+    // No Apple Pay mount point in the DOM for this session/tab set — nothing to initialize.
+    hideApplePayNavItem();
+} else if (!window.ApplePaySession || !window.ApplePaySession.canMakePayments()) {
+    // Browser/device cannot run Apple Pay at all.
+    hideApplePayNavItem();
 } else {
-    // Removed Apple Pay nav-item if intanceApplePayButton don't exists.
-    $("li[data-method-id='HIPAY_APPLEPAY']").toggleClass("d-none");
+    // Configuration
+    const total = {
+        label: window.hipayCustomPreferences.applePayConfig.total.label,
+        amount: $('#apple-pay-button').data('total').toString()
+    };
+
+    const request = {
+        countryCode: window.hipayCustomPreferences.applePayConfig.request.countryCode,
+        currencyCode: window.hipayCustomPreferences.applePayConfig.request.currencyCode
+            || $('.form-control.paymentMethod').data('currency-code'),
+        total: total,
+        supportedNetworks: window.hipayCustomPreferences.applePayConfig.request.supportedNetworks
+    };
+
+    if (!request.currencyCode) {
+        // Neither server config nor the DOM fallback produced a currency — do not call hipay.create().
+        hideApplePayNavItem();
+    } else {
+        const applePayStyle = {
+            type: window.hipayCustomPreferences.applePayConfig.style.type,
+            color: window.hipayCustomPreferences.applePayConfig.style.color
+        };
+
+        const options = {
+            displayName: window.hipayCustomPreferences.applePayConfig.options.displayName,
+            request: request,
+            applePayStyle: applePayStyle,
+            selector: 'apple-pay-button'
+        };
+
+        var intanceApplePayButton = hipay.create(
+            'paymentRequestButton',
+            options
+        );
+
+        if (intanceApplePayButton) {
+            hipayPaymentHelper.setApplePayInstance(intanceApplePayButton);
+
+            intanceApplePayButton.on('paymentAuthorized', function(hipayToken) {
+                $('#hipay-apple-error-message').empty();
+
+                formHelpers.clearPreviousErrors('.payment-form');
+                $('input[name=dwfrm_billing_hipaytokenize]').val(JSON.stringify(hipayToken));
+
+                var paymentForm = hipayPaymentHelper.serializeBillingAddressForm();
+
+                // disable the next:Place Order button here
+                $('body').trigger('checkout:disableButton', '.next-step-button button');
+
+                hipayPaymentHelper.submitBillingAndplaceOrder(paymentForm, 'HIPAY_APPLEPAY');
+            });
+        } else {
+            // Removed Apple Pay nav-item if intanceApplePayButton don't exists.
+            hideApplePayNavItem();
+        }
+    }
 }
 
 // Remove next-step-button if HIPAY_APPLEPAY is clicked.

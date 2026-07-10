@@ -26,7 +26,7 @@ var HiPayStatus = {
     },
     ACCEPT: {
         code: 'accept',
-        paymentStatus: [112, 116, 117, 118, 119, 142],
+        paymentStatus: [112, 116, 117, 118, 119],
         value: 'ACCEPT'
     },
     CANCEL: {
