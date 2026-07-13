@@ -197,15 +197,12 @@ function sendConfirmationEmailFromJob(order) {
 function updateOrderStatus(order, notification) {
     var statuses = require('*/cartridge/scripts/lib/hipay/hipayStatus').HiPayStatus;
     var OrderMgr = require('dw/order/OrderMgr');
-    var Transaction = require('dw/system/Transaction');
 
     if (!order) { return; }
 
-    // if payment succeeded and status order created, update order status to open and send confirmation email to customer
+    // Caller is responsible for the active transaction; no nested Transaction.wrap here.
     if (empty(order.custom.hipayTransactionID)) {
-        Transaction.wrap(function () {
-            order.getCustom().hipayTransactionID = notification.transaction_reference;
-        });
+        order.custom.hipayTransactionID = notification.transaction_reference;
     }
 
     if (order.status.value === Order.ORDER_STATUS_CREATED) {
@@ -224,11 +221,8 @@ function updateOrderStatus(order, notification) {
                 throw '[HiPayHelper.js] - Failed to change status from CREATED to NEW for order ' + order.orderNo;
             }
             Logger.info('[HiPayHelper.js] - Order {0}] Update order from CREATED to OPEN', order.orderNo);
-            Transaction.wrap(function () {
-                // Set other status
-                order.setConfirmationStatus(Order.CONFIRMATION_STATUS_CONFIRMED);
-                order.setExportStatus(Order.EXPORT_STATUS_READY);
-            });
+            order.setConfirmationStatus(Order.CONFIRMATION_STATUS_CONFIRMED);
+            order.setExportStatus(Order.EXPORT_STATUS_READY);
             Logger.info('[HiPayHelper.js] - Order {0} is updated', order.orderNo);
             // Send mail confirmation order
             if (order.getCustomerEmail()) {
@@ -318,6 +312,7 @@ function getHostedFieldsPreferences() {
             },
             request: {
                 countryCode: currentSite.getCustomPreferenceValue('hipayAppleCountryCode'),
+                currencyCode: session.currency ? session.currency.currencyCode : null,
                 supportedNetworks: currentSite.getCustomPreferenceValue('HipayAppleSupportedNetworks')
             },
             style: {

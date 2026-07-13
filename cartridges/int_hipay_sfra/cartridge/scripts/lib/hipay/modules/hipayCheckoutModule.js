@@ -257,20 +257,6 @@ HiPayCheckoutModule.hiPayOrderRequest = function (paymentInstrument, order, devi
         }
 
         if (pi.paymentMethod.equals('HIPAY_PAYPAL_V2')) {
-            // Guard against an empty PayPal V2 orderID before we call HiPay.
-            //
-            // The orderID is captured by the client-side SDK and pushed into the
-            // hidden `paypalV2OrderID` billing form field. If the user managed to
-            // trigger order placement before the SDK populated that field (for
-            // example via a stale browser tab, an extension that reposts the
-            // form, or a race during basket recalculation), HiPay would respond
-            // with an opaque "missing provider data" failure that is hard to
-            // diagnose post-mortem.
-            //
-            // We bail out early with a logged error so the order is never sent
-            // to HiPay in this invalid state; the caller already initialised
-            // `response.error = true`, so returning it propagates the failure
-            // through the normal place-order error path.
             var paypalOrderID = session.forms.billing.paypalV2OrderID.value;
 
             if (empty(paypalOrderID)) {

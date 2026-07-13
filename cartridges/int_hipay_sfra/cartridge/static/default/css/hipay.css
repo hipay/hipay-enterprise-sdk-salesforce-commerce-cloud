@@ -133,3 +133,18 @@ i.payment-product-sprite-alma-4x {
     color: red;
     padding-top: 1rem;
 }
+
+/* PI-6060: prevents the co-branding network-selection label from overlapping the CVC row. */
+#hipay-hostedfields-form .hipay-form-row.hipay-flex-column:has(.hipay-cobranding-card-label-floating) {
+    margin-bottom: 0 !important;
+}
+
+#hipay-hostedfields-form .hipay-cobranding-card-label-floating {
+    position: static !important;
+    display: block !important;
+    width: 100% !important;
+    margin-top: 4px !important;
+    margin-bottom: 12px !important;
+    text-align: right !important;
+    pointer-events: none !important;
+}

@@ -114,25 +114,9 @@
                             </button>
 
                             <iscomment>
-                                PayPal V2 "placeOrder" placement.
-
-                                Previous behaviour rendered the PayPal button container twice:
-                                  - once inside an isloop over `selectedPaymentInstruments`
-                                    (covering page reloads while PayPal was the selected method);
-                                  - once unconditionally (covering the normal flow).
-
-                                With a single hard-coded id this produced two `#paypal-button`
-                                elements in the DOM, which broke the HiPay JS SDK mount and made
-                                the error message container ambiguous.
-
-                                The button is now rendered exactly once, guarded by the
-                                placement preference. The placeOrder-specific ids
-                                (`paypal-button-place-order` / `hipay-paypalv2-error-message-place-order`)
-                                guarantee uniqueness vs the submitPayment placement defined in
-                                hiPayContent.isml. The client (paypalV2.js / billing.js)
-                                handles visibility based on the active checkout stage and the
-                                currently selected payment instrument, so we no longer need a
-                                template-side loop on `selectedPaymentInstruments`.
+                                PayPal V2 "placeOrder" placement: the button is rendered once
+                                here, guarded by the placement preference, when the merchant
+                                configures PayPal to appear at the Place Order step.
                             </iscomment>
                             <isif condition="${require('*/cartridge/scripts/util/hipayMultiLocaleConfigs').getHiPayPaypalButtonPlacement() === 'placeOrder'}">
                                 <isset name="paypalButtonId" value="${'paypal-button-place-order'}" scope="page" />

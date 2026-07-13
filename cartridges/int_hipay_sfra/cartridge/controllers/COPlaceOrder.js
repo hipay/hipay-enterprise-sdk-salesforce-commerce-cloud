@@ -7,7 +7,6 @@ var csrfProtection = require('*/cartridge/scripts/middleware/csrf');
 var BasketMgr = require('dw/order/BasketMgr');
 var URLUtils = require('dw/web/URLUtils');
 var hooksHelper = require('*/cartridge/scripts/helpers/hooks');
-var Site = require('dw/system/Site');
 var hipayPendingOrderHelper = require('*/cartridge/scripts/lib/hipay/hipayPendingOrderHelper');
 
 /**
@@ -68,17 +67,11 @@ function submitOrder(orderId, req, res, next) {
     // Reset usingMultiShip after successful Order placement
     req.session.privacyCache.set('usingMultiShipping', false);
 
-    if (Site.getCurrent().getCustomPreferenceValue('hipaySFRAVersion')) {
-        res.render('/checkout/form/orderConfirmRedirect', {
-            url: URLUtils.https('Order-Confirm'),
-            ID: order.orderNo,
-            token: order.orderToken
-        });
-        return next();
-    }
-
-    res.redirect(URLUtils.https('Order-Confirm', 'ID', order.orderNo, 'token', order.orderToken));
-
+    res.render('/checkout/form/orderConfirmRedirect', {
+        url: URLUtils.https('Order-Confirm'),
+        ID: order.orderNo,
+        token: order.orderToken
+    });
 
     return next();
 }
