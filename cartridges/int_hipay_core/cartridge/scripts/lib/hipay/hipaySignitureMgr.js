@@ -78,4 +78,38 @@ HiPaySignitureMgr.calculateNotificationSigniture = function (paramsMap, passPhra
     return Encoding.toHex(digest.digestBytes(new Bytes(stringToHash, 'UTF-8')));
 };
 
+/**
+ * Validates the signature of a raw-body (XML) HiPay notification. XML notifications carry
+ * no HTTP parameters, so the raw body is hashed directly instead of a derived paramsMap string.
+ * Returns false on any missing input or error.
+ */
+HiPaySignitureMgr.checkIsValidXmlNotification = function (rawBody, passPhrase, shaSign) {
+    if (empty(rawBody) || empty(passPhrase) || empty(shaSign)) {
+        return false;
+    }
+
+    try {
+        var shaOut = HiPaySignitureMgr.calculateXmlNotificationSigniture(rawBody, passPhrase);
+        return !empty(shaOut) && shaSign === shaOut;
+    } catch (e) {
+        return false;
+    }
+};
+
+/**
+ * Generate a hash from the exact raw XML body and pass phrase, using the same
+ * configured hash algorithm as calculateNotificationSigniture.
+ */
+HiPaySignitureMgr.calculateXmlNotificationSigniture = function (rawBody, passPhrase) {
+    var stringToHash = rawBody + passPhrase;
+    var hashAlgo = Site.getCurrent().getCustomPreferenceValue('hipayHashAlgorithm').value;
+
+    if (empty(hashAlgo) || empty(MessageDigest[hashAlgo])) {
+        throw new Error('Invalid or missing HiPay hash algorithm configuration');
+    }
+
+    var digest = new MessageDigest(MessageDigest[hashAlgo]);
+    return Encoding.toHex(digest.digestBytes(new Bytes(stringToHash, 'UTF-8')));
+};
+
 module.exports.HiPaySignitureMgr = HiPaySignitureMgr;

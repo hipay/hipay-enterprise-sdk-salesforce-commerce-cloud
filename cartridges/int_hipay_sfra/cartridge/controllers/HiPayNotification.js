@@ -11,9 +11,7 @@ server.post(
     'Notify',
     server.middleware.https,
     function (req, res, next) {
-        if (hipayNotificationModule.checkSignature(request)) {
-            hipayNotificationModule.saveNotification(request);
-        }
+        hipayNotificationModule.processIncomingNotification(request);
 
         res.render('hipay/notifications/hipayNotification');
 

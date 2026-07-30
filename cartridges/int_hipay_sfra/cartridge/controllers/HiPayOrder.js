@@ -15,14 +15,23 @@ var hipayPendingOrderHelper = require('*/cartridge/scripts/lib/hipay/hipayPendin
 
 function acceptPayment(req, res, next, mode) {
     var isHashValid = HiPayProcess.verifyHash();
-    var isStatusValid = HiPayOrderModule.hiPayVerifyStatus(mode);
     var hiPayState = req.querystring.state;
+    var hiPayStatus = parseInt(req.querystring.status, 10);
+    var isForwarding142 = mode === statuses.ACCEPT.value
+        && hiPayState === 'forwarding'
+        && hiPayStatus === 142;
+    var isStatusValid = HiPayOrderModule.hiPayVerifyStatus(mode);
     var isStateValid = ['completed', 'pending_reference'].indexOf(hiPayState) > -1;
     var params = {};
     var processOrder;
     var order;
     var error;
     var redirectURL;
+
+    if (isForwarding142) {
+        isStateValid = true;
+        isStatusValid = HiPayOrderModule.hiPayVerifyStatus(statuses.PENDING.value);
+    }
 
     if (isHashValid && isStateValid && isStatusValid) {
         processOrder = HiPayOrderModule.hiPayProcessOrderCall();

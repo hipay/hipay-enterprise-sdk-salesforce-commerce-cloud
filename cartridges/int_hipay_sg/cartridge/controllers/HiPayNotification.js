@@ -14,9 +14,7 @@ var guard = require('*/cartridge/scripts/guard');
 function notify() {
     var hipayNotificationModule = require('*/cartridge/scripts/lib/hipay/modules/hipayNotificationModule');
 
-    if (hipayNotificationModule.checkSignature(request)) {
-        hipayNotificationModule.saveNotification(request);
-    }
+    hipayNotificationModule.processIncomingNotification(request);
 
     ISML.renderTemplate('hipay/notifications/hipaynotification');
 }
