@@ -1,5 +1,15 @@
 ## CHANGELOG
 
+## Version 26.2.2
+- Fixed the Alma browser return flow when HiPay redirects to the accept route with `state=forwarding` and transaction status `142`.
+- Kept status `142` configured as a pending status without adding it to the accepted or final order-placement statuses.
+- Added support for HiPay notifications sent with `text/xml` or `application/xml` content types.
+- Added XML notification signature validation using the exact raw request body followed by the configured HiPay passphrase.
+- Added secure XML parsing and normalization into the existing HiPay notification structure.
+- Added validation for malformed XML, missing mandatory fields, conflicting duplicate fields, oversized payloads, and unsafe `DOCTYPE` or `ENTITY` declarations.
+- Preserved the existing `application/x-www-form-urlencoded` notification signature and processing flow.
+- Updated the SFRA and SiteGenesis notification controllers to use the unified notification-processing flow.
+
 ## Version 26.2.1
 - Fixed the Apple Pay checkout flow by ensuring `CheckoutServices-SubmitPayment` is executed before `CheckoutServices-PlaceOrder`.
 - Improved Apple Pay session handling by correctly completing the payment sheet on both success and failure.

@@ -11,6 +11,96 @@ var Constants = require('*/cartridge/scripts/util/hipayConstants');
 var HiPayLogger = require('*/cartridge/scripts/lib/hipay/hipayLogger');
 var log = new HiPayLogger('HiPayProcessNotificationCall');
 
+// XML notification support -- see processIncomingNotification below.
+var XML_CONTENT_TYPES = ['text/xml', 'application/xml'];
+var MANDATORY_XML_FIELDS = ['order[id]', 'status', 'transaction_reference', 'attempt_id'];
+var SIMPLE_XML_FIELDS = ['status', 'transaction_reference', 'attempt_id', 'captured_amount', 'message'];
+var TRIMMED_XML_FIELDS = ['order[id]', 'status', 'transaction_reference', 'attempt_id', 'captured_amount'];
+var MAX_XML_BODY_LENGTH = 200000;
+
+/**
+ * Normalizes Content-Type: lowercase, strips ";..." parameters, trims.
+ *
+ * @param {Request} request
+ * @returns {String}
+ */
+function normalizeContentType(request) {
+    var rawContentType = request.getHttpHeaders().get('content-type');
+
+    if (empty(rawContentType)) {
+        return '';
+    }
+
+    return rawContentType.toLowerCase().split(';')[0].trim();
+}
+
+/**
+ * @param {Request} request
+ * @returns {Boolean}
+ */
+function isXmlNotification(request) {
+    return XML_CONTENT_TYPES.indexOf(normalizeContentType(request)) !== -1;
+}
+
+/**
+ * Reads the raw request body, unmodified.
+ *
+ * @param {Request} request
+ * @returns {String}
+ */
+function getRawBody(request) {
+    return request.httpParameterMap.requestBodyAsString;
+}
+
+/**
+ * Validates an XML notification's signature against the given raw body.
+ *
+ * @param {Request} request
+ * @param {String} rawBody
+ * @returns {Boolean}
+ */
+function validateXmlSignature(request, rawBody) {
+    var HiPayConfig = require('*/cartridge/scripts/lib/hipay/hipayConfig').HiPayConfig;
+    var HiPaySignitureMgr = require('*/cartridge/scripts/lib/hipay/hipaySignitureMgr').HiPaySignitureMgr;
+    var shaSignature = request.getHttpHeaders().get('x-allopass-signature');
+    var isRequestValid;
+
+    log.info('HiPay XML notification :: rawBodyLength=' + (rawBody ? rawBody.length : 0));
+
+    try {
+        isRequestValid = HiPaySignitureMgr.checkIsValidXmlNotification(rawBody, HiPayConfig.hipayApiPassphrase, shaSignature);
+    } catch (e) {
+        isRequestValid = false;
+    }
+
+    log.info('HiPay XML notification signature :: ' + (isRequestValid ? 'valid' : 'invalid'));
+
+    if (!isRequestValid) {
+        log.error('The XML notification call from HiPay has an invalid signature!');
+    }
+
+    return isRequestValid;
+}
+
+/**
+ * Validates a form-urlencoded notification's signature from parsed HTTP parameters.
+ *
+ * @param {Request} request
+ * @returns {Boolean}
+ */
+function validateFormSignature(request) {
+    var HiPayConfig = require('*/cartridge/scripts/lib/hipay/hipayConfig').HiPayConfig;
+    var HiPaySignitureMgr = require('*/cartridge/scripts/lib/hipay/hipaySignitureMgr').HiPaySignitureMgr;
+    var shaSignature = request.getHttpHeaders().get('x-allopass-signature');
+    var isRequestValid = HiPaySignitureMgr.checkIsValidNotification(request.getHttpParameters(), HiPayConfig.hipayApiPassphrase, shaSignature);
+
+    if (!isRequestValid) {
+        log.error('The notification call from HiPay has an invalid signature!');
+    }
+
+    return isRequestValid;
+}
+
 /**
  * Verify signature parameter from notification.
  *
@@ -18,16 +108,16 @@ var log = new HiPayLogger('HiPayProcessNotificationCall');
  * @returns {Boolean}
  */
 function checkSignature(request) {
-    var HiPayConfig = require('*/cartridge/scripts/lib/hipay/hipayConfig').HiPayConfig;
-    var HiPaySignitureMgr = require('*/cartridge/scripts/lib/hipay/hipaySignitureMgr').HiPaySignitureMgr;
-    var shaSignature = request.getHttpHeaders().get('x-allopass-signature');
-    var isRequestValid = HiPaySignitureMgr.checkIsValidNotification(request.getHttpParameters(), HiPayConfig.hipayApiPassphrase, shaSignature);
+    var contentType = normalizeContentType(request);
+    var isXml = XML_CONTENT_TYPES.indexOf(contentType) !== -1;
 
-    if (!isRequestValid) {
-        log.error('The notification call from HiPay has an invalid signature! :: ' + request.httpParameterMap);
+    log.info('HiPay notification received :: content-type=' + (contentType || 'unknown') + ' payloadType=' + (isXml ? 'xml' : 'form'));
+
+    if (isXml) {
+        return validateXmlSignature(request, getRawBody(request));
     }
 
-    return isRequestValid;
+    return validateFormSignature(request);
 }
 
 /* Creates a formatted text message from the request parameters */
@@ -78,6 +168,157 @@ function addOrderNote(order, notification) {
 }
 
 /**
+ * Resolves the flat notification key for an element path, or null if unmapped.
+ * id/Id/ID only map to order[id] when directly nested inside <order>.
+ *
+ * @param {Array} pathStack - element local names from root to current element
+ * @returns {String|null}
+ */
+function resolveFlatKey(pathStack) {
+    var lastLower = pathStack.length ? pathStack[pathStack.length - 1].toLowerCase() : '';
+    var parentLower = pathStack.length > 1 ? pathStack[pathStack.length - 2].toLowerCase() : '';
+
+    if (parentLower === 'order' && lastLower === 'id') {
+        return 'order[id]';
+    }
+
+    if (SIMPLE_XML_FIELDS.indexOf(lastLower) !== -1) {
+        return lastLower;
+    }
+
+    return null;
+}
+
+/**
+ * Reject unsafe XML declarations before parsing.
+ *
+ * @param {String} rawBody
+ * @returns {Boolean}
+ */
+function containsUnsafeXmlDeclarations(rawBody) {
+    return /<!DOCTYPE/i.test(rawBody) || /<!ENTITY/i.test(rawBody);
+}
+
+/**
+ * Parses a raw XML notification into the same flat object shape as the form path.
+ *
+ * XMLStreamReader may split one element's text across several CHARACTERS events, so text is
+ * accumulated per element and only finalized on its matching END_ELEMENT.
+ *
+ * @param {String} rawBody
+ * @returns {Object} { valid: Boolean, notification: Object= }
+ */
+function parseXmlNotification(rawBody) {
+    if (empty(rawBody)) {
+        log.error('The XML notification call from HiPay has an empty body');
+        return { valid: false };
+    }
+
+    if (rawBody.length > MAX_XML_BODY_LENGTH) {
+        log.error('The XML notification call from HiPay exceeds the maximum accepted payload size');
+        return { valid: false };
+    }
+
+    if (containsUnsafeXmlDeclarations(rawBody)) {
+        log.error('The XML notification call from HiPay contains a disallowed DOCTYPE/ENTITY declaration');
+        return { valid: false };
+    }
+
+    var Reader = require('dw/io/Reader');
+    var XMLStreamReader = require('dw/io/XMLStreamReader');
+
+    var reader;
+    var xmlReader;
+    var notification = {};
+    var conflict = false;
+
+    try {
+        reader = new Reader(rawBody);
+        xmlReader = new XMLStreamReader(reader);
+
+        var elementStack = []; // { name, key, buffer }
+
+        while (xmlReader.hasNext()) {
+            xmlReader.next();
+
+            if (xmlReader.isStartElement()) {
+                var name = xmlReader.getLocalName();
+                var pathStack = elementStack.map(function (e) { return e.name; }).concat([name]); // eslint-disable-line no-loop-func
+
+                elementStack.push({ name: name, key: resolveFlatKey(pathStack), buffer: '' });
+            } else if (xmlReader.isCharacters()) {
+                var current = elementStack[elementStack.length - 1];
+
+                if (current && current.key) {
+                    current.buffer += xmlReader.getText();
+                }
+            } else if (xmlReader.isEndElement()) {
+                var finished = elementStack.pop();
+
+                if (finished && finished.key) {
+                    var isBlank = finished.buffer.trim() === '';
+
+                    if (!isBlank) {
+                        var value = TRIMMED_XML_FIELDS.indexOf(finished.key) !== -1 ? finished.buffer.trim() : finished.buffer;
+
+                        if (Object.prototype.hasOwnProperty.call(notification, finished.key)
+                            && notification[finished.key] !== value
+                            && MANDATORY_XML_FIELDS.indexOf(finished.key) !== -1) {
+                            conflict = true;
+                        }
+
+                        notification[finished.key] = value;
+                    }
+                }
+            }
+        }
+    } catch (e) {
+        log.error('The XML notification call from HiPay could not be parsed :: malformed XML');
+        return { valid: false };
+    } finally {
+        // XMLStreamReader.close() does not close the underlying Reader (StAX semantics).
+        if (xmlReader) {
+            try {
+                xmlReader.close();
+            } catch (e) {
+                // ignore
+            }
+        }
+
+        if (reader) {
+            try {
+                reader.close();
+            } catch (e) {
+                // ignore
+            }
+        }
+    }
+
+    if (conflict) {
+        log.error('The XML notification call from HiPay contains conflicting duplicate mandatory fields');
+        return { valid: false };
+    }
+
+    var missing = MANDATORY_XML_FIELDS.filter(function (field) {
+        return empty(notification[field]);
+    });
+
+    if (missing.length > 0) {
+        log.error('The XML notification call from HiPay is missing mandatory fields :: ' + missing.join(','));
+        return { valid: false };
+    }
+
+    if (!/^\d+$/.test(String(notification.status))) {
+        log.error('The XML notification call from HiPay has a non-numeric status');
+        return { valid: false };
+    }
+
+    log.info('HiPay XML notification parsed :: status=' + notification.status);
+
+    return { valid: true, notification: notification };
+}
+
+/**
  * Create simple object from request's parameters.
  *
  * @param {Request} request
@@ -99,13 +340,11 @@ function getNotificationFromRequest(request) {
 }
 
 /**
- * Store notification in a custom object.
+ * Stores a normalized notification object in a custom object.
  *
- * @param {Request} request
+ * @param {Object} notification
  */
-function saveNotification(request) {
-    var notification = getNotificationFromRequest(request);
-
+function persistNotification(notification) {
     // Generate unique ID with Transcation-Attempt-Date.
     var id = [
         notification.transaction_reference,
@@ -118,6 +357,67 @@ function saveNotification(request) {
         instance.custom.notification = JSON.stringify(notification);
         instance.custom.hipayTimestamp = Date.now().toString();
     });
+}
+
+/**
+ * Store notification in a custom object.
+ *
+ * @param {Request} request
+ */
+function saveNotification(request) {
+    var notification;
+
+    if (isXmlNotification(request)) {
+        var parsed = parseXmlNotification(getRawBody(request));
+
+        if (!parsed.valid) {
+            return;
+        }
+
+        notification = parsed.notification;
+    } else {
+        notification = getNotificationFromRequest(request);
+    }
+
+    persistNotification(notification);
+}
+
+/**
+ * Handles an incoming HiPay notification (form or XML).
+ * Reuses the exact XML body for signature validation and parsing.
+ *
+ * @param {Request} request
+ * @returns {Boolean} true if the notification was valid and stored
+ */
+function processIncomingNotification(request) {
+    var contentType = normalizeContentType(request);
+    var isXml = XML_CONTENT_TYPES.indexOf(contentType) !== -1;
+
+    log.info('HiPay notification received :: content-type=' + (contentType || 'unknown') + ' payloadType=' + (isXml ? 'xml' : 'form'));
+
+    if (isXml) {
+        var rawBody = getRawBody(request);
+
+        if (!validateXmlSignature(request, rawBody)) {
+            return false;
+        }
+
+        var parsed = parseXmlNotification(rawBody);
+
+        if (!parsed.valid) {
+            return false;
+        }
+
+        persistNotification(parsed.notification);
+        return true;
+    }
+
+    if (!validateFormSignature(request)) {
+        return false;
+    }
+
+    persistNotification(getNotificationFromRequest(request));
+    return true;
 }
 
 /**
@@ -193,6 +493,7 @@ function processNotification(notification) {
 }
 
 module.exports = {
+    processIncomingNotification: processIncomingNotification,
     checkSignature: checkSignature,
     processNotification: processNotification,
     saveNotification: saveNotification
